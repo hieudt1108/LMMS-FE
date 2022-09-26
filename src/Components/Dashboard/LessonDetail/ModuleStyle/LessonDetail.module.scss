@@ -1,0 +1,79 @@
+//SubjectDetailCard.js
+.subject {
+  width: 74%;
+}
+.codeclass {
+  background: rgba(255, 110, 52, 0.3);
+  width: fit-content;
+}
+.total {
+  background: rgba(3, 176, 170, 0.3);
+  color: rgba(3, 176, 170, 1);
+}
+
+// LessonDetail.js
+.document,
+.other {
+  width: 49.5%;
+  height: fit-content;
+}
+.done_text {
+  color: #03b0a9;
+}
+
+//UpFile.js
+.up_file {
+  border: 2px dashed white;
+}
+.btn_up_file {
+  max-width: 21rem;
+}
+
+//DocumentFile.js
+.doc_file {
+  border: 1px solid #d3d3d3;
+}
+
+//VideoCallBtn.js
+.videoCall {
+  background: url("../../../../Assets/Dashboard/LessonDetail/joincall.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 17rem;
+}
+.done {
+  background: url("../../../../Assets/Dashboard/LessonDetail/record.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 17rem;
+}
+.btn_video,
+.btn_video_done {
+  padding: 1.8rem 7rem;
+  font-size: 24px;
+  background: linear-gradient(90deg, #036bb3 3.75%, #03b0a9 100%);
+
+  &::after {
+    right: 4rem;
+  }
+  &:hover {
+    background: linear-gradient(90deg, #03b0a9 3.75%, #036bb3 100%);
+  }
+}
+.btn_video_done {
+  background: linear-gradient(90deg, #ff6d34 0%, #ff6d34 0%);
+  &:hover {
+    background: linear-gradient(90deg, #ff6d34 0%, #ff8c5f 106.35%);
+  }
+}
+
+//homewwork
+.home_work {
+  background: #ffeff2;
+  .mark {
+    color: #03b0a9;
+  }
+  .not_mark {
+    color: #ed2114;
+  }
+}

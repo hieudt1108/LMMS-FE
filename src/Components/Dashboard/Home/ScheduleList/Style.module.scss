@@ -1,0 +1,33 @@
+.schedule-list {
+  border-collapse: separate;
+  border-spacing: 0 1rem;
+  tr {
+    vertical-align: middle;
+  }
+  td {
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    padding: 12px;
+  }
+  .border-left-radius {
+    border-radius: 3px 0 0 3px;
+  }
+  .border-right-radius {
+    border-radius: 0 6px 6px 0;
+    border-right: 1px solid;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .schedule-list {
+    .stack-column {
+      flex-direction: column !important;
+      p {
+        margin-bottom: 0.5rem !important;
+      }
+    }
+    a {
+      padding: 0.5rem 0.5rem !important;
+    }
+  }
+}

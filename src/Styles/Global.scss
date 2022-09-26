@@ -1,0 +1,228 @@
+@import "./Config.scss";
+
+body {
+  margin: 0;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: "Mulish", sans-serif;
+  font-size: 14px;
+  color: #000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.aka-center-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.aka-ps-12 {
+  padding-left: 12px;
+}
+
+.aka-pe-12 {
+  padding-right: 12px;
+}
+
+.aka-pt-12 {
+  padding-top: 12px;
+}
+
+.aka-pb-12 {
+  padding-bottom: 12px;
+}
+
+.aka-p-12 {
+  padding: 12px;
+}
+.aka-p-16 {
+  padding: 16px;
+}
+.aka-ms-12 {
+  margin-left: 12px;
+}
+
+.aka-me-12 {
+  margin-right: 12px;
+}
+.aka-me-50 {
+  margin-right: 50px;
+}
+.aka-mt-8 {
+  margin-top: 8px;
+}
+.aka-mt-12 {
+  margin-top: 12px;
+}
+
+.aka-mb-12 {
+  margin-bottom: 12px;
+}
+.aka-mb-24 {
+  margin-bottom: 24px;
+}
+.aka-m-12 {
+  margin: 12px;
+}
+
+.aka-color-1 {
+  color: $akaColor1;
+}
+
+.aka-color-2 {
+  color: $akaColor2;
+}
+
+.aka-color-3 {
+  color: $akaColor3;
+}
+
+.aka-color-4 {
+  color: $akaColor4;
+}
+
+.aka-color-5 {
+  color: $akaColor5;
+}
+.aka-color-9 {
+  color: $akaColor9;
+}
+.aka-color-10 {
+  color: $akaColor10;
+}
+.aka-color-black{
+  color: $akaColor-black;
+}
+.aka-bg-1 {
+  background: $akaColor1;
+}
+
+.aka-bg-2 {
+  background: $akaColor2;
+}
+
+.aka-bg-3 {
+  background: $akaColor3;
+}
+
+.aka-bg-4 {
+  background: $akaColor4;
+}
+
+.aka-bg-5 {
+  background: $akaColor5;
+}
+.aka-bg-7 {
+  background: $akaColor7;
+}
+.aka-bg-8 {
+  background: $akaColor8;
+}
+.aka-bg-11 {
+  background: $akaColor11;
+}
+.aka-bg-12 {
+  background: $akaColor12
+}
+.aka-bg-13 {
+  background: $akaColor13
+}
+.aka-fw-400 {
+  font-weight: 400;
+}
+
+.aka-fw-500 {
+  font-weight: 500;
+}
+
+.aka-fw-600 {
+  font-weight: 600;
+}
+.aka-fw-700 {
+  font-weight: 700;
+}
+.aka-fw-800 {
+  font-weight: 800;
+}
+
+.aka-boxshadow {
+  box-shadow: 0px 4px 13px rgba(0, 0, 0, 0.12);
+}
+
+.aka-fz-1 {
+  font-size: 12px;
+}
+
+.aka-lh-44 {
+  line-height: 44px;
+}
+
+.aka-fz-2 {
+  font-size: 14px;
+}
+.aka-fz-3 {
+  font-size: 16px;
+}
+.aka-br-1 {
+  border-radius: 3px;
+}
+
+.aka-br-2 {
+  border-radius: 6px;
+}
+.aka-br-bp {
+  border-bottom: 1px solid #d3d3d3;
+}
+.aka-br-3 {
+  border-radius: 12px;
+}
+
+.aka-br-4 {
+  border-radius: 24px;
+}
+
+.aka-circle-box-md {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.aka-circle-box-sm {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.main-btn {
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  position: relative;
+  font-weight: 600;
+  text-align: center;
+  transition: 0.3s ease-in;
+  background: linear-gradient(90deg, #0367b4 100%, #0367b4 100%);
+  &::after {
+    position: absolute;
+    right: 2rem;
+    opacity: 0;
+    content: url("../Assets/Login/white-arrow-right.svg");
+    color: #fff;
+  }
+  &:hover {
+    background: linear-gradient(90deg, #0367b4 0%, #2a89d2 123.77%);
+    &::after {
+      right: 0.5rem;
+      opacity: 1;
+      transition: 0.25s ease-in;
+    }
+  }
+}

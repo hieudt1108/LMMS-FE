@@ -1,0 +1,15 @@
+.course-card {
+  background: url("../../../Assets/Dashboard/striped-retangle.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  & > div {
+    width: 20%;
+    h4 {
+      font-weight: 700;
+    }
+    span {
+      font-weight: 600;
+    }
+  }
+}

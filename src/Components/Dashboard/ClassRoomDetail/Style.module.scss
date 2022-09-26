@@ -1,0 +1,7 @@
+.subject-card {
+  text-decoration: none;
+  & > div,
+  & > p {
+    width: 33.33%;
+  }
+}

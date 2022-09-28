@@ -11,9 +11,9 @@ function Banner({BannerImage, BannerTitle}) {
         {BannerTitle}
         <p className="aka-fz-1 text-black-50">Hôm nay: </p>
         <p className="aka-color-5 text-capitalize fw-bold">{moment().format("dddd [, Ngày] Do MMMM [Năm] YYYY")}</p>
-        <div className={Style["absolute-img"] + " position-absolute"}>
+        {/* <div className={Style["absolute-img"] + " position-absolute"}>
           {BannerImage}
-        </div>
+        </div> */}
     </div>
   )
 }

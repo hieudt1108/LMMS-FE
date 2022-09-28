@@ -22,14 +22,21 @@
   }
 
   .header-wrapper {
-    padding-top: 40px;
-    background-image: url("../../Assets/LandingPage/ld-bg.png");
+    padding-top: 20px;
+    background-image: url("../../Assets/LandingPage/header-product-indie.svg");
     background-position: top left;
     background-repeat: no-repeat;
     background-size: cover;
-    padding-bottom: 357px;
+    padding-bottom: 92px;
     .top-nav {
-      margin-bottom: 96px;
+      .vic-school {
+        .vic-info-name {
+          color: white;
+          .vic-grade {
+            font-size: 12px;
+          }
+        }
+      }
     }
     h1 {
       line-height: 102px;
@@ -80,9 +87,9 @@
   }
 
   .block-3 {
-    margin-bottom: 352px;
+    margin-bottom: 102px;
     .sub-header {
-      margin-bottom: 162px;
+      margin-bottom: 132px;
     }
     .content-box {
       img {
@@ -108,7 +115,7 @@
     max-width: 1673px;
     margin: 0 auto;
     border-radius: 36px 36px 0px 0px;
-    padding-top: 74px;
+    padding-top: 44px;
   }
 }
 
@@ -141,9 +148,10 @@
         margin-bottom: 36px;
       }
       h1 {
+        color: white;
         text-align: center;
-        font-size: 40px;
-        line-height: 62px;
+        font-size: 36px;
+        line-height: 42px;
       }
     }
     .block-1 {

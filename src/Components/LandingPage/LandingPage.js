@@ -2,18 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import Style from "./Style.module.scss";
-import {
-  LDImage1,
-  LDImage2,
-  LDIcon1,
-  LDIcon2,
-  LDIcon3,
-  LDIcon4,
-  LDIcon5,
-  LDIcon6,
-  LDIcon7,
-} from "../../Assets/LandingPage";
-import Logo from "../../Assets/Dashboard/logo.svg";
+import { LDImage1, LDIcon6, LDIcon7 } from "../../Assets/LandingPage";
+import Logo from "../../Assets/Dashboard/logo-victoryschool.png";
 
 export default function LandingPage() {
   return (
@@ -26,7 +16,23 @@ export default function LandingPage() {
               " d-flex justify-content-between align-items-center"
             }
           >
-            <img src={Logo} alt="akadon" />
+            <div
+              className={
+                Style["vic-school"] + " d-flex align-items-center mb-3"
+              }
+            >
+              <img src={Logo} alt="akadon" />
+              <div className={Style["vic-info-name"]}>
+                <span className={Style["vic-grade"]}>
+                  TRƯỜNG TIỂU HỌC VÀ TRUNG HỌC CƠ SỞ
+                </span>
+                <br></br>
+                <span className=" aka-fw-700 mb-0 text-capitalize text-nowrap">
+                  VICTORIA THĂNG LONG
+                </span>
+              </div>
+            </div>
+
             <Link
               to="/login"
               className="aka-bg-1 aka-br-2 aka-lh-44 text-decoration-none border-0 text-light px-4"
@@ -36,8 +42,8 @@ export default function LandingPage() {
           </div>
 
           <div className="d-flex flex-column flex-xl-row align-items-center justify-content-between">
-            <h1 className="aka-color-5 aka-fw-800 mb-0 text-capitalize text-nowrap">
-              Quản lý<span className="d-inline d-xl-block"></span> trường học
+            <h1 className="text-white aka-fw-800 mb-0 text-capitalize text-nowrap">
+              Quản lý<span className="d-inline d-xl-block"></span> tài liệu
               online<br></br> thật đơn giản
             </h1>
             <img src={LDImage1} alt="landing page" width={648} />
@@ -45,108 +51,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`${Style["block-1"]} ${Style["container"]}`}>
-        <h2
-          className={`${Style["sub-header"]} aka-fw-800 text-center text-capitalize position-relative`}
-        >
-          Quản lý lớp học & các khoá học
-        </h2>
-        <div className="d-flex flex-column flex-xl-row align-items-stretch">
-          <div className="text-center">
-            <img
-              src={LDImage2}
-              alt="landing page"
-              className={Style["hero-image"] + " me-3"}
-            />
-          </div>
-          <div className="d-flex flex-row flex-xl-column justify-content-between align-items-stretch py-3">
-            <div
-              className={`${Style["content-box"]} aka-br-4 aka-boxshadow py-4 px-3 me-3 mb-0 mb-xl-4 me-xl-0 `}
-            >
-              <div className="d-flex align-items-center">
-                <img src={LDIcon1} alt="classroom" className="me-2" />
-                <h4 className="mb-0 fw-bold">Lớp học</h4>
-              </div>
-              <p>
-                Từng lớp học và khoá học được chia theo logic tương tự như lớp
-                học truyền thống
-              </p>
-            </div>
-
-            <div
-              className={`${Style["content-box"]} aka-br-4 aka-boxshadow py-4 px-3`}
-            >
-              <div className="d-flex align-items-center">
-                <img src={LDIcon2} alt="classroom" className="me-2" />
-                <h4 className="mb-0 fw-bold">Trải nghiệm</h4>
-              </div>
-              <p>
-                Giúp đem lại trải nghiệm xuyên suốt dù học trực tiếp hay trực
-                tuyến
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className={`${Style["block-2-wrapper"]} w-100`}>
-        <div className={`${Style["container"]}`}>
-          {/* HEADER */}
-          <h2
-            className={`${Style["sub-header"]} position-relative text-capitalize aka-fw-800 text-center`}
-          >
-            Tác vụ của giáo viên
-          </h2>
-          {/* PARAGRAPH */}
-          <p className="text-center mx-auto">
-            Các tác vụ thường ngày của giáo viên sẽ được tự động hoá, giúp giáo
-            viên có thể bỏ qua những công đoạn lặp lại, và có thể tập trung vào
-            việc truyền đạt kiến thức tốt hơn
-          </p>
-          {/* CONTENT CONTAINER START */}
-          <div className="d-flex justify-content-between">
-            <div
-              className={`${Style["content-box"]} aka-br-4 me-3 position-relative bg-white`}
-            >
-              <h4 className="fw-bold text-center w-100">Điểm danh</h4>
-              <img
-                src={LDIcon3}
-                alt="landing page"
-                className={`position-absolute`}
-              />
-            </div>
-
-            <div
-              className={`${Style["content-box"]} aka-br-4 me-3 position-relative bg-white`}
-            >
-              <h4 className="fw-bold text-center w-100">Giao bài tập</h4>
-              <img
-                src={LDIcon4}
-                alt="landing page"
-                className={`position-absolute`}
-              />
-            </div>
-
-            <div
-              className={`${Style["content-box"]} aka-br-4 position-relative bg-white`}
-            >
-              <h4 className="fw-bold text-center w-100">Đánh giá kết quả</h4>
-              <img
-                src={LDIcon5}
-                alt="landing page"
-                className={`position-absolute`}
-              />
-            </div>
-          </div>
-          {/* CONTENT CONTAINER END */}
-        </div>
-      </section>
-
       <section className={`${Style["block-3"]} ${Style["container"]}`}>
         <h2
           className={`${Style["sub-header"]} position-relative text-center aka-fw-800`}
         >
-          Quản lý nội dung giáo dục
+          Quản lý tài liệu bài giảng
         </h2>
 
         <div className="d-flex flex-column flex-xl-row align-items-center align-items-xl-stretch">
@@ -160,8 +69,8 @@ export default function LandingPage() {
               </h4>
             </div>
             <p>
-              Nhà trường luôn có thể chủ động cài đặt chương trình học theo giáo
-              án đã định sẵn cho các năm học
+              Nhà trường luôn có thể chủ động cài đặt chương trình học theo
+              giáo án đã định sẵn cho các năm học
             </p>
           </div>
 
@@ -174,60 +83,83 @@ export default function LandingPage() {
                 Trải nghiệm dùng
               </h4>
             </div>
-            <p>Đem lại trải nghiệm đơn giản cho các giáo viên và học sinh</p>
+            <p>
+              Đem lại trải nghiệm đơn giản cho các giáo viên và học sinh
+            </p>
           </div>
         </div>
       </section>
 
       <section className={`${Style["footer-wrapper"]} aka-bg-4`}>
         <div className={`${Style["container"]}`}>
-          <img src={Logo} alt="akadon" className="mb-4" />
-          <ul className={`navbar-nav d-flex flex-row flex-wrap border-bottom`}>
+          {/* <img src={Logo} alt="akadon" className="mb-4" /> */}
+          <ul
+            className={`navbar-nav justify-content-between d-flex flex-row flex-wrap border-bottom`}
+          >
             <li className={`nav-item mb-4 me-3`}>
-              <p className="mb-4">Công ty TNHH Công nghệ Ứng dụng AKADON</p>
-              <a href="/" className="text-dark h2 mb-0 me-3">
-                <i className="bi bi-facebook"></i>
-              </a>
-              <a href="/" className="text-dark h2 mb-0">
-                <i className="bi bi-youtube"></i>
-              </a>
+              <img
+                src={Logo}
+                alt="akadon"
+                className="mb-4 d-flex mx-auto"
+              />
+              <p className="mb-4">VICTORIA THĂNG LONG</p>
             </li>
 
             <li className={`nav-item mb-4 me-3`}>
               <p className="mb-4">
                 <i className="bi bi-geo-alt"></i>
                 <span className="ms-3">
-                  Tầng 3, số 26 Lê Trọng Tấn, Khương Mai,<br></br> Thanh Xuân,
-                  Hà Nội
+                  Địa chỉ: Lô A2.4 - TH01 - KĐT Thanh <br></br> Hà - Thanh
+                  Oai - Hà Nội
                 </span>
               </p>
-              <p className="mb-0">
-                <i className="bi bi-telephone-fill"></i>
-                <a
-                  href="tel:0858836632"
-                  className="ms-3 text-dark text-decoration-none"
-                >
-                  085 883 6632
-                </a>
+              <p className="mb-4">
+                <i className="bi bi-geo-alt"></i>
+                <span className="ms-3">
+                  CÔNG TY CỔ PHẦN ĐẦU TƯ VÀ PHÁT TRIỂN <br></br> GIÁO DỤC
+                  VICTORIA THĂNG LONG Địa chỉ Văn Phòng: <br></br>Tầng 2 –
+                  Khu Văn Phòng, tòa nhà 27A3, Khu đô thị <br></br>Green
+                  Star 232 Phạm Văn Đồng, Phường Cổ Nhuế 1,<br></br> Quận
+                  Bắc Từ Liêm, TP Hà Nội
+                </span>
               </p>
             </li>
 
             <li className={`nav-item mb-4`}>
               <p className="aka-mb-12">
-                Mã số doanh nghiệp: <strong>0107979500</strong>
+                <i className="bi bi-telephone-fill"></i>
+                <a
+                  href="tel:0858836632"
+                  className="ms-3 text-dark text-decoration-none"
+                >
+                  024 6653 6253 - 0889 662 899
+                </a>
+              </p>
+              <p className="aka-mb-12">
+                <i class="bi bi-envelope-fill"></i>
+                <span className="ms-3">
+                  Email: <strong>vicschool@vicschool.edu.vn</strong>
+                </span>
               </p>
 
               <p className="aka-mb-12">
-                Đại diện doanh nghiệp: <strong>Văn Thị Thu Nhiên</strong>
-              </p>
-
-              <p className="aka-mb-12">
-                Chức vụ: <strong>Giám đốc điều hành</strong>
+                <i class="bi bi-building"></i>
+                <span className="ms-3">
+                  Website:{" "}
+                  <strong>
+                    <a href="http://vicschool.edu.vn/">
+                      http://vicschool.edu.vn/
+                    </a>
+                  </strong>
+                </span>
               </p>
             </li>
           </ul>
-          <div className="py-5 d-flex">
-            <a href="/" className="mb-0 me-4 text-dark text-decoration-none">
+          <div className="py-3 d-flex">
+            <a
+              href="/"
+              className="mb-0 me-4 text-dark text-decoration-none"
+            >
               Điều khoản sử dụng
             </a>
             <a
@@ -236,7 +168,10 @@ export default function LandingPage() {
             >
               Chính sách bảo mật
             </a>
-            <p className="mb-0">@2021 AKADON EDUCATION. All Rights Reserved.</p>
+            <p className="mb-0">
+              Copyright © Victoria Thăng Long Corporation. All Rights
+              Reserved
+            </p>
           </div>
         </div>
       </section>

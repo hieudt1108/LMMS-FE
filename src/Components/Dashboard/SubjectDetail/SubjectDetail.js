@@ -21,9 +21,9 @@ function SubjectDetail({ match }) {
             <div className={Style["schedule-teach"] + " bg-white aka-br-3"}>
                <ScheduleTeach match={match} />
             </div>
-            <div className={Style["document"] + " bg-white aka-br-3"}>
+            {/* <div className={Style["document"] + " bg-white aka-br-3"}>
                <DocumentHomework />
-            </div>
+            </div> */}
          </div>
       </div>
    );

@@ -32,40 +32,6 @@ function Topnav() {
         <li
           className={
             Style["topnav__items"] +
-            " aka-circle-box me-3 position-relative nav-item aka-center-box aka-boxshadow rounded-circle btn"
-          }
-        >
-          <img src={MessageBuble} alt="message" />
-          <div
-            className={
-              Style["count"] +
-              " aka-circle-box-sm aka-center-box aka-fz-1 position-absolute rounded-circle text-white aka-fw-500"
-            }
-          >
-            1
-          </div>
-        </li>
-
-        <li
-          className={
-            Style["topnav__items"] +
-            " aka-circle-box-md me-3 position-relative nav-item aka-center-box aka-boxshadow rounded-circle btn"
-          }
-        >
-          <img src={Bell} alt="message" />
-          <div
-            className={
-              Style["count"] +
-              " aka-circle-box-sm aka-center-box aka-fz-1 position-absolute rounded-circle text-white aka-fw-500"
-            }
-          >
-            3
-          </div>
-        </li>
-
-        <li
-          className={
-            Style["topnav__items"] +
             " aka-circle-box-md position-relative nav-item aka-center-box rounded-circle btn"
           }
         >
@@ -80,7 +46,8 @@ function Topnav() {
               <i className="bi bi-chevron-down"></i>
             </DropdownToggle>
             <DropdownMenu className="mt-3">
-              <DropdownItem onClick={handleLogout}>Đăng xuất</DropdownItem>
+              <DropdownItem>Profile</DropdownItem>
+              <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
         </li>

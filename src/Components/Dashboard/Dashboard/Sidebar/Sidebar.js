@@ -3,7 +3,7 @@ import { ListGroup, ListGroupItem } from "reactstrap";
 import { NavLink, useRouteMatch, Link } from "react-router-dom";
 
 import style from "./Style.module.scss";
-import Logo from "../../../../Assets/Dashboard/logo.svg";
+import Logo from "../../../../Assets/Dashboard/logo-victoryschool.png";
 
 export default function Sidebar() {
   const match = useRouteMatch();
@@ -11,7 +11,7 @@ export default function Sidebar() {
     <div className={style["sidebar"] + " bg-white"}>
       <div className={style["logo"] + " text-center"}>
         <Link to="/">
-          <img src={Logo} alt="akadon" width={100} className="mx-auto" />
+          <img src={Logo} alt="akadon" width={110} className="mx-auto" />
         </Link>
       </div>
 

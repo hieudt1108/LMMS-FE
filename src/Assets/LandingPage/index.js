@@ -1,5 +1,5 @@
 import LDBackground from "./ld-bg.png";
-import LDImage1 from "./ld-img-1.png";
+import LDImage1 from "./Dashboard.png";
 import LDImage2 from "./ld-img-2.png";
 import LDIcon1 from "./ld-icon-1.svg";
 import LDIcon2 from "./ld-icon-2.svg";
@@ -20,4 +20,4 @@ export {
   LDIcon5,
   LDIcon6,
   LDIcon7,
-}
+};

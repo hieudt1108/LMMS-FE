@@ -3,11 +3,11 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Button, Form, Input, Label } from "reactstrap";
 
-import {login, setLocalStorage, getLocalStorage} from "../../Api";
+import { login, setLocalStorage, getLocalStorage } from "../../Api";
 import { LOGIN_REQUEST } from "../../Redux/Actions/ActionTypes";
 
 import lgUnder from "../../Assets/Login/loginBG.svg";
-import logo from "../../Assets/Login/LogoGroup.svg";
+import logo from "../../Assets/Dashboard/logo-victoryschool.png";
 
 import Lgcss from "./Login.module.scss";
 import LoginInfo from "./LoginInfo";
@@ -17,9 +17,9 @@ export default function Login() {
   const dispatch = useDispatch();
   // warning unctrol to control
   const initUser = {
-    school: "Akadon",
-    email: "thanhdovan210184@gmail.com",
-    password: "123@123a",
+    school: "",
+    email: "",
+    password: "",
   };
   const [hide, setHide] = useState(true);
   const [loginData, setLoginData] = useState(initUser);
@@ -75,7 +75,7 @@ export default function Login() {
           className={Lgcss.under_img + " position-absolute"}
         />
         <div className="text-center pb-2">
-          <img alt="logo" src={logo} width={125} />
+          <img alt="logo" src={logo} width={110} />
         </div>
         <Form
           className={Lgcss.box + " mx-auto mt-4 aka-br-2"}

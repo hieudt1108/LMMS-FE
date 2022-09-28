@@ -54,8 +54,8 @@ export default function Home() {
     BannerTitle = (
       <h4 className="fw-bold mb-3">
         <span>Bạn đang dạy</span>
-        <span className="aka-color-2"> {sumary.total_course} môn học</span>
-        <span> cho</span>
+        {/* <span className="aka-color-2"> {sumary.total_course} môn học</span>
+        <span> cho</span> */}
         <span className="aka-color-2"> {sumary.total_class} lớp</span>
       </h4>
     );
@@ -75,10 +75,10 @@ export default function Home() {
         TitleScheduleList={TitleScheduleList}
         courses_today={sumary.courses_today}
       />
-      <HomeworkList
+      {/* <HomeworkList
         homeworks_today={sumary.homeworks_today}
         homeworkTitle={homeworkTitle}
-      />
+      /> */}
     </div>
   );
 }

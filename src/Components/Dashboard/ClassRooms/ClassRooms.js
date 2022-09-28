@@ -41,35 +41,35 @@ export default function ClassRooms({match}) {
             {name}
           </h4>
           <div className={Style["course-card"] + " aka-br-2 d-flex mb-3"}>
-            <div className="aka-color-5 text-center py-3">
+            <div className=" border border-dark aka-color-5 text-center py-3">
               <h4>{total_student}</h4>
               <span>Học sinh</span>
             </div>
 
-            <div className="aka-color-5 text-center py-3">
+            <div className="border border-dark aka-color-5 text-center py-3">
               <h4>{total_male}</h4>
               <span>Nam</span>
             </div>
 
-            <div className="aka-color-5 text-center py-3">
+            <div className="border border-dark aka-color-5 text-center py-3">
               <h4>{total_female}</h4>
               <span>Nữ</span>
             </div>
 
-            <div className="aka-color-5 text-center py-3">
+            <div className="border border-dark aka-color-5 text-center py-3">
               <h4>{total_course}</h4>
               <span>Môn học giảng dạy</span>
             </div>
 
-            <div className="aka-color-5 text-center py-3">
+            <div className="border border-dark aka-color-5 text-center py-3">
               <h4>{total_lesson}</h4>
               <span>Số tiết giảng dạy</span>
             </div>
           </div>
-          <p className="mb-0">
+          {/* <p className="mb-0">
             <span className="aka-color-3">Ngày bắt đầu dạy: </span>
             <span className="aka-color-5">{start_datetime}</span>
-          </p>
+          </p> */}
         </Link>
       );
     });

@@ -43,7 +43,7 @@ function App() {
               </SnackbarProvider>
             </QueryWrapper>
           </SettingsProvider>
-          <ReactQueryDevtools initialIsOpen />
+          {/*<ReactQueryDevtools initialIsOpen />*/}
         </QueryClientProvider>
       </Sentry.ErrorBoundary>
     </React.Suspense>

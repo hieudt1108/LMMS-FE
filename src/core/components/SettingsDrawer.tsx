@@ -92,9 +92,9 @@ const SettingsDrawer = ({ onDrawerToggle, open }: SettingsDrawerProps) => {
               label={t("settings.drawer.language.options.en")}
             />
             <FormControlLabel
-              value="fr"
+              value="vi"
               control={<Radio />}
-              label={t("settings.drawer.language.options.fr")}
+              label={t("settings.drawer.language.options.vi")}
             />
           </RadioGroup>
         </FormControl>

@@ -56,26 +56,9 @@ const MeetingWidgets = () => {
                 {meeting.date}
               </Typography>
             </Box>
-            <IconButton
-              aria-label="Go to meeting details"
-              component={RouterLink}
-              to={`/${process.env.PUBLIC_URL}/admin/calendar`}
-            >
-              <ChevronRightIcon />
-            </IconButton>
           </CardContent>
         </Card>
       ))}
-      <Button
-        aria-label="Add new meeting"
-        color="secondary"
-        component={RouterLink}
-        fullWidth
-        to={`/${process.env.PUBLIC_URL}/admin/calendar`}
-        variant="contained"
-      >
-        <AddIcon />
-      </Button>
     </React.Fragment>
   );
 };

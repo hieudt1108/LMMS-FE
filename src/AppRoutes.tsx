@@ -24,7 +24,7 @@ const Login = lazy(() => import("./auth/pages/Login"));
 const Register = lazy(() => import("./auth/pages/Register"));
 
 // Calendar
-const CalendarApp = lazy(() => import("./calendar/pages/CalendarApp"));
+// const CalendarApp = lazy(() => import("./calendar/pages/CalendarApp"));
 
 // Core
 const Forbidden = lazy(() => import("./core/pages/Forbidden"));
@@ -46,7 +46,7 @@ const AppRoutes = () => {
       <PrivateRoute path="admin" element={<Admin />}>
         <PrivateRoute path="/" element={<Home />} />
         <PrivateRoute path="/document" element={null} />
-        <PrivateRoute path="calendar" element={<CalendarApp />} />
+        {/* <PrivateRoute path="calendar" element={<CalendarApp />} /> */}
         <PrivateRoute path="dashboard" element={<Dashboard />} />
         <PrivateRoute path="faq" element={<Faq />} />
         <PrivateRoute path="help" element={<HelpCenter />} />

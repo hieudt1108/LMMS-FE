@@ -11,9 +11,9 @@ i18n
     backend: {
       loadPath: `${process.env.PUBLIC_URL}/locales/{{lng}}/translation.json`,
     },
-    fallbackLng: "en",
+    fallbackLng: "vi",
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
-    supportedLngs: ["en", "fr"],
+    supportedLngs: ["en", "vi"],
   });

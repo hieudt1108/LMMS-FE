@@ -10,6 +10,7 @@ import BarChartIcon from "@material-ui/icons/BarChart";
 import EventIcon from "@material-ui/icons/Event";
 import HelpCenterIcon from "@material-ui/icons/HelpCenter";
 import HomeIcon from "@material-ui/icons/Home";
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PeopleIcon from "@material-ui/icons/People";
 import PersonIcon from "@material-ui/icons/Person";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -34,7 +35,7 @@ export const menuItems = [
     path: "/admin",
   },
   {
-    icon: HomeIcon,
+    icon: FileCopyIcon,
     key: "admin.drawer.menu.document",
     path: "/admin/document",
   },
@@ -47,16 +48,6 @@ export const menuItems = [
     icon: PeopleIcon,
     key: "admin.drawer.menu.userManagement",
     path: "/admin/user-management",
-  },
-  {
-    icon: EventIcon,
-    key: "admin.drawer.menu.calendar",
-    path: "/admin/calendar",
-  },
-  {
-    icon: AccountTreeIcon,
-    key: "admin.drawer.menu.projects",
-    path: "/admin/projects",
   },
   {
     icon: HelpCenterIcon,

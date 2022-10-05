@@ -32,7 +32,7 @@ function App() {
 
   return (
     <React.Suspense fallback={<Loader />}>
-      <Sentry.ErrorBoundary fallback={"An error has occurred"}>
+      <Sentry.ErrorBoundary>
         <QueryClientProvider client={queryClient}>
           <SettingsProvider>
             <QueryWrapper>

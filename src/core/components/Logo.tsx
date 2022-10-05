@@ -10,7 +10,7 @@ type LogoProps = {
 const Logo = ({colored = false, size = 90, ...boxProps}: LogoProps) => {
   return (
       <Box {...boxProps}>
-        <LogoSvg height={size} width={size} />
+        <LogoSvg height={120} width={120} />
       </Box>
   );
 };

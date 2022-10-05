@@ -1,8 +1,8 @@
 {
   "name": "",
   "version": "0.1.0-alpha",
-  "description": "Free and open-source admin application made with React",
-  "author": "Thạngoyce",
+  "description": "",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -57,7 +57,7 @@
     "build:production": "env-cmd -f .env.production npm run build",
     "predeploy": "yarn run build:production",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
+    "start": "set PORT=80 &&react-scripts start",
     "test": "react-scripts test"
   },
   "eslintConfig": {

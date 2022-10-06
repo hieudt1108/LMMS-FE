@@ -402,8 +402,26 @@
     }
   },
   "userManagement": {
+    "listScreen": {
+      "importFile": "Nhập file",
+      "exportFile": "Xuất file",
+      "addUser": "Thêm người dùng",
+      "search": "Tìm kiếm theo tên",
+      "filter": "Thêm bộ lọc"
+    },
     "confirmations": {
       "delete": "Bạn có chắc chắn muốn xóa người dùng này không?"
+    },
+    "action": {
+      "disabled": {
+        "button": "Vô hiệu hóa"
+      },
+      "cancel": {
+        "button": "Hủy bỏ"
+      },
+      "save":{
+        "button": "Lưu"
+      }
     },
     "form": {
       "disabled": {
@@ -428,7 +446,17 @@
       },
       "role": {
         "label": "Vai trò"
+      },
+      "address": {
+        "label": "Địa chỉ"
+      },
+      "email": {
+        "label": "Email"
+      },
+      "phone": {
+        "label":"Điện thoại"
       }
+
     },
     "modal": {
       "add": {
@@ -437,7 +465,7 @@
       },
       "edit": {
         "action": "Sửa",
-        "title": "Sửa thông tin người dùng"
+        "title": "Thông tin người dùng"
       }
     },
     "notifications": {

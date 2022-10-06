@@ -120,15 +120,7 @@ const Login = () => {
             >
               {t("auth.login.submit")}
             </LoadingButton>
-            <Button
-              component={RouterLink}
-              to={`/${process.env.PUBLIC_URL}/register`}
-              color="primary"
-              fullWidth
-              sx={{ mt: 2 }}
-            >
-              {t("auth.login.newAccountLink")}
-            </Button>
+
           </Box>
         </BoxedLayout>
       </Grid>

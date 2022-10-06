@@ -24,9 +24,23 @@ const LandingLayout = ({ children }: LandingLayoutProps) => {
     <Paper square>
       <AppBar color="transparent" position="relative">
         <Toolbar>
-          <Logo size={24} sx={{ mr: 2 }} />
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            {process.env.REACT_APP_NAME}
+          <Logo size={36} sx={{ mt: 4 }} />
+          <Typography
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 2 }}
+            alignSelf="center"
+          >
+            TRƯỜNG TIỂU HỌC VÀ TRUNG HỌC CƠ SỞ
+            <Typography
+              variant="h5"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              VICTORIA THĂNG LONG
+            </Typography>
           </Typography>
           <IconButton
             color="default"

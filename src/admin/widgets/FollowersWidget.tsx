@@ -11,31 +11,119 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Math from "../../Assets/Subjects/mathLogo.png";
+import Chemistry from "../../Assets/Subjects/chemistryLogo.png";
+import English from "../../Assets/Subjects/englishLogo.png";
+import Geography from "../../Assets/Subjects/geography.png";
+
+import { Link as RouterLink } from "react-router-dom";
+import { useAuth } from "../../auth/contexts/AuthProvider";
+import Fab from "@mui/material/Fab";
 
 const socials = [
   {
+    image: <img src={Math} />,
     bgcolor: "primary.main",
     icon: <ThumbUpIcon sx={{ color: "#fff" }} />,
-    name: "Likes",
-    trend: <ArrowDropUpIcon sx={{ color: "success.main" }} />,
+    name: "Math",
+    trend: (
+      <div className="d-flex">
+        <Fab
+          style={{
+            backgroundColor: "#8BC6EC",
+            backgroundImage:
+              "linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)",
+          }}
+          color="secondary"
+          component={RouterLink}
+          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          variant="extended"
+        >
+          Document
+          <ArrowRightIcon sx={{ color: "#757de8" }} />
+        </Fab>
+      </div>
+    ),
     unitKey: "admin.home.followers.units.likes",
-    value: "26,789",
+    teacher: "Adam",
   },
   {
+    image: <img src={Chemistry} />,
     bgcolor: "error.main",
     icon: <FavoriteIcon style={{ color: "#fff" }} />,
-    name: "Love",
-    trend: <ArrowRightIcon sx={{ color: "action.disabled" }} />,
+    name: "Chemistry",
+    trend: (
+      <div className="d-flex">
+        <Fab
+          style={{
+            backgroundColor: "#8BC6EC",
+            backgroundImage:
+              "linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)",
+          }}
+          color="secondary"
+          component={RouterLink}
+          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          variant="extended"
+        >
+          Document
+          <ArrowRightIcon sx={{ color: "#757de8" }} />
+        </Fab>
+      </div>
+    ),
     unitKey: "admin.home.followers.units.love",
-    value: "6,754",
+    teacher: "Tú Sena",
   },
   {
+    image: <img src={English} />,
     bgcolor: "warning.main",
     icon: <EmojiEmotionsIcon style={{ color: "#fff" }} />,
-    name: "Smiles",
-    trend: <ArrowDropDownIcon sx={{ color: "error.main" }} />,
+    name: "English",
+    trend: (
+      <div className="d-flex">
+        <Fab
+          style={{
+            backgroundColor: "#8BC6EC",
+            backgroundImage:
+              "linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)",
+          }}
+          color="secondary"
+          component={RouterLink}
+          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          variant="extended"
+        >
+          Document
+          <ArrowRightIcon sx={{ color: "#757de8" }} />
+        </Fab>
+      </div>
+    ),
     unitKey: "admin.home.followers.units.smiles",
-    value: "52,789",
+    teacher: "John Smith",
+  },
+  {
+    image: <img src={Geography} />,
+    bgcolor: "warning.main",
+    icon: <EmojiEmotionsIcon style={{ color: "#fff" }} />,
+    name: "Geography",
+    trend: (
+      <div className="d-flex">
+        <Fab
+          style={{
+            backgroundColor: "#8BC6EC",
+            backgroundImage:
+              "linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)",
+          }}
+          color="secondary"
+          component={RouterLink}
+          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          variant="extended"
+        >
+          Document
+          <ArrowRightIcon sx={{ color: "#757de8" }} />
+        </Fab>
+      </div>
+    ),
+    unitKey: "admin.home.followers.units.smiles",
+    teacher: "Pault",
   },
 ];
 
@@ -47,18 +135,23 @@ const FollowersWidget = () => {
       {socials.map((social) => (
         <Card key={social.name} sx={{ mb: 2 }}>
           <CardContent sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar
+            <Box sx={{ mr: 2 }}>{social.image}</Box>
+            {/* <Avatar
               aria-label={`${social.name} avatar`}
               sx={{ bgcolor: social.bgcolor, mr: 2 }}
             >
               {social.icon}
-            </Avatar>
+            </Avatar> */}
             <Box sx={{ flexGrow: 1 }}>
               <Typography component="div" variant="h6">
-                {social.value}
+                Teacher: {social.teacher}
               </Typography>
-              <Typography variant="body2" color="textSecondary" component="div">
-                {t(social.name)}
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                component="div"
+              >
+                Subject: {t(social.name)}
               </Typography>
             </Box>
             {social.trend}

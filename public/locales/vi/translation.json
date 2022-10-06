@@ -22,7 +22,7 @@
     },
     "home": {
       "achievement": {
-        "action": "Xem lí lịch",
+        "action": "Xem danh sách lớp",
         "description": "Bạn đã hoàn thành {{progress}}% trong hồ sơ của bạn. Tiến trình hiện tại của bạn là rất tốt.",
         "title": "Xin chúc mừng {{name}}"
       },

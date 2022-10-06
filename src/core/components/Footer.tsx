@@ -7,14 +7,7 @@ const Footer = () => {
   return (
     <Box sx={{ p: 6 }} component="footer">
       <Typography variant="body2" color="text.secondary" align="center">
-        {"© "}
-        <Link
-          color="inherit"
-          component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/`}
-        >
-          {process.env.REACT_APP_NAME}
-        </Link>{" "}
+        Copyright © Victoria Thăng Long Corporation. All Rights Reserved{" "}
         {new Date().getFullYear()}
         {"."}
       </Typography>

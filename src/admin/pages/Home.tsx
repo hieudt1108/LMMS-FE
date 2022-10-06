@@ -19,17 +19,28 @@ const Home = () => {
         </AdminToolbar>
       </AdminAppBar>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          lg={12}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <WelcomeWidget />
           <AchievementWidget />
         </Grid>
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid item xs={12} md={6} lg={6}>
           <FollowersWidget />
-          <ViewsWidget />
+          {/* <ViewsWidget /> */}
         </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <PersonalTargetsWidget />
-          <MeetingWidgets />
+        <Grid item xs={12} md={6} lg={6}>
+          {/* <MeetingWidgets />
+          <PersonalTargetsWidget /> */}
+          <ViewsWidget />
         </Grid>
       </Grid>
     </React.Fragment>

@@ -34,6 +34,7 @@
     "i18next": "^20.1.0",
     "i18next-browser-languagedetector": "^6.1.0",
     "i18next-xhr-backend": "^3.2.2",
+    "material-ui-popup-state": "^4.1.0",
     "react": "^17.0.2",
     "react-app-rewired": "^2.2.1",
     "react-dom": "^17.0.2",
@@ -41,7 +42,7 @@
     "react-i18next": "^11.8.11",
     "react-query": "^3.16.0",
     "react-router": "6.0.0-beta.0",
-    "react-router-dom": "6.0.0-beta.0",
+    "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "4.0.3",
     "recharts": "^2.0.9",
     "source-map-explorer": "^2.5.2",
@@ -57,7 +58,7 @@
     "build:production": "env-cmd -f .env.production npm run build",
     "predeploy": "yarn run build:production",
     "deploy": "gh-pages -d build",
-    "start": "set PORT=80 &&react-scripts start",
+    "start": "set PORT=3000 &&react-scripts start",
     "test": "react-scripts test"
   },
   "eslintConfig": {

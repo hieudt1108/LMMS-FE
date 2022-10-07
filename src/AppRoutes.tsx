@@ -10,6 +10,7 @@ const HelpCenter = lazy(() => import("./admin/pages/HelpCenter"));
 const Home = lazy(() => import("./admin/pages/Home"));
 const Profile = lazy(() => import("./admin/pages/Profile"));
 const ProfileActivity = lazy(() => import("./admin/pages/ProfileActivity"));
+const Classes = lazy(() => import("./admin/pages/Classes"));
 const ProfileInformation = lazy(
   () => import("./admin/pages/ProfileInformation")
 );
@@ -47,6 +48,7 @@ const AppRoutes = () => {
         <PrivateRoute path="/" element={<Home />} />
         <PrivateRoute path="/document" element={null} />
         {/* <PrivateRoute path="calendar" element={<CalendarApp />} /> */}
+        <PrivateRoute path="classes" element={<Classes />} />
         <PrivateRoute path="dashboard" element={<Dashboard />} />
         <PrivateRoute path="faq" element={<Faq />} />
         <PrivateRoute path="help" element={<HelpCenter />} />

@@ -16,34 +16,34 @@ const teams = [
   {
     id: "1",
     color: "primary.main",
-    name: "Marketing Team",
+    name: "11B2",
     progress: 75,
     value: 122,
   },
   {
     id: "2",
     color: "warning.main",
-    name: "Operations Team",
+    name: "11B2",
     progress: 50,
     value: 82,
   },
   {
     id: "3",
     color: "error.main",
-    name: "Sales Team",
+    name: "11B2",
     progress: 25,
     value: 39,
   },
   {
     id: "4",
     color: "text.secondary",
-    name: "Research Team",
+    name: "11B2",
     progress: 10,
     value: 9,
   },
 ];
 
-const TeamProgressWidget = () => {
+const DownloadByClassWidget = () => {
   const { t } = useTranslation();
 
   return (
@@ -62,10 +62,10 @@ const TeamProgressWidget = () => {
           >
             <TableHead>
               <TableRow>
-                <TableCell>{t("dashboard.teams.columns.team")}</TableCell>
+                <TableCell>{t("dashboard.teams.columns.class")}</TableCell>
                 <TableCell>{t("dashboard.teams.columns.progress")}</TableCell>
                 <TableCell align="center">
-                  {t("dashboard.teams.columns.value")}
+                  {t("dashboard.teams.columns.download")}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -108,4 +108,4 @@ const TeamProgressWidget = () => {
   );
 };
 
-export default TeamProgressWidget;
+export default DownloadByClassWidget;

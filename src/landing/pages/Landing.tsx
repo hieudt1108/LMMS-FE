@@ -96,7 +96,7 @@ const Landing = () => {
                 borderRadius: 24,
                 borderWidth: 4,
                 borderColor: theme.palette.background.default,
-                width: "100%",
+                width: "100%"
               }}
             />
           </Container>

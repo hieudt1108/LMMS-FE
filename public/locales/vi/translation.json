@@ -209,6 +209,9 @@
       "required": "Yêu cầu"
     }
   },
+  "document": {
+    "title": "Chương trình học"
+  },
   "dashboard": {
     "activity": {
       "title": "Hoạt động"

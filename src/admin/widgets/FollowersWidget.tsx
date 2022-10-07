@@ -36,7 +36,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          to={`/${process.env.PUBLIC_URL}/admin/document`}
           variant="extended"
         >
           Document
@@ -62,7 +62,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          to={`/${process.env.PUBLIC_URL}/admin/document`}
           variant="extended"
         >
           Document
@@ -88,7 +88,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          to={`/${process.env.PUBLIC_URL}/admin/document`}
           variant="extended"
         >
           Document
@@ -114,7 +114,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          to={`/${process.env.PUBLIC_URL}/admin/document`}
           variant="extended"
         >
           Document

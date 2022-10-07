@@ -209,6 +209,9 @@
       "required": "Required"
     }
   },
+  "document": {
+    "title": "Syllabus"
+  },
   "dashboard": {
     "activity": {
       "title": "Activity"

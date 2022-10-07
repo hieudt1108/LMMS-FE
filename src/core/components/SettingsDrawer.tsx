@@ -29,10 +29,6 @@ const SettingsDrawer = ({ onDrawerToggle, open }: SettingsDrawerProps) => {
   } = useSettings();
   const { i18n, t } = useTranslation();
 
-  const handleDirectionChange = (_: any, direction: "ltr" | "rtl") => {
-    changeDirection(direction);
-  };
-
   const handleLanguageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     i18n.changeLanguage((event.target as HTMLInputElement).value);
   };
@@ -113,23 +109,6 @@ const SettingsDrawer = ({ onDrawerToggle, open }: SettingsDrawerProps) => {
           </ToggleButton>
           <ToggleButton value="dark">
             {t("settings.drawer.mode.options.dark")}
-          </ToggleButton>
-        </ToggleButtonGroup>
-        <Typography gutterBottom id="settings-mode" marginTop={3} variant="h6">
-          {t("settings.drawer.direction.label")}
-        </Typography>
-        <ToggleButtonGroup
-          color="primary"
-          value={direction}
-          exclusive
-          fullWidth
-          onChange={handleDirectionChange}
-        >
-          <ToggleButton value="ltr">
-            {t("settings.drawer.direction.options.ltr")}
-          </ToggleButton>
-          <ToggleButton value="rtl">
-            {t("settings.drawer.direction.options.rtl")}
           </ToggleButton>
         </ToggleButtonGroup>
         <Typography

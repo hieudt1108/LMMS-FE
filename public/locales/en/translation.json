@@ -21,8 +21,8 @@
       }
     },
     "home": {
-      "achievement": {
-        "action": "View Profile",
+      "classmate": {
+        "action": "View Class",
         "description": "You have completed {{progress}}% of your profile. Your current progress is great.",
         "title": "Congratulations {{name}}"
       },

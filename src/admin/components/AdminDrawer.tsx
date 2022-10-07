@@ -70,7 +70,7 @@ const AdminDrawer = ({
 
   const drawer = (
       <Box sx={{display: "flex", flexDirection: "column", minHeight: "100%"}}>
-        <Logo style={{marginLeft: 60}} sx={{display: "flex", p: 4}}/>
+        <Logo sx={{display: "flex", p: 4, justifyContent: "center"}}/>
         <List component="nav" sx={{px: 2}}>
           {menuItems.map((item) => (
               <ListItem

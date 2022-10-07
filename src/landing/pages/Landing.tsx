@@ -10,6 +10,7 @@ import Stack from "@material-ui/core/Stack";
 import { useTheme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import StarIcon from "@material-ui/icons/Star";
+import { url } from "inspector";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../../auth/contexts/AuthProvider";
@@ -22,7 +23,7 @@ const Landing = () => {
 
   return (
     <LandingLayout>
-      <main>
+      <main >
         <Box
           sx={{
             py: 6,
@@ -42,11 +43,28 @@ const Landing = () => {
               align="center"
               color="text.primary"
               marginBottom={2}
+              style={{
+                fontSize: 60,
+                color:"white"
+              }}
+              sx={{ fontSize: 60 }}
+            >
+              {t("landing.bigtitle")}
+            </Typography>
+            <Typography
+              variant="h2"
+              // align="center"
+              color="text.primary"
+              marginBottom={2}
+              sx={{ mt: 4, ml: 6 }}
+              style={{
+                color:"white"
+              }}
             >
               {t("landing.title")}
             </Typography>
             <Stack
-              sx={{ pt: 3 }}
+              sx={{ pt: 2 }}
               direction="row"
               spacing={2}
               justifyContent="center"
@@ -73,13 +91,12 @@ const Landing = () => {
           <Container sx={{ py: 6 }} maxWidth="md">
             <img
               alt="Application demo"
-              src={`img/template-${theme.palette.mode}.png`}
+              src={`img/landing.png`}
               style={{
                 borderRadius: 24,
-                borderStyle: "solid",
                 borderWidth: 4,
                 borderColor: theme.palette.background.default,
-                width: "100%",
+                width: "100%"
               }}
             />
           </Container>

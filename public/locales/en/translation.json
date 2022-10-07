@@ -305,7 +305,8 @@
       "more": "More on Github",
       "title": "Main Features"
     },
-    "title": "Free and open-source admin application made with React and Material-UI"
+    "bigtitle" : "Hệ Thống Quản Lý Học Liệu",
+    "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
   },
   "notifications": {
     "newComment": "<bold>{{user}}</bold> has written a new comment on your profile",

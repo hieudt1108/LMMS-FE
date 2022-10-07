@@ -47,11 +47,13 @@ const Login = () => {
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid
+        onClick={() => navigate(`/${process.env.PUBLIC_URL}`)}
         item
         xs={false}
         sm={4}
         md={7}
         sx={{
+          cursor : "pointer",
           backgroundImage: "url(./img/startup.svg)",
           backgroundRepeat: "no-repeat",
           bgcolor: "background.default",

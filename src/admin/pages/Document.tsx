@@ -101,7 +101,7 @@ export default function Document() {
   return (
     <React.Fragment>
       <AdminAppBar>
-        <AdminToolbar title={t("document.title")} />
+        <AdminToolbar title={t("syllabus.title")} />
       </AdminAppBar>
       <Typography component="div" variant="h6">
         Môn Toán

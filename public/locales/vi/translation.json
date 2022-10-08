@@ -210,8 +210,11 @@
       "required": "Yêu cầu"
     }
   },
-  "document": {
+  "syllabus": {
     "title": "Chương trình học"
+  },
+  "document": {
+    "title": "Các tài liệu ôn tập"
   },
   "dashboard": {
     "activity": {

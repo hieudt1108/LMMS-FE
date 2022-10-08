@@ -211,7 +211,13 @@
     }
   },
   "document": {
-    "title": "Chương trình học"
+    "title": "Chương trình học",
+    "subject": {
+      "math": {
+        "title": "Môn toán",
+        "description": "Khung chương trình môn toán"
+      }
+    }
   },
   "dashboard": {
     "activity": {
@@ -412,7 +418,9 @@
       "exportFile": "Xuất file",
       "addUser": "Thêm người dùng",
       "search": "Tìm kiếm theo tên",
-      "filter": "Thêm bộ lọc"
+      "filter": "Thêm bộ lọc",
+      "title":"Người dùng",
+      "description":"Danh sách chi tiết thông tin người dùng"
     },
     "confirmations": {
       "delete": "Bạn có chắc chắn muốn xóa người dùng này không?"

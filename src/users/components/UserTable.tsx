@@ -18,17 +18,15 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import PersonIcon from "@material-ui/icons/Person";
-import React, {useState} from "react";
-import {useTranslation} from "react-i18next";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Empty from "../../core/components/Empty";
 import * as selectUtils from "../../core/utils/selectUtils";
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import {User} from "../types/user";
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { User } from "../types/user";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
-interface EnhancedTableProps {
-}
-
+interface EnhancedTableProps {}
 
 type UserRowProps = {
   index: number;
@@ -39,14 +37,14 @@ type UserRowProps = {
 };
 
 const UserRow = ({
-                   index,
-                   onDelete,
-                   onEdit,
-                   processing,
-                   user,
-                 }: UserRowProps) => {
+  index,
+  onDelete,
+  onEdit,
+  processing,
+  user,
+}: UserRowProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const labelId = `enhanced-table-checkbox-${index}`;
   const openActions = Boolean(anchorEl);
@@ -70,58 +68,50 @@ const UserRow = ({
   };
 
   return (
-      <TableRow
-          tabIndex={-1}
-          key={user.id}
-          sx={{"& td": {bgcolor: "background.paper", border: 0}}}
-      >
-        <TableCell>
-          <Box sx={{display: "flex", alignItems: "center"}}>
-            <Avatar sx={{mr: 3}}>
-              <Avatar alt="Remy Sharp" src={user.avatar}/>
-            </Avatar>
-            <Box>
-              <Typography component="div" variant="h6">
-                {`${user.lastName} ${user.firstName}`}
-              </Typography>
-              <Typography color="textSecondary" variant="body2">
-                {user.email}
-              </Typography>
-            </Box>
+    <TableRow
+      tabIndex={-1}
+      key={user.id}
+      sx={{ "& td": { bgcolor: "background.paper", border: 0 } }}
+    >
+      <TableCell>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Avatar sx={{ mr: 3 }}>
+            <Avatar alt="Remy Sharp" src={user.avatar} />
+          </Avatar>
+          <Box>
+            <Typography component="div" variant="h6">
+              {`${user.lastName} ${user.firstName}`}
+            </Typography>
+            <Typography color="textSecondary" variant="body2">
+              {user.email}
+            </Typography>
           </Box>
-        </TableCell>
-        <TableCell align="center">{user.gender}</TableCell>
-        <TableCell align="center">{user.role}</TableCell>
-        <TableCell align="center">
-          {user.disabled ? (
-              // <Chip label="Disabled"/>
-              <RemoveCircleOutlineIcon
-                  sx={{
-                    color: "white",
-                    backgroundColor: "red",
-                    borderRadius: "100%"
-                  }}
-              />
-          ) : (
-              // <Chip color="primary" label="Active"/>
-              <CheckCircleOutlineIcon
-                  sx={{
-                    color: "white",
-                    backgroundColor: "green",
-                    borderRadius: "100%"
-                  }}
-              />
-          )}
-        </TableCell>
-        <TableCell
-            align="right"
-            sx={{borderTopRightRadius: "1rem", borderBottomRightRadius: "1rem"}}
-        >
-          <IconButton aria-label="edit" size="small">
-            <EditIcon fontSize="inherit" color="primary" onClick={handleEdit}/>
-          </IconButton>
-        </TableCell>
-      </TableRow>
+        </Box>
+      </TableCell>
+      <TableCell align="center">{user.gender}</TableCell>
+      <TableCell align="center">{user.role}</TableCell>
+      <TableCell align="center">
+        {user.disabled ? (
+          <RemoveCircleOutlineIcon />
+        ) : (
+          <CheckCircleOutlineIcon
+            sx={{
+              color: "white",
+              backgroundColor: "green",
+              borderRadius: "100%",
+            }}
+          />
+        )}
+      </TableCell>
+      <TableCell
+        align="right"
+        sx={{ borderTopRightRadius: "1rem", borderBottomRightRadius: "1rem" }}
+      >
+        <IconButton aria-label="edit" size="small">
+          <EditIcon fontSize="inherit" color="primary" onClick={handleEdit} />
+        </IconButton>
+      </TableCell>
+    </TableRow>
   );
 };
 
@@ -133,47 +123,45 @@ type UserTableProps = {
 };
 
 const UserTable = ({
-                     onDelete,
-                     onEdit,
-                     processing,
-                     users = [],
-                   }: UserTableProps) => {
+  onDelete,
+  onEdit,
+  processing,
+  users = [],
+}: UserTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
-      event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-
   if (users.length === 0) {
-    return <Empty title="No user yet"/>;
+    return <Empty title="No user yet" />;
   }
 
   function EnhancedTableHead({}: EnhancedTableProps) {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     return (
-        <TableHead>
-          <TableRow sx={{"& th": {border: 0}}}>
-            {headCells.map((headCell) => (
-                <TableCell key={headCell.id} align={headCell.align} sx={{py: 0}}>
-                  {t(headCell.label)}
-                </TableCell>
-            ))}
-            <TableCell align="right" sx={{py: 0}}>
-              {t("userManagement.table.headers.actions")}
+      <TableHead>
+        <TableRow sx={{ "& th": { border: 0 } }}>
+          {headCells.map((headCell) => (
+            <TableCell key={headCell.id} align={headCell.align} sx={{ py: 0 }}>
+              {t(headCell.label)}
             </TableCell>
-          </TableRow>
-        </TableHead>
+          ))}
+          <TableCell align="right" sx={{ py: 0 }}>
+            {t("userManagement.table.headers.actions")}
+          </TableCell>
+        </TableRow>
+      </TableHead>
     );
   }
 
@@ -206,47 +194,45 @@ const UserTable = ({
     },
   ];
 
-
   return (
-      <React.Fragment>
-        <TableContainer>
-          <Table
-              aria-labelledby="tableTitle"
-              sx={{
-                minWidth: 600,
-                borderCollapse: "separate",
-                borderSpacing: "0 1rem",
-              }}
-          >
-            <EnhancedTableHead/>
+    <React.Fragment>
+      <TableContainer>
+        <Table
+          aria-labelledby="tableTitle"
+          sx={{
+            minWidth: 600,
+            borderCollapse: "separate",
+            borderSpacing: "0 1rem",
+          }}
+        >
+          <EnhancedTableHead />
 
-
-            <TableBody>
-              {users
+          <TableBody>
+            {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((user, index) => (
-                  <UserRow
-                      index={index}
-                      key={user.id}
-                      onDelete={onDelete}
-                      onEdit={onEdit}
-                      processing={processing}
-                      user={user}
-                  />
+                <UserRow
+                  index={index}
+                  key={user.id}
+                  onDelete={onDelete}
+                  onEdit={onEdit}
+                  processing={processing}
+                  user={user}
+                />
               ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={users.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </React.Fragment>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={users.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </React.Fragment>
   );
 };
 

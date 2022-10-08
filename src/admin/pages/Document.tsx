@@ -101,69 +101,65 @@ const rows = [
 export default function Document() {
     const {t} = useTranslation();
 
-    return (
-        <React.Fragment>
-            {/*<AdminAppBar>*/}
-            {/*  <AdminToolbar title={t("document.title")} />*/}
-            {/*</AdminAppBar>*/}
-            <AdminHeader
-                title={"document.subject.math.title"}
-                description={"document.subject.math.description"}
-            />
-
-            <Box mt={2}>
-                <TableContainer component={Paper}>
-                    <Table sx={{minWidth: 650}} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center" colSpan={5}>
-                                    Kỳ 1
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell width={10}>Tuần</TableCell>
-                                <TableCell width={10}>Tiết</TableCell>
-                                <TableCell align="center">Bài dạy/ chủ đề</TableCell>
-                                <TableCell align="center">Ghi chú/ BTVN</TableCell>
-                                <TableCell width={50} align="center">Tài liệu</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows.map((row) => (
-                                <TableRow
-                                    key={row.week}
-                                    sx={{"&:last-child td, &:last-child th": {border: 0}}}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        {row.week}
-                                    </TableCell>
-                                    <TableCell align="center">{row.slot}</TableCell>
-                                    <TableCell align="center">{row.schedule}</TableCell>
-                                    <TableCell align="center">{row.note}</TableCell>
-                                    <TableCell align="right">
-                                        <div className="d-flex">
-                                            <Fab
-                                                style={{
-                                                    backgroundColor: "#8BC6EC",
-                                                    backgroundImage:
-                                                        "linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)",
-                                                }}
-                                                color="secondary"
-                                                component={RouterLink}
-                                                to={`/${process.env.PUBLIC_URL}/admin/document/:subjectSlot`}
-                                                variant="extended"
-                                            >
-                                                Document
-                                                <ArrowRightIcon sx={{color: "#757de8"}}/>
-                                            </Fab>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Box>
-        </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      <AdminHeader
+          title={"document.subject.math.title"}
+          description={"document.subject.math.description"}
+      />
+      <Box mt={2}>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center" colSpan={5}>
+                Kỳ 1
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell width={10}>Tuần</TableCell>
+              <TableCell width={10}>Tiết</TableCell>
+              <TableCell align="center">Bài dạy/ chủ đề</TableCell>
+              <TableCell align="center">Ghi chú/ BTVN</TableCell>
+              <TableCell width={50} align="center">Tài liệu</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.week}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.week}
+                </TableCell>
+                <TableCell align="center">{row.slot}</TableCell>
+                <TableCell align="center">{row.schedule}</TableCell>
+                <TableCell align="center">{row.note}</TableCell>
+                <TableCell align="right">
+                  <div className="d-flex">
+                    <Fab
+                      style={{
+                        backgroundColor: "#8BC6EC",
+                        backgroundImage:
+                          "linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)",
+                      }}
+                      color="secondary"
+                      component={RouterLink}
+                      to={`/${process.env.PUBLIC_URL}/admin/document/:subjectSlot`}
+                      variant="extended"
+                    >
+                      Document
+                      <ArrowRightIcon sx={{ color: "#757de8" }} />
+                    </Fab>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      </Box>
+    </React.Fragment>
+  );
 }

@@ -210,8 +210,11 @@
       "required": "Required"
     }
   },
-  "document": {
+  "syllabus": {
     "title": "Syllabus"
+  },
+  "document": {
+    "title": "Document practice"
   },
   "dashboard": {
     "activity": {

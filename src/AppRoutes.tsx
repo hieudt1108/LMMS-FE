@@ -12,6 +12,8 @@ const Profile = lazy(() => import("./admin/pages/Profile"));
 const ProfileActivity = lazy(
   () => import("./admin/pages/ProfileActivity")
 );
+const ProfileActivity = lazy(() => import("./admin/pages/ProfileActivity"));
+const Classes = lazy(() => import("./admin/pages/Classes"));
 const ProfileInformation = lazy(
   () => import("./admin/pages/ProfileInformation")
 );
@@ -53,6 +55,7 @@ const AppRoutes = () => {
         <PrivateRoute path="/document" element={<Document />} />
         <PrivateRoute path="/document/:subjectSlot" element={null} />
         {/* <PrivateRoute path="calendar" element={<CalendarApp />} /> */}
+        <PrivateRoute path="classes" element={<Classes />} />
         <PrivateRoute path="dashboard" element={<Dashboard />} />
         <PrivateRoute path="faq" element={<Faq />} />
         <PrivateRoute path="help" element={<HelpCenter />} />

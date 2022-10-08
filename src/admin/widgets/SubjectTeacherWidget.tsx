@@ -5,7 +5,7 @@ import { useTheme } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import { Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-const SalesByCategoryWidget = () => {
+const SubjectTeacherWidget = () => {
   const { t } = useTranslation();
   const theme = useTheme();
 
@@ -63,4 +63,4 @@ const SalesByCategoryWidget = () => {
   );
 };
 
-export default SalesByCategoryWidget;
+export default SubjectTeacherWidget;

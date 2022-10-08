@@ -5,6 +5,7 @@
         "calendar": "Lịch",
         "dashboard": "Bảng điều khiển",
         "help": "Trợ giúp",
+        "classes": "Lớp học",
         "home": "Trang chủ",
         "projects": "Dự án",
         "settings": "Cài đặt",
@@ -226,10 +227,10 @@
       "title": "Đơn hàng"
     },
     "overview": {
-      "orders": "Đơn hàng",
-      "sales": "Bán hàng",
-      "users": "Người dùng",
-      "visits": "Lượt truy cập"
+      "subjects": "Môn học",
+      "class": "Lớp học",
+      "documents": "Tài Liệu",
+      "downloads": "Lượt tải"
     },
     "progress": {
       "title": "Tiến trình"
@@ -255,13 +256,13 @@
     "teams": {
       "columns": {
         "progress": "Progress",
-        "team": "Team",
-        "value": "Value"
+        "class": "Lớp học",
+        "download": "Lượt tải"
       },
       "title": "Teams Progress"
     },
     "users": {
-      "title": "Recent Users"
+      "title": "Giáo viên bộ môn"
     },
     "visitProgress": {
       "title": "Visits"
@@ -488,6 +489,20 @@
     },
     "toolbar": {
       "title": "Người dùng"
+    }
+  },
+  "classes":{
+    "title":"Lớp học",
+    "create":"Tạo lớp học",
+    "filter":{
+      "class":"Lớp học",
+      "year": "Niên khoá",
+      "status":{
+        "title":"Trạng thái",
+        "active":"Kích hoạt",
+        "inActive":"Không kích hoạt"
+      },
+      "search":"Tìm kiếm lớp"
     }
   }
 }

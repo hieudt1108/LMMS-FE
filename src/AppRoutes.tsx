@@ -12,7 +12,6 @@ const Profile = lazy(() => import("./admin/pages/Profile"));
 const ProfileActivity = lazy(
   () => import("./admin/pages/ProfileActivity")
 );
-const ProfileActivity = lazy(() => import("./admin/pages/ProfileActivity"));
 const Classes = lazy(() => import("./admin/pages/Classes"));
 const ProfileInformation = lazy(
   () => import("./admin/pages/ProfileInformation")

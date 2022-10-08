@@ -211,7 +211,8 @@
     }
   },
   "document": {
-    "title": "Chương trình học",
+    "title": "Các tài liệu ôn tập",
+    "title2": "Chương trình học",
     "subject": {
       "math": {
         "title": "Môn toán",
@@ -220,9 +221,6 @@
     }},
   "syllabus": {
     "title": "Chương trình học"
-  },
-  "document": {
-    "title": "Các tài liệu ôn tập"
   },
   "dashboard": {
     "activity": {

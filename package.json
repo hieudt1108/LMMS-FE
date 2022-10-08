@@ -62,7 +62,7 @@
     "build:production": "env-cmd -f .env.production npm run build",
     "predeploy": "yarn run build:production",
     "deploy": "gh-pages -d build",
-    "start": "set PORT=80 &&react-scripts start",
+    "start": "set PORT=3000 &&react-scripts start",
     "test": "react-scripts test"
   },
   "eslintConfig": {

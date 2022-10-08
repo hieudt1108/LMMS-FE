@@ -12,6 +12,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import BoxedLayout from "../../core/components/BoxedLayout";
 import { useSnackbar } from "../../core/contexts/SnackbarProvider";
+import { ROUTER } from "../../Router";
 import { useAuth } from "../contexts/AuthProvider";
 
 const Login = () => {
@@ -23,7 +24,7 @@ const Login = () => {
   const handleLogin = (email: string, password: string) => {
     login(email, password)
       .then(() =>
-        navigate(`/${process.env.PUBLIC_URL}/admin`, { replace: true })
+        navigate(ROUTER.ADMIN, { replace: true })
       )
       .catch(() => snackbar.error(t("common.errors.unexpected.subTitle")));
   };
@@ -53,7 +54,7 @@ const Login = () => {
         sm={4}
         md={7}
         sx={{
-          cursor : "pointer",
+          cursor: "pointer",
           backgroundImage: "url(./img/startup.svg)",
           backgroundRepeat: "no-repeat",
           bgcolor: "background.default",
@@ -107,7 +108,7 @@ const Login = () => {
             <Box sx={{ textAlign: "right" }}>
               <Link
                 component={RouterLink}
-                to={`/${process.env.PUBLIC_URL}/forgot-password`}
+                to={ROUTER.FORGOT_PASSWORD}
                 variant="body2"
               >
                 {t("auth.login.forgotPasswordLink")}

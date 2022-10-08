@@ -1,6 +1,7 @@
 import Button from "@material-ui/core/Button";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
+import { ROUTER } from "../../Router";
 import { ReactComponent as ForbiddenSvg } from "../assets/403.svg";
 import Result from "../components/Result";
 
@@ -13,7 +14,7 @@ const Forbidden = () => {
         <Button
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin`}
+          to={ROUTER.ADMIN}
           variant="contained"
         >
           {t("common.backHome")}

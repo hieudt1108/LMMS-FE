@@ -18,6 +18,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useNavigate } from 'react-router-dom';
+import { parseWithOptions } from "date-fns/fp";
+import { ROUTER } from '../../Router'
 
 const ClassCart = () => {
     const navigate = useNavigate();
@@ -63,8 +65,11 @@ const ClassCart = () => {
                     />
                     <CardActionArea
                         onClick={() => {
-                            console.log("env", process.env)
-                            // navigate('/hello')
+                            navigate(ROUTER.ADMIN_CLASS_DETAIL, {
+                                state: {
+                                    id: 1,
+                                }
+                            })
                         }}
                     >
                         <CardMedia
@@ -99,7 +104,7 @@ const ClassCart = () => {
                 </Card>
             </Grid>
 
-        </React.Fragment>
+        </React.Fragment >
     );
 };
 

@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./core/components/PrivateRoute";
+import { ROUTER } from "./Router";
 
 // Admin
 const Admin = lazy(() => import("./admin/pages/Admin"));
@@ -13,6 +14,7 @@ const ProfileActivity = lazy(
   () => import("./admin/pages/ProfileActivity")
 );
 const Classes = lazy(() => import("./admin/pages/Classes"));
+const ClassDetail = lazy(() => import("./admin/pages/ClassDetail"));
 const ProfileInformation = lazy(
   () => import("./admin/pages/ProfileInformation")
 );
@@ -54,7 +56,8 @@ const AppRoutes = () => {
         <PrivateRoute path="/document" element={<Document />} />
         <PrivateRoute path="/document/:subjectSlot" element={null} />
         {/* <PrivateRoute path="calendar" element={<CalendarApp />} /> */}
-        <PrivateRoute path="classes" element={<Classes />} />
+        <PrivateRoute path="/classes" element={<Classes />} />
+        <PrivateRoute path="/class/:id" element={<ClassDetail />} />
         <PrivateRoute path="dashboard" element={<Dashboard />} />
         <PrivateRoute path="faq" element={<Faq />} />
         <PrivateRoute path="help" element={<HelpCenter />} />
@@ -70,7 +73,7 @@ const AppRoutes = () => {
           path="projects"
           element={
             <Navigate
-              to={`/${process.env.PUBLIC_URL}/under-construction`}
+              to={ROUTER.UNDER_CONSTRUCTION}
               replace
             />
           }
@@ -93,7 +96,7 @@ const AppRoutes = () => {
       <Route
         path="*"
         element={
-          <Navigate to={`/${process.env.PUBLIC_URL}/404`} replace />
+          <Navigate to={ROUTER[404]} replace />
         }
       />
     </Routes>

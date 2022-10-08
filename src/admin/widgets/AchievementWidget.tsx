@@ -3,6 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../../auth/contexts/AuthProvider";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import Fab from "@mui/material/Fab";
+import { ROUTER } from "../../Router";
 const AchievementWidget = () => {
   const { userInfo } = useAuth();
   const { t } = useTranslation();
@@ -12,7 +13,7 @@ const AchievementWidget = () => {
       <Fab
         color="secondary"
         component={RouterLink}
-        to={`/${process.env.PUBLIC_URL}/admin/profile`}
+        to={ROUTER.ADMIN_PROFILE}
         variant="extended"
       >
         {t("admin.home.achievement.action")}

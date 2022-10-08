@@ -13,7 +13,7 @@ const NotFound = () => {
         <Button
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin`}
+          to={ROUTER.ADMIN}
           variant="contained"
         >
           {t("common.backHome")}

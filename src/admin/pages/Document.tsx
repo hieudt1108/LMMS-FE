@@ -15,6 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import { Link as RouterLink } from "react-router-dom";
 import Fab from "@mui/material/Fab";
+import { ROUTER } from "../../Router";
 
 
 function createData(
@@ -144,7 +145,7 @@ export default function Document() {
                       }}
                       color="secondary"
                       component={RouterLink}
-                      to={`/${process.env.PUBLIC_URL}/admin/document/:subjectSlot`}
+                      to={ROUTER.ADMIN_DOUCUMENT_SUBJECT}
                       variant="extended"
                     >
                       Document

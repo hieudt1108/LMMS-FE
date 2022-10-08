@@ -9,6 +9,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import BoxedLayout from "../../core/components/BoxedLayout";
 import { useSnackbar } from "../../core/contexts/SnackbarProvider";
+import { ROUTER } from "../../Router";
 import { useForgotPassword } from "../hooks/useForgotPassword";
 
 const ForgotPassword = () => {
@@ -34,7 +35,7 @@ const ForgotPassword = () => {
     forgotPassword({ email })
       .then(() => {
         snackbar.success(t("auth.forgotPassword.notifications.success"));
-        navigate(`/${process.env.PUBLIC_URL}/forgot-password-submit`);
+        navigate(ROUTER.FORGOT_PASSWORD_SUBMIT);
       })
       .catch(() => {
         snackbar.error(t("common.errors.unexpected.subTitle"));
@@ -81,7 +82,7 @@ const ForgotPassword = () => {
         </LoadingButton>
         <Button
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/login`}
+          to={ROUTER.LOGIN}
           color="primary"
           fullWidth
           sx={{ mt: 2 }}

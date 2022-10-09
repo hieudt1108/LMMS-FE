@@ -476,5 +476,8 @@
       },
       "search":"Search Class"
     }
+  },
+  "classDetail":{
+    "title": "Class Detail"
   }
 }

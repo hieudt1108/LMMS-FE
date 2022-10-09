@@ -25,6 +25,10 @@ const Document = lazy(() => import("./admin/pages/Document"));
 const DocumentbySyllabus = lazy(
   () => import("./document/pages/DocumentbySyllabus")
 );
+
+const ViewDocumentDetail = lazy(
+  () => import("./document/pages/ViewDocumentDetail")
+);
 // Auth
 const ForgotPassword = lazy(() => import("./auth/pages/ForgotPassword"));
 const ForgotPasswordSubmit = lazy(
@@ -59,6 +63,10 @@ const AppRoutes = () => {
         <PrivateRoute
           path="/document/:subjectSlot"
           element={<DocumentbySyllabus />}
+        />
+        <PrivateRoute
+          path="/document/:subjectSlot/:id"
+          element={<ViewDocumentDetail />}
         />
         {/* <PrivateRoute path="calendar" element={<CalendarApp />} /> */}
         <PrivateRoute path="classes" element={<Classes />} />

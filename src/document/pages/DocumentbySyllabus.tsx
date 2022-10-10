@@ -1,21 +1,21 @@
-import * as React from "react";
-import { experimentalStyled as styled } from "@mui/material/styles";
-import AdminAppBar from "../../admin/components/AdminAppBar";
-import AdminToolbar from "../../admin/components/AdminToolbar";
-import { useTranslation } from "react-i18next";
+import * as React from 'react';
+import { experimentalStyled as styled } from '@mui/material/styles';
+import AdminAppBar from '../../admin/components/AdminAppBar';
+import AdminToolbar from '../../admin/components/AdminToolbar';
+import { useTranslation } from 'react-i18next';
 
-import HeaderListDocument from "../components/Headersubjetc";
-import ListDocument from "../components/ListDocument";
+import HeaderListDocument from '../components/Headersubjetc';
+import ListDocument from '../components/ListDocument';
 //component api mui
-import Grid from "@material-ui/core/Grid";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import Grid from '@material-ui/core/Grid';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(2),
-  textAlign: "center",
+  textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
 
@@ -25,7 +25,7 @@ export default function DocumentbySyllabus() {
   return (
     <React.Fragment>
       <AdminAppBar>
-        <AdminToolbar title={t("document.title")} />
+        <AdminToolbar title={t('document.title')} />
       </AdminAppBar>
 
       <Grid>

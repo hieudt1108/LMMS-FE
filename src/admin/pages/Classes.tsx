@@ -1,11 +1,9 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import AdminAppBar from "../components/AdminAppBar";
-import AdminToolbar from "../components/AdminToolbar";
-import { Grid } from "@mui/material";
-import ClassCart from "../components/ClassCart";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Grid } from '@mui/material';
+import ClassCart from '../components/ClassCart';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -18,12 +16,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { SelectChangeEvent } from '@mui/material/Select';
-import { ClassSelect } from "../components/ClassSelect";
-
-
+import { ClassSelect } from '../components/ClassSelect';
 
 const Classes = () => {
-
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
   const [age, setAge] = React.useState<number | string>('');
@@ -42,21 +37,12 @@ const Classes = () => {
     }
   };
 
-
   return (
     <React.Fragment>
-      <AdminAppBar>
-        <AdminToolbar title={t("classes.title")} />
-      </AdminAppBar>
-
-      <Stack
-        spacing={2}
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mt={2}
-      >
-        <Button variant="outlined" onClick={handleClickOpen}>{t("classes.create")}</Button>
+      <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between" mt={2}>
+        <Button variant="outlined" onClick={handleClickOpen}>
+          {t('classes.create')}
+        </Button>
         <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
           <DialogTitle>Fill the form</DialogTitle>
           <DialogContent>
@@ -99,24 +85,14 @@ const Classes = () => {
             <Button onClick={handleClose}>Ok</Button>
           </DialogActions>
         </Dialog>
-        <Stack
-          spacing={2}
-          direction="row"
-          alignItems="center"
-          mt={2}
-        >
+        <Stack spacing={2} direction="row" alignItems="center" mt={2}>
           <ClassSelect></ClassSelect>
           <ClassSelect></ClassSelect>
           <ClassSelect></ClassSelect>
         </Stack>
       </Stack>
 
-      <Stack
-        spacing={2}
-        direction="row"
-        alignItems="center"
-        mt={2}
-      >
+      <Stack spacing={2} direction="row" alignItems="center" mt={2}>
         <Grid container spacing={2}>
           <ClassCart></ClassCart>
           <ClassCart></ClassCart>
@@ -125,16 +101,9 @@ const Classes = () => {
           <ClassCart></ClassCart>
           <ClassCart></ClassCart>
         </Grid>
-
       </Stack>
 
-      <Stack
-        spacing={2}
-        direction="row"
-        justifyContent="flex-end"
-        alignItems="center"
-        mt={2}
-      >
+      <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
         <Pagination count={10} color="secondary" size="large" />
       </Stack>
     </React.Fragment>

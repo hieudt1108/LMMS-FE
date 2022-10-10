@@ -1,16 +1,16 @@
-import * as Sentry from "@sentry/react";
-import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-import AppRoutes from "./AppRoutes";
-import AuthProvider from "./auth/contexts/AuthProvider";
-import Loader from "./core/components/Loader";
-import QueryWrapper from "./core/components/QueryWrapper";
-import SettingsProvider from "./core/contexts/SettingsProvider";
-import SnackbarProvider from "./core/contexts/SnackbarProvider";
-import usePageTracking from "./core/hooks/usePageTracking";
+import * as Sentry from '@sentry/react';
+import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import AppRoutes from './AppRoutes';
+import AuthProvider from './auth/contexts/AuthProvider';
+import Loader from './core/components/Loader';
+import QueryWrapper from './core/components/QueryWrapper';
+import SettingsProvider from './core/contexts/SettingsProvider';
+import SnackbarProvider from './core/contexts/SnackbarProvider';
+import usePageTracking from './core/hooks/usePageTracking';
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   Sentry.init({
     dsn: process.env.REACT_APP_SENTRY_DSN,
   });

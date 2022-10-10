@@ -5,6 +5,7 @@
         "calendar": "Lịch",
         "dashboard": "Bảng điều khiển",
         "help": "Trợ giúp",
+        "classes": "Lớp học",
         "home": "Trang chủ",
         "projects": "Dự án",
         "settings": "Cài đặt",
@@ -171,8 +172,11 @@
   "common": {
     "backHome": "Trở về trang chủ",
     "cancel": "Hủy",
+    "return" : "Quay lại",
     "confirm": "Xác nhận",
     "confirmation": "Xác nhận",
+    "add": "Thêm",
+    "createclass": "Tạo lớp học",
     "delete": "Xóa",
     "edit": "Sửa",
     "errors": {
@@ -209,6 +213,18 @@
       "required": "Yêu cầu"
     }
   },
+  "document": {
+    "title": "Các tài liệu ôn tập",
+    "title2": "Chương trình học",
+    "subject": {
+      "math": {
+        "title": "Môn toán",
+        "description": "Khung chương trình môn toán"
+      }
+    }},
+  "syllabus": {
+    "title": "Chương trình học"
+  },
   "dashboard": {
     "activity": {
       "title": "Hoạt động"
@@ -223,10 +239,10 @@
       "title": "Đơn hàng"
     },
     "overview": {
-      "orders": "Đơn hàng",
-      "sales": "Bán hàng",
-      "users": "Người dùng",
-      "visits": "Lượt truy cập"
+      "subjects": "Môn học",
+      "class": "Lớp học",
+      "documents": "Tài Liệu",
+      "downloads": "Lượt tải"
     },
     "progress": {
       "title": "Tiến trình"
@@ -252,13 +268,13 @@
     "teams": {
       "columns": {
         "progress": "Progress",
-        "team": "Team",
-        "value": "Value"
+        "class": "Lớp học",
+        "download": "Lượt tải"
       },
       "title": "Teams Progress"
     },
     "users": {
-      "title": "Recent Users"
+      "title": "Giáo viên bộ môn"
     },
     "visitProgress": {
       "title": "Visits"
@@ -403,8 +419,28 @@
     }
   },
   "userManagement": {
+    "listScreen": {
+      "importFile": "Nhập file",
+      "exportFile": "Xuất file",
+      "addUser": "Thêm người dùng",
+      "search": "Tìm kiếm theo tên",
+      "filter": "Thêm bộ lọc",
+      "title":"Người dùng",
+      "description":"Danh sách chi tiết thông tin người dùng"
+    },
     "confirmations": {
       "delete": "Bạn có chắc chắn muốn xóa người dùng này không?"
+    },
+    "action": {
+      "disabled": {
+        "button": "Vô hiệu hóa"
+      },
+      "cancel": {
+        "button": "Hủy bỏ"
+      },
+      "save":{
+        "button": "Lưu"
+      }
     },
     "form": {
       "disabled": {
@@ -429,7 +465,17 @@
       },
       "role": {
         "label": "Vai trò"
+      },
+      "address": {
+        "label": "Địa chỉ"
+      },
+      "email": {
+        "label": "Email"
+      },
+      "phone": {
+        "label":"Điện thoại"
       }
+
     },
     "modal": {
       "add": {
@@ -438,7 +484,7 @@
       },
       "edit": {
         "action": "Sửa",
-        "title": "Sửa thông tin người dùng"
+        "title": "Thông tin người dùng"
       }
     },
     "notifications": {
@@ -457,6 +503,20 @@
     },
     "toolbar": {
       "title": "Người dùng"
+    }
+  },
+  "classes":{
+    "title":"Lớp học",
+    "create":"Tạo lớp học",
+    "filter":{
+      "class":"Lớp học",
+      "year": "Niên khoá",
+      "status":{
+        "title":"Trạng thái",
+        "active":"Kích hoạt",
+        "inActive":"Không kích hoạt"
+      },
+      "search":"Tìm kiếm lớp"
     }
   }
 }

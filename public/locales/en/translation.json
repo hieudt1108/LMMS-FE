@@ -6,6 +6,7 @@
         "dashboard": "Dashboard",
         "help": "Help",
         "home": "Home",
+        "classes": "Classes",
         "projects": "Projects",
         "settings": "Settings",
         "userManagement": "Users",
@@ -171,8 +172,11 @@
   "common": {
     "backHome": "Back to Home",
     "cancel": "Cancel",
+    "return" : "Back",
     "confirm": "Confirm",
     "confirmation": "Confirmation",
+    "add": "Add",
+    "createclass": "Create a class",
     "delete": "Delete",
     "edit": "Edit",
     "errors": {
@@ -209,6 +213,12 @@
       "required": "Required"
     }
   },
+  "syllabus": {
+    "title": "Syllabus"
+  },
+  "document": {
+    "title": "Document practice"
+  },
   "dashboard": {
     "activity": {
       "title": "Activity"
@@ -223,10 +233,10 @@
       "title": "Orders"
     },
     "overview": {
-      "orders": "Orders",
-      "sales": "Sales",
-      "users": "Users",
-      "visits": "Visits"
+      "subjects": "Subjects",
+      "class": "Class",
+      "documents": "Documents",
+      "downloads": "Downloads"
     },
     "progress": {
       "title": "Progress"
@@ -252,13 +262,13 @@
     "teams": {
       "columns": {
         "progress": "Progress",
-        "team": "Team",
-        "value": "Value"
+        "class": "Class",
+        "download": "Downloads"
       },
       "title": "Teams Progress"
     },
     "users": {
-      "title": "Recent Users"
+      "title": "Subject Teachers"
     },
     "visitProgress": {
       "title": "Visits"
@@ -457,6 +467,20 @@
     },
     "toolbar": {
       "title": "Users"
+    }
+  },
+  "classes":{
+    "title":"Classes",
+    "create":"Create Class",
+    "filter":{
+      "class":"Class",
+      "year": "Year",
+      "status":{
+        "title":"Status",
+        "active":"Active",
+        "inActive":"In Active"
+      },
+      "search":"Search Class"
     }
   }
 }

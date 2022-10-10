@@ -22,94 +22,25 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Empty from "../../core/components/Empty";
 import * as selectUtils from "../../core/utils/selectUtils";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { User } from "../types/user";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
-interface HeadCell {
-  id: string;
-  label: string;
-  align: "center" | "left" | "right";
-}
-
-const headCells: HeadCell[] = [
-  {
-    id: "user",
-    align: "left",
-    label: "userManagement.table.headers.user",
-  },
-  {
-    id: "gender",
-    align: "center",
-    label: "userManagement.table.headers.gender",
-  },
-  {
-    id: "role",
-    align: "center",
-    label: "userManagement.table.headers.role",
-  },
-  {
-    id: "status",
-    align: "center",
-    label: "userManagement.table.headers.status",
-  },
-];
-
-interface EnhancedTableProps {
-  numSelected: number;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  rowCount: number;
-}
-
-function EnhancedTableHead({
-  onSelectAllClick,
-  numSelected,
-  rowCount,
-}: EnhancedTableProps) {
-  const { t } = useTranslation();
-
-  return (
-    <TableHead>
-      <TableRow sx={{ "& th": { border: 0 } }}>
-        <TableCell sx={{ py: 0 }}>
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all users",
-            }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell key={headCell.id} align={headCell.align} sx={{ py: 0 }}>
-            {t(headCell.label)}
-          </TableCell>
-        ))}
-        <TableCell align="right" sx={{ py: 0 }}>
-          {t("userManagement.table.headers.actions")}
-        </TableCell>
-      </TableRow>
-    </TableHead>
-  );
-}
+interface EnhancedTableProps {}
 
 type UserRowProps = {
   index: number;
-  onCheck: (id: string) => void;
   onDelete: (userIds: string[]) => void;
   onEdit: (user: User) => void;
   processing: boolean;
-  selected: boolean;
   user: User;
 };
 
 const UserRow = ({
   index,
-  onCheck,
   onDelete,
   onEdit,
   processing,
-  selected,
   user,
 }: UserRowProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -138,29 +69,14 @@ const UserRow = ({
 
   return (
     <TableRow
-      aria-checked={selected}
       tabIndex={-1}
       key={user.id}
-      selected={selected}
       sx={{ "& td": { bgcolor: "background.paper", border: 0 } }}
     >
-      <TableCell
-        padding="checkbox"
-        sx={{ borderTopLeftRadius: "1rem", borderBottomLeftRadius: "1rem" }}
-      >
-        <Checkbox
-          color="primary"
-          checked={selected}
-          inputProps={{
-            "aria-labelledby": labelId,
-          }}
-          onClick={() => onCheck(user.id)}
-        />
-      </TableCell>
       <TableCell>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Avatar sx={{ mr: 3 }}>
-            <PersonIcon />
+            <Avatar alt="Remy Sharp" src={user.avatar} />
           </Avatar>
           <Box>
             <Typography component="div" variant="h6">
@@ -176,54 +92,24 @@ const UserRow = ({
       <TableCell align="center">{user.role}</TableCell>
       <TableCell align="center">
         {user.disabled ? (
-          <Chip label="Disabled" />
+          <RemoveCircleOutlineIcon />
         ) : (
-          <Chip color="primary" label="Active" />
+          <CheckCircleOutlineIcon
+            sx={{
+              color: "white",
+              backgroundColor: "green",
+              borderRadius: "100%",
+            }}
+          />
         )}
       </TableCell>
       <TableCell
         align="right"
         sx={{ borderTopRightRadius: "1rem", borderBottomRightRadius: "1rem" }}
       >
-        <IconButton
-          id="user-row-menu-button"
-          aria-label="user actions"
-          aria-controls="user-row-menu"
-          aria-haspopup="true"
-          aria-expanded={openActions ? "true" : "false"}
-          disabled={processing}
-          onClick={handleOpenActions}
-        >
-          <MoreVertIcon />
+        <IconButton aria-label="edit" size="small">
+          <EditIcon fontSize="inherit" color="primary" onClick={handleEdit} />
         </IconButton>
-        <Menu
-          id="user-row-menu"
-          anchorEl={anchorEl}
-          aria-labelledby="user-row-menu-button"
-          open={openActions}
-          onClose={handleCloseActions}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-        >
-          <MenuItem onClick={handleEdit}>
-            <ListItemIcon>
-              <EditIcon />
-            </ListItemIcon>{" "}
-            {t("common.edit")}
-          </MenuItem>
-          <MenuItem onClick={handleDelete}>
-            <ListItemIcon>
-              <DeleteIcon />
-            </ListItemIcon>{" "}
-            {t("common.delete")}
-          </MenuItem>
-        </Menu>
       </TableCell>
     </TableRow>
   );
@@ -233,35 +119,17 @@ type UserTableProps = {
   processing: boolean;
   onDelete: (userIds: string[]) => void;
   onEdit: (user: User) => void;
-  onSelectedChange: (selected: string[]) => void;
-  selected: string[];
-  users?: User[];
+  users?: any[];
 };
 
 const UserTable = ({
   onDelete,
   onEdit,
-  onSelectedChange,
   processing,
-  selected,
   users = [],
 }: UserTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelecteds = selectUtils.selectAll(users);
-      onSelectedChange(newSelecteds);
-      return;
-    }
-    onSelectedChange([]);
-  };
-
-  const handleClick = (id: string) => {
-    let newSelected: string[] = selectUtils.selectOne(selected, id);
-    onSelectedChange(newSelected);
-  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -274,11 +142,57 @@ const UserTable = ({
     setPage(0);
   };
 
-  const isSelected = (id: string) => selected.indexOf(id) !== -1;
-
   if (users.length === 0) {
     return <Empty title="No user yet" />;
   }
+
+  function EnhancedTableHead({}: EnhancedTableProps) {
+    const { t } = useTranslation();
+
+    return (
+      <TableHead>
+        <TableRow sx={{ "& th": { border: 0 } }}>
+          {headCells.map((headCell) => (
+            <TableCell key={headCell.id} align={headCell.align} sx={{ py: 0 }}>
+              {t(headCell.label)}
+            </TableCell>
+          ))}
+          <TableCell align="right" sx={{ py: 0 }}>
+            {t("userManagement.table.headers.actions")}
+          </TableCell>
+        </TableRow>
+      </TableHead>
+    );
+  }
+
+  interface HeadCell {
+    id: string;
+    label: string;
+    align: "center" | "left" | "right";
+  }
+
+  const headCells: HeadCell[] = [
+    {
+      id: "user",
+      align: "left",
+      label: "userManagement.table.headers.user",
+    },
+    {
+      id: "gender",
+      align: "center",
+      label: "userManagement.table.headers.gender",
+    },
+    {
+      id: "role",
+      align: "center",
+      label: "userManagement.table.headers.role",
+    },
+    {
+      id: "status",
+      align: "center",
+      label: "userManagement.table.headers.status",
+    },
+  ];
 
   return (
     <React.Fragment>
@@ -291,11 +205,8 @@ const UserTable = ({
             borderSpacing: "0 1rem",
           }}
         >
-          <EnhancedTableHead
-            numSelected={selected.length}
-            onSelectAllClick={handleSelectAllClick}
-            rowCount={users.length}
-          />
+          <EnhancedTableHead />
+
           <TableBody>
             {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -303,11 +214,9 @@ const UserTable = ({
                 <UserRow
                   index={index}
                   key={user.id}
-                  onCheck={handleClick}
                   onDelete={onDelete}
                   onEdit={onEdit}
                   processing={processing}
-                  selected={isSelected(user.id)}
                   user={user}
                 />
               ))}

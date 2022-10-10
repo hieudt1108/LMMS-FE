@@ -1,4 +1,4 @@
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -16,13 +16,12 @@ import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { User } from "../types/user";
+import Grid from "@material-ui/core/Grid";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import Box from "@material-ui/core/Box";
+import Stack from "@mui/material/Stack";
 
-const genders = [
-  { label: "userManagement.form.gender.options.f", value: "F" },
-  { label: "userManagement.form.gender.options.m", value: "M" },
-  { label: "userManagement.form.gender.options.n", value: "NC" },
-];
-const roles = ["Admin", "Member"];
+const roles = ["Teacher", "Student", "Parent"];
 
 type UserDialogProps = {
   onAdd: (user: Partial<User>) => void;
@@ -43,6 +42,10 @@ const UserDialog = ({
 }: UserDialogProps) => {
   const { t } = useTranslation();
 
+  const genders = [
+    { label: "userManagement.form.gender.options.f", value: "F" },
+    { label: "userManagement.form.gender.options.m", value: "M" },
+  ];
   const editMode = Boolean(user && user.id);
 
   const handleSubmit = (values: Partial<User>) => {
@@ -58,7 +61,7 @@ const UserDialog = ({
       disabled: user ? user.disabled : false,
       email: user ? user.email : "",
       firstName: user ? user.firstName : "",
-      gender: user ? user.gender : "F",
+      gender: user ? user.gender : 0,
       lastName: user ? user.lastName : "",
       role: user ? user.role : "",
     },
@@ -78,7 +81,14 @@ const UserDialog = ({
   });
 
   return (
-    <Dialog open={open} onClose={onClose} aria-labelledby="user-dialog-title">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      maxWidth={"lg"}
+      fullWidth={true}
+    >
       <form onSubmit={formik.handleSubmit} noValidate>
         <DialogTitle id="user-dialog-title">
           {editMode
@@ -86,71 +96,121 @@ const UserDialog = ({
             : t("userManagement.modal.add.title")}
         </DialogTitle>
         <DialogContent>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="lastName"
-            label={t("userManagement.form.lastName.label")}
-            name="lastName"
-            autoComplete="family-name"
-            autoFocus
-            disabled={processing}
-            value={formik.values.lastName}
-            onChange={formik.handleChange}
-            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-            helperText={formik.touched.lastName && formik.errors.lastName}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="firstName"
-            label={t("userManagement.form.firstName.label")}
-            name="firstName"
-            autoComplete="given-name"
-            disabled={processing}
-            value={formik.values.firstName}
-            onChange={formik.handleChange}
-            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-            helperText={formik.touched.firstName && formik.errors.firstName}
-          />
-          <FormControl component="fieldset" margin="normal">
-            <FormLabel component="legend">
-              {t("userManagement.form.gender.label")}
-            </FormLabel>
-            <RadioGroup
-              row
-              aria-label="gender"
-              name="gender"
-              value={formik.values.gender}
-              onChange={formik.handleChange}
-            >
-              {genders.map((gender) => (
-                <FormControlLabel
-                  key={gender.value}
-                  disabled={processing}
-                  value={gender.value}
-                  control={<Radio />}
-                  label={t(gender.label)}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label={t("userManagement.form.email.label")}
-            name="email"
-            autoComplete="email"
-            disabled={processing}
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-          />
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="lastName"
+                label={t("userManagement.form.lastName.label")}
+                name="lastName"
+                autoComplete="family-name"
+                autoFocus
+                disabled={processing}
+                value={formik.values.lastName}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.lastName && Boolean(formik.errors.lastName)
+                }
+                helperText={formik.touched.lastName && formik.errors.lastName}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="firstName"
+                label={t("userManagement.form.firstName.label")}
+                name="firstName"
+                autoComplete="given-name"
+                disabled={processing}
+                value={formik.values.firstName}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.firstName && Boolean(formik.errors.firstName)
+                }
+                helperText={formik.touched.firstName && formik.errors.firstName}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                type="date"
+                id="birthDate"
+                label={t("userManagement.form.lastName.label")}
+                name="lastName"
+                autoComplete="family-name"
+                autoFocus
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={9}>
+              <Grid container spacing={2}>
+                <Grid item xs={9}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label={t("userManagement.form.email.label")}
+                    name="email"
+                    autoComplete="given-name"
+                    disabled={processing}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <FormControl component="fieldset" margin="normal">
+                    <Box mt={1}>
+                      <RadioGroup
+                        row
+                        aria-label="gender"
+                        name="gender"
+                        value={formik.values.gender}
+                        onChange={formik.handleChange}
+                      >
+                        {genders.map((gender) => (
+                          <FormControlLabel
+                            key={gender.value}
+                            disabled={processing}
+                            value={gender.value}
+                            control={<Radio />}
+                            label={t(gender.label)}
+                          />
+                        ))}
+                      </RadioGroup>
+                    </Box>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={9}>
+              <TextField
+                margin="normal"
+                required
+                id="address"
+                fullWidth
+                label={t("userManagement.form.address.label")}
+                name="address"
+              ></TextField>
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                margin="normal"
+                required
+                id="phone"
+                fullWidth
+                label={t("userManagement.form.phone.label")}
+                name="phone"
+              ></TextField>
+            </Grid>
+          </Grid>
+
           <TextField
             margin="normal"
             required
@@ -171,23 +231,16 @@ const UserDialog = ({
               </MenuItem>
             ))}
           </TextField>
-          <FormControl component="fieldset" margin="normal">
-            <FormControlLabel
-              name="disabled"
-              disabled={processing}
-              onChange={formik.handleChange}
-              checked={formik.values.disabled}
-              control={<Checkbox />}
-              label={t("userManagement.form.disabled.label")}
-            />
-          </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>{t("common.cancel")}</Button>
-          <LoadingButton loading={processing} type="submit" variant="contained">
-            {editMode
-              ? t("userManagement.modal.edit.action")
-              : t("userManagement.modal.add.action")}
+          <Button onClick={onClose}>
+            {t("userManagement.action.cancel.button")}
+          </Button>
+          <Button color="error">
+            {t("userManagement.action.disabled.button")}
+          </Button>
+          <LoadingButton loading={processing} type="submit">
+            {t("userManagement.action.save.button")}
           </LoadingButton>
         </DialogActions>
       </form>

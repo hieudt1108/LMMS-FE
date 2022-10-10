@@ -1,37 +1,32 @@
 import Grid from "@material-ui/core/Grid";
-import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
-import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
-import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import AdminAppBar from "../components/AdminAppBar";
 import AdminToolbar from "../components/AdminToolbar";
 import ActivityWidget from "../widgets/ActivityWidget";
 import BudgetWidget from "../widgets/BudgetWidget";
-import CircleProgressWidget from "../widgets/CircleProgressWidget";
 import OverviewWidget from "../widgets/OverviewWidget";
-import ProgressWidget from "../widgets/ProgressWidget";
 import SalesByAgeWidget from "../widgets/SalesByAgeWidget";
-import SalesByCategoryWidget from "../widgets/SalesByCategoryWidget";
-import SalesHistoryWidget from "../widgets/SalesHistoryWidget";
-import TeamProgressWidget from "../widgets/TeamProgressWidget";
+import SubjectTeacherWidget from "../widgets/SubjectTeacherWidget";
+import DownloadByClassWidget from "../widgets/DownloadByClassWidget";
 import UsersWidget from "../widgets/UsersWidget";
+import Header from "../../users/components/Header";
 
 const overviewItems = [
   {
-    unit: "dashboard.overview.visits",
+    unit: "dashboard.overview.subjects",
     value: "20 700",
   },
   {
-    unit: "dashboard.overview.sales",
+    unit: "dashboard.overview.class",
     value: "$ 1 550",
   },
   {
-    unit: "dashboard.overview.orders",
+    unit: "dashboard.overview.documents",
     value: "149",
   },
   {
-    unit: "dashboard.overview.users",
+    unit: "dashboard.overview.downloads",
     value: "657",
   },
 ];
@@ -41,9 +36,6 @@ const Dashboard = () => {
 
   return (
     <React.Fragment>
-      <AdminAppBar>
-        <AdminToolbar title={t("dashboard.title")} />
-      </AdminAppBar>
       <Grid container spacing={2}>
         {overviewItems.map((item, index) => (
           <Grid key={index} item xs={6} md={3}>
@@ -54,45 +46,17 @@ const Dashboard = () => {
           <ActivityWidget />
         </Grid>
         <Grid item xs={12} md={4}>
-          <BudgetWidget />
+          <SubjectTeacherWidget />
         </Grid>
-        <Grid item xs={12} md={4}>
-          <SalesHistoryWidget value={567} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <ProgressWidget
-            avatar={<SupervisorAccountIcon />}
-            mb={2}
-            title={t("dashboard.visitProgress.title")}
-            value={75}
-          />
-          <ProgressWidget
-            avatar={<ShoppingBasketIcon />}
-            mb={2}
-            title={t("dashboard.orderProgress.title")}
-            value={50}
-          />
-          <ProgressWidget
-            avatar={<AttachMoneyIcon />}
-            title={t("dashboard.salesProgress.title")}
-            value={25}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <CircleProgressWidget
-            height={204}
-            title={t("dashboard.progress.title")}
-            value={75}
-          />
-        </Grid>
+
         <Grid item xs={12} md={4}>
           <UsersWidget />
         </Grid>
         <Grid item xs={12} md={8}>
-          <TeamProgressWidget />
+          <DownloadByClassWidget />
         </Grid>
         <Grid item xs={12} md={4}>
-          <SalesByCategoryWidget />
+          <BudgetWidget />
         </Grid>
         <Grid item xs={12} md={8}>
           <SalesByAgeWidget />

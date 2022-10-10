@@ -24,9 +24,6 @@ const HelpCenter = () => {
 
   return (
     <React.Fragment>
-      <AdminAppBar>
-        <AdminToolbar title={t("help.title")} />
-      </AdminAppBar>
       <Container maxWidth="xs" sx={{ mt: 3 }}>
         <SvgContainer>
           <HelpSvg />

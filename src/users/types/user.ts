@@ -4,7 +4,7 @@ export interface User {
   disabled: boolean;
   email: string;
   firstName: string;
-  gender?: "F" | "M" | "NC";
+  gender?: number ;
   lastName: string;
   role: string;
 }

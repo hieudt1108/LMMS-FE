@@ -1,10 +1,9 @@
-import Avatar from "@material-ui/core/Avatar";
+
 import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -36,7 +35,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          to={`/${process.env.PUBLIC_URL}/admin/document`}
           variant="extended"
         >
           Document
@@ -62,7 +61,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          to={`/${process.env.PUBLIC_URL}/admin/document`}
           variant="extended"
         >
           Document
@@ -88,7 +87,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          to={`/${process.env.PUBLIC_URL}/admin/document`}
           variant="extended"
         >
           Document
@@ -114,7 +113,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          to={`/${process.env.PUBLIC_URL}/admin/document`}
           variant="extended"
         >
           Document
@@ -136,12 +135,6 @@ const FollowersWidget = () => {
         <Card key={social.name} sx={{ mb: 2 }}>
           <CardContent sx={{ display: "flex", alignItems: "center" }}>
             <Box sx={{ mr: 2 }}>{social.image}</Box>
-            {/* <Avatar
-              aria-label={`${social.name} avatar`}
-              sx={{ bgcolor: social.bgcolor, mr: 2 }}
-            >
-              {social.icon}
-            </Avatar> */}
             <Box sx={{ flexGrow: 1 }}>
               <Typography component="div" variant="h6">
                 Teacher: {social.teacher}

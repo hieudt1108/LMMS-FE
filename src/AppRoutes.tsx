@@ -9,12 +9,22 @@ const Faq = lazy(() => import("./admin/pages/Faq"));
 const HelpCenter = lazy(() => import("./admin/pages/HelpCenter"));
 const Home = lazy(() => import("./admin/pages/Home"));
 const Profile = lazy(() => import("./admin/pages/Profile"));
-const ProfileActivity = lazy(() => import("./admin/pages/ProfileActivity"));
+const ProfileActivity = lazy(
+  () => import("./admin/pages/ProfileActivity")
+);
+const Classes = lazy(() => import("./admin/pages/Classes"));
 const ProfileInformation = lazy(
   () => import("./admin/pages/ProfileInformation")
 );
-const ProfilePassword = lazy(() => import("./admin/pages/ProfilePassword"));
+const ProfilePassword = lazy(
+  () => import("./admin/pages/ProfilePassword")
+);
+const Document = lazy(() => import("./admin/pages/Document"));
+// document
 
+const DocumentbySyllabus = lazy(
+  () => import("./document/pages/DocumentbySyllabus")
+);
 // Auth
 const ForgotPassword = lazy(() => import("./auth/pages/ForgotPassword"));
 const ForgotPasswordSubmit = lazy(
@@ -45,13 +55,22 @@ const AppRoutes = () => {
       <Route path="/" element={<Landing />} />
       <PrivateRoute path="admin" element={<Admin />}>
         <PrivateRoute path="/" element={<Home />} />
+        <PrivateRoute path="/document" element={<Document />} />
+        <PrivateRoute
+          path="/document/:subjectSlot"
+          element={<DocumentbySyllabus />}
+        />
         {/* <PrivateRoute path="calendar" element={<CalendarApp />} /> */}
+        <PrivateRoute path="classes" element={<Classes />} />
         <PrivateRoute path="dashboard" element={<Dashboard />} />
         <PrivateRoute path="faq" element={<Faq />} />
         <PrivateRoute path="help" element={<HelpCenter />} />
         <PrivateRoute path="profile" element={<Profile />}>
           <PrivateRoute path="/" element={<ProfileActivity />} />
-          <PrivateRoute path="information" element={<ProfileInformation />} />
+          <PrivateRoute
+            path="information"
+            element={<ProfileInformation />}
+          />
           <PrivateRoute path="password" element={<ProfilePassword />} />
         </PrivateRoute>
         <PrivateRoute
@@ -63,10 +82,16 @@ const AppRoutes = () => {
             />
           }
         />
-        <PrivateRoute path="user-management" element={<UserManagement />} />
+        <PrivateRoute
+          path="user-management"
+          element={<UserManagement />}
+        />
       </PrivateRoute>
       <Route path="forgot-password" element={<ForgotPassword />} />
-      <Route path="forgot-password-submit" element={<ForgotPasswordSubmit />} />
+      <Route
+        path="forgot-password-submit"
+        element={<ForgotPasswordSubmit />}
+      />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route path="under-construction" element={<UnderConstructions />} />
@@ -74,7 +99,9 @@ const AppRoutes = () => {
       <Route path="404" element={<NotFound />} />
       <Route
         path="*"
-        element={<Navigate to={`/${process.env.PUBLIC_URL}/404`} replace />}
+        element={
+          <Navigate to={`/${process.env.PUBLIC_URL}/404`} replace />
+        }
       />
     </Routes>
   );

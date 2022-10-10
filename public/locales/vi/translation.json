@@ -211,6 +211,15 @@
     }
   },
   "document": {
+    "title": "Các tài liệu ôn tập",
+    "title2": "Chương trình học",
+    "subject": {
+      "math": {
+        "title": "Môn toán",
+        "description": "Khung chương trình môn toán"
+      }
+    }},
+  "syllabus": {
     "title": "Chương trình học"
   },
   "dashboard": {
@@ -412,7 +421,9 @@
       "exportFile": "Xuất file",
       "addUser": "Thêm người dùng",
       "search": "Tìm kiếm theo tên",
-      "filter": "Thêm bộ lọc"
+      "filter": "Thêm bộ lọc",
+      "title":"Người dùng",
+      "description":"Danh sách chi tiết thông tin người dùng"
     },
     "confirmations": {
       "delete": "Bạn có chắc chắn muốn xóa người dùng này không?"
@@ -503,6 +514,20 @@
         "inActive":"Không kích hoạt"
       },
       "search":"Tìm kiếm lớp"
+    }
+  },
+  "classDetail":{
+    "title": "Lớp học",
+    "titleBar": {
+      "document":"Tài Liệu",
+      "member": "Thành Viên"
+    },
+    "Member": {
+      "id": "Id",
+      "account":"Tài Khoản",
+      "tools": "Công cụ",
+      "subject": "Môn học",
+      "homeroomTeacher": "Giáo viên chủ nhiệm"
     }
   }
 }

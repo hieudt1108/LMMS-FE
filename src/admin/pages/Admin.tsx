@@ -6,6 +6,7 @@ import QueryWrapper from "../../core/components/QueryWrapper";
 import SettingsDrawer from "../../core/components/SettingsDrawer";
 import { useSettings } from "../../core/contexts/SettingsProvider";
 import AdminDrawer from "../components/AdminDrawer";
+import ToolBar from "./ToolBar";
 
 const AdminLayout = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -28,11 +29,19 @@ const AdminLayout = () => {
         onDrawerToggle={handleSettingsToggle}
         open={settingsOpen}
       />
-      <Box component="main" sx={{ flexGrow: 1, pb: 3, px: { xs: 3, sm: 6 } }}>
-        <Toolbar />
-        <QueryWrapper>
-          <Outlet />
-        </QueryWrapper>
+      <Box sx={{ flexGrow: 1, display: "block" }}>
+        <Box>
+          <ToolBar toggleDrawer={toggleDrawer} />
+        </Box>
+        <Box
+          component="main"
+          mt={2}
+          sx={{ flexGrow: 1, pb: 3, px: { xs: 3, sm: 6 } }}
+        >
+          <QueryWrapper>
+            <Outlet />
+          </QueryWrapper>
+        </Box>
       </Box>
     </Box>
   );

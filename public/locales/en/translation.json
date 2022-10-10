@@ -210,8 +210,11 @@
       "required": "Required"
     }
   },
-  "document": {
+  "syllabus": {
     "title": "Syllabus"
+  },
+  "document": {
+    "title": "Document practice"
   },
   "dashboard": {
     "activity": {
@@ -478,6 +481,17 @@
     }
   },
   "classDetail":{
-    "title": "Class Detail"
+    "title": "Class Detail",
+    "titleBar": {
+      "document":"Document",
+      "member": "Member"
+    },
+    "Member": {
+      "id": "Number",
+      "account":"Account",
+      "tools": "Tools",
+      "subject": "Subject",
+      "homeroomTeacher": "Homeroom Teacher"
+    }
   }
 }

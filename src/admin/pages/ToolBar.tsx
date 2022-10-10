@@ -15,6 +15,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { useAuth } from "../../auth/contexts/AuthProvider";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { ROUTER } from "../../Router";
 
 interface ToolbarProps {
   toggleDrawer: () => void;
@@ -42,7 +43,7 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    let path = `/${process.env.PUBLIC_URL}/admin/profile`;
+    let path = ROUTER.ADMIN_PROFILE;
     navigate(path);
   };
 

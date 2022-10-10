@@ -1,5 +1,6 @@
 import { Navigate, Route, RouteProps } from "react-router";
 import { useAuth } from "../../auth/contexts/AuthProvider";
+import { ROUTER } from "../../Router";
 
 type PrivateRouteProps = {
   roles?: string[];
@@ -14,11 +15,11 @@ const PrivateRoute = ({
 
   if (userInfo) {
     if (!hasRole(roles)) {
-      return <Navigate to={`/${process.env.PUBLIC_URL}/403`} />;
+      return <Navigate to={ROUTER[403]} />;
     }
     return <Route {...routeProps} />;
   } else {
-    return <Navigate to={`/${process.env.PUBLIC_URL}/login`} />;
+    return <Navigate to={ROUTER.LOGIN} />;
   }
 };
 

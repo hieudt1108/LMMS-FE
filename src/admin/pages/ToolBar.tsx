@@ -22,6 +22,8 @@ import Link from '@mui/material/Link';
 import HomeIcon from '@mui/icons-material/Home';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import GrainIcon from '@mui/icons-material/Grain';
+import { ROUTER } from "../../Router";
+
 interface ToolbarProps {
   toggleDrawer: () => void;
 }
@@ -61,10 +63,12 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
     navigate(path);
   };
 
+
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-
+    let path = ROUTER.ADMIN_PROFILE;
+    navigate(path);
   };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -88,8 +92,8 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleChooseOption}>Profile</MenuItem>
-      <MenuItem onClick={handleChooseOption}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 

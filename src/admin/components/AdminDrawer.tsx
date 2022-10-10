@@ -18,6 +18,7 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from "../../auth/contexts/AuthProvider";
 import Logo from "../../core/components/Logo";
 import { drawerCollapsedWidth, drawerWidth } from "../../core/config/layout";
+import { ROUTER } from "../../Router";
 
 type AdminDrawerProps = {
   collapsed: boolean;
@@ -103,7 +104,7 @@ const AdminDrawer = ({
         <ListItem
           button
           component={NavLink}
-          to={`/${process.env.PUBLIC_URL}/admin/profile`}
+          to={ROUTER.ADMIN_PROFILE}
         >
           <ListItemAvatar>
             <Avatar>

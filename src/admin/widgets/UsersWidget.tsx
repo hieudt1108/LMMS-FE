@@ -13,6 +13,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import PersonIcon from "@material-ui/icons/Person";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
+import { ROUTER } from "../../Router";
 
 const users = [
   {
@@ -66,7 +67,7 @@ const UsersWidget = () => {
                   aria-label="Go to user details"
                   component={RouterLink}
                   edge="end"
-                  to={`/${process.env.PUBLIC_URL}/admin/user-management`}
+                  to={ROUTER.ADMIN_USER_MANAGEMENT}
                 >
                   <ChevronRightIcon />
                 </IconButton>

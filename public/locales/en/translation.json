@@ -482,5 +482,19 @@
       },
       "search":"Search Class"
     }
+  },
+  "classDetail":{
+    "title": "Class Detail",
+    "titleBar": {
+      "document":"Document",
+      "member": "Member"
+    },
+    "Member": {
+      "id": "Number",
+      "account":"Account",
+      "tools": "Tools",
+      "subject": "Subject",
+      "homeroomTeacher": "Homeroom Teacher"
+    }
   }
 }

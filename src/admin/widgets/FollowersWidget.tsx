@@ -18,6 +18,7 @@ import Geography from "../../Assets/Subjects/geography.png";
 import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../../auth/contexts/AuthProvider";
 import Fab from "@mui/material/Fab";
+import { ROUTER } from "../../Router";
 
 const socials = [
   {
@@ -35,7 +36,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/document`}
+          to={ROUTER.ADMIN_DOCUMENT}
           variant="extended"
         >
           Document
@@ -61,7 +62,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/document`}
+          to={ROUTER.ADMIN_DOCUMENT}
           variant="extended"
         >
           Document
@@ -87,7 +88,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/document`}
+          to={ROUTER.ADMIN_DOCUMENT}
           variant="extended"
         >
           Document
@@ -113,7 +114,7 @@ const socials = [
           }}
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/document`}
+          to={ROUTER.ADMIN_DOCUMENT}
           variant="extended"
         >
           Document

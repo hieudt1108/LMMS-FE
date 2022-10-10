@@ -10,6 +10,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import { ROUTER } from "../../Router";
 
 const data = [
   {
@@ -103,7 +104,7 @@ const ViewsWidget = () => {
             <IconButton
               aria-label="Go to dashboard"
               component={RouterLink}
-              to={`/${process.env.PUBLIC_URL}/admin/dashboard`}
+              to={ROUTER.ADMIN_DASHBOARD}
             >
               <ChevronRightIcon />
             </IconButton>

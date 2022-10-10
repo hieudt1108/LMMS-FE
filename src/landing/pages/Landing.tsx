@@ -14,6 +14,7 @@ import { url } from "inspector";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../../auth/contexts/AuthProvider";
+import { ROUTER } from "../../Router";
 import LandingLayout from "../components/LandingLayout";
 
 const Landing = () => {
@@ -45,7 +46,7 @@ const Landing = () => {
               marginBottom={2}
               style={{
                 fontSize: 60,
-                color:"white"
+                color: "white"
               }}
               sx={{ fontSize: 60 }}
             >
@@ -58,7 +59,7 @@ const Landing = () => {
               marginBottom={2}
               sx={{ mt: 4, ml: 6 }}
               style={{
-                color:"white"
+                color: "white"
               }}
             >
               {t("landing.title")}
@@ -72,7 +73,7 @@ const Landing = () => {
               {userInfo ? (
                 <Button
                   component={RouterLink}
-                  to={`/${process.env.PUBLIC_URL}/admin`}
+                  to={ROUTER.ADMIN}
                   variant="contained"
                 >
                   {t("landing.cta.mainAuth", { name: userInfo.firstName })}
@@ -80,7 +81,7 @@ const Landing = () => {
               ) : (
                 <Button
                   component={RouterLink}
-                  to={`/${process.env.PUBLIC_URL}/login`}
+                  to={ROUTER.LOGIN}
                   variant="contained"
                 >
                   {t("landing.cta.main")}

@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { Link as RouterLink } from "react-router-dom";
+import { ROUTER } from "../../Router";
 
 export default function ListDocument() {
   return (
@@ -29,7 +30,7 @@ export default function ListDocument() {
         <Button
           size="large"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/document`}
+          to={`/${process.env.PUBLIC_URL}/admin/document/math/1`}
         >
           View
         </Button>

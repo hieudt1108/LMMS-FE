@@ -8,6 +8,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
+import { ROUTER } from "../../Router";
 import AdminAppBar from "../components/AdminAppBar";
 import AdminToolbar from "../components/AdminToolbar";
 
@@ -66,7 +67,7 @@ const Faq = () => {
         ))}
         <Link
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/help`}
+          to={ROUTER.ADMIN_HELP}
           variant="body2"
         >
           {t("faq.noAnswerLink")}

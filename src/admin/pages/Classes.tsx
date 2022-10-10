@@ -33,11 +33,8 @@ const levels = ["Khối 1", "Khối 2", "Khối 3", "Khối 4", "Khối 5", "Kh�
 const Classes = () => {
 
   const { t } = useTranslation();
-  const [age, setAge] = React.useState<number | string>('');
-
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [age, setAge] = React.useState<number | string>('');
 
   const handleChange = (event: SelectChangeEvent<typeof age>) => {
     setAge(Number(event.target.value) || '');
@@ -63,6 +60,11 @@ const Classes = () => {
   }));
 
 
+  const handleClose = (event: React.SyntheticEvent<unknown>, reason?: string) => {
+    if (reason !== 'backdropClick') {
+      setOpen(false);
+    }
+  };
 
 
   return (
@@ -79,7 +81,7 @@ const Classes = () => {
         mt={2}
       >
         <div>
-          <Button variant="outlined" onClick={handleOpen}>{t("classes.create")}</Button>
+          <Button variant="outlined" onClick={handleClickOpen}>{t("classes.create")}</Button>
           <Modal
             open={open}
             onClose={handleClose}

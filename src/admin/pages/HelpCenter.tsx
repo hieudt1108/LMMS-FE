@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as HelpSvg } from "../../core/assets/help.svg";
 import SvgContainer from "../../core/components/SvgContainer";
+import { ROUTER } from "../../Router";
 import AdminAppBar from "../components/AdminAppBar";
 import AdminToolbar from "../components/AdminToolbar";
 
@@ -64,7 +65,7 @@ const HelpCenter = () => {
           <Card>
             <CardActionArea
               component={RouterLink}
-              to={`/${process.env.PUBLIC_URL}/admin/faq`}
+              to={ROUTER.ADMIN_FAP}
             >
               <CardHeader
                 avatar={

@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import BoxedLayout from "../../core/components/BoxedLayout";
 import { useSnackbar } from "../../core/contexts/SnackbarProvider";
+import { ROUTER } from "../../Router";
 import { useForgotPasswordSubmit } from "../hooks/useForgotPasswordSubmit";
 
 const ForgotPasswordSubmit = () => {
@@ -37,7 +38,7 @@ const ForgotPasswordSubmit = () => {
     forgotPasswordSubmit({ code, newPassword })
       .then(() => {
         snackbar.success(t("auth.forgotPasswordSubmit.notifications.success"));
-        navigate(`/${process.env.PUBLIC_URL}/login`);
+        navigate(ROUTER.LOGIN);
       })
       .catch(() => {
         snackbar.error(t("common.errors.unexpected.subTitle"));
@@ -120,7 +121,7 @@ const ForgotPasswordSubmit = () => {
         </LoadingButton>
         <Button
           component={Link}
-          to={`/${process.env.PUBLIC_URL}/login`}
+          to={ROUTER.LOGIN}
           color="primary"
           fullWidth
           sx={{ mt: 2 }}

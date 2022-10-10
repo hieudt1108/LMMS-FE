@@ -48,6 +48,7 @@
     "react-router": "6.0.0-beta.0",
     "react-router-dom": "6.0.0-beta.0",
     "react-scripts": "4.0.3",
+    "react-swipeable-views": "^0.14.0",
     "recharts": "^2.0.9",
     "source-map-explorer": "^2.5.2",
     "styled-components": "^5.3.6",
@@ -82,5 +83,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-swipeable-views": "^0.13.1",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1",
+    "tailwindcss": "^3.1.8"
   }
 }

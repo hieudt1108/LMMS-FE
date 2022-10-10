@@ -2,6 +2,7 @@ import Button from "@material-ui/core/Button";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink } from "react-router-dom";
 import Result from "../../core/components/Result";
+import { ROUTER } from "../../Router";
 import { ReactComponent as NotFoundSvg } from "../assets/404.svg";
 
 const NotFound = () => {
@@ -13,7 +14,7 @@ const NotFound = () => {
         <Button
           color="secondary"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin`}
+          to={ROUTER.ADMIN}
           variant="contained"
         >
           {t("common.backHome")}

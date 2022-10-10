@@ -446,9 +446,6 @@
       "disabled": {
         "label": "Vô hiệu hóa"
       },
-      "email": {
-        "label": "Địa chỉ email"
-      },
       "firstName": {
         "label": "Họ"
       },
@@ -517,6 +514,20 @@
         "inActive":"Không kích hoạt"
       },
       "search":"Tìm kiếm lớp"
+    }
+  },
+  "classDetail":{
+    "title": "Lớp học",
+    "titleBar": {
+      "document":"Tài Liệu",
+      "member": "Thành Viên"
+    },
+    "Member": {
+      "id": "Id",
+      "account":"Tài Khoản",
+      "tools": "Công cụ",
+      "subject": "Môn học",
+      "homeroomTeacher": "Giáo viên chủ nhiệm"
     }
   }
 }

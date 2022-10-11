@@ -74,7 +74,7 @@ export default function Document() {
                   <TableCell align="center">{row.schedule}</TableCell>
                   <TableCell align="center">{row.note}</TableCell>
                   <TableCell align="right">
-                    <div className="d-flex">
+                    <Box style={{ display: 'flex' }}>
                       <Fab
                         style={{
                           backgroundColor: '#8BC6EC',
@@ -88,7 +88,7 @@ export default function Document() {
                         Document
                         <ArrowRightIcon sx={{ color: '#757de8' }} />
                       </Fab>
-                    </div>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))}

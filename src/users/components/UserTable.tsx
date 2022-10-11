@@ -1,8 +1,11 @@
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-
+import Checkbox from '@material-ui/core/Checkbox';
+import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
-
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,29 +17,74 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import PersonIcon from '@material-ui/icons/Person';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Empty from '../../core/components/Empty';
 import * as selectUtils from '../../core/utils/selectUtils';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { User } from '../types/user';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
-interface EnhancedTableProps {}
+interface HeadCell {
+  id: string;
+  label: string;
+  align: 'center' | 'left' | 'right';
+}
+
+const headCells: HeadCell[] = [
+  {
+    id: 'user',
+    align: 'left',
+    label: 'userManagement.table.headers.user',
+  },
+  {
+    id: 'gender',
+    align: 'center',
+    label: 'userManagement.table.headers.gender',
+  },
+  {
+    id: 'role',
+    align: 'center',
+    label: 'userManagement.table.headers.role',
+  },
+  {
+    id: 'status',
+    align: 'center',
+    label: 'userManagement.table.headers.status',
+  },
+];
+
+function EnhancedTableHead() {
+  const { t } = useTranslation();
+
+  return (
+    <TableHead>
+      <TableRow sx={{ '& th': { border: 0 } }}>
+        {headCells.map((headCell) => (
+          <TableCell key={headCell.id} align={headCell.align} sx={{ py: 0 }}>
+            {t(headCell.label)}
+          </TableCell>
+        ))}
+        <TableCell align="right" sx={{ py: 0 }}>
+          {t('userManagement.table.headers.actions')}
+        </TableCell>
+      </TableRow>
+    </TableHead>
+  );
+}
 
 type UserRowProps = {
   index: number;
   onDelete: (userIds: string[]) => void;
   onEdit: (user: User) => void;
   processing: boolean;
+  selected: boolean;
   user: User;
 };
 
-const UserRow = ({ index, onDelete, onEdit, processing, user }: UserRowProps) => {
+const UserRow = ({ index, onDelete, onEdit, processing, selected, user }: UserRowProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation();
 
-  const labelId = `enhanced-table-checkbox-${index}`;
   const openActions = Boolean(anchorEl);
 
   const handleOpenActions = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -58,15 +106,11 @@ const UserRow = ({ index, onDelete, onEdit, processing, user }: UserRowProps) =>
   };
 
   return (
-    <TableRow
-      tabIndex={-1}
-      key={user.id}
-      sx={{ '& td': { bgcolor: 'background.paper', border: 0 } }}
-    >
-      <TableCell>
+    <TableRow sx={{ '& td': { bgcolor: 'background.paper', border: 0 } }}>
+      <TableCell sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Avatar sx={{ mr: 3 }}>
-            <Avatar alt="Remy Sharp" src={user.avatar} />
+            <PersonIcon />
           </Avatar>
           <Box>
             <Typography component="div" variant="h6">
@@ -81,25 +125,51 @@ const UserRow = ({ index, onDelete, onEdit, processing, user }: UserRowProps) =>
       <TableCell align="center">{user.gender}</TableCell>
       <TableCell align="center">{user.role}</TableCell>
       <TableCell align="center">
-        {user.disabled ? (
-          <RemoveCircleOutlineIcon />
-        ) : (
-          <CheckCircleOutlineIcon
-            sx={{
-              color: 'white',
-              backgroundColor: 'green',
-              borderRadius: '100%',
-            }}
-          />
-        )}
+        {user.disabled ? <Chip label="Disabled" /> : <Chip color="primary" label="Active" />}
       </TableCell>
       <TableCell
         align="right"
         sx={{ borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}
       >
-        <IconButton aria-label="edit" size="small">
-          <EditIcon fontSize="inherit" color="primary" onClick={handleEdit} />
+        <IconButton
+          id="user-row-menu-button"
+          aria-label="user actions"
+          aria-controls="user-row-menu"
+          aria-haspopup="true"
+          aria-expanded={openActions ? 'true' : 'false'}
+          disabled={processing}
+          onClick={handleOpenActions}
+        >
+          <MoreVertIcon />
         </IconButton>
+        <Menu
+          id="user-row-menu"
+          anchorEl={anchorEl}
+          aria-labelledby="user-row-menu-button"
+          open={openActions}
+          onClose={handleCloseActions}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <MenuItem onClick={handleEdit}>
+            <ListItemIcon>
+              <EditIcon />
+            </ListItemIcon>{' '}
+            {t('common.edit')}
+          </MenuItem>
+          <MenuItem onClick={handleDelete}>
+            <ListItemIcon>
+              <DeleteIcon />
+            </ListItemIcon>{' '}
+            {t('common.delete')}
+          </MenuItem>
+        </Menu>
       </TableCell>
     </TableRow>
   );
@@ -109,12 +179,26 @@ type UserTableProps = {
   processing: boolean;
   onDelete: (userIds: string[]) => void;
   onEdit: (user: User) => void;
-  users?: any[];
+  onSelectedChange: (selected: string[]) => void;
+  selected: string[];
+  users?: User[];
 };
 
-const UserTable = ({ onDelete, onEdit, processing, users = [] }: UserTableProps) => {
+const UserTable = ({
+  onDelete,
+  onEdit,
+  onSelectedChange,
+  processing,
+  selected,
+  users = [],
+}: UserTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleClick = (id: string) => {
+    let newSelected: string[] = selectUtils.selectOne(selected, id);
+    onSelectedChange(newSelected);
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -125,57 +209,11 @@ const UserTable = ({ onDelete, onEdit, processing, users = [] }: UserTableProps)
     setPage(0);
   };
 
+  const isSelected = (id: string) => selected.indexOf(id) !== -1;
+
   if (users.length === 0) {
     return <Empty title="No user yet" />;
   }
-
-  function EnhancedTableHead({}: EnhancedTableProps) {
-    const { t } = useTranslation();
-
-    return (
-      <TableHead>
-        <TableRow sx={{ '& th': { border: 0 } }}>
-          {headCells.map((headCell) => (
-            <TableCell key={headCell.id} align={headCell.align} sx={{ py: 0 }}>
-              {t(headCell.label)}
-            </TableCell>
-          ))}
-          <TableCell align="right" sx={{ py: 0 }}>
-            {t('userManagement.table.headers.actions')}
-          </TableCell>
-        </TableRow>
-      </TableHead>
-    );
-  }
-
-  interface HeadCell {
-    id: string;
-    label: string;
-    align: 'center' | 'left' | 'right';
-  }
-
-  const headCells: HeadCell[] = [
-    {
-      id: 'user',
-      align: 'left',
-      label: 'userManagement.table.headers.user',
-    },
-    {
-      id: 'gender',
-      align: 'center',
-      label: 'userManagement.table.headers.gender',
-    },
-    {
-      id: 'role',
-      align: 'center',
-      label: 'userManagement.table.headers.role',
-    },
-    {
-      id: 'status',
-      align: 'center',
-      label: 'userManagement.table.headers.status',
-    },
-  ];
 
   return (
     <React.Fragment>
@@ -188,6 +226,7 @@ const UserTable = ({ onDelete, onEdit, processing, users = [] }: UserTableProps)
             borderSpacing: '0 1rem',
           }}
         >
+          <EnhancedTableHead />
           <TableBody>
             {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -198,23 +237,22 @@ const UserTable = ({ onDelete, onEdit, processing, users = [] }: UserTableProps)
                   onDelete={onDelete}
                   onEdit={onEdit}
                   processing={processing}
+                  selected={isSelected(user.id)}
                   user={user}
                 />
               ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <Box>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={users.length}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Box>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={users.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </React.Fragment>
   );
 };

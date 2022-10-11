@@ -28,7 +28,6 @@
     "@types/react-dom": "^17.0.0",
     "axios": "^0.21.1",
     "axios-mock-adapter": "^1.19.0",
-    "bootstrap": "^5.2.2",
     "ckeditor4": "^4.20.0",
     "date-fns": "^2.19.0",
     "env-cmd": "^10.1.0",

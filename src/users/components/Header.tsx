@@ -1,23 +1,8 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  InputAdornment,
-  SvgIcon,
-  TextField,
-  Typography,
-  InputBase,
-} from '@material-ui/core';
+import { Box, Button, Card, CardContent, Grid, Typography, InputBase } from '@material-ui/core';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import React, { Fragment } from 'react';
-import AdminAppBar from '../../admin/components/AdminAppBar';
-import AdminToolbar from '../../admin/components/AdminToolbar';
-import AddIcon from '@material-ui/icons/Add';
-import FilterListIcon from '@mui/icons-material/FilterList';
+
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -78,11 +63,8 @@ const Header = ({ title, description }: HeaderProps) => {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <Box className="ml-3 mb-2">
-                <Typography className="mb-2" variant="h2" component="h1" sx={{ flexGrow: 1 }}>
-                  {t(title)}
-                </Typography>
-                <Typography color="textSecondary" variant="body2">
+              <Box marginBottom={2}>
+                <Typography variant="h2" color="GrayText">
                   {t(description)}
                 </Typography>
               </Box>
@@ -104,9 +86,6 @@ const Header = ({ title, description }: HeaderProps) => {
                 </Button>
                 <Button startIcon={<FileDownloadIcon fontSize="small" />}>
                   {t('userManagement.listScreen.importFile')}
-                </Button>
-                <Button startIcon={<AddIcon fontSize="small" />}>
-                  {t('userManagement.listScreen.addUser')}
                 </Button>
               </Grid>
             </Grid>

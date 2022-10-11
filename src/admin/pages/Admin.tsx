@@ -36,7 +36,7 @@ const AdminLayout = () => {
         <Box
           component="main"
           mt={2}
-          sx={{ flexGrow: 1, pb: 3, px: { xs: 3, sm: 3 } }}
+          sx={{ flexGrow: 1, pb: 3, px: { xs: 3, sm: 6 } }}
         >
           <QueryWrapper>
             <Outlet />

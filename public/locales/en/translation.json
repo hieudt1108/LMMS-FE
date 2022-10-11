@@ -309,7 +309,7 @@
       "more": "More on Github",
       "title": "Main Features"
     },
-    "bigtitle" : "Hệ Thống Quản Lý Học Liệu",
+    "bigtitle": "Hệ Thống Quản Lý Học Liệu",
     "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
   },
   "notifications": {
@@ -466,32 +466,38 @@
       "title": "Users"
     }
   },
-  "classes":{
-    "title":"Classes",
-    "create":"Create Class",
-    "filter":{
-      "class":"Class",
+  "classes": {
+    "title": "Classes",
+    "create": "Create Class",
+    "filter": {
+      "class": "Class",
       "year": "Year",
-      "status":{
-        "title":"Status",
-        "active":"Active",
-        "inActive":"In Active"
+      "status": {
+        "title": "Status",
+        "active": "Active",
+        "inActive": "In Active"
       },
-      "search":"Search Class"
+      "search": "Search Class"
     }
   },
-  "classDetail":{
+  "classDetail": {
     "title": "Class Detail",
     "titleBar": {
-      "document":"Document",
+      "document": "Document",
       "member": "Member"
     },
-    "Member": {
+    "member": {
       "id": "Number",
-      "account":"Account",
-      "tools": "Tools",
+      "account": "Account",
       "subject": "Subject",
-      "homeroomTeacher": "Homeroom Teacher"
+      "homeroomTeacher": "Homeroom Teacher",
+      "tools": "Tools",
+      "teacher": "Teacher",
+      "student": "Student"
+    },
+    "action": {
+      "addTeacher": "Add Teacher",
+      "addStudent": "Add Student"
     }
   }
 }

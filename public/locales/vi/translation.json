@@ -218,7 +218,8 @@
         "title": "Môn toán",
         "description": "Khung chương trình môn toán"
       }
-    }},
+    }
+  },
   "syllabus": {
     "title": "Chương trình học"
   },
@@ -315,7 +316,7 @@
       "more": "More on Github",
       "title": "Tính năng chính"
     },
-    "bigtitle" : "Hệ Thống Quản Lý Học Liệu",
+    "bigtitle": "Hệ Thống Quản Lý Học Liệu",
     "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
   },
   "notifications": {
@@ -422,8 +423,8 @@
       "addUser": "Thêm người dùng",
       "search": "Tìm kiếm theo tên",
       "filter": "Thêm bộ lọc",
-      "title":"Người dùng",
-      "description":"Danh sách chi tiết thông tin người dùng"
+      "title": "Người dùng",
+      "description": "Danh sách chi tiết thông tin người dùng"
     },
     "confirmations": {
       "delete": "Bạn có chắc chắn muốn xóa người dùng này không?"
@@ -435,7 +436,7 @@
       "cancel": {
         "button": "Hủy bỏ"
       },
-      "save":{
+      "save": {
         "button": "Lưu"
       }
     },
@@ -470,9 +471,8 @@
         "label": "Email"
       },
       "phone": {
-        "label":"Điện thoại"
+        "label": "Điện thoại"
       }
-
     },
     "modal": {
       "add": {
@@ -502,32 +502,38 @@
       "title": "Người dùng"
     }
   },
-  "classes":{
-    "title":"Lớp học",
-    "create":"Tạo lớp học",
-    "filter":{
-      "class":"Lớp học",
+  "classes": {
+    "title": "Lớp học",
+    "create": "Tạo lớp học",
+    "filter": {
+      "class": "Lớp học",
       "year": "Niên khoá",
-      "status":{
-        "title":"Trạng thái",
-        "active":"Kích hoạt",
-        "inActive":"Không kích hoạt"
+      "status": {
+        "title": "Trạng thái",
+        "active": "Kích hoạt",
+        "inActive": "Không kích hoạt"
       },
-      "search":"Tìm kiếm lớp"
+      "search": "Tìm kiếm lớp"
     }
   },
-  "classDetail":{
+  "classDetail": {
     "title": "Lớp học",
     "titleBar": {
-      "document":"Tài Liệu",
+      "document": "Tài Liệu",
       "member": "Thành Viên"
     },
     "Member": {
       "id": "Id",
-      "account":"Tài Khoản",
+      "account": "Tài Khoản",
       "tools": "Công cụ",
       "subject": "Môn học",
-      "homeroomTeacher": "Giáo viên chủ nhiệm"
+      "homeroomTeacher": "Giáo viên chủ nhiệm",
+      "teacher": "Giáo viên",
+      "student": "Học sinh"
+    },
+    "action": {
+      "addTeacher": "Thêm giáo viên",
+      "addStudent": "Thêm học sinh"
     }
   }
 }

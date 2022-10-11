@@ -15,7 +15,6 @@ import English from '../../Assets/Subjects/englishLogo.png';
 import Geography from '../../Assets/Subjects/geography.png';
 
 import { Link as RouterLink } from 'react-router-dom';
-import { useAuth } from '../../auth/contexts/AuthProvider';
 import Fab from '@mui/material/Fab';
 import { ROUTER } from '../../Router';
 

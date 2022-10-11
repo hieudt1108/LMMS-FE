@@ -6,8 +6,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
@@ -16,12 +14,11 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { User } from '../types/user';
-import { Box, CardContent, Grid, Typography, InputBase } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 const genders = [
   { label: 'userManagement.form.gender.options.f', value: 'F' },
   { label: 'userManagement.form.gender.options.m', value: 'M' },
 ];
-const roles = ['Admin', 'Member'];
 
 type UserDialogProps = {
   onAdd: (user: Partial<User>) => void;

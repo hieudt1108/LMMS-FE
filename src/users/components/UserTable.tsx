@@ -1,6 +1,5 @@
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -21,7 +20,6 @@ import PersonIcon from '@material-ui/icons/Person';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Empty from '../../core/components/Empty';
-import * as selectUtils from '../../core/utils/selectUtils';
 import { User } from '../types/user';
 
 interface HeadCell {
@@ -194,11 +192,6 @@ const UserTable = ({
 }: UserTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const handleClick = (id: string) => {
-    let newSelected: string[] = selectUtils.selectOne(selected, id);
-    onSelectedChange(newSelected);
-  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);

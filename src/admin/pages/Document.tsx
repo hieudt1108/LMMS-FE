@@ -1,9 +1,4 @@
 import * as React from 'react';
-
-import AdminAppBar from '../components/AdminAppBar';
-import AdminToolbar from '../components/AdminToolbar';
-import { useTranslation } from 'react-i18next';
-
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -37,8 +32,6 @@ const rows = [
 ];
 
 export default function Document() {
-  const { t } = useTranslation();
-
   return (
     <React.Fragment>
       <AdminHeader

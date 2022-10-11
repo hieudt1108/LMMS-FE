@@ -1,5 +1,5 @@
 import { Card, CardContent, Grid, Typography } from '@material-ui/core';
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 

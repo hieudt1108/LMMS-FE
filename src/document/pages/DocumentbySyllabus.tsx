@@ -29,16 +29,14 @@ export default function DocumentbySyllabus() {
       </AdminAppBar>
 
       <Grid>
-        <Grid item xs={12} md={6} lg={12}>
+        <Grid item xs={12} md={12} lg={12}>
           <HeaderListDocument />
         </Grid>
         <Box>
           <Grid container spacing={2}>
             {Array.from(Array(10)).map((_, index) => (
-              <Grid item xs={2} md={4} lg={2}>
-                <Item>
-                  <ListDocument />
-                </Item>
+              <Grid item xs={2} md={4} lg={3}>
+                <ListDocument />
               </Grid>
             ))}
             ;

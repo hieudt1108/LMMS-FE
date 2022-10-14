@@ -11,14 +11,12 @@ import HomeIcon from '@material-ui/icons/Home';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PeopleIcon from '@material-ui/icons/People';
 import ClassIcon from '@material-ui/icons/Class';
-import PersonIcon from '@material-ui/icons/Person';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../auth/contexts/AuthProvider';
 import Logo from '../../core/components/Logo';
 import { drawerCollapsedWidth, drawerWidth } from '../../core/config/layout';
-import { ROUTER } from '../../Router';
 
 type AdminDrawerProps = {
   collapsed: boolean;

@@ -3,18 +3,14 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { useAuth } from '../../auth/contexts/AuthProvider';
-import { useTranslation } from 'react-i18next';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+// import { useAuth } from '../../auth/contexts/AuthProvider';
+// import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { ROUTER } from '../../Router';
 
 interface ToolbarProps {
@@ -22,13 +18,13 @@ interface ToolbarProps {
 }
 
 export default function ToolBar({ toggleDrawer }: ToolbarProps) {
-  const { userInfo } = useAuth();
-  const { t } = useTranslation();
+  // const { userInfo } = useAuth();
+  // const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const navigate = useNavigate();
-  const isMenuOpen = Boolean(anchorEl);
+  // const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {

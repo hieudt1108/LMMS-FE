@@ -68,7 +68,7 @@ const Landing = () => {
               {userInfo ? (
                 <Button
                   component={RouterLink}
-                  to={ROUTER.ADMIN}
+                  to={ROUTER.ROLES}
                   variant='contained'
                 >
                   {t('landing.cta.mainAuth', { name: userInfo.firstName })}

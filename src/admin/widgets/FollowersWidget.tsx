@@ -15,8 +15,9 @@ import English from '../../Assets/Subjects/englishLogo.png';
 import Geography from '../../Assets/Subjects/geography.png';
 
 import { Link as RouterLink } from 'react-router-dom';
-import Fab from '@mui/material/Fab';
+import { useAuth } from '../../auth/contexts/AuthProvider';
 import { ROUTER } from '../../Router';
+import { Button } from '@material-ui/core';
 
 const socials = [
   {
@@ -26,19 +27,15 @@ const socials = [
     name: 'Math',
     trend: (
       <Box style={{ display: 'flex' }}>
-        <Fab
-          style={{
-            backgroundColor: '#8BC6EC',
-            backgroundImage: 'linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)',
-          }}
-          color="secondary"
+        <Button
+          color='primary'
           component={RouterLink}
           to={ROUTER.ADMIN_DOCUMENT}
-          variant="extended"
+          variant='text'
         >
-          Document
+          Chương trình học
           <ArrowRightIcon sx={{ color: '#757de8' }} />
-        </Fab>
+        </Button>
       </Box>
     ),
     unitKey: 'admin.home.followers.units.likes',
@@ -51,19 +48,15 @@ const socials = [
     name: 'Chemistry',
     trend: (
       <Box style={{ display: 'flex' }}>
-        <Fab
-          style={{
-            backgroundColor: '#8BC6EC',
-            backgroundImage: 'linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)',
-          }}
-          color="secondary"
+        <Button
+          color='primary'
           component={RouterLink}
           to={ROUTER.ADMIN_DOCUMENT}
-          variant="extended"
+          variant='text'
         >
-          Document
+          Chương trình học
           <ArrowRightIcon sx={{ color: '#757de8' }} />
-        </Fab>
+        </Button>
       </Box>
     ),
     unitKey: 'admin.home.followers.units.love',
@@ -76,19 +69,15 @@ const socials = [
     name: 'English',
     trend: (
       <Box style={{ display: 'flex' }}>
-        <Fab
-          style={{
-            backgroundColor: '#8BC6EC',
-            backgroundImage: 'linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)',
-          }}
-          color="secondary"
+        <Button
+          color='primary'
           component={RouterLink}
           to={ROUTER.ADMIN_DOCUMENT}
-          variant="extended"
+          variant='text'
         >
-          Document
+          Chương trình học
           <ArrowRightIcon sx={{ color: '#757de8' }} />
-        </Fab>
+        </Button>
       </Box>
     ),
     unitKey: 'admin.home.followers.units.smiles',
@@ -101,19 +90,15 @@ const socials = [
     name: 'Geography',
     trend: (
       <Box style={{ display: 'flex' }}>
-        <Fab
-          style={{
-            backgroundColor: '#8BC6EC',
-            backgroundImage: 'linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)',
-          }}
-          color="secondary"
+        <Button
+          color='primary'
           component={RouterLink}
           to={ROUTER.ADMIN_DOCUMENT}
-          variant="extended"
+          variant='text'
         >
-          Document
+          Chương trình học
           <ArrowRightIcon sx={{ color: '#757de8' }} />
-        </Fab>
+        </Button>
       </Box>
     ),
     unitKey: 'admin.home.followers.units.smiles',
@@ -131,10 +116,10 @@ const FollowersWidget = () => {
           <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{ mr: 2 }}>{social.image}</Box>
             <Box sx={{ flexGrow: 1 }}>
-              <Typography component="div" variant="h6">
+              <Typography component='div' variant='h6'>
                 Teacher: {social.teacher}
               </Typography>
-              <Typography variant="body2" color="textSecondary" component="div">
+              <Typography variant='body2' color='textSecondary' component='div'>
                 Subject: {t(social.name)}
               </Typography>
             </Box>

@@ -15,7 +15,7 @@
     "@material-ui/icons": "^5.0.0-alpha.35",
     "@material-ui/lab": "5.0.0-alpha.35",
     "@mui/icons-material": "^5.10.6",
-    "@mui/material": "^5.10.8",
+    "@mui/material": "^5.10.9",
     "@mui/styled-engine-sc": "^5.10.6",
     "@mui/x-data-grid": "^5.17.6",
     "@sentry/react": "^6.4.1",

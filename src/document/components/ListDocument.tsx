@@ -23,7 +23,7 @@ export default function ListDocument() {
         <Button
           size="large"
           component={RouterLink}
-          to={`/${process.env.PUBLIC_URL}/admin/document`}
+          to={`/${process.env.PUBLIC_URL}/admin/document/:subjectSlot/1`}
         >
           View
         </Button>

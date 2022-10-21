@@ -2,10 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import "./core/config/i18n";
-import "./mocks/server";
 import reportWebVitals from "./reportWebVitals";
-
+import axios from "axios";
+axios.defaults.baseURL = 'https://localhost:7287/api';
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

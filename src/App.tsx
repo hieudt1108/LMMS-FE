@@ -1,8 +1,12 @@
 import * as Sentry from '@sentry/react';
 import React from 'react';
-import {QueryClient, QueryClientProvider} from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import AppRoutes from './AppRoutes';
-
+import Loader from './core/components/Loader';
+import QueryWrapper from './core/components/QueryWrapper';
+import SettingsProvider from './core/contexts/SettingsProvider';
+import SnackbarProvider from './core/contexts/SnackbarProvider';
+import usePageTracking from './core/hooks/usePageTracking';
 
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({
@@ -22,12 +26,17 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-
   return (
-    <React.Suspense fallback={null}>
+    <React.Suspense fallback={<Loader />}>
       <Sentry.ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-                  <AppRoutes />
+          <SettingsProvider>
+            <QueryWrapper>
+              <SnackbarProvider>
+                <AppRoutes />
+              </SnackbarProvider>
+            </QueryWrapper>
+          </SettingsProvider>
         </QueryClientProvider>
       </Sentry.ErrorBoundary>
     </React.Suspense>

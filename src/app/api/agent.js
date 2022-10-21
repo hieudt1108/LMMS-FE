@@ -1,12 +1,15 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: '',
+  baseURL: 'http://lmms.site:8080/api/',
   timeout: 3000,
 });
 
 // INTERCEPTORS CONFIG START
-instance.interceptors.response.use(responseOnSuccessMiddleware, responseOnErrorMiddleware);
+instance.interceptors.response.use(
+  responseOnSuccessMiddleware,
+  responseOnErrorMiddleware
+);
 
 function responseOnSuccessMiddleware(res) {
   return res;
@@ -42,10 +45,6 @@ function getApi(url) {
     .catch((err) => err);
 }
 
-function getSumaryInfo() {
-  return getApi('api/home/summary/');
-}
-
 // POST API AREA ============================>
 function postApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -58,6 +57,10 @@ function postApi(url, payload) {
     .then((res) => res)
     .catch((err) => err);
 }
+
+const loginAuth = (payload) => {
+  return postApi('Auth/login', payload);
+};
 
 // DELETE API AREA ============================>
 function deleteApi(url) {
@@ -86,5 +89,6 @@ function putApi(url, payload) {
     .catch((err) => err);
 }
 
-export //export api here
- {};
+//export api here
+
+export { setLocalStorage, getLocalStorage, loginAuth };

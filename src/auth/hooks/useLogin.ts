@@ -1,5 +1,6 @@
-import axios from "axios";
-import { useMutation } from "react-query";
+import axios from 'axios';
+import { useMutation } from 'react-query';
+// import { loginAuth } from '../../../src/app/api/agent';
 
 const login = async ({
   email,
@@ -8,7 +9,7 @@ const login = async ({
   email: string;
   password: string;
 }): Promise<string> => {
-  const { data } = await axios.post("/api/login", { email, password });
+  const { data } = await axios.post('/api/login', { email, password });
   return data;
 };
 

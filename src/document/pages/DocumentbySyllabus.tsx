@@ -39,7 +39,6 @@ export default function DocumentbySyllabus() {
                 <ListDocument />
               </Grid>
             ))}
-            ;
           </Grid>
         </Box>
       </Grid>

@@ -11,6 +11,11 @@
         "settings": "Settings",
         "userManagement": "Users",
         "document": "Document"
+      },
+      "grade-teach": {
+        "normal": "Hệ thường",
+        "standar": "Hệ song ngữ",
+        "profesinal": "Chất lượng cao"
       }
     },
     "header": {

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
@@ -17,6 +18,14 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../auth/contexts/AuthProvider';
 import Logo from '../../core/components/Logo';
 import { drawerCollapsedWidth, drawerWidth } from '../../core/config/layout';
+
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import SchoolIcon from '@mui/icons-material/School';
+import ListItemButton from '@mui/material/ListItemButton';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Collapse from '@mui/material/Collapse';
 
 type AdminDrawerProps = {
   collapsed: boolean;
@@ -58,6 +67,23 @@ export const menuItems = [
   },
 ];
 
+export const levelSyllabus = [
+  {
+    icon: MenuBookIcon,
+    key: 'admin.drawer.grade-teach.normal',
+    path: '/admin/program/:id',
+  },
+  {
+    icon: MenuBookIcon,
+    key: 'admin.drawer.grade-teach.standar',
+    path: '/admin/program/:id',
+  },
+  {
+    icon: MenuBookIcon,
+    key: 'admin.drawer.grade-teach.profesinal',
+    path: '/admin/program/:id',
+  },
+];
 const AdminDrawer = ({
   collapsed,
   mobileOpen,
@@ -68,17 +94,22 @@ const AdminDrawer = ({
   const { t } = useTranslation();
 
   const width = collapsed ? drawerCollapsedWidth : drawerWidth;
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
 
   const drawer = (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
       <Logo style={{ marginLeft: 60 }} sx={{ display: 'flex', p: 4 }} />
-      <List component="nav" sx={{ px: 2 }}>
+      <List component='nav' sx={{ px: 2 }}>
         {menuItems.map((item) => (
           <ListItem
             button
             component={NavLink}
             key={item.path}
-            activeClassName="Mui-selected"
+            activeClassName='Mui-selected'
             end={true}
             to={`/${process.env.PUBLIC_URL}${item.path}`}
           >
@@ -97,22 +128,40 @@ const AdminDrawer = ({
         ))}
       </List>
       <Box sx={{ flexGrow: 1 }} />
-      <List component="nav" sx={{ p: 2 }}>
-        {/* <ListItem button component={NavLink} to={ROUTER.ADMIN_PROFILE}>
-          <ListItemAvatar>
-            <Avatar>
-              <PersonIcon />
-            </Avatar>
-          </ListItemAvatar>
-          {userInfo && (
-            <ListItemText
-              primary={`${userInfo.firstName} ${userInfo.lastName}`}
-              sx={{
-                display: collapsed ? 'none' : 'block',
-              }}
-            />
-          )}
-        </ListItem> */}
+      <List component='nav' sx={{ p: 2 }}>
+        <ListItemButton onClick={handleClick}>
+          <ListItemIcon>
+            <SchoolIcon />
+          </ListItemIcon>
+          <ListItemText primary='Chương trình học' />
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={open} timeout='auto' unmountOnExit>
+          <List component='div' disablePadding>
+            {levelSyllabus.map((item) => (
+              <ListItemButton
+                component={NavLink}
+                key={item.path}
+                activeClassName='Mui-selected'
+                end={true}
+                to={`/${process.env.PUBLIC_URL}${item.path}`}
+                sx={{ pl: 4 }}
+              >
+                <ListItemAvatar>
+                  <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+                    <item.icon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={t(item.key)}
+                  sx={{
+                    display: collapsed ? 'none' : 'block',
+                  }}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+        </Collapse>
         <ListItem button onClick={onSettingsToggle}>
           <ListItemAvatar>
             <Avatar>
@@ -132,8 +181,8 @@ const AdminDrawer = ({
 
   return (
     <Box
-      aria-label="Admin drawer"
-      component="nav"
+      aria-label='Admin drawer'
+      component='nav'
       sx={{
         width: { lg: width },
         flexShrink: { lg: 0 },
@@ -141,7 +190,7 @@ const AdminDrawer = ({
     >
       {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
       <Drawer
-        variant="temporary"
+        variant='temporary'
         open={mobileOpen}
         onClose={onDrawerToggle}
         ModalProps={{
@@ -158,7 +207,7 @@ const AdminDrawer = ({
         {drawer}
       </Drawer>
       <Drawer
-        variant="permanent"
+        variant='permanent'
         open
         sx={{
           display: { xs: 'none', lg: 'block' },

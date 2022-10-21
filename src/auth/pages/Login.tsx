@@ -1,24 +1,16 @@
 import React from 'react';
+import {getApi, getLocalStorage} from "../../dataProvider/agent";
 // import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 // import { useDispatch } from "react-redux";
 // import { useAuth } from '../contexts/AuthProvider';
 
-
 const axios = require('axios').default;
+
+
 const Login = () => {
   console.log('Login')
-  axios.get('/Program/count')
-  .then(function (response: any) {
-    // handle success
-    console.log(response);
-  })
-  .catch(function (error: any) {
-    // handle error
-    console.log(error);
-  })
-  .finally(function () {
-    // always executed
-  });
+  getApi('Program/count')
+
 
   // const { isLoggingIn, login } = useAuth();
   // const navigate = useNavigate();

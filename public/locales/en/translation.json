@@ -100,6 +100,9 @@
         "email": {
           "label": "E-mail Address"
         },
+        "username": {
+          "label": "User name"
+        },
         "password": {
           "label": "Password"
         }

@@ -1,18 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import Box from '@material-ui/core/Box';
-
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LoadingButton from '@material-ui/lab/LoadingButton';
-
 import {useTranslation} from 'react-i18next';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import BoxedLayout from '../../core/components/BoxedLayout';
 import {ROUTER} from '../../Router';
-
 import {
   loginAuth,
   setLocalStorage,
@@ -22,54 +19,39 @@ import {dataLayerPush} from '../../Utils/dataLayerPush.js';
 
 const Login = () => {
   const navigate = useNavigate();
-
   const {t} = useTranslation();
-
   const initUser = {
     username: '',
     password: '',
   };
-
   const [loginData, setLoginData] = useState(initUser);
   const [error, setError] = useState('');
-
-  // useEffect(() => {
-  //   const isAuthenticated = getLocalStorage('isAuthenticated');
-  //   if (isAuthenticated) {
-  //     navigate(ROUTER.ADMIN);
-  //   }
-  // });
-
   async function handleLogin(e: { preventDefault: () => void }) {
     e.preventDefault();
+    const res = await loginAuth(loginData);
     // optional
-
     if (!loginData.username) {
       setError('username');
       return;
     }
-    if (!loginData.username) {
+    else if (!loginData.password) {
       setError('password');
       return;
     }
-    setError('');
-
-    const res = await loginAuth(loginData);
-    console.log('Data :', res);
-    if (res.status < 400) {
-      navigate(ROUTER.ADMIN);
-
-      setLocalStorage('access_token', res.data.token);
-      setLocalStorage('user_info', res.data.user);
-      setLocalStorage('isAuthenticated', true);
-
-      dataLayerPush('test', {
-        type: 'login',
-        login: loginData,
-      });
-    } else if (res.response) {
-      alert('Tài khoản này không có hoặc bị sai thông tin!!');
+    else if (res.status < 400) {
+        // navigate(ROUTER.ADMIN);
+        setLocalStorage('access_token', res.data.accessToken);
+        setLocalStorage('user_info', res.config.data);
+        setLocalStorage('isAuthenticated', true);
+        dataLayerPush('test', {
+            type: 'login',
+            login: loginData,
+        });
     }
+    else {
+        setError('wrong');
+    }
+    console.log('Data :', res);
   }
 
   return (
@@ -114,7 +96,7 @@ const Login = () => {
                   }
               />
               {error === 'username' && (
-                  <span className={`  text-danger `}>Bạn chưa nhập username</span>
+                  <span style={{color : 'red'}} className={`  text-danger `}>Tên đăng nhập trống</span>
               )}
               <TextField
                   margin='normal'
@@ -133,14 +115,9 @@ const Login = () => {
                         password: e.target.value,
                       })
                   }
-                  // disabled={isLoggingIn}
-                  // value={formik.values.password}
-                  // onChange={formik.handleChange}
-                  // error={formik.touched.password && Boolean(formik.errors.password)}
-                  // helperText={formik.touched.password && formik.errors.password}
               />
-              {error === 'username' && (
-                  <span className={`  text-danger `}>Bạn chưa pass</span>
+              {error === 'password' && (
+                  <span style={{color : 'red'}} className={`  text-danger `}>Mật khẩu trống</span>
               )}
               <Box sx={{textAlign: 'right'}}>
                 <Link
@@ -154,12 +131,14 @@ const Login = () => {
               <LoadingButton
                   type='submit'
                   fullWidth
-                  // loading={isLoggingIn}
                   variant='contained'
                   sx={{mt: 3}}
               >
                 {t('auth.login.submit')}
               </LoadingButton>
+                {error === 'wrong' && (
+                    <span style={{color : 'red'}}  className={`  text-danger `}>Tài khoản hoặc mật khẩu bạn đã nhập không chính xác</span>
+                )}
             </Box>
           </BoxedLayout>
         </Grid>

@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROUTER } from './Router';
-
+import ProtectedRoute from './core/components/ProtectedRoute.js';
 // Admin
 
 // document

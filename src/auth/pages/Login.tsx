@@ -39,7 +39,7 @@ const Login = () => {
       return;
     }
     else if (res.status < 400) {
-        // navigate(ROUTER.ADMIN);
+
         setLocalStorage('access_token', res.data.accessToken);
         setLocalStorage('user_info', res.config.data);
         setLocalStorage('isAuthenticated', true);
@@ -47,6 +47,8 @@ const Login = () => {
             type: 'login',
             login: loginData,
         });
+        navigate("/home");
+        // window.location.reload();
     }
     else {
         setError('wrong');

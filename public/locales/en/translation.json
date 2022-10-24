@@ -172,8 +172,11 @@
   "common": {
     "backHome": "Back to Home",
     "cancel": "Cancel",
+    "add": "Add",
+    "return" : "Back",
     "confirm": "Confirm",
     "confirmation": "Confirmation",
+    "createclass": "Create a class",
     "delete": "Delete",
     "edit": "Edit",
     "errors": {

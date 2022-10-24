@@ -172,8 +172,11 @@
   "common": {
     "backHome": "Trở về trang chủ",
     "cancel": "Hủy",
+    "add": "Thêm",
+    "return" : "Quay lại",
     "confirm": "Xác nhận",
     "confirmation": "Xác nhận",
+    "createclass": "Tạo lớp học",
     "delete": "Xóa",
     "edit": "Sửa",
     "errors": {

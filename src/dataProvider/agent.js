@@ -70,6 +70,11 @@ function getAllLevel() {
 function getLevelById(id) {
   return getApi(`/Level/getOne/${id}`);
 }
+// USERS
+function getAllUsers() {
+  return getApi('/User/getAll');
+}
+
 // POST API AREA ============================>
 function postApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -101,6 +106,9 @@ const postGrade = () => {
 const postLevel = () => {
   return postApi('Level');
 };
+
+
+
 // DELETE API AREA ============================>
 function deleteApi(url) {
   const token = getLocalStorage('access_token');
@@ -137,6 +145,7 @@ export {
   getAllClass,
   getClassbyId,
   getAllGrade,
+  getAllUsers,
   getGradebyId,
   postClass,
   postGrade,

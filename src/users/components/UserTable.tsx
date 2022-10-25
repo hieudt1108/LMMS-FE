@@ -23,6 +23,10 @@ import { useTranslation } from 'react-i18next';
 import Empty from '../../core/components/Empty';
 import * as selectUtils from '../../core/utils/selectUtils';
 import { User } from '../types/user';
+import { useParams, useNavigate } from 'react-router-dom';
+import {
+  getAllUsers, loginAuth,
+} from '../../dataProvider/agent.js';
 
 interface HeadCell {
   id: string;
@@ -82,10 +86,30 @@ type UserRowProps = {
 };
 
 const UserRow = ({ index, onDelete, onEdit, processing, selected, user }: UserRowProps) => {
+  const { id }= useParams();
+  let navigate = useNavigate();
+
+  const initialUserState = {
+    id: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    gender: undefined,
+    birthDate: "",
+    address : "",
+    phone : "",
+    role: "",
+    enable : undefined
+  };
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [currentUser, setCurrentUser] = useState<User>(initialUserState);
   const { t } = useTranslation();
 
   const openActions = Boolean(anchorEl);
+
+  const res = getAllUsers();
+
 
   const handleOpenActions = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -114,7 +138,7 @@ const UserRow = ({ index, onDelete, onEdit, processing, selected, user }: UserRo
           </Avatar>
           <Box>
             <Typography component="div" variant="h6">
-              {`${user.lastName} ${user.firstName}`}
+              {`${currentUser.lastName} ${currentUser.firstName}`}
             </Typography>
             <Typography color="textSecondary" variant="body2">
               {user.email}
@@ -122,10 +146,10 @@ const UserRow = ({ index, onDelete, onEdit, processing, selected, user }: UserRo
           </Box>
         </Box>
       </TableCell>
-      <TableCell align="center">{user.gender}</TableCell>
-      <TableCell align="center">{user.role}</TableCell>
+      <TableCell align="center">{currentUser.gender}</TableCell>
+      <TableCell align="center">{currentUser.role}</TableCell>
       <TableCell align="center">
-        {user.disabled ? <Chip label="Disabled" /> : <Chip color="primary" label="Active" />}
+        {currentUser.enable ? <Chip label="Disabled" /> : <Chip color="primary" label="Active" />}
       </TableCell>
       <TableCell
         align="right"

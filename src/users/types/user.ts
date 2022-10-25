@@ -1,10 +1,12 @@
 export interface User {
   id: string;
-  avatar?: string;
-  disabled: boolean;
   email: string;
   firstName: string;
-  gender?: number ;
   lastName: string;
+  gender?: number ;
+  birthDate: string ;
+  address : string;
+  phone : string;
   role: string;
+  enable? : number;
 }

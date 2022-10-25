@@ -5,7 +5,7 @@ import {
     CardMedia,
     CardContent,
     Typography,
-    IconButton,
+    IconButton, Divider,
 } from "@mui/material";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -20,6 +20,8 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useNavigate } from 'react-router-dom';
 import { parseWithOptions } from "date-fns/fp";
 import { ROUTER } from '../../Router'
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 
 const ClassCart = () => {
     const navigate = useNavigate();
@@ -80,25 +82,31 @@ const ClassCart = () => {
 
                         />
                         <CardContent>
-
-                            <BottomNavigation
-                                showLabels
-                                value={value}
-                                onChange={(event, newValue) => {
-                                    setValue(newValue);
-                                }}
+                            <Stack
+                                direction="row"
+                                divider={<Divider orientation="vertical" flexItem />}
+                                justifyContent="center"
+                                spacing={1}
                             >
-                                <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-                                <BottomNavigationAction
-                                    label="Favorites"
-                                    icon={<FavoriteIcon />}
-                                >
-                                </BottomNavigationAction>
-                                <BottomNavigationAction
-                                    label="Nearby"
-                                    icon={<LocationOnIcon />}
-                                />
-                            </BottomNavigation>
+                                <Box>
+                                    <Typography align="center" sx={{ fontWeight: 'bold' }}>
+                                        30
+                                    </Typography>
+                                    <Typography>students</Typography>
+                                </Box>
+                                <Box>
+                                    <Typography align="center" sx={{ fontWeight: 'bold' }}>
+                                        1
+                                    </Typography>
+                                    <Typography>teachers</Typography>
+                                </Box>
+                                <Box>
+                                    <Typography align="center" sx={{ fontWeight: 'bold' }}>
+                                        100
+                                    </Typography>
+                                    <Typography>downloads</Typography>
+                                </Box>
+                            </Stack>
                         </CardContent>
                     </CardActionArea>
                 </Card>

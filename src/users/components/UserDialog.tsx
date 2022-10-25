@@ -47,7 +47,7 @@ const UserDialog = ({ onAdd, onClose, onUpdate, open, processing, user }: UserDi
 
   const formik = useFormik({
     initialValues: {
-      disabled: user ? user.disabled : false,
+      // disabled: user ? user.enable : false,
       email: user ? user.email : '',
       firstName: user ? user.firstName : '',
       gender: user ? user.gender : 0,
@@ -202,7 +202,7 @@ const UserDialog = ({ onAdd, onClose, onUpdate, open, processing, user }: UserDi
               name="disabled"
               disabled={processing}
               onChange={formik.handleChange}
-              checked={formik.values.disabled}
+              // checked={formik.values.enable}
               control={<Checkbox />}
               label={t('userManagement.form.disabled.label')}
             />

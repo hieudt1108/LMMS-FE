@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
 import ClassCart from '../components/ClassCart';
@@ -17,6 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { ClassSelect } from '../components/ClassSelect';
+import { getAllClass } from '../../dataProvider/agent';
 
 const Classes = () => {
   const { t } = useTranslation();
@@ -31,46 +32,66 @@ const Classes = () => {
     setOpen(true);
   };
 
-  const handleClose = (event: React.SyntheticEvent<unknown>, reason?: string) => {
+  const handleClose = (
+    event: React.SyntheticEvent<unknown>,
+    reason?: string
+  ) => {
     if (reason !== 'backdropClick') {
       setOpen(false);
     }
   };
 
+  useEffect(() => {
+    // declare the async data fetching function
+    const fetchData = async () => {
+      return await getAllClass();
+    };
+
+    const result = fetchData().catch(console.error);
+
+    // what will be logged to the console?
+    console.log(result);
+  }, []);
   return (
     <React.Fragment>
-      <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between" mt={2}>
-        <Button variant="outlined" onClick={handleClickOpen}>
+      <Stack
+        spacing={2}
+        direction='row'
+        alignItems='center'
+        justifyContent='space-between'
+        mt={2}
+      >
+        <Button variant='outlined' onClick={handleClickOpen}>
           {t('classes.create')}
         </Button>
         <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
           <DialogTitle>Fill the form</DialogTitle>
           <DialogContent>
-            <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Box component='form' sx={{ display: 'flex', flexWrap: 'wrap' }}>
               <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel htmlFor="demo-dialog-native">Age</InputLabel>
+                <InputLabel htmlFor='demo-dialog-native'>Age</InputLabel>
                 <Select
                   native
                   value={age}
                   onChange={handleChange}
-                  input={<OutlinedInput label="Age" id="demo-dialog-native" />}
+                  input={<OutlinedInput label='Age' id='demo-dialog-native' />}
                 >
-                  <option aria-label="None" value="" />
+                  <option aria-label='None' value='' />
                   <option value={10}>Ten</option>
                   <option value={20}>Twenty</option>
                   <option value={30}>Thirty</option>
                 </Select>
               </FormControl>
               <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-dialog-select-label">Age</InputLabel>
+                <InputLabel id='demo-dialog-select-label'>Age</InputLabel>
                 <Select
-                  labelId="demo-dialog-select-label"
-                  id="demo-dialog-select"
+                  labelId='demo-dialog-select-label'
+                  id='demo-dialog-select'
                   value={age}
                   onChange={handleChange}
-                  input={<OutlinedInput label="Age" />}
+                  input={<OutlinedInput label='Age' />}
                 >
-                  <MenuItem value="">
+                  <MenuItem value=''>
                     <em>None</em>
                   </MenuItem>
                   <MenuItem value={10}>Ten</MenuItem>
@@ -85,14 +106,14 @@ const Classes = () => {
             <Button onClick={handleClose}>Ok</Button>
           </DialogActions>
         </Dialog>
-        <Stack spacing={2} direction="row" alignItems="center" mt={2}>
+        <Stack spacing={2} direction='row' alignItems='center' mt={2}>
           <ClassSelect></ClassSelect>
           <ClassSelect></ClassSelect>
           <ClassSelect></ClassSelect>
         </Stack>
       </Stack>
 
-      <Stack spacing={2} direction="row" alignItems="center" mt={2}>
+      <Stack spacing={2} direction='row' alignItems='center' mt={2}>
         <Grid container spacing={2}>
           <ClassCart></ClassCart>
           <ClassCart></ClassCart>
@@ -103,8 +124,14 @@ const Classes = () => {
         </Grid>
       </Stack>
 
-      <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
-        <Pagination count={10} color="secondary" size="large" />
+      <Stack
+        spacing={2}
+        direction='row'
+        justifyContent='flex-end'
+        alignItems='center'
+        mt={2}
+      >
+        <Pagination count={10} color='secondary' size='large' />
       </Stack>
     </React.Fragment>
   );

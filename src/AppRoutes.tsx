@@ -3,6 +3,9 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROUTER } from './Router';
 import PrivateRoute from './core/components/PrivateRoute';
 import ProtectedRoute from './core/components/ProtectedRoute.js';
+import Classes from './admin/pages/Classes';
+import ClassDetail from './admin/pages/ClassDetail';
+import Document from './admin/pages/Document';
 // Admin
 
 // document
@@ -32,6 +35,9 @@ const AppRoutes = () => {
       <Route path='login' element={<Login />} />
       <Route path='admin' element={<Admin />}>
         <Route path='/' element={<Home />} />
+        <Route path='/document' element={<Document />} />
+        <Route path='/classes' element={<Classes />} />
+        <Route path='/class/:id' element={<ClassDetail />} />
       </Route>
 
       <Route path='*' element={<Navigate to={ROUTER[404]} replace />} />

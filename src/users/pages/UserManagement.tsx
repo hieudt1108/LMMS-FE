@@ -2,6 +2,8 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import AdminAppBar from '../../admin/components/AdminAppBar';
+import AdminToolbar from '../../admin/components/AdminToolbar';
 import ConfirmDialog from '../../core/components/ConfirmDialog';
 import SelectToolbar from '../../core/components/SelectToolbar';
 import { useSnackbar } from '../../core/contexts/SnackbarProvider';
@@ -9,8 +11,6 @@ import UserDialog from '../components/UserDialog';
 import UserTable from '../components/UserTable';
 import { User } from '../types/user';
 import Header from '../components/Header';
-import AdminAppBar from "../../admin/components/AdminAppBar";
-import AdminToolbar from "../../admin/components/AdminToolbar";
 
 const UserManagement = () => {
   const snackbar = useSnackbar();
@@ -22,55 +22,59 @@ const UserManagement = () => {
   const [userDeleted, setUserDeleted] = useState<string[]>([]);
   const [userUpdated, setUserUpdated] = useState<User | undefined>(undefined);
 
-  // const { addUser, isAdding } = useAddUser();
-  // const { deleteUsers, isDeleting } = useDeleteUsers();
-  // const { isUpdating, updateUser } = useUpdateUser();
-  // const { data } = useUsers();
+  // @ts-ignore
+  const { addUser, isAdding } = useState("");
+  // @ts-ignore
+  const { deleteUsers, isDeleting } = useState("");
+  // @ts-ignore
+  const { isUpdating, updateUser } = useState("");
+  // @ts-ignore
+  const { data } = useState("");
 
-  // const processing = isAdding || isDeleting || isUpdating;
+  const processing = isAdding || isDeleting || isUpdating;
 
-  // const handleAddUser = async (user: Partial<User>) => {
-  //   addUser(user as User)
-  //     .then(() => {
-  //       snackbar.success(
-  //         t('userManagement.notifications.addSuccess', {
-  //           user: `${user.firstName} ${user.lastName}`,
-  //         })
-  //       );
-  //       setOpenUserDialog(false);
-  //     })
-  //     .catch(() => {
-  //       snackbar.error(t('common.errors.unexpected.subTitle'));
-  //     });
-  // };
-  //
-  // const handleDeleteUsers = async () => {
-  //   deleteUsers(userDeleted)
-  //     .then(() => {
-  //       snackbar.success(t('userManagement.notifications.deleteSuccess'));
-  //       setSelected([]);
-  //       setUserDeleted([]);
-  //       setOpenConfirmDeleteDialog(false);
-  //     })
-  //     .catch(() => {
-  //       snackbar.error(t('common.errors.unexpected.subTitle'));
-  //     });
-  // };
-  //
-  // const handleUpdateUser = async (user: User) => {
-  //   updateUser(user)
-  //     .then(() => {
-  //       snackbar.success(
-  //         t('userManagement.notifications.updateSuccess', {
-  //           user: `${user.firstName} ${user.lastName}`,
-  //         })
-  //       );
-  //       setOpenUserDialog(false);
-  //     })
-  //     .catch(() => {
-  //       snackbar.error(t('common.errors.unexpected.subTitle'));
-  //     });
-  // };
+  const handleAddUser = async (user: Partial<User>) => {
+    addUser(user as User)
+        .then(() => {
+          snackbar.success(
+              t('userManagement.notifications.addSuccess', {
+                user: `${user.firstName} ${user.lastName}`,
+              })
+          );
+          setOpenUserDialog(false);
+        })
+        .catch(() => {
+          snackbar.error(t('common.errors.unexpected.subTitle'));
+        });
+  };
+
+  const handleDeleteUsers = async () => {
+    deleteUsers(userDeleted)
+        .then(() => {
+          snackbar.success(t('userManagement.notifications.deleteSuccess'));
+          setSelected([]);
+          setUserDeleted([]);
+          setOpenConfirmDeleteDialog(false);
+        })
+        .catch(() => {
+          snackbar.error(t('common.errors.unexpected.subTitle'));
+        });
+  };
+
+  const handleUpdateUser = async (user: User) => {
+    updateUser(user)
+        .then(() => {
+          snackbar.success(
+              t('userManagement.notifications.updateSuccess', {
+                user: `${user.firstName} ${user.lastName}`,
+              })
+          );
+          setOpenUserDialog(false);
+        })
+        .catch(() => {
+          snackbar.error(t('common.errors.unexpected.subTitle'));
+        });
+  };
 
   // const handleCancelSelected = () => {
   //   setSelected([]);
@@ -100,51 +104,51 @@ const UserManagement = () => {
   };
 
   return (
-    <React.Fragment>
-      <AdminAppBar>
-        <AdminToolbar title={t('userManagement.toolbar.title')}>
-          <Fab
-            aria-label="logout"
-            color="primary"
-            // disabled={processing}
-            onClick={() => handleOpenUserDialog()}
-            size="small"
-          >
-            <AddIcon />
-          </Fab>
-        </AdminToolbar>
-      </AdminAppBar>
-      <Header
-        title={'userManagement.listScreen.title'}
-        description={'userManagement.listScreen.description'}
-      />
-      {/*<UserTable*/}
-      {/*  processing={processing}*/}
-      {/*  onDelete={handleOpenConfirmDeleteDialog}*/}
-      {/*  onEdit={handleOpenUserDialog}*/}
-      {/*  onSelectedChange={handleSelectedChange}*/}
-      {/*  selected={selected}*/}
-      {/*  users={data}*/}
-      {/*/>*/}
-      {/*<ConfirmDialog*/}
-      {/*  description={t('userManagement.confirmations.delete')}*/}
-      {/*  pending={processing}*/}
-      {/*  onClose={handleCloseConfirmDeleteDialog}*/}
-      {/*  onConfirm={handleDeleteUsers}*/}
-      {/*  open={openConfirmDeleteDialog}*/}
-      {/*  title={t('common.confirmation')}*/}
-      {/*/>*/}
-      {/*{openUserDialog && (*/}
-      {/*  <UserDialog*/}
-      {/*    onAdd={handleAddUser}*/}
-      {/*    onClose={handleCloseUserDialog}*/}
-      {/*    onUpdate={handleUpdateUser}*/}
-      {/*    open={openUserDialog}*/}
-      {/*    processing={processing}*/}
-      {/*    user={userUpdated}*/}
-      {/*  />*/}
-      {/*)}*/}
-    </React.Fragment>
+      <React.Fragment>
+        <AdminAppBar>
+          <AdminToolbar title={t('userManagement.toolbar.title')}>
+            <Fab
+                aria-label="logout"
+                color="primary"
+                disabled={processing}
+                onClick={() => handleOpenUserDialog()}
+                size="small"
+            >
+              <AddIcon />
+            </Fab>
+          </AdminToolbar>
+        </AdminAppBar>
+        <Header
+            title={'userManagement.listScreen.title'}
+            description={'userManagement.listScreen.description'}
+        />
+        <UserTable
+            processing={processing}
+            onDelete={handleOpenConfirmDeleteDialog}
+            onEdit={handleOpenUserDialog}
+            onSelectedChange={handleSelectedChange}
+            selected={selected}
+            users={data}
+        />
+        <ConfirmDialog
+            description={t('userManagement.confirmations.delete')}
+            pending={processing}
+            onClose={handleCloseConfirmDeleteDialog}
+            onConfirm={handleDeleteUsers}
+            open={openConfirmDeleteDialog}
+            title={t('common.confirmation')}
+        />
+        {openUserDialog && (
+            <UserDialog
+                onAdd={handleAddUser}
+                onClose={handleCloseUserDialog}
+                onUpdate={handleUpdateUser}
+                open={openUserDialog}
+                processing={processing}
+                user={userUpdated}
+            />
+        )}
+      </React.Fragment>
   );
 };
 

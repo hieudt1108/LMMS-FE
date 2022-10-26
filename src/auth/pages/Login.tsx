@@ -44,7 +44,7 @@ const Login = () => {
         type: 'login',
         login: loginData,
       });
-      navigate(ROUTER.ADMIN, { replace: true });
+      navigate(ROUTER.ROLES, { replace: true });
       // window.location.reload();
     } else {
       setError('wrong');

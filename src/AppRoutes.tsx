@@ -24,6 +24,8 @@ const Faq = lazy(() => import('./admin/pages/Faq'));
 const HelpCenter = lazy(() => import('./admin/pages/HelpCenter'));
 const Home = lazy(() => import('./admin/pages/Home'));
 const Profile = lazy(() => import('./admin/pages/Profile'));
+
+const UserManagement = lazy(() => import('./users/pages/UserManagement'));
 // Calendar
 // const CalendarApp = lazy(() => import("./calendar/pages/CalendarApp"));
 
@@ -34,12 +36,14 @@ const SubSystem = lazy(() => import('./subsystem/pages/SubSystem'));
 
 // Landing
 const Landing = lazy(() => import('./landing/pages/Landing'));
+const LandingRoles = lazy(() => import('./landing/pages/LandingRoles'));
 
 // Users
 const AppRoutes = () => {
   return (
     <Routes basename={process.env.PUBLIC_URL}>
       <Route path='/' element={<Landing />} />
+      <Route path='/roles' element={<LandingRoles />} />
       <Route path='login' element={<Login />} />
       <Route path='admin' element={<Admin />}>
         <Route path='/' element={<Home />} />

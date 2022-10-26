@@ -74,6 +74,10 @@ function getLevelById(id) {
 function getAllUsers() {
   return getApi('/User/getAll');
 }
+// PROGRAM
+function getAllProgram() {
+  return getApi('/Program/getAll?page=1&pageSize=5');
+}
 
 // POST API AREA ============================>
 function postApi(url, payload) {
@@ -106,8 +110,6 @@ const postGrade = () => {
 const postLevel = () => {
   return postApi('Level');
 };
-
-
 
 // DELETE API AREA ============================>
 function deleteApi(url) {
@@ -152,4 +154,5 @@ export {
   postLevel,
   getAllLevel,
   getLevelById,
+  getAllProgram,
 };

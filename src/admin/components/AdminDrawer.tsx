@@ -24,6 +24,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import { getAllProgram } from '../../dataProvider/agent';
 
 type AdminDrawerProps = {
   collapsed: boolean;
@@ -76,12 +77,27 @@ const AdminDrawer = ({
 
   const width = collapsed ? drawerCollapsedWidth : drawerWidth;
 
+  const [programs, setProgram] = React.useState([]);
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
     setOpen(!open);
   };
 
+  console.log(programs);
+  React.useEffect(() => {
+    fetchProgram();
+  }, []);
+
+  async function fetchProgram() {
+    const res = await getAllProgram();
+    if (res.status < 400) {
+      setProgram(res.data);
+    } else {
+      console.log('error fetch api');
+    }
+    console.log('data: ', res.data.data);
+  }
   const drawer = (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
       <Logo style={{ marginLeft: 60 }} sx={{ display: 'flex', p: 4 }} />
@@ -164,66 +180,28 @@ const AdminDrawer = ({
         </ListItem>
         <Collapse in={open} timeout='auto' unmountOnExit>
           <List component='nav' sx={{ px: 2 }}>
-            <ListItem
-              button
-              component={NavLink}
-              key={'/admin/document'}
-              activeClassName='Mui-selected'
-              end={true}
-              to={ROUTER.ADMIN_SUBSYSTEM}
-            >
-              <ListItemAvatar>
-                <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
-                  <FileCopyIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={t('admin.drawer.grade-teach.normal')}
-                sx={{
-                  display: collapsed ? 'none' : 'block',
-                }}
-              />
-            </ListItem>
-            <ListItem
-              button
-              component={NavLink}
-              key={'/admin/document'}
-              activeClassName='Mui-selected'
-              end={true}
-              to={ROUTER.ADMIN_SUBSYSTEM}
-            >
-              <ListItemAvatar>
-                <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
-                  <FileCopyIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={t('admin.drawer.grade-teach.standar')}
-                sx={{
-                  display: collapsed ? 'none' : 'block',
-                }}
-              />
-            </ListItem>
-            <ListItem
-              button
-              component={NavLink}
-              key={'/admin/document'}
-              activeClassName='Mui-selected'
-              end={true}
-              to={ROUTER.ADMIN_SUBSYSTEM}
-            >
-              <ListItemAvatar>
-                <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
-                  <FileCopyIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={t('admin.drawer.grade-teach.profesinal')}
-                sx={{
-                  display: collapsed ? 'none' : 'block',
-                }}
-              />
-            </ListItem>
+            {/* {programs?.map((program) => (
+              <ListItem
+                button
+                component={NavLink}
+                key={'/admin/document'}
+                activeClassName='Mui-selected'
+                end={true}
+                to={ROUTER.ADMIN_SUBSYSTEM}
+              >
+                <ListItemAvatar>
+                  <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+                    <FileCopyIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={program.data.}
+                  sx={{
+                    display: collapsed ? 'none' : 'block',
+                  }}
+                />
+              </ListItem>
+            ))} */}
           </List>
         </Collapse>
         <ListItem

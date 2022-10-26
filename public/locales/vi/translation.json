@@ -10,7 +10,8 @@
         "projects": "Dự án",
         "settings": "Cài đặt",
         "userManagement": "Người dùng",
-        "document": "Tài liệu"
+        "document": "Tài liệu",
+        "sub-program": "Chương trình học"
       },
       "grade-teach": {
         "normal": "Hệ thường",

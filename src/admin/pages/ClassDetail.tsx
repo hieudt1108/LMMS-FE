@@ -1,4 +1,10 @@
-import { Grid, Pagination, Stack, Typography, useTheme } from '@material-ui/core';
+import {
+  Grid,
+  Pagination,
+  Stack,
+  Typography,
+  useTheme,
+} from '@material-ui/core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import AdminAppBar from '../components/AdminAppBar';
@@ -24,7 +30,7 @@ function TabPanel(props: TabPanelProps) {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
@@ -67,23 +73,23 @@ const ClassDetail = () => {
   };
   return (
     <React.Fragment>
-      <Stack spacing={2} direction="row" alignItems="center" mt={2}>
+      <Stack spacing={2} direction='row' alignItems='center' mt={2}>
         <Box
           sx={{
             width: '100%',
             height: 186,
           }}
-          className="rounded bg-light"
+          className='rounded bg-light'
         >
-          <Typography variant="h1" className="h-75 ml-3 pt-3">
+          <Typography variant='h1' className='h-75 ml-3 pt-3'>
             1A - Khối 1 - Năm học 2022 - 2023
           </Typography>
           <Tabs
             value={value}
-            textColor="secondary"
-            indicatorColor="secondary"
+            textColor='secondary'
+            indicatorColor='secondary'
             onChange={handleChange}
-            aria-label="nav tabs example"
+            aria-label='nav tabs example'
             centered
           >
             <Tab {...a11yProps(0)} label={t('classDetail.titleBar.document')} />
@@ -95,15 +101,15 @@ const ClassDetail = () => {
             onChangeIndex={handleChangeIndex}
           >
             <TabPanel value={value} index={0} dir={theme.direction}>
-              <Stack spacing={2} direction="column" justifyContent="flex-end">
-                <Stack spacing={2} direction="row" justifyContent="flex-end">
+              <Stack spacing={2} direction='column' justifyContent='flex-end'>
+                <Stack spacing={2} direction='row' justifyContent='flex-end'>
                   <ClassSelect></ClassSelect>
                 </Stack>
 
                 <Box>
                   <Grid container spacing={2}>
                     {Array.from(Array(10)).map((_, index) => (
-                      <Grid item xs={6} md={4} lg={2}>
+                      <Grid item xs={6} md={4} lg={3}>
                         <Item>
                           <ListDocument />
                         </Item>
@@ -114,12 +120,12 @@ const ClassDetail = () => {
                 </Box>
                 <Stack
                   spacing={2}
-                  direction="row"
-                  justifyContent="flex-end"
-                  alignItems="center"
+                  direction='row'
+                  justifyContent='flex-end'
+                  alignItems='center'
                   mt={2}
                 >
-                  <Pagination count={10} color="secondary" size="large" />
+                  <Pagination count={10} color='secondary' size='large' />
                 </Stack>
               </Stack>
             </TabPanel>

@@ -1,29 +1,24 @@
-import React from 'react';
+import * as React from 'react';
 import Card from '@mui/material/Card';
 import {
   CardActionArea,
   CardMedia,
-  CardContent,
   Typography,
   IconButton,
 } from '@mui/material';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { CardHeader, Grid } from '@material-ui/core';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useNavigate } from 'react-router-dom';
-import { parseWithOptions } from 'date-fns/fp';
 import { ROUTER } from '../../Router';
 
-const ClassCart = () => {
+export default function ClassCart() {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
+
   return (
     <React.Fragment>
       <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -86,33 +81,9 @@ const ClassCart = () => {
               image='img\portrait-1.jpg'
               alt='green iguana'
             />
-            <CardContent>
-              <BottomNavigation
-                showLabels
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
-              >
-                <BottomNavigationAction
-                  label='Recents'
-                  icon={<RestoreIcon />}
-                />
-                <BottomNavigationAction
-                  label='Favorites'
-                  icon={<FavoriteIcon />}
-                ></BottomNavigationAction>
-                <BottomNavigationAction
-                  label='Nearby'
-                  icon={<LocationOnIcon />}
-                />
-              </BottomNavigation>
-            </CardContent>
           </CardActionArea>
         </Card>
       </Grid>
     </React.Fragment>
   );
-};
-
-export default ClassCart;
+}

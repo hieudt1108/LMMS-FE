@@ -1,3 +1,4 @@
+import * as React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
@@ -19,6 +20,10 @@ import { useAuth } from '../../auth/contexts/AuthProvider';
 import Logo from '../../core/components/Logo';
 import { drawerCollapsedWidth, drawerWidth } from '../../core/config/layout';
 import { ROUTER } from '../../Router';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import Collapse from '@mui/material/Collapse';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 
 type AdminDrawerProps = {
   collapsed: boolean;
@@ -71,50 +76,219 @@ const AdminDrawer = ({
 
   const width = collapsed ? drawerCollapsedWidth : drawerWidth;
 
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
   const drawer = (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
       <Logo style={{ marginLeft: 60 }} sx={{ display: 'flex', p: 4 }} />
-      <List component="nav" sx={{ px: 2 }}>
-        {menuItems.map((item) => (
-          <ListItem
-            button
-            component={NavLink}
-            key={item.path}
-            activeClassName="Mui-selected"
-            end={true}
-            to={`/${process.env.PUBLIC_URL}${item.path}`}
-          >
-            <ListItemAvatar>
-              <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
-                <item.icon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={t(item.key)}
-              sx={{
-                display: collapsed ? 'none' : 'block',
-              }}
-            />
-          </ListItem>
-        ))}
-      </List>
-      <Box sx={{ flexGrow: 1 }} />
-      <List component="nav" sx={{ p: 2 }}>
-        {/* <ListItem button component={NavLink} to={ROUTER.ADMIN_PROFILE}>
+      <List component='nav' sx={{ px: 2 }}>
+        <ListItem
+          button
+          component={NavLink}
+          key={'/admin'}
+          activeClassName='Mui-selected'
+          end={true}
+          to={`/${process.env.PUBLIC_URL}${'/admin'}`}
+        >
           <ListItemAvatar>
-            <Avatar>
-              <PersonIcon />
+            <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+              <HomeIcon />
             </Avatar>
           </ListItemAvatar>
-          {userInfo && (
-            <ListItemText
-              primary={`${userInfo.firstName} ${userInfo.lastName}`}
-              sx={{
-                display: collapsed ? 'none' : 'block',
-              }}
-            />
-          )}
-        </ListItem> */}
+          <ListItemText
+            primary={t('admin.drawer.menu.home')}
+            sx={{
+              display: collapsed ? 'none' : 'block',
+            }}
+          />
+        </ListItem>
+
+        <ListItem
+          button
+          component={NavLink}
+          key={'/admin/classes'}
+          activeClassName='Mui-selected'
+          end={true}
+          to={`/${process.env.PUBLIC_URL}${'/admin/classes'}`}
+        >
+          <ListItemAvatar>
+            <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+              <ClassIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={t('admin.drawer.menu.classes')}
+            sx={{
+              display: collapsed ? 'none' : 'block',
+            }}
+          />
+        </ListItem>
+        <ListItem
+          button
+          component={NavLink}
+          key={'/admin/document'}
+          activeClassName='Mui-selected'
+          end={true}
+          to={`/${process.env.PUBLIC_URL}${'/admin/document'}`}
+        >
+          <ListItemAvatar>
+            <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+              <FileCopyIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={t('admin.drawer.menu.document')}
+            sx={{
+              display: collapsed ? 'none' : 'block',
+            }}
+          />
+        </ListItem>
+
+        <ListItem onClick={handleClick}>
+          <ListItemAvatar>
+            <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+              <AutoStoriesIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={t('admin.drawer.menu.sub-program')}
+            sx={{
+              display: collapsed ? 'none' : 'block',
+            }}
+          />
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={open} timeout='auto' unmountOnExit>
+          <List component='nav' sx={{ px: 2 }}>
+            <ListItem
+              button
+              component={NavLink}
+              key={'/admin/document'}
+              activeClassName='Mui-selected'
+              end={true}
+              to={ROUTER.ADMIN_SUBSYSTEM}
+            >
+              <ListItemAvatar>
+                <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+                  <FileCopyIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={t('admin.drawer.grade-teach.normal')}
+                sx={{
+                  display: collapsed ? 'none' : 'block',
+                }}
+              />
+            </ListItem>
+            <ListItem
+              button
+              component={NavLink}
+              key={'/admin/document'}
+              activeClassName='Mui-selected'
+              end={true}
+              to={ROUTER.ADMIN_SUBSYSTEM}
+            >
+              <ListItemAvatar>
+                <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+                  <FileCopyIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={t('admin.drawer.grade-teach.standar')}
+                sx={{
+                  display: collapsed ? 'none' : 'block',
+                }}
+              />
+            </ListItem>
+            <ListItem
+              button
+              component={NavLink}
+              key={'/admin/document'}
+              activeClassName='Mui-selected'
+              end={true}
+              to={ROUTER.ADMIN_SUBSYSTEM}
+            >
+              <ListItemAvatar>
+                <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+                  <FileCopyIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={t('admin.drawer.grade-teach.profesinal')}
+                sx={{
+                  display: collapsed ? 'none' : 'block',
+                }}
+              />
+            </ListItem>
+          </List>
+        </Collapse>
+        <ListItem
+          button
+          component={NavLink}
+          key={'/admin/dashboard'}
+          activeClassName='Mui-selected'
+          end={true}
+          to={`/${process.env.PUBLIC_URL}${'/admin/dashboard'}`}
+        >
+          <ListItemAvatar>
+            <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+              <BarChartIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={t('admin.drawer.menu.dashboard')}
+            sx={{
+              display: collapsed ? 'none' : 'block',
+            }}
+          />
+        </ListItem>
+        <ListItem
+          button
+          component={NavLink}
+          key={'/admin/user-management'}
+          activeClassName='Mui-selected'
+          end={true}
+          to={`/${process.env.PUBLIC_URL}${'/admin/user-management'}`}
+        >
+          <ListItemAvatar>
+            <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+              <PeopleIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={t('admin.drawer.menu.userManagement')}
+            sx={{
+              display: collapsed ? 'none' : 'block',
+            }}
+          />
+        </ListItem>
+        <ListItem
+          button
+          component={NavLink}
+          key={'/admin/help'}
+          activeClassName='Mui-selected'
+          end={true}
+          to={`/${process.env.PUBLIC_URL}${'/admin/help'}`}
+        >
+          <ListItemAvatar>
+            <Avatar sx={{ color: 'inherit', bgcolor: 'transparent' }}>
+              <HelpCenterIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={t('admin.drawer.menu.help')}
+            sx={{
+              display: collapsed ? 'none' : 'block',
+            }}
+          />
+        </ListItem>
+      </List>
+      <Box sx={{ flexGrow: 1 }} />
+      <List component='nav' sx={{ p: 2 }}>
         <ListItem button onClick={onSettingsToggle}>
           <ListItemAvatar>
             <Avatar>
@@ -134,8 +308,8 @@ const AdminDrawer = ({
 
   return (
     <Box
-      aria-label="Admin drawer"
-      component="nav"
+      aria-label='Admin drawer'
+      component='nav'
       sx={{
         width: { lg: width },
         flexShrink: { lg: 0 },
@@ -143,7 +317,7 @@ const AdminDrawer = ({
     >
       {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
       <Drawer
-        variant="temporary"
+        variant='temporary'
         open={mobileOpen}
         onClose={onDrawerToggle}
         ModalProps={{
@@ -160,7 +334,7 @@ const AdminDrawer = ({
         {drawer}
       </Drawer>
       <Drawer
-        variant="permanent"
+        variant='permanent'
         open
         sx={{
           display: { xs: 'none', lg: 'block' },

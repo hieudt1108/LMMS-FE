@@ -10,7 +10,8 @@
         "projects": "Projects",
         "settings": "Settings",
         "userManagement": "Users",
-        "document": "Document"
+        "document": "Document",
+        "sub-program": "Sub system"
       },
       "grade-teach": {
         "normal": "Hệ thường",

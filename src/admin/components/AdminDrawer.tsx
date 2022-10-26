@@ -77,14 +77,13 @@ const AdminDrawer = ({
 
   const width = collapsed ? drawerCollapsedWidth : drawerWidth;
 
-  const [programs, setProgram] = React.useState([]);
+  const [programs, setProgram] = React.useState<any[]>([]);
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
     setOpen(!open);
   };
 
-  console.log(programs);
   React.useEffect(() => {
     fetchProgram();
   }, []);
@@ -92,11 +91,11 @@ const AdminDrawer = ({
   async function fetchProgram() {
     const res = await getAllProgram();
     if (res.status < 400) {
-      setProgram(res.data);
+      setProgram(res.data.data);
     } else {
       console.log('error fetch api');
     }
-    console.log('data: ', res.data.data);
+    // console.log('data: ', programs);
   }
   const drawer = (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
@@ -180,7 +179,7 @@ const AdminDrawer = ({
         </ListItem>
         <Collapse in={open} timeout='auto' unmountOnExit>
           <List component='nav' sx={{ px: 2 }}>
-            {/* {programs?.map((program) => (
+            {programs?.map((program) => (
               <ListItem
                 button
                 component={NavLink}
@@ -195,13 +194,13 @@ const AdminDrawer = ({
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={program.data.}
+                  primary={program.name}
                   sx={{
                     display: collapsed ? 'none' : 'block',
                   }}
                 />
               </ListItem>
-            ))} */}
+            ))}
           </List>
         </Collapse>
         <ListItem

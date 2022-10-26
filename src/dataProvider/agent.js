@@ -31,6 +31,9 @@ const setLocalStorage = (key, value) => {
 const getLocalStorage = (key) => {
   return JSON.parse(localStorage.getItem(key));
 };
+const clearLocalStorage = () => {
+  localStorage.clear();
+};
 
 // GET API AREA ============================>
 function getApi(url) {
@@ -107,8 +110,6 @@ const postLevel = () => {
   return postApi('Level');
 };
 
-
-
 // DELETE API AREA ============================>
 function deleteApi(url) {
   const token = getLocalStorage('access_token');
@@ -152,4 +153,5 @@ export {
   postLevel,
   getAllLevel,
   getLevelById,
+  clearLocalStorage,
 };

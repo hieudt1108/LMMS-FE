@@ -3,9 +3,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROUTER } from './Router';
 import PrivateRoute from './core/components/PrivateRoute';
 import ProtectedRoute from './core/components/ProtectedRoute.js';
-import Classes from './admin/pages/Classes';
-import ClassDetail from './admin/pages/ClassDetail';
-import Document from './admin/pages/Document';
 // Admin
 
 // document

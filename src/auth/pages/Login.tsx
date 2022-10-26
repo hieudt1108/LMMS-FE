@@ -13,6 +13,7 @@ import { ROUTER } from '../../Router';
 import {
   loginAuth,
   setLocalStorage,
+  clearLocalStorage,
   getLocalStorage,
 } from '../../dataProvider/agent.js';
 import { dataLayerPush } from '../../Utils/dataLayerPush.js';
@@ -30,25 +31,20 @@ const Login = () => {
     e.preventDefault();
     const res = await loginAuth(loginData);
     // optional
-    if (!loginData.username) {
-      setError('username');
+    if (res.status === 400) {
+      setError('Incorrect user name or password');
       return;
-    } else if (!loginData.password) {
-      setError('password');
-      return;
-    } else if (res.status < 400) {
-      setLocalStorage('access_token', res.data.accessToken);
-      setLocalStorage('user_info', res.config.data);
-      setLocalStorage('isAuthenticated', true);
-      dataLayerPush('test', {
-        type: 'login',
-        login: loginData,
-      });
-      navigate(ROUTER.ADMIN, { replace: true });
-      // window.location.reload();
-    } else {
-      setError('wrong');
     }
+    clearLocalStorage();
+    setLocalStorage('access_token', res.data.accessToken);
+    setLocalStorage('user_info', res.config.data);
+    setLocalStorage('isAuthenticated', true);
+    dataLayerPush('test', {
+      type: 'login',
+      login: loginData,
+    });
+    navigate(ROUTER.ADMIN, { replace: true });
+    // window.location.reload();
     console.log('Data :', res);
   }
 

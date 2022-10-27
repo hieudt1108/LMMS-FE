@@ -24,7 +24,8 @@ interface ToolbarProps {
 export default function ToolBar({ toggleDrawer }: ToolbarProps) {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
+    React.useState<null | HTMLElement>(null);
 
   const navigate = useNavigate();
   const isMenuOpen = Boolean(anchorEl);
@@ -69,13 +70,13 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
     >
       <MenuItem style={{ alignItems: 'end' }} onClick={handleProfileMenuOpen}>
         <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
+          size='large'
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          color='inherit'
         >
-          <AccountCircle fontSize="large" />
+          <AccountCircle fontSize='large' />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -84,16 +85,17 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar
           sx={{
             backgroundColor: 'white',
+            minHeight: '80px!important',
           }}
         >
           {/*menu */}
           <IconButton
-            aria-label="open drawer"
-            edge="start"
+            aria-label='open drawer'
+            edge='start'
             onClick={toggleDrawer}
             sx={{
               display: { lg: 'none' },
@@ -107,15 +109,15 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
+              size='large'
+              edge='end'
+              aria-label='account of current user'
               aria-controls={menuId}
-              aria-haspopup="true"
+              aria-haspopup='true'
               onClick={handleProfileMenuOpen}
               sx={{ color: 'grey[900]' }}
             >
-              <AccountCircle fontSize="large" />
+              <AccountCircle fontSize='large' />
             </IconButton>
             {/* <IconButton size="large" aria-label="show 4 new mails" sx={{ color: 'grey[900]' }}>
               <SettingsIcon />
@@ -123,10 +125,10 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
-              size="large"
-              aria-label="show more"
+              size='large'
+              aria-label='show more'
               aria-controls={mobileMenuId}
-              aria-haspopup="true"
+              aria-haspopup='true'
               onClick={handleMobileMenuOpen}
               sx={{
                 color: 'grey[900]',

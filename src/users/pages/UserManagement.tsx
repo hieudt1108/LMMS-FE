@@ -11,8 +11,22 @@ import UserDialog from '../components/UserDialog';
 import UserTable from '../components/UserTable';
 import { User } from '../types/user';
 import Header from '../components/Header';
+import { getAllUsers } from '../../dataProvider/agent';
 
 const UserManagement = () => {
+  const [user, setUsers] = React.useState([]);
+  React.useEffect(() => {
+    fetchUsers();
+  }, []);
+  async function fetchUsers() {
+    const res = await getAllUsers();
+    if (res.status < 400) {
+      setUsers(res.data.data);
+    } else {
+      console.log('error');
+    }
+  }
+  // console.log(user);
   const snackbar = useSnackbar();
   const { t } = useTranslation();
 
@@ -23,57 +37,57 @@ const UserManagement = () => {
   const [userUpdated, setUserUpdated] = useState<User | undefined>(undefined);
 
   // @ts-ignore
-  const { addUser, isAdding } = useState("");
+  const { addUser, isAdding } = useState('');
   // @ts-ignore
-  const { deleteUsers, isDeleting } = useState("");
+  const { deleteUsers, isDeleting } = useState('');
   // @ts-ignore
-  const { isUpdating, updateUser } = useState("");
+  const { isUpdating, updateUser } = useState('');
   // @ts-ignore
-  const { data } = useState("");
+  const { data } = useState('');
 
   const processing = isAdding || isDeleting || isUpdating;
 
   const handleAddUser = async (user: Partial<User>) => {
     addUser(user as User)
-        .then(() => {
-          snackbar.success(
-              t('userManagement.notifications.addSuccess', {
-                user: `${user.firstName} ${user.lastName}`,
-              })
-          );
-          setOpenUserDialog(false);
-        })
-        .catch(() => {
-          snackbar.error(t('common.errors.unexpected.subTitle'));
-        });
+      .then(() => {
+        snackbar.success(
+          t('userManagement.notifications.addSuccess', {
+            user: `${user.firstName} ${user.lastName}`,
+          })
+        );
+        setOpenUserDialog(false);
+      })
+      .catch(() => {
+        snackbar.error(t('common.errors.unexpected.subTitle'));
+      });
   };
 
   const handleDeleteUsers = async () => {
     deleteUsers(userDeleted)
-        .then(() => {
-          snackbar.success(t('userManagement.notifications.deleteSuccess'));
-          setSelected([]);
-          setUserDeleted([]);
-          setOpenConfirmDeleteDialog(false);
-        })
-        .catch(() => {
-          snackbar.error(t('common.errors.unexpected.subTitle'));
-        });
+      .then(() => {
+        snackbar.success(t('userManagement.notifications.deleteSuccess'));
+        setSelected([]);
+        setUserDeleted([]);
+        setOpenConfirmDeleteDialog(false);
+      })
+      .catch(() => {
+        snackbar.error(t('common.errors.unexpected.subTitle'));
+      });
   };
 
   const handleUpdateUser = async (user: User) => {
     updateUser(user)
-        .then(() => {
-          snackbar.success(
-              t('userManagement.notifications.updateSuccess', {
-                user: `${user.firstName} ${user.lastName}`,
-              })
-          );
-          setOpenUserDialog(false);
-        })
-        .catch(() => {
-          snackbar.error(t('common.errors.unexpected.subTitle'));
-        });
+      .then(() => {
+        snackbar.success(
+          t('userManagement.notifications.updateSuccess', {
+            user: `${user.firstName} ${user.lastName}`,
+          })
+        );
+        setOpenUserDialog(false);
+      })
+      .catch(() => {
+        snackbar.error(t('common.errors.unexpected.subTitle'));
+      });
   };
 
   // const handleCancelSelected = () => {
@@ -104,51 +118,51 @@ const UserManagement = () => {
   };
 
   return (
-      <React.Fragment>
-        <AdminAppBar>
-          <AdminToolbar title={t('userManagement.toolbar.title')}>
-            <Fab
-                aria-label="logout"
-                color="primary"
-                disabled={processing}
-                onClick={() => handleOpenUserDialog()}
-                size="small"
-            >
-              <AddIcon />
-            </Fab>
-          </AdminToolbar>
-        </AdminAppBar>
-        <Header
-            title={'userManagement.listScreen.title'}
-            description={'userManagement.listScreen.description'}
+    <React.Fragment>
+      <AdminAppBar>
+        <AdminToolbar title={t('userManagement.toolbar.title')}>
+          <Fab
+            aria-label='logout'
+            color='primary'
+            disabled={processing}
+            onClick={() => handleOpenUserDialog()}
+            size='small'
+          >
+            <AddIcon />
+          </Fab>
+        </AdminToolbar>
+      </AdminAppBar>
+      <Header
+        title={'userManagement.listScreen.title'}
+        description={'userManagement.listScreen.description'}
+      />
+      <UserTable
+        processing={processing}
+        onDelete={handleOpenConfirmDeleteDialog}
+        onEdit={handleOpenUserDialog}
+        onSelectedChange={handleSelectedChange}
+        selected={selected}
+        users={user}
+      />
+      <ConfirmDialog
+        description={t('userManagement.confirmations.delete')}
+        pending={processing}
+        onClose={handleCloseConfirmDeleteDialog}
+        onConfirm={handleDeleteUsers}
+        open={openConfirmDeleteDialog}
+        title={t('common.confirmation')}
+      />
+      {openUserDialog && (
+        <UserDialog
+          onAdd={handleAddUser}
+          onClose={handleCloseUserDialog}
+          onUpdate={handleUpdateUser}
+          open={openUserDialog}
+          processing={processing}
+          user={userUpdated}
         />
-        <UserTable
-            processing={processing}
-            onDelete={handleOpenConfirmDeleteDialog}
-            onEdit={handleOpenUserDialog}
-            onSelectedChange={handleSelectedChange}
-            selected={selected}
-            users={data}
-        />
-        <ConfirmDialog
-            description={t('userManagement.confirmations.delete')}
-            pending={processing}
-            onClose={handleCloseConfirmDeleteDialog}
-            onConfirm={handleDeleteUsers}
-            open={openConfirmDeleteDialog}
-            title={t('common.confirmation')}
-        />
-        {openUserDialog && (
-            <UserDialog
-                onAdd={handleAddUser}
-                onClose={handleCloseUserDialog}
-                onUpdate={handleUpdateUser}
-                open={openUserDialog}
-                processing={processing}
-                user={userUpdated}
-            />
-        )}
-      </React.Fragment>
+      )}
+    </React.Fragment>
   );
 };
 

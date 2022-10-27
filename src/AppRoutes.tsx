@@ -57,6 +57,7 @@ const AppRoutes = () => {
         <Route path='/classes' element={<Classes />} />
         <Route path='/class/:id' element={<ClassDetail />} />
         <Route path='dashboard' element={<Dashboard />} />
+        <Route path='/user-management' element={<UserManagement />} />
       </Route>
 
       <Route path='*' element={<Navigate to={ROUTER[404]} replace />} />

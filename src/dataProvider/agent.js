@@ -47,7 +47,7 @@ function getApi(url) {
 
 // CLASS
 function getAllClass() {
-  return getApi('/Class/getAll');
+  return getApi('/Class/getAll?pageIndex=1&pageSize=10');
 }
 function getClassbyId(id) {
   return getApi(`/Class/getOne/${id}`);

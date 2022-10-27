@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   CardActionArea,
@@ -6,7 +6,7 @@ import {
   Typography,
   IconButton,
 } from '@mui/material';
-
+import { getAllClass } from '../../dataProvider/agent';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { CardHeader, Grid, Card } from '@material-ui/core';
 import Menu from '@mui/material/Menu';
@@ -26,6 +26,21 @@ const levels = [
 export default function PrimarySchool() {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
+  const [classes, setClass] = useState([]);
+
+  useEffect(() => {
+    fetchProgram();
+  }, []);
+  console.log(classes);
+  async function fetchProgram() {
+    const res = await getAllClass();
+    if (res.status < 400) {
+      setClass(res.data.data);
+    } else {
+      console.log('error fetch api');
+    }
+    // console.log('data: ', programs);
+  }
   return (
     <React.Fragment>
       {levels?.map((level) => (

@@ -15,9 +15,9 @@ export default function SubSystem() {
 
   return (
     <React.Fragment>
-      <AdminAppBar>
-        <AdminToolbar title={t('document.title')} />
-      </AdminAppBar>
+      {/*<AdminAppBar>*/}
+      {/*  <AdminToolbar title={t('document.title')} />*/}
+      {/*</AdminAppBar>*/}
       <HeaderSubsystem />
     </React.Fragment>
   );

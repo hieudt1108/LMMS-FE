@@ -119,19 +119,19 @@ const UserManagement = () => {
 
   return (
     <React.Fragment>
-      <AdminAppBar>
-        <AdminToolbar title={t('userManagement.toolbar.title')}>
-          <Fab
-            aria-label='logout'
-            color='primary'
-            disabled={processing}
-            onClick={() => handleOpenUserDialog()}
-            size='small'
-          >
-            <AddIcon />
-          </Fab>
-        </AdminToolbar>
-      </AdminAppBar>
+      {/*<AdminAppBar>*/}
+      {/*  <AdminToolbar title={t('userManagement.toolbar.title')}>*/}
+      {/*    <Fab*/}
+      {/*      aria-label='logout'*/}
+      {/*      color='primary'*/}
+      {/*      disabled={processing}*/}
+      {/*      onClick={() => handleOpenUserDialog()}*/}
+      {/*      size='small'*/}
+      {/*    >*/}
+      {/*      <AddIcon />*/}
+      {/*    </Fab>*/}
+      {/*  </AdminToolbar>*/}
+      {/*</AdminAppBar>*/}
       <Header
         title={'userManagement.listScreen.title'}
         description={'userManagement.listScreen.description'}

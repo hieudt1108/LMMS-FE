@@ -185,6 +185,9 @@
     "confirmation": "Xác nhận",
     "delete": "Xóa",
     "edit": "Sửa",
+    "add" : "Thêm",
+    "return" : "Hủy",
+    "createclass" : "Tạo lớp học",
     "errors": {
       "forbidden": {
         "subTitle": "Bạn không có quyền truy cập để xem trang này"
@@ -514,6 +517,7 @@
   "classes": {
     "title": "Lớp học",
     "create": "Tạo lớp học",
+    "description": "Danh sách lớp học",
     "filter": {
       "class": "Lớp học",
       "year": "Niên khoá",

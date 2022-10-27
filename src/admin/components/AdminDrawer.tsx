@@ -184,7 +184,7 @@ const AdminDrawer = ({
                 button
                 component={NavLink}
                 key={'/admin/document'}
-                activeClassName='Mui-selected'
+
                 end={true}
                 to={ROUTER.ADMIN_SUBSYSTEM}
               >

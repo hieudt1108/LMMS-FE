@@ -37,6 +37,8 @@ const typography = {
   },
   subtitle2: {
     letterSpacing: 0,
+    fontSize: 17,
+    marginLeft :"5px"
   },
   body1: {
     letterSpacing: 0,

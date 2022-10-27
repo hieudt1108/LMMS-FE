@@ -185,6 +185,9 @@
     "confirmation": "Confirmation",
     "delete": "Delete",
     "edit": "Edit",
+    "add" : "Add",
+    "return" : "Cancel",
+    "createclass" : "Create class",
     "errors": {
       "forbidden": {
         "subTitle": "You don't have access to view this page"
@@ -478,6 +481,7 @@
   "classes": {
     "title": "Classes",
     "create": "Create Class",
+    "description": "List of classes",
     "filter": {
       "class": "Class",
       "year": "Year",

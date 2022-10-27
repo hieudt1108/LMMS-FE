@@ -513,6 +513,7 @@
   "classes": {
     "title": "Lớp học",
     "create": "Tạo lớp học",
+    "description": "Danh sách lớp học",
     "filter": {
       "class": "Lớp học",
       "year": "Niên khoá",

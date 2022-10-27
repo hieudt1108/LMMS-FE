@@ -23,10 +23,6 @@ import { useTranslation } from 'react-i18next';
 import Empty from '../../core/components/Empty';
 import * as selectUtils from '../../core/utils/selectUtils';
 import { User } from '../types/user';
-import { useParams, useNavigate } from 'react-router-dom';
-import {
-  getAllUsers, loginAuth,
-} from '../../dataProvider/agent.js';
 
 interface HeadCell {
   id: string;
@@ -61,18 +57,18 @@ function EnhancedTableHead() {
   const { t } = useTranslation();
 
   return (
-    <TableHead>
-      <TableRow sx={{ '& th': { border: 0 } }}>
-        {headCells.map((headCell) => (
-          <TableCell key={headCell.id} align={headCell.align} sx={{ py: 0 }}>
-            {t(headCell.label)}
+      <TableHead>
+        <TableRow sx={{ '& th': { border: 0 } }}>
+          {headCells.map((headCell) => (
+              <TableCell key={headCell.id} align={headCell.align} sx={{ py: 0 }}>
+                {t(headCell.label)}
+              </TableCell>
+          ))}
+          <TableCell align="right" sx={{ py: 0 }}>
+            {t('userManagement.table.headers.actions')}
           </TableCell>
-        ))}
-        <TableCell align="right" sx={{ py: 0 }}>
-          {t('userManagement.table.headers.actions')}
-        </TableCell>
-      </TableRow>
-    </TableHead>
+        </TableRow>
+      </TableHead>
   );
 }
 
@@ -86,30 +82,10 @@ type UserRowProps = {
 };
 
 const UserRow = ({ index, onDelete, onEdit, processing, selected, user }: UserRowProps) => {
-  const { id }= useParams();
-  let navigate = useNavigate();
-
-  const initialUserState = {
-    id: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    gender: undefined,
-    birthDate: "",
-    address : "",
-    phone : "",
-    role: "",
-    enable : undefined
-  };
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [currentUser, setCurrentUser] = useState<User>(initialUserState);
   const { t } = useTranslation();
 
   const openActions = Boolean(anchorEl);
-
-  const res = getAllUsers();
-
 
   const handleOpenActions = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -130,72 +106,73 @@ const UserRow = ({ index, onDelete, onEdit, processing, selected, user }: UserRo
   };
 
   return (
-    <TableRow sx={{ '& td': { bgcolor: 'background.paper', border: 0 } }}>
-      <TableCell sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar sx={{ mr: 3 }}>
-            <PersonIcon />
-          </Avatar>
-          <Box>
-            <Typography component="div" variant="h6">
-              {`${currentUser.lastName} ${currentUser.firstName}`}
-            </Typography>
-            <Typography color="textSecondary" variant="body2">
-              {user.email}
-            </Typography>
+
+      <TableRow sx={{ '& td': { bgcolor: 'background.paper', border: 0 } }}>
+        <TableCell sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar sx={{ mr: 3 }}>
+              <PersonIcon />
+            </Avatar>
+            <Box>
+              <Typography component="div" variant="h6">
+                {`${user.lastName} ${user.firstName}`}
+              </Typography>
+              <Typography color="textSecondary" variant="body2">
+                {user.email}
+              </Typography>
+            </Box>
           </Box>
-        </Box>
-      </TableCell>
-      <TableCell align="center">{currentUser.gender}</TableCell>
-      <TableCell align="center">{currentUser.role}</TableCell>
-      <TableCell align="center">
-        {currentUser.enable ? <Chip label="Disabled" /> : <Chip color="primary" label="Active" />}
-      </TableCell>
-      <TableCell
-        align="right"
-        sx={{ borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}
-      >
-        <IconButton
-          id="user-row-menu-button"
-          aria-label="user actions"
-          aria-controls="user-row-menu"
-          aria-haspopup="true"
-          aria-expanded={openActions ? 'true' : 'false'}
-          disabled={processing}
-          onClick={handleOpenActions}
+        </TableCell>
+        <TableCell align="center">{user.gender}</TableCell>
+        <TableCell align="center">{user.role}</TableCell>
+        <TableCell align="center">
+          {user.enable ? <Chip label="Disabled" /> : <Chip color="primary" label="Active" />}
+        </TableCell>
+        <TableCell
+            align="right"
+            sx={{ borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}
         >
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          id="user-row-menu"
-          anchorEl={anchorEl}
-          aria-labelledby="user-row-menu-button"
-          open={openActions}
-          onClose={handleCloseActions}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <MenuItem onClick={handleEdit}>
-            <ListItemIcon>
-              <EditIcon />
-            </ListItemIcon>{' '}
-            {t('common.edit')}
-          </MenuItem>
-          <MenuItem onClick={handleDelete}>
-            <ListItemIcon>
-              <DeleteIcon />
-            </ListItemIcon>{' '}
-            {t('common.delete')}
-          </MenuItem>
-        </Menu>
-      </TableCell>
-    </TableRow>
+          <IconButton
+              id="user-row-menu-button"
+              aria-label="user actions"
+              aria-controls="user-row-menu"
+              aria-haspopup="true"
+              aria-expanded={openActions ? 'true' : 'false'}
+              disabled={processing}
+              onClick={handleOpenActions}
+          >
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+              id="user-row-menu"
+              anchorEl={anchorEl}
+              aria-labelledby="user-row-menu-button"
+              open={openActions}
+              onClose={handleCloseActions}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+          >
+            <MenuItem onClick={handleEdit}>
+              <ListItemIcon>
+                <EditIcon />
+              </ListItemIcon>{' '}
+              {t('common.edit')}
+            </MenuItem>
+            <MenuItem onClick={handleDelete}>
+              <ListItemIcon>
+                <DeleteIcon />
+              </ListItemIcon>{' '}
+              {t('common.delete')}
+            </MenuItem>
+          </Menu>
+        </TableCell>
+      </TableRow>
   );
 };
 
@@ -209,13 +186,13 @@ type UserTableProps = {
 };
 
 const UserTable = ({
-  onDelete,
-  onEdit,
-  onSelectedChange,
-  processing,
-  selected,
-  users = [],
-}: UserTableProps) => {
+                     onDelete,
+                     onEdit,
+                     onSelectedChange,
+                     processing,
+                     selected,
+                     users = [],
+                   }: UserTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -240,44 +217,44 @@ const UserTable = ({
   }
 
   return (
-    <React.Fragment>
-      <TableContainer>
-        <Table
-          aria-labelledby="tableTitle"
-          sx={{
-            minWidth: 600,
-            borderCollapse: 'separate',
-            borderSpacing: '0 1rem',
-          }}
-        >
-          <EnhancedTableHead />
-          <TableBody>
-            {users
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((user, index) => (
-                <UserRow
-                  index={index}
-                  key={user.id}
-                  onDelete={onDelete}
-                  onEdit={onEdit}
-                  processing={processing}
-                  selected={isSelected(user.id)}
-                  user={user}
-                />
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={users.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </React.Fragment>
+      <React.Fragment>
+        <TableContainer>
+          <Table
+              aria-labelledby="tableTitle"
+              sx={{
+                minWidth: 600,
+                borderCollapse: 'separate',
+                borderSpacing: '0 1rem',
+              }}
+          >
+            <EnhancedTableHead />
+            <TableBody>
+              {users
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((user, index) => (
+                      <UserRow
+                          index={index}
+                          key={user.id}
+                          onDelete={onDelete}
+                          onEdit={onEdit}
+                          processing={processing}
+                          selected={isSelected(user.id)}
+                          user={user}
+                      />
+                  ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={users.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </React.Fragment>
   );
 };
 

@@ -62,7 +62,7 @@ const ClassCart = () => {
   return (
       <React.Fragment>
         <Grid item xs={12} sm={10} md={8} lg={6} xl={4} >
-          <Card elevation={3} sx={{ width: '408px',cursor: 'pointer', height: '170px', ":hover":{boxShadow: "0 0 0 1px #03a5fc",}, }}>
+          <Card elevation={8} sx={{ width: '408px',cursor: 'pointer', height: '170px', ":hover":{boxShadow: "0 0 0 1px #03a5fc",}, }}>
             <Stack
                 direction='row'
                 alignItems='flex-start'
@@ -105,8 +105,8 @@ const ClassCart = () => {
                     justifyContent='center'
                     sx={{ marginTop: '0px !important' }}
                 >
-                  <Typography variant='subtitle1'>Lượt tải:</Typography>
-                  <Typography variant='subtitle2' sx={{marginTop : '1.8px'}}>0</Typography>
+                  <Typography variant='subtitle1'>Niên khóa:</Typography>
+                  <Typography variant='subtitle2' sx={{marginTop : '1px'}}>2022 - 2023</Typography>
                 </Stack>
               </Stack>
 
@@ -123,9 +123,6 @@ const ClassCart = () => {
                       <Menu {...bindMenu(popupState)}>
                         <MenuItem onClick={popupState.close}>Delte</MenuItem>
                         <MenuItem onClick={popupState.close}>Update</MenuItem>
-                        <MenuItem onClick={popupState.close} disabled>
-                          Logout
-                        </MenuItem>
                       </Menu>
                     </React.Fragment>
                 )}

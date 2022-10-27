@@ -3,12 +3,12 @@ import { experimentalStyled as styled } from '@mui/material/styles';
 import AdminAppBar from '../../admin/components/AdminAppBar';
 import AdminToolbar from '../../admin/components/AdminToolbar';
 import { useTranslation } from 'react-i18next';
-
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
 import InforDetail from '../components/InforDetail';
+import HeaderDocumentDetail from "../components/HeaderDocumentDetail";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -23,9 +23,9 @@ export default function ViewDocumentDetail() {
 
   return (
     <React.Fragment>
-      <AdminAppBar>
-        <AdminToolbar title={t('document.title')} />
-      </AdminAppBar>
+      <HeaderDocumentDetail
+          title={"Tài liệu ?"}
+      />
       <Box>
         <Grid container spacing={1}>
           <Grid item xs={12} md={9}>

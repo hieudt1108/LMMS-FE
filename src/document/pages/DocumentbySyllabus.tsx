@@ -24,9 +24,9 @@ export default function DocumentbySyllabus() {
 
   return (
     <React.Fragment>
-      <AdminAppBar>
-        <AdminToolbar title={t('document.title')} />
-      </AdminAppBar>
+      {/*<AdminAppBar>*/}
+      {/*  <AdminToolbar title={t('document.title')} />*/}
+      {/*</AdminAppBar>*/}
 
       <Grid>
         <Grid item xs={12} md={12} lg={12}>

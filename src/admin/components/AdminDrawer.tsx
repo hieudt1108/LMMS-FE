@@ -78,7 +78,7 @@ const AdminDrawer = ({
   const width = collapsed ? drawerCollapsedWidth : drawerWidth;
 
   const [programs, setProgram] = React.useState<any[]>([]);
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);

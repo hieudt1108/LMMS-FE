@@ -57,53 +57,7 @@ const LandingLayout = ({ children }: LandingLayoutProps) => {
               VICTORIA THĂNG LONG
             </Typography>
           </Typography>
-          <Box sx={{ margin: 5 }}>
-            <Button
-              style={{
-                color: 'white',
-                border: 'none',
-                background: 'none',
-                cursor: 'pointer',
-                margin: 10,
-                padding: 0,
-              }}
-              component={RouterLink}
-              to={ROUTER.ADMIN_PAGE_FAQ}
-              variant='contained'
-            >
-              About
-            </Button>
-            <Button
-              style={{
-                color: 'white',
-                border: 'none',
-                background: 'none',
-                cursor: 'pointer',
-                margin: 10,
-                padding: 0,
-              }}
-              component={RouterLink}
-              to={ROUTER.ADMIN_PAGE_FAQ}
-              variant='contained'
-            >
-              FAQs
-            </Button>
-            <Button
-              style={{
-                color: 'white',
-                border: 'none',
-                background: 'none',
-                cursor: 'pointer',
-                margin: 10,
-                padding: 0,
-              }}
-              component={RouterLink}
-              to={ROUTER.ADMIN_PAGE_FAQ}
-              variant='contained'
-            >
-              Contact
-            </Button>
-          </Box>
+
           <IconButton
             color='default'
             aria-label='settings'

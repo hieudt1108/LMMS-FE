@@ -20,7 +20,7 @@ const Landing = () => {
       <main>
         <Box
           sx={{
-            py: 6,
+            py: 4.1,
           }}
           style={{ display: 'flex' }}
         >

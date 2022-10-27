@@ -67,8 +67,6 @@ const HelpCenter = () => {
         <Grid item xs={6} lg={3}>
           <Card>
             <CardActionArea
-              component={RouterLink}
-              to={ROUTER.ADMIN_FAP}
             >
               <CardHeader
                 avatar={

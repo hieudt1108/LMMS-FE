@@ -14,6 +14,7 @@ export const ROUTER = {
   ADMIN_DASHBOARD: `/${process.env.PUBLIC_URL}/admin/dashboard`,
   ADMIN_SUBSYSTEM: `/${process.env.PUBLIC_URL}/admin/sub-system/:id`,
   ROLES: `/${process.env.PUBLIC_URL}/roles`,
+  LANDING: `/${process.env.PUBLIC_URL}/`,
 
   LOGIN: `/${process.env.PUBLIC_URL}/login`,
   FORGOT_PASSWORD_SUBMIT: `/${process.env.PUBLIC_URL}/forgot-password-submit`,

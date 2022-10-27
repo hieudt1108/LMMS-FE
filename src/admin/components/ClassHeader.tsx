@@ -128,12 +128,12 @@ const ClassHeader = ({ title, description }: HeaderProps) => {
                   </FormControl>
 
                   <FormControl sx={{ minWidth: 150, ml:1 }} size="small">
-                    <InputLabel id="demo-simple-select-helper-label">Năm học</InputLabel>
+                    <InputLabel id="demo-simple-select-helper-label">Niên khóa</InputLabel>
                     <Select
                         labelId="demo-simple-select-helper-label"
                         id="demo-simple-select-helper"
                         value={schoolYear}
-                        label="Năm học"
+                        label="Niên khóa"
                         onChange={handleChangeSchoolYear}
                     >
                       <MenuItem value={10}>2021 - 2022</MenuItem>

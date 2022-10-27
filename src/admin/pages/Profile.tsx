@@ -9,22 +9,22 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import PersonIcon from "@material-ui/icons/Person";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { NavLink, Outlet } from "react-router-dom";
+import {NavLink, Outlet, useNavigate} from "react-router-dom";
 import { useAuth } from "../../auth/contexts/AuthProvider";
 import QueryWrapper from "../../core/components/QueryWrapper";
 import { useSnackbar } from "../../core/contexts/SnackbarProvider";
 import AdminAppBar from "../components/AdminAppBar";
 import AdminToolbar from "../components/AdminToolbar";
 import CircleProgressWidget from "../widgets/CircleProgressWidget";
+import {loginAuth, setLocalStorage} from "../../dataProvider/agent";
+import {dataLayerPush} from "../../Utils/dataLayerPush";
+import {ROUTER} from "../../Router";
 
 const profileMenuItems = [
-  {
-    key: "profile.menu.activity",
-    path: "",
-  },
+
   {
     key: "profile.menu.info",
-    path: "./information",
+    path: "",
   },
   {
     key: "profile.menu.password",
@@ -36,12 +36,14 @@ const Profile = () => {
   const { isLoggingOut, logout } = useAuth();
   const snackbar = useSnackbar();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout().catch(() =>
-      snackbar.error(t("common.errors.unexpected.subTitle"))
-    );
-  };
+    async function handleLogout(e: { preventDefault: () => void }) {
+        e.preventDefault();
+        navigate(ROUTER.LANDING, { replace: true });
+        localStorage.clear();
+    }
+
 
   return (
     <React.Fragment>

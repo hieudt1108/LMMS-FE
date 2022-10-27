@@ -24,10 +24,14 @@ const Faq = lazy(() => import('./admin/pages/Faq'));
 const HelpCenter = lazy(() => import('./admin/pages/HelpCenter'));
 const Home = lazy(() => import('./admin/pages/Home'));
 const Profile = lazy(() => import('./admin/pages/Profile'));
-
+const ProfileInformation = lazy(
+    () => import("./admin/pages/ProfileInformation")
+);
+const ProfilePassword = lazy(
+    () => import("./admin/pages/ProfilePassword")
+);
 const UserManagement = lazy(() => import('./users/pages/UserManagement'));
-// Calendar
-// const CalendarApp = lazy(() => import("./calendar/pages/CalendarApp"));
+
 
 // Core
 
@@ -58,6 +62,15 @@ const AppRoutes = () => {
         <Route path='/class/:id' element={<ClassDetail />} />
         <Route path='dashboard' element={<Dashboard />} />
         <Route path='/user-management' element={<UserManagement />} />
+          <Route path="profile" element={<Profile />}>
+              <Route
+                  path="/"
+                  element={<ProfileInformation />}
+              />
+              <Route path="password" element={<ProfilePassword />} />
+          </Route>
+
+          <Route path="help" element={<HelpCenter />} />
       </Route>
 
       <Route path='*' element={<Navigate to={ROUTER[404]} replace />} />

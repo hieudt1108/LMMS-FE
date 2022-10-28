@@ -19,15 +19,14 @@ import SvgContainer from "../../core/components/SvgContainer";
 import { ROUTER } from "../../Router";
 import AdminAppBar from "../components/AdminAppBar";
 import AdminToolbar from "../components/AdminToolbar";
+import HelpCenterHeader from "../components/HelpCenterHeader";
 
 const HelpCenter = () => {
   const { t } = useTranslation();
 
   return (
     <React.Fragment>
-      <AdminAppBar>
-        <AdminToolbar title={t("help.title")} />
-      </AdminAppBar>
+      <HelpCenterHeader title={"Trung tâm trợ giúp"}/>
       <Container maxWidth="xs" sx={{ mt: 3 }}>
         <SvgContainer>
           <HelpSvg />

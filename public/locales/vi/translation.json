@@ -186,7 +186,7 @@
     "delete": "Xóa",
     "edit": "Sửa",
     "add" : "Thêm",
-    "return" : "Hủy",
+    "return" : "Quay lại",
     "createclass" : "Tạo lớp học",
     "errors": {
       "forbidden": {
@@ -493,7 +493,11 @@
       },
       "edit": {
         "action": "Sửa",
-        "title": "Thông tin người dùng"
+        "title": "Sửa thông tin người dùng"
+      },
+      "delete": {
+        "action": "Xóa người dùng",
+        "title": "Xóa người dùng"
       }
     },
     "notifications": {

@@ -1,24 +1,15 @@
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
-import Fab from "@material-ui/core/Fab";
 import Grid from "@material-ui/core/Grid";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
-import Typography from "@material-ui/core/Typography";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import PersonIcon from "@material-ui/icons/Person";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {NavLink, Outlet, useNavigate} from "react-router-dom";
-import { useAuth } from "../../auth/contexts/AuthProvider";
+import {NavLink, Outlet} from "react-router-dom";
 import QueryWrapper from "../../core/components/QueryWrapper";
-import { useSnackbar } from "../../core/contexts/SnackbarProvider";
-import AdminAppBar from "../components/AdminAppBar";
-import AdminToolbar from "../components/AdminToolbar";
 import CircleProgressWidget from "../widgets/CircleProgressWidget";
-import {loginAuth, setLocalStorage} from "../../dataProvider/agent";
-import {dataLayerPush} from "../../Utils/dataLayerPush";
-import {ROUTER} from "../../Router";
+import ProfileHeader from "../components/ProfileHeader";
 
 const profileMenuItems = [
 
@@ -33,32 +24,10 @@ const profileMenuItems = [
 ];
 
 const Profile = () => {
-  const { isLoggingOut, logout } = useAuth();
-  const snackbar = useSnackbar();
   const { t } = useTranslation();
-  const navigate = useNavigate();
-
-    async function handleLogout(e: { preventDefault: () => void }) {
-        e.preventDefault();
-        navigate(ROUTER.LANDING, { replace: true });
-        localStorage.clear();
-    }
-
-
   return (
     <React.Fragment>
-      <AdminAppBar>
-        <AdminToolbar>
-          <Fab
-            aria-label="logout"
-            color="secondary"
-            disabled={isLoggingOut}
-            onClick={handleLogout}
-          >
-            <ExitToAppIcon />
-          </Fab>
-        </AdminToolbar>
-      </AdminAppBar>
+        <ProfileHeader title={"Thông tin cá nhân"}/>
       <Grid container spacing={12}>
         <Grid item xs={12} md={4} marginTop={3}>
           <Box
@@ -80,11 +49,6 @@ const Profile = () => {
             >
               <PersonIcon sx={{ fontSize: 120 }} />
             </Avatar>
-            {/*<Typography*/}
-            {/*  component="div"*/}
-            {/*  variant="h4"*/}
-            {/*>{`${userInfo?.firstName} ${userInfo?.lastName}`}</Typography>*/}
-            {/*<Typography variant="body2">{userInfo?.role}</Typography>*/}
           </Box>
           <CircleProgressWidget
             height={244}
@@ -92,7 +56,7 @@ const Profile = () => {
             value={75}
           />
         </Grid>
-        <Grid item xs={12} md={8} marginTop={3}>
+        <Grid item xs={12} md={8} marginTop={3} >
           <Box sx={{ mb: 4 }}>
             <Tabs aria-label="profile nav tabs" value={false}>
               {profileMenuItems.map((item) => (

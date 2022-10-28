@@ -17,6 +17,7 @@ const ViewDocumentDetail = lazy(
   () => import('./document/pages/ViewDocumentDetail')
 );
 //Program
+const Program = lazy(() => import('./subsystem/pages/ProgramManagement'));
 
 const Login = lazy(() => import('./auth/pages/Login'));
 const Admin = lazy(() => import('./admin/pages/Admin'));
@@ -31,7 +32,8 @@ const ProfilePassword = lazy(
     () => import("./admin/pages/ProfilePassword")
 );
 const UserManagement = lazy(() => import('./users/pages/UserManagement'));
-
+const AddUser = lazy(() => import('./users/pages/AddUser'));
+const EditUser = lazy(() => import('./users/pages/EditUser'));
 
 // Core
 
@@ -52,6 +54,7 @@ const AppRoutes = () => {
       <Route path='admin' element={<Admin />}>
         <Route path='/' element={<Home />} />
         <Route path='/sub-system/:id' element={<SubSystem />} />
+          <Route path='/program' element={<Program />} />
         <Route path='/document' element={<Document />} />
         <Route path='/document/:subjectSlot' element={<DocumentbySyllabus />} />
         <Route
@@ -62,6 +65,8 @@ const AppRoutes = () => {
         <Route path='/class/:id' element={<ClassDetail />} />
         <Route path='dashboard' element={<Dashboard />} />
         <Route path='/user-management' element={<UserManagement />} />
+          <Route path='/adduser' element={<AddUser />} />
+          <Route path='/edituser' element={<EditUser />} />
           <Route path="profile" element={<Profile />}>
               <Route
                   path="/"

@@ -11,10 +11,14 @@ export const ROUTER = {
   ADMIN_FAP: `/${process.env.PUBLIC_URL}/admin/faq`,
   ADMIN_PAGE_FAQ: `/${process.env.PUBLIC_URL}/admin/pages/Faq`,
   ADMIN_USER_MANAGEMENT: `/${process.env.PUBLIC_URL}/admin/user-management`,
+  ADMIN_ADD_USER: `/${process.env.PUBLIC_URL}/admin/adduser`,
+  ADMIN_EDIT_USER: `/${process.env.PUBLIC_URL}/admin/edituser`,
   ADMIN_DASHBOARD: `/${process.env.PUBLIC_URL}/admin/dashboard`,
   ADMIN_SUBSYSTEM: `/${process.env.PUBLIC_URL}/admin/sub-system/:id`,
+  ADMIN_PROGRAM: `/${process.env.PUBLIC_URL}/admin/program`,
   ROLES: `/${process.env.PUBLIC_URL}/roles`,
   LANDING: `/${process.env.PUBLIC_URL}/`,
+
 
   LOGIN: `/${process.env.PUBLIC_URL}/login`,
   FORGOT_PASSWORD_SUBMIT: `/${process.env.PUBLIC_URL}/forgot-password-submit`,

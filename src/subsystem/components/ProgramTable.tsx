@@ -17,15 +17,13 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import PersonIcon from '@material-ui/icons/Person';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Empty from '../../core/components/Empty';
 import * as selectUtils from '../../core/utils/selectUtils';
-import { User } from '../types/user';
+import { Program } from '../types/program';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getAllUsers, loginAuth } from '../../dataProvider/agent.js';
-import {ROUTER} from "../../Router";
 
 interface HeadCell {
   id: string;
@@ -35,24 +33,19 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [
   {
-    id: 'user',
+    id: 'id',
     align: 'left',
-    label: 'userManagement.table.headers.user',
+    label: 'ID',
   },
   {
-    id: 'gender',
+    id: 'program',
     align: 'center',
-    label: 'userManagement.table.headers.gender',
-  },
-  {
-    id: 'role',
-    align: 'center',
-    label: 'userManagement.table.headers.role',
+    label: 'Tên chương trình',
   },
   {
     id: 'status',
     align: 'center',
-    label: 'userManagement.table.headers.status',
+    label: 'Trạng thái',
   },
 ];
 
@@ -75,23 +68,23 @@ function EnhancedTableHead() {
   );
 }
 
-type UserRowProps = {
+type ProgramRowProps = {
   index: number;
-  onDelete: (userIds: string[]) => void;
-  onEdit: (user: User) => void;
+  onDelete: (programIds: string[]) => void;
+  onEdit: (program: Program) => void;
   processing: boolean;
   selected: boolean;
-  user: User;
+  program: Program;
 };
 
-const UserRow = ({
+const ProgramRow = ({
   index,
   onDelete,
   onEdit,
   processing,
   selected,
-  user,
-}: UserRowProps) => {
+  program,
+}: ProgramRowProps) => {
   const { id } = useParams();
   let navigate = useNavigate();
 
@@ -110,46 +103,38 @@ const UserRow = ({
 
   const handleDelete = () => {
     handleCloseActions();
-    onDelete([user.id]);
+    onDelete([program.id]);
   };
 
   const handleEdit = () => {
     handleCloseActions();
-    onEdit(user);
+    onEdit(program);
   };
-
-  async function handleEditUser(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    navigate(ROUTER.ADMIN_EDIT_USER, { replace: true });
-  }
 
   return (
     <TableRow sx={{ '& td': { bgcolor: 'background.paper', border: 0 } }}>
       <TableCell
-        sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}
+          sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar sx={{ mr: 3 }}>
-            <PersonIcon />
-          </Avatar>
+          <Typography component='div' variant='h6'>
+            {`${program.id}`}
+          </Typography>
+        </Box>
+      </TableCell>
+      <TableCell
+          align='center'
+      >
+        <Box sx={{ alignItems: 'center' }}>
           <Box>
             <Typography component='div' variant='h6'>
-              {`${user.lastName} ${user.firstName}`}
-            </Typography>
-            <Typography color='textSecondary' variant='body2'>
-              {user.email}
+              {`${program.name}`}
             </Typography>
           </Box>
         </Box>
       </TableCell>
-      {user.gender == 0 ? (
-        <TableCell align='center'>Male</TableCell>
-      ) : (
-        <TableCell align='center'>Female</TableCell>
-      )}
-      <TableCell align='center'>{user.role}</TableCell>
       <TableCell align='center'>
-        {user.enable ? (
+        {program.enable ? (
           <Chip label='Disabled' />
         ) : (
           <Chip color='primary' label='Active' />
@@ -185,7 +170,7 @@ const UserRow = ({
             horizontal: 'right',
           }}
         >
-          <MenuItem onClick={handleEditUser}>
+          <MenuItem onClick={handleEdit}>
             <ListItemIcon>
               <EditIcon />
             </ListItemIcon>{' '}
@@ -203,13 +188,13 @@ const UserRow = ({
   );
 };
 
-type UserTableProps = {
+type ProgramTableProps = {
   processing: boolean;
-  onDelete: (userIds: string[]) => void;
-  onEdit: (user: User) => void;
+  onDelete: (programIds: string[]) => void;
+  onEdit: (program: Program) => void;
   onSelectedChange: (selected: string[]) => void;
   selected: string[];
-  users?: User[];
+  programs?: Program[];
 };
 
 const UserTable = ({
@@ -218,13 +203,13 @@ const UserTable = ({
   onSelectedChange,
   processing,
   selected,
-  users = [],
-}: UserTableProps) => {
+  programs = [],
+}: ProgramTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const usertable = users;
-  // console.log(users);
+  const programtable = programs;
+  // console.log(programs);
   const handleClick = (id: string) => {
     let newSelected: string[] = selectUtils.selectOne(selected, id);
     onSelectedChange(newSelected);
@@ -243,8 +228,8 @@ const UserTable = ({
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
-  if (users.length === 0) {
-    return <Empty title='No user yet' />;
+  if (programs.length === 0) {
+    return <Empty title='No programs yet' />;
   }
 
   return (
@@ -260,17 +245,17 @@ const UserTable = ({
         >
           <EnhancedTableHead />
           <TableBody>
-            {users
+            {programs
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((user, index) => (
-                <UserRow
+              .map((program, index) => (
+                <ProgramRow
                   index={index}
-                  key={user.id}
+                  key={program.id}
                   onDelete={onDelete}
                   onEdit={onEdit}
                   processing={processing}
-                  selected={isSelected(user.id)}
-                  user={user}
+                  selected={isSelected(program.id)}
+                  program={program}
                 />
               ))}
           </TableBody>
@@ -279,7 +264,7 @@ const UserTable = ({
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component='div'
-        count={users.length}
+        count={programs.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

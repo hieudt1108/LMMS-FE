@@ -7,8 +7,7 @@ import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { styled, alpha } from '@mui/material/styles';
-import UserDialog from "./UserDialog";
-import {User} from "../types/user";
+import {Program} from "../types/program";
 import {useSnackbar} from "../../core/contexts/SnackbarProvider";
 import {useNavigate} from "react-router-dom";
 import {ROUTER} from "../../Router";
@@ -62,52 +61,52 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Header = ({ title, description }: HeaderProps) => {
   const { t } = useTranslation();
-  const [openUserDialog, setOpenUserDialog] = useState(false);
+  const [openProgramDialog, setOpenProgramDialog] = useState(false);
   const snackbar = useSnackbar();
   // @ts-ignore
-  const { addUser, isAdding } = useState('');
+  const { addProgram, isAdding } = useState('');
   // @ts-ignore
-  const { isUpdating, updateUser } = useState('');
-  const [userDeleted, setUserDeleted] = useState<string[]>([]);
-  const [userUpdated, setUserUpdated] = useState<User | undefined>(undefined);
+  const { isUpdating, updateProgram } = useState('');
+  const [programDeleted, setProgramDeleted] = useState<string[]>([]);
+  const [programUpdated, setProgramUpdated] = useState<Program | undefined>(undefined);
   const processing = isAdding || isUpdating;
-  const handleAddUser = async (user: Partial<User>) => {
-    addUser(user as User)
+  const handleAddProgram = async (program: Partial<Program>) => {
+    addProgram(program as Program)
         .then(() => {
           snackbar.success(
               t('userManagement.notifications.addSuccess', {
-                user: `${user.firstName} ${user.lastName}`,
+                user: `${program.name}`,
               })
           );
-          setOpenUserDialog(false);
+          setOpenProgramDialog(false);
         })
         .catch(() => {
           snackbar.error(t('common.errors.unexpected.subTitle'));
         });
   };
-  const handleUpdateUser = async (user: User) => {
-    updateUser(user)
+  const handleUpdateUser = async (program: Program) => {
+    updateProgram(program)
         .then(() => {
           snackbar.success(
               t('userManagement.notifications.updateSuccess', {
-                user: `${user.firstName} ${user.lastName}`,
+                program: `${program.name}`,
               })
           );
-          setOpenUserDialog(false);
+          setOpenProgramDialog(false);
         })
         .catch(() => {
           snackbar.error(t('common.errors.unexpected.subTitle'));
         });
   };
 
-  const handleOpenUserDialog = (user?: User) => {
-    setUserUpdated(user);
-    setOpenUserDialog(true);
+  const handleOpenUserDialog = (user?: Program) => {
+    setProgramUpdated(user);
+    setOpenProgramDialog(true);
   };
 
   const handleCloseUserDialog = () => {
-    setUserUpdated(undefined);
-    setOpenUserDialog(false);
+    setProgramUpdated(undefined);
+    setOpenProgramDialog(false);
   };
 
   const navigate = useNavigate();
@@ -134,7 +133,7 @@ const Header = ({ title, description }: HeaderProps) => {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder="Tìm kiếm người dùng"
+                  placeholder="Tìm kiếm chương trình học"
                   inputProps={{ 'aria-label': 'search' }}
                 />
               </Search>
@@ -149,7 +148,7 @@ const Header = ({ title, description }: HeaderProps) => {
                     {t('userManagement.listScreen.importFile')}
                   </Button>
                   <Button startIcon={<PersonAddAltIcon fontSize="small" />} onClick={handleAddUser2} >
-                    Thêm người dùng
+                    Thêm chương trình
                   </Button>
                 </Box>
 
@@ -158,16 +157,6 @@ const Header = ({ title, description }: HeaderProps) => {
           </Grid>
         </CardContent>
       </Card>
-      {openUserDialog && (
-          <UserDialog
-              onAdd={handleAddUser}
-              onClose={handleCloseUserDialog}
-              onUpdate={handleUpdateUser}
-              open={openUserDialog}
-              processing={processing}
-              user={userUpdated}
-          />
-      )}
     </Fragment>
   );
 };

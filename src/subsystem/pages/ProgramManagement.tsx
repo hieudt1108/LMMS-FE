@@ -1,27 +1,22 @@
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AdminAppBar from '../../admin/components/AdminAppBar';
-import AdminToolbar from '../../admin/components/AdminToolbar';
 import ConfirmDialog from '../../core/components/ConfirmDialog';
-import SelectToolbar from '../../core/components/SelectToolbar';
 import { useSnackbar } from '../../core/contexts/SnackbarProvider';
-import UserDialog from '../components/UserDialog';
-import UserTable from '../components/UserTable';
-import { User } from '../types/user';
-import Header from '../components/Header';
-import { getAllUsers } from '../../dataProvider/agent';
+import ProgramTable from '../components/ProgramTable';
+import { Program } from '../types/program';
+import HeaderProgram from '../components/HeaderProgram';
+import { getAllProgram } from '../../dataProvider/agent';
 
-const UserManagement = () => {
-  const [user, setUsers] = React.useState([]);
+const ProgramManagement = () => {
+  const [program, setPrograms] = React.useState([]);
   React.useEffect(() => {
-    fetchUsers();
+    fetchPrograms();
   }, []);
-  async function fetchUsers() {
-    const res = await getAllUsers();
+  async function fetchPrograms() {
+    const res = await getAllProgram();
     if (res.status < 400) {
-      setUsers(res.data.data);
+      setPrograms(res.data.data);
     } else {
       console.log('error');
     }
@@ -31,17 +26,17 @@ const UserManagement = () => {
   const { t } = useTranslation();
 
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
-  const [openUserDialog, setOpenUserDialog] = useState(false);
+  const [openProgramDialog, setOpenProgramDialog] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
-  const [userDeleted, setUserDeleted] = useState<string[]>([]);
-  const [userUpdated, setUserUpdated] = useState<User | undefined>(undefined);
+  const [programDeleted, setProgramDeleted] = useState<string[]>([]);
+  const [programUpdated, setProgramUpdated] = useState<Program | undefined>(undefined);
 
   // @ts-ignore
-  const { addUser, isAdding } = useState('');
+  const { addProgram, isAdding } = useState('');
   // @ts-ignore
-  const { deleteUsers, isDeleting } = useState('');
+  const { deletePrograms, isDeleting } = useState('');
   // @ts-ignore
-  const { isUpdating, updateUser } = useState('');
+  const { isUpdating, updateProgram } = useState('');
   // @ts-ignore
   const { data } = useState('');
 
@@ -50,11 +45,11 @@ const UserManagement = () => {
 
   const handleDeleteUsers = async () => {
     setOpenConfirmDeleteDialog(false);
-    // deleteUsers(userDeleted)
+    // deletePrograms(programDeleted)
     //   .then(() => {
     //     snackbar.success(t('userManagement.notifications.deleteSuccess'));
     //     setSelected([]);
-    //     setUserDeleted([]);
+    //     setProgramDeleted([]);
     //     setOpenConfirmDeleteDialog(false);
     //   })
     //   .catch(() => {
@@ -72,18 +67,18 @@ const UserManagement = () => {
   };
 
   const handleCloseUserDialog = () => {
-    setUserUpdated(undefined);
-    setOpenUserDialog(false);
+    setProgramUpdated(undefined);
+    setOpenProgramDialog(false);
   };
 
   const handleOpenConfirmDeleteDialog = (userIds: string[]) => {
-    setUserDeleted(userIds);
+    setProgramDeleted(userIds);
     setOpenConfirmDeleteDialog(true);
   };
 
-  const handleOpenUserDialog = (user?: User) => {
-    setUserUpdated(user);
-    setOpenUserDialog(true);
+  const handleOpenUserDialog = (user?: Program) => {
+    setProgramUpdated(user);
+    setOpenProgramDialog(true);
   };
 
   const handleSelectedChange = (newSelected: string[]) => {
@@ -92,20 +87,20 @@ const UserManagement = () => {
 
   return (
     <React.Fragment>
-      <Header
-        title={'userManagement.listScreen.title'}
-        description={'userManagement.listScreen.description'}
+      <HeaderProgram
+        title={''}
+        description={'Danh sách chương trình học'}
       />
-      <UserTable
+      <ProgramTable
         processing={processing}
         onDelete={handleOpenConfirmDeleteDialog}
         onEdit={handleOpenUserDialog}
         onSelectedChange={handleSelectedChange}
         selected={selected}
-        users={user}
+        programs={program}
       />
       <ConfirmDialog
-        description={t('userManagement.confirmations.delete')}
+        description={t('Bạn có chắc muốn xóa chương trình này không ?')}
         pending={processing}
         onClose={handleCloseConfirmDeleteDialog}
         onConfirm={handleDeleteUsers}
@@ -116,4 +111,4 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement;
+export default ProgramManagement;

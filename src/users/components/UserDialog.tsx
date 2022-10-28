@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { User } from '../types/user';
 import { Box, CardContent, Grid, Typography, InputBase } from '@material-ui/core';
+
 const genders = [
   { label: 'userManagement.form.gender.options.f', value: 'F' },
   { label: 'userManagement.form.gender.options.m', value: 'M' },

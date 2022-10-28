@@ -186,7 +186,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "add" : "Add",
-    "return" : "Cancel",
+    "return" : "Return",
     "createclass" : "Create class",
     "errors": {
       "forbidden": {
@@ -458,6 +458,10 @@
       "edit": {
         "action": "Edit",
         "title": "Edit User"
+      },
+      "delete": {
+        "action": "Delete",
+        "title": "Delete User"
       }
     },
     "notifications": {

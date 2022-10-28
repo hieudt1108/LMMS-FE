@@ -428,6 +428,53 @@
       "title": "Cài đặt"
     }
   },
+  "programManagement": {
+    "confirmations": {
+      "delete": "Bạn có chắc chắn muốn xóa chương trình học này không?"
+    },
+    "form": {
+      "disabled": {
+        "label": "Vô hiệu hóa"
+      },
+      "name": {
+        "label": "Tên chương trình học"
+      },
+      "description": {
+        "title" : "Mô tả",
+        "label": "Mô tả chương trình học:"
+      }
+    },
+    "modal": {
+      "add": {
+        "action": "Thêm",
+        "title": "Thêm chương trình học"
+      },
+      "edit": {
+        "action": "Sửa",
+        "title": "Sửa chương trình học"
+      },
+      "delete": {
+        "action": "Xóa",
+        "title": "Xóa chương trình học"
+      }
+    },
+    "notifications": {
+      "addSuccess": "{{program}} đã được thêm!",
+      "deleteSuccess": "Program(s) đã được xóa!",
+      "updateSuccess": "{{program}} đã được cập nhật!"
+    },
+    "table": {
+      "headers": {
+        "actions": "Hành động",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "program": "Chương trình"
+      }
+    },
+    "toolbar": {
+      "title": "Chương trình học"
+    }
+  },
   "userManagement": {
     "listScreen": {
       "importFile": "Nhập file",

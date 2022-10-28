@@ -7,6 +7,7 @@ import ProgramTable from '../components/ProgramTable';
 import { Program } from '../types/program';
 import HeaderProgram from '../components/HeaderProgram';
 import { getAllProgram } from '../../dataProvider/agent';
+import ProgramAddEditDialog from "../components/ProgramAddEditDialog";
 
 const ProgramManagement = () => {
   const [program, setPrograms] = React.useState([]);
@@ -21,10 +22,9 @@ const ProgramManagement = () => {
       console.log('error');
     }
   }
-  // console.log(user);
+
   const snackbar = useSnackbar();
   const { t } = useTranslation();
-
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
   const [openProgramDialog, setOpenProgramDialog] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
@@ -39,36 +39,15 @@ const ProgramManagement = () => {
   const { isUpdating, updateProgram } = useState('');
   // @ts-ignore
   const { data } = useState('');
-
   const processing = isAdding || isDeleting || isUpdating;
 
 
-  const handleDeleteUsers = async () => {
+  const handleDeletePrograms = async () => {
     setOpenConfirmDeleteDialog(false);
-    // deletePrograms(programDeleted)
-    //   .then(() => {
-    //     snackbar.success(t('userManagement.notifications.deleteSuccess'));
-    //     setSelected([]);
-    //     setProgramDeleted([]);
-    //     setOpenConfirmDeleteDialog(false);
-    //   })
-    //   .catch(() => {
-    //     snackbar.error(t('common.errors.unexpected.subTitle'));
-    //   });
   };
-
-
-  // const handleCancelSelected = () => {
-  //   setSelected([]);
-  // };
 
   const handleCloseConfirmDeleteDialog = () => {
     setOpenConfirmDeleteDialog(false);
-  };
-
-  const handleCloseUserDialog = () => {
-    setProgramUpdated(undefined);
-    setOpenProgramDialog(false);
   };
 
   const handleOpenConfirmDeleteDialog = (userIds: string[]) => {
@@ -103,7 +82,7 @@ const ProgramManagement = () => {
         description={t('Bạn có chắc muốn xóa chương trình này không ?')}
         pending={processing}
         onClose={handleCloseConfirmDeleteDialog}
-        onConfirm={handleDeleteUsers}
+        onConfirm={handleDeletePrograms}
         open={openConfirmDeleteDialog}
         title={t('common.confirmation')}
       />

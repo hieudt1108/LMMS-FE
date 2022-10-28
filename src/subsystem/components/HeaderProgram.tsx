@@ -11,6 +11,7 @@ import {Program} from "../types/program";
 import {useSnackbar} from "../../core/contexts/SnackbarProvider";
 import {useNavigate} from "react-router-dom";
 import {ROUTER} from "../../Router";
+import ProgramAddEditDialog from "./ProgramAddEditDialog";
 
 type HeaderProps = {
   title: string;
@@ -59,7 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Header = ({ title, description }: HeaderProps) => {
+const HeaderProgram = ({ title, description }: HeaderProps) => {
   const { t } = useTranslation();
   const [openProgramDialog, setOpenProgramDialog] = useState(false);
   const snackbar = useSnackbar();
@@ -67,9 +68,9 @@ const Header = ({ title, description }: HeaderProps) => {
   const { addProgram, isAdding } = useState('');
   // @ts-ignore
   const { isUpdating, updateProgram } = useState('');
-  const [programDeleted, setProgramDeleted] = useState<string[]>([]);
   const [programUpdated, setProgramUpdated] = useState<Program | undefined>(undefined);
   const processing = isAdding || isUpdating;
+
   const handleAddProgram = async (program: Partial<Program>) => {
     addProgram(program as Program)
         .then(() => {
@@ -99,22 +100,17 @@ const Header = ({ title, description }: HeaderProps) => {
         });
   };
 
-  const handleOpenUserDialog = (user?: Program) => {
-    setProgramUpdated(user);
-    setOpenProgramDialog(true);
-  };
 
-  const handleCloseUserDialog = () => {
+  const handleCloseProgramDialog = () => {
     setProgramUpdated(undefined);
     setOpenProgramDialog(false);
   };
 
-  const navigate = useNavigate();
+  const handleOpenProgramDialog = (program?: Program) => {
+    setProgramUpdated(program);
+    setOpenProgramDialog(true);
+  };
 
-  async function handleAddUser2(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    navigate(ROUTER.ADMIN_ADD_USER, { replace: true });
-  }
 
   return (
     <Fragment>
@@ -147,18 +143,27 @@ const Header = ({ title, description }: HeaderProps) => {
                   <Button startIcon={<FileDownloadIcon fontSize="small" />}>
                     {t('userManagement.listScreen.importFile')}
                   </Button>
-                  <Button startIcon={<PersonAddAltIcon fontSize="small" />} onClick={handleAddUser2} >
+                  <Button startIcon={<PersonAddAltIcon fontSize="small" />} onClick={() => handleOpenProgramDialog()} >
                     Thêm chương trình
                   </Button>
                 </Box>
-
               </Grid>
             </Grid>
           </Grid>
         </CardContent>
       </Card>
+      {openProgramDialog && (
+          <ProgramAddEditDialog
+              onAdd={handleAddProgram}
+              onClose={handleCloseProgramDialog}
+              onUpdate={handleUpdateUser}
+              open={openProgramDialog}
+              processing={processing}
+              program={programUpdated}
+          />
+      )}
     </Fragment>
   );
 };
 
-export default Header;
+export default HeaderProgram;

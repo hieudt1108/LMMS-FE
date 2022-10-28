@@ -71,20 +71,7 @@ const Header = ({ title, description }: HeaderProps) => {
   const [userDeleted, setUserDeleted] = useState<string[]>([]);
   const [userUpdated, setUserUpdated] = useState<User | undefined>(undefined);
   const processing = isAdding || isUpdating;
-  const handleAddUser = async (user: Partial<User>) => {
-    addUser(user as User)
-        .then(() => {
-          snackbar.success(
-              t('userManagement.notifications.addSuccess', {
-                user: `${user.firstName} ${user.lastName}`,
-              })
-          );
-          setOpenUserDialog(false);
-        })
-        .catch(() => {
-          snackbar.error(t('common.errors.unexpected.subTitle'));
-        });
-  };
+
   const handleUpdateUser = async (user: User) => {
     updateUser(user)
         .then(() => {
@@ -100,10 +87,6 @@ const Header = ({ title, description }: HeaderProps) => {
         });
   };
 
-  const handleOpenUserDialog = (user?: User) => {
-    setUserUpdated(user);
-    setOpenUserDialog(true);
-  };
 
   const handleCloseUserDialog = () => {
     setUserUpdated(undefined);
@@ -112,7 +95,7 @@ const Header = ({ title, description }: HeaderProps) => {
 
   const navigate = useNavigate();
 
-  async function handleAddUser2(e: { preventDefault: () => void }) {
+  async function handleAddUser(e: { preventDefault: () => void }) {
     e.preventDefault();
     navigate(ROUTER.ADMIN_ADD_USER, { replace: true });
   }
@@ -148,7 +131,7 @@ const Header = ({ title, description }: HeaderProps) => {
                   <Button startIcon={<FileDownloadIcon fontSize="small" />}>
                     {t('userManagement.listScreen.importFile')}
                   </Button>
-                  <Button startIcon={<PersonAddAltIcon fontSize="small" />} onClick={handleAddUser2} >
+                  <Button startIcon={<PersonAddAltIcon fontSize="small" />} onClick={handleAddUser} >
                     Thêm người dùng
                   </Button>
                 </Box>
@@ -158,16 +141,7 @@ const Header = ({ title, description }: HeaderProps) => {
           </Grid>
         </CardContent>
       </Card>
-      {openUserDialog && (
-          <UserDialog
-              onAdd={handleAddUser}
-              onClose={handleCloseUserDialog}
-              onUpdate={handleUpdateUser}
-              open={openUserDialog}
-              processing={processing}
-              user={userUpdated}
-          />
-      )}
+
     </Fragment>
   );
 };

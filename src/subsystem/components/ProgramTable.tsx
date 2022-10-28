@@ -17,7 +17,6 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Empty from '../../core/components/Empty';
@@ -207,9 +206,8 @@ const UserTable = ({
 }: ProgramTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const programtable = programs;
-  // console.log(programs);
+
   const handleClick = (id: string) => {
     let newSelected: string[] = selectUtils.selectOne(selected, id);
     onSelectedChange(newSelected);

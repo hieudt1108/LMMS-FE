@@ -421,6 +421,54 @@
       "title": "Settings"
     }
   },
+  "programManagement": {
+    "confirmations": {
+      "delete": "Are you sure you want to delete this program?"
+    },
+    "form": {
+      "disabled": {
+        "label": "Disabled"
+      },
+      "name": {
+        "label": "Program study name"
+      },
+      "description": {
+        "title" : "Description",
+        "label": "Description study program"
+      }
+    },
+    "modal": {
+      "add": {
+        "action": "Add",
+        "title": "Add Program"
+      },
+      "edit": {
+        "action": "Edit",
+        "title": "Edit Program"
+      },
+      "delete": {
+        "action": "Delete",
+        "title": "Delete Program"
+      }
+    },
+    "notifications": {
+      "addSuccess": "{{program}} has been added!",
+      "deleteSuccess": "Program(s) have been deleted!",
+      "updateSuccess": "{{program}} has been updated!"
+    },
+    "table": {
+      "headers": {
+        "actions": "Actions",
+        "gender": "Gender",
+        "role": "Role",
+        "status": "Status",
+        "program": "Program"
+      }
+    },
+    "toolbar": {
+      "title": "Programs"
+    }
+  },
   "userManagement": {
     "confirmations": {
       "delete": "Are you sure you want to delete this user?"

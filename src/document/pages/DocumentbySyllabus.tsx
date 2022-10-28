@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { experimentalStyled as styled } from '@mui/material/styles';
-import AdminAppBar from '../../admin/components/AdminAppBar';
-import AdminToolbar from '../../admin/components/AdminToolbar';
+
 import { useTranslation } from 'react-i18next';
 
-import HeaderListDocument from '../components/Headersubjetc';
+import HeaderListDocument from '../components/HeaderSysllabusDetail';
 import ListDocument from '../components/ListDocument';
 //component api mui
 import Grid from '@material-ui/core/Grid';

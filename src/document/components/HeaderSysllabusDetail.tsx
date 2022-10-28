@@ -1,14 +1,14 @@
-import * as React from "react";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+import * as React from 'react';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 
 //Subject img
-import Math from "../../Assets/Subjects/mathLogo.png";
+import Math from '../../Assets/Subjects/mathLogo.png';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -49,48 +49,39 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-
-export default function Headersubjetc() {
+export default function HeaderSyllabus() {
   return (
     <React.Fragment>
       <Card sx={{ mb: 2 }}>
         <CardContent
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
           <Box sx={{ mr: 2 }}>
             <img src={Math} />
           </Box>
           <Box>
-            <Typography component="div" variant="h4">
+            <Typography component='div' variant='h4'>
               Unit 1. My new school
             </Typography>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              component="div"
-            >
+            <Typography variant='body2' color='textSecondary' component='div'>
               Getting started
             </Typography>
           </Box>
           <Box>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              component="div"
-            >
+            <Typography variant='body2' color='textSecondary' component='div'>
               1. Listen and read.
             </Typography>
           </Box>
-          <Search style={{border:"1px solid", borderRadius:"12px"}}>
+          <Search style={{ border: '1px solid', borderRadius: '12px' }}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder='Search…'
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>

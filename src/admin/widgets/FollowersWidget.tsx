@@ -18,107 +18,53 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../../auth/contexts/AuthProvider';
 import Fab from '@mui/material/Fab';
 import { ROUTER } from '../../Router';
+import { Button } from '@material-ui/core';
 
 const socials = [
   {
-    image: <img src={Math} />,
+    image: <img src={Math} alt='' />,
     bgcolor: 'primary.main',
     icon: <ThumbUpIcon sx={{ color: '#fff' }} />,
     name: 'Math',
     trend: (
       <Box style={{ display: 'flex' }}>
-        <Fab
-          style={{
-            backgroundColor: '#8BC6EC',
-            backgroundImage: 'linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)',
-          }}
-          color="secondary"
+        <Button
+          size='small'
+          sx={{ bgcolor: '#039be5' }}
           component={RouterLink}
           to={ROUTER.ADMIN_DOCUMENT}
-          variant="extended"
+          variant='contained'
         >
-          Document
-          <ArrowRightIcon sx={{ color: '#757de8' }} />
-        </Fab>
+          Đề cương
+          <ArrowRightIcon sx={{ color: '#0d47a1' }} />
+        </Button>
       </Box>
     ),
     unitKey: 'admin.home.followers.units.likes',
     teacher: 'Adam',
   },
   {
-    image: <img src={Chemistry} />,
+    image: <img src={Chemistry} alt='' />,
     bgcolor: 'error.main',
     icon: <FavoriteIcon style={{ color: '#fff' }} />,
     name: 'Chemistry',
     trend: (
       <Box style={{ display: 'flex' }}>
-        <Fab
-          style={{
-            backgroundColor: '#8BC6EC',
-            backgroundImage: 'linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)',
-          }}
-          color="secondary"
+        <Button
+          size='small'
+          sx={{ bgcolor: '#039be5' }}
+          //color='secondary'
           component={RouterLink}
           to={ROUTER.ADMIN_DOCUMENT}
-          variant="extended"
+          variant='contained'
         >
-          Document
-          <ArrowRightIcon sx={{ color: '#757de8' }} />
-        </Fab>
+          Đề cương
+          <ArrowRightIcon sx={{ color: '#0d47a1' }} />
+        </Button>
       </Box>
     ),
     unitKey: 'admin.home.followers.units.love',
     teacher: 'Tú Sena',
-  },
-  {
-    image: <img src={English} />,
-    bgcolor: 'warning.main',
-    icon: <EmojiEmotionsIcon style={{ color: '#fff' }} />,
-    name: 'English',
-    trend: (
-      <Box style={{ display: 'flex' }}>
-        <Fab
-          style={{
-            backgroundColor: '#8BC6EC',
-            backgroundImage: 'linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)',
-          }}
-          color="secondary"
-          component={RouterLink}
-          to={ROUTER.ADMIN_DOCUMENT}
-          variant="extended"
-        >
-          Document
-          <ArrowRightIcon sx={{ color: '#757de8' }} />
-        </Fab>
-      </Box>
-    ),
-    unitKey: 'admin.home.followers.units.smiles',
-    teacher: 'John Smith',
-  },
-  {
-    image: <img src={Geography} />,
-    bgcolor: 'warning.main',
-    icon: <EmojiEmotionsIcon style={{ color: '#fff' }} />,
-    name: 'Geography',
-    trend: (
-      <Box style={{ display: 'flex' }}>
-        <Fab
-          style={{
-            backgroundColor: '#8BC6EC',
-            backgroundImage: 'linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)',
-          }}
-          color="secondary"
-          component={RouterLink}
-          to={ROUTER.ADMIN_DOCUMENT}
-          variant="extended"
-        >
-          Document
-          <ArrowRightIcon sx={{ color: '#757de8' }} />
-        </Fab>
-      </Box>
-    ),
-    unitKey: 'admin.home.followers.units.smiles',
-    teacher: 'Pault',
   },
 ];
 
@@ -132,10 +78,10 @@ const FollowersWidget = () => {
           <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{ mr: 2 }}>{social.image}</Box>
             <Box sx={{ flexGrow: 1 }}>
-              <Typography component="div" variant="h6">
+              <Typography component='div' variant='h6'>
                 Teacher: {social.teacher}
               </Typography>
-              <Typography variant="body2" color="textSecondary" component="div">
+              <Typography variant='body2' color='textSecondary' component='div'>
                 Subject: {t(social.name)}
               </Typography>
             </Box>

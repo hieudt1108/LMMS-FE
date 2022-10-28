@@ -125,6 +125,10 @@ function deleteApi(url) {
     .catch((err) => err);
 }
 
+// PROGRAM
+const deleteProgram = (id) => {
+  return deleteApi(`Program/${id}`);
+};
 // PUT API AREA ============================>
 function putApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -138,6 +142,10 @@ function putApi(url, payload) {
     .catch((err) => err);
 }
 
+// PROGRAM
+const updateProgram = (id) => {
+  return putApi(`Program/${id}`);
+};
 //export api here
 
 export {
@@ -155,4 +163,6 @@ export {
   getAllLevel,
   getLevelById,
   getAllProgram,
+  deleteProgram,
+  updateProgram,
 };

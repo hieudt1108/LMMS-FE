@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { styled, alpha } from '@mui/material/styles';
-import UserDialog from "./UserDialog";
 import {User} from "../types/user";
 import {useSnackbar} from "../../core/contexts/SnackbarProvider";
 import {useNavigate} from "react-router-dom";

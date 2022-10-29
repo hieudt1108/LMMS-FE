@@ -119,6 +119,23 @@ const AddUser = () => {
                                     sx={{ml:5}}
                                 />
                         </Stack>
+                        <Stack direction="row">
+                            <Typography component="div" variant="h6" sx={{mt:3}}>
+                                Password<span style={{color: "red"}}>*</span>
+                            </Typography>
+                            <TextField
+                                margin="normal"
+                                required
+                                size="small"
+                                fullWidth
+                                id="lastName"
+                                label={t('userManagement.form.lastName.label')}
+                                name="lastName"
+                                autoComplete="family-name"
+                                autoFocus
+                                sx={{ml:5}}
+                            />
+                        </Stack>
                         <Stack direction="row" >
                             <Typography component="div" variant="h6" sx={{mt:3}}>
                                 Firstname

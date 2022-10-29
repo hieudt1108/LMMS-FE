@@ -23,6 +23,7 @@ import Empty from '../../core/components/Empty';
 import * as selectUtils from '../../core/utils/selectUtils';
 import { Program } from '../types/program';
 import { useParams, useNavigate } from 'react-router-dom';
+import {User} from "../../users/types/user";
 
 interface HeadCell {
   id: string;
@@ -196,16 +197,18 @@ type ProgramTableProps = {
   programs?: Program[];
 };
 
-const UserTable = ({
-  onDelete,
-  onEdit,
-  onSelectedChange,
-  processing,
-  selected,
-  programs = [],
-}: ProgramTableProps) => {
+
+const ProgramTable = ({
+   onDelete,
+   onEdit,
+   onSelectedChange,
+   processing,
+   selected,
+   programs = [],
+ }: ProgramTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const programtable = programs;
 
   const handleClick = (id: string) => {
@@ -218,7 +221,7 @@ const UserTable = ({
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+      event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -227,7 +230,7 @@ const UserTable = ({
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
   if (programs.length === 0) {
-    return <Empty title='No programs yet' />;
+    return <Empty title='No program yet' />;
   }
 
   return (
@@ -260,16 +263,16 @@ const UserTable = ({
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component='div'
-        count={programs.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25]}
+          component='div'
+          count={programs.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </React.Fragment>
   );
 };
 
-export default UserTable;
+export default ProgramTable;

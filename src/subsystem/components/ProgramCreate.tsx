@@ -6,6 +6,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import LoadingButton from '@material-ui/lab/LoadingButton';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -73,6 +75,7 @@ const ProgramDialog = ({
   processing,
   program,
 }: ProgramDialogProps) => {
+
   const { t } = useTranslation();
   const editMode = Boolean(program && program.id);
 
@@ -82,19 +85,49 @@ const ProgramDialog = ({
   };
 
   const [programData, setProgramData] = useState(initProgram);
-
+  function notify(type: string,text : string) {
+    if(type === 'success'){
+      toast.success(text, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }else{
+      toast.error(text, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }
   async function handleCreateProgram(e: { preventDefault: () => void }) {
     e.preventDefault();
     const res = await createProgram(programData);
 
     if (res.status < 400) {
-      console.log('add success');
+      onClose();
+      notify("success","Thêm chương trình học thành công");
     } else {
-      console.log('error fetch api');
+      onClose();
+      notify("error","Thất bại...");
     }
     console.log('data: ', res);
   }
+
+
+
   return (
+      <>
     <Dialog
       open={open}
       onClose={onClose}
@@ -102,6 +135,7 @@ const ProgramDialog = ({
       maxWidth={'md'}
       fullWidth={true}
     >
+
       <form onSubmit={handleCreateProgram} noValidate>
         <DialogTitle id='program-dialog-title'>
           {editMode
@@ -185,6 +219,7 @@ const ProgramDialog = ({
         </DialogActions>
       </form>
     </Dialog>
+      </>
   );
 };
 

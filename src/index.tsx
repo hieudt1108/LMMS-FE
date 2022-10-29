@@ -5,12 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
 import './core/config/i18n';
+import {ToastContainer} from "react-toastify";
 // import './mocks/server';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
+        <ToastContainer />
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

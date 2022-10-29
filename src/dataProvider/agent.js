@@ -116,6 +116,11 @@ const createProgram = (payload) => {
   return postApi('Program', payload);
 };
 
+// User
+const createUser = (payload) => {
+  return postApi('Auth/registerSingleUser', payload);
+};
+
 // DELETE API AREA ============================>
 function deleteApi(url) {
   const token = getLocalStorage('access_token');
@@ -161,6 +166,7 @@ export {
   getClassbyId,
   getAllGrade,
   getAllUsers,
+  createUser,
   getGradebyId,
   postClass,
   postGrade,

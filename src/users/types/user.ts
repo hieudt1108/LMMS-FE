@@ -1,5 +1,7 @@
 export interface User {
   id: string;
+  username: string;
+  password : string;
   email: string;
   firstName: string;
   lastName: string;
@@ -7,6 +9,7 @@ export interface User {
   birthDate: string ;
   address : string;
   phone : string;
-  role: string;
-  enable? : number;
+  isTeacher: number;
+  roleID: number;
+  enable : number;
 }

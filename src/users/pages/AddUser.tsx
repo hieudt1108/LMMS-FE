@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import {Box, Divider, Grid} from "@material-ui/core";
+import {Box, Grid} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -12,13 +12,11 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Stack from '@mui/material/Stack';
 import {styled} from "@mui/material/styles";
-import {Switch, useMediaQuery} from "@mui/material";
+import {Select, Switch, useMediaQuery} from "@mui/material";
 import Button from "@material-ui/core/Button";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import CardActions from "@material-ui/core/CardActions";
 import HelpCenterHeader from "../../admin/components/HelpCenterHeader";
-import ConfirmDialog from "../../core/components/ConfirmDialog";
-import {useSnackbar} from "../../core/contexts/SnackbarProvider";
 import {useTheme} from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -27,13 +25,17 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import SvgContainer from "../../core/components/SvgContainer";
 import {ReactComponent as ConfirmSvg} from "../../core/assets/confirm.svg";
-
-
+import {createProgram, createUser} from '../../dataProvider/agent.js';
+import {toast} from "react-toastify";
+import {SelectChangeEvent} from "@mui/material/Select";
+import Checkbox from "@material-ui/core/Checkbox";
+import {DatePicker} from "@material-ui/lab";
+import dayjs, { Dayjs } from 'dayjs';
 
 
 const genders = [
-    { label: 'userManagement.form.gender.options.f', value: 'F' },
-    { label: 'userManagement.form.gender.options.m', value: 'M' },
+    { label: 'userManagement.form.gender.options.f', value: "0" },
+    { label: 'userManagement.form.gender.options.m', value: "1" },
 ];
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
@@ -71,17 +73,83 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 
 const AddUser = () => {
     const { t } = useTranslation();
+
+    const initUser = {
+        userName: 'saa',
+        password : 'sadsada',
+        email: '',
+        firstName: '',
+        lastName: '',
+        gender: 0,
+        birthDate: '2014-11-18',
+        address : '',
+        phone : '',
+        isTeacher: 0,
+        roleID: [10],
+        enable : 0
+    };
+
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const [userData, setUserData] = useState(initUser);
+    const [isTeacher, setIsTeacher] = React.useState('');
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setIsTeacher(event.target.value);
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
+    function notify(type: string,text : string) {
+        if(type === 'success'){
+            toast.success(text, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }else{
+            toast.error(text, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
+    }
+
     const handleClose = () => {
         setOpen(false);
     };
+
+    const [value, setValue] = React.useState<Dayjs | null>(
+        dayjs('2014-08-18T21:11:54'),
+    );
+
+    async function handleCreateUser(e: { preventDefault: () => void }) {
+        e.preventDefault();
+        const res = await createUser(initUser);
+        console.log('data: ', res);
+        if (res.status < 400) {
+            setOpen(false);
+            notify("success","Thêm người dùng thành công");
+        } else {
+            setOpen(false);
+            notify("error","Thất bại...");
+        }
+
+    }
 
   return (
     <React.Fragment>
@@ -116,8 +184,33 @@ const AddUser = () => {
                                     name="lastName"
                                     autoComplete="family-name"
                                     autoFocus
+                                    // value={userData.userName}
+                                    // onChange={(e) =>
+                                    //     setUserData({ ...userData, userName: e.target.value })
+                                    // }
                                     sx={{ml:5}}
                                 />
+                        </Stack>
+                        <Stack direction="row">
+                            <Typography component="div" variant="h6" sx={{mt:3}}>
+                                Password<span style={{color: "red"}}>*</span>
+                            </Typography>
+                            <TextField
+                                margin="normal"
+                                required
+                                size="small"
+                                fullWidth
+                                id="lastName"
+                                label={t('userManagement.form.lastName.label')}
+                                name="lastName"
+                                autoComplete="family-name"
+                                autoFocus
+                                // value={userData.password}
+                                // onChange={(e) =>
+                                //     setUserData({ ...userData, password: e.target.value })
+                                // }
+                                sx={{ml:5}}
+                            />
                         </Stack>
                         <Stack direction="row" >
                             <Typography component="div" variant="h6" sx={{mt:3}}>
@@ -133,6 +226,10 @@ const AddUser = () => {
                                 name="lastName"
                                 autoComplete="family-name"
                                 autoFocus
+                                // value={userData.firstName}
+                                // onChange={(e) =>
+                                //     setUserData({ ...userData, firstName: e.target.value })
+                                // }
                                 sx={{ml:5.7}}
                             />
                         </Stack>
@@ -150,8 +247,31 @@ const AddUser = () => {
                                 name="lastName"
                                 autoComplete="family-name"
                                 autoFocus
+                                // value={userData.lastName}
+                                // onChange={(e) =>
+                                //     setUserData({ ...userData, lastName: e.target.value })
+                                // }
                                 sx={{ml:5.7}}
                             />
+                        </Stack>
+                        <Stack direction="row" >
+                            <Typography component="div" variant="h6" sx={{mt:5}}>
+                                Birthday
+                            </Typography>
+                            <Box sx={{ml:7,mt:3}}>
+                            <DatePicker
+                                inputFormat={"yyyy-mm-dd"}
+                                disableFuture
+                                label="Date"
+                                openTo="year"
+                                value={value}
+                                onChange={(newValue) => {
+                                    setValue(newValue);
+                                }}
+                                renderInput={(params) => <TextField
+                                    {...params} />}
+                            />
+                            </Box>
                         </Stack>
                         <Stack direction="row" >
                             <Typography component="div" variant="h6" sx={{mt:3}}>
@@ -163,6 +283,9 @@ const AddUser = () => {
                                         row
                                         aria-label="gender"
                                         name="gender"
+                                        // onChange={(e) =>
+                                        //     setUserData({ ...userData, gender: parseInt(e.target.value) })
+                                        // }
                                     >
                                         {genders.map((gender) => (
                                             <FormControlLabel
@@ -186,6 +309,18 @@ const AddUser = () => {
                                 sx={{ml:3,mt:2}}
                             />
                         </Stack>
+                        <Stack direction="row" >
+                            <Typography component="div" variant="h6" sx={{mt:3}}>
+                                Role
+                            </Typography>
+                            <FormControlLabel sx={{ml:9,mt:1.85}}
+                                              // value={userData.isTeacher}
+                                  control={<Checkbox
+                                      // onChange={(e) =>
+                                      // setUserData({ ...userData, isTeacher: parseInt(e.target.value) })}
+                                   />}
+                                  label="Is Teacher" />
+                        </Stack>
                         <Box marginBottom={2} marginTop={3}>
                             <Typography variant="h2" color="GrayText">
                                 Contact Info
@@ -204,6 +339,10 @@ const AddUser = () => {
                                 label={t('userManagement.form.email.label')}
                                 name="email"
                                 autoComplete="email"
+                                // value={userData.email}
+                                // onChange={(e) =>
+                                //     setUserData({ ...userData, email: e.target.value })
+                                // }
                                 sx={{ml:9.5}}
                             />
                         </Stack>
@@ -219,6 +358,10 @@ const AddUser = () => {
                                 id="address"
                                 label={t('userManagement.form.address.label')}
                                 name="address"
+                                // value={userData.address}
+                                // onChange={(e) =>
+                                //     setUserData({ ...userData, address: e.target.value })
+                                // }
                                 sx={{ml:7}}
                             ></TextField>
                         </Stack>
@@ -234,6 +377,10 @@ const AddUser = () => {
                                 fullWidth
                                 label={t('userManagement.form.phone.label')}
                                 name="phone"
+                                // value={userData.phone}
+                                // onChange={(e) =>
+                                //     setUserData({ ...userData, phone: e.target.value })
+                                // }
                                 sx={{ml:8.5}}
                             ></TextField>
                         </Stack>
@@ -268,7 +415,7 @@ const AddUser = () => {
                 <Button onClick={handleClose}>{t("common.cancel")}</Button>
                 <LoadingButton
                     autoFocus
-                    onClick={handleClose}
+                    onClick={handleCreateUser}
                     variant="contained"
                 >
                     {t("common.confirm")}

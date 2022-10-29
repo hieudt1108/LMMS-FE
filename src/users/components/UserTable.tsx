@@ -147,7 +147,7 @@ const UserRow = ({
       ) : (
         <TableCell align='center'>Female</TableCell>
       )}
-      <TableCell align='center'>{user.role}</TableCell>
+      <TableCell align='center'>{user.roleID}</TableCell>
       <TableCell align='center'>
         {user.enable ? (
           <Chip label='Disabled' />

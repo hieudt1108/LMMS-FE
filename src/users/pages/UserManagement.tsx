@@ -7,7 +7,6 @@ import AdminToolbar from '../../admin/components/AdminToolbar';
 import ConfirmDialog from '../../core/components/ConfirmDialog';
 import SelectToolbar from '../../core/components/SelectToolbar';
 import { useSnackbar } from '../../core/contexts/SnackbarProvider';
-import UserDialog from '../components/UserDialog';
 import UserTable from '../components/UserTable';
 import { User } from '../types/user';
 import Header from '../components/Header';

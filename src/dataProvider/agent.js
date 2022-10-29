@@ -103,12 +103,17 @@ const postClass = (payload) => {
 
 // GRADE
 const postGrade = () => {
-  return postApi('api/Grade');
+  return postApi('Grade');
 };
 
 // LEVEL
 const postLevel = () => {
   return postApi('Level');
+};
+
+// Program
+const createProgram = (payload) => {
+  return postApi('Program', payload);
 };
 
 // DELETE API AREA ============================>
@@ -143,8 +148,8 @@ function putApi(url, payload) {
 }
 
 // PROGRAM
-const updateProgram = (id) => {
-  return putApi(`Program/${id}`);
+const updateProgram = (id, payload) => {
+  return putApi(`Program/${id}`, payload);
 };
 //export api here
 
@@ -165,4 +170,5 @@ export {
   getAllProgram,
   deleteProgram,
   updateProgram,
+  createProgram,
 };

@@ -1,17 +1,25 @@
-import { Box, Button, Card, CardContent, Grid, Typography, InputBase } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  InputBase,
+} from '@material-ui/core';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import React, {Fragment, useState} from 'react';
+import React, { Fragment, useState } from 'react';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { styled, alpha } from '@mui/material/styles';
-import {Program} from "../types/program";
-import {useSnackbar} from "../../core/contexts/SnackbarProvider";
-import {useNavigate} from "react-router-dom";
-import {ROUTER} from "../../Router";
-import ProgramAddEditDialog from "./ProgramAddEditDialog";
+import { Program } from '../types/program';
+import { useSnackbar } from '../../core/contexts/SnackbarProvider';
+import { useNavigate } from 'react-router-dom';
+import { ROUTER } from '../../Router';
+import ProgramAddEditDialog from './ProgramCreate';
 
 type HeaderProps = {
   title: string;
@@ -68,38 +76,39 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
   const { addProgram, isAdding } = useState('');
   // @ts-ignore
   const { isUpdating, updateProgram } = useState('');
-  const [programUpdated, setProgramUpdated] = useState<Program | undefined>(undefined);
+  const [programUpdated, setProgramUpdated] = useState<Program | undefined>(
+    undefined
+  );
   const processing = isAdding || isUpdating;
 
   const handleAddProgram = async (program: Partial<Program>) => {
     addProgram(program as Program)
-        .then(() => {
-          snackbar.success(
-              t('userManagement.notifications.addSuccess', {
-                user: `${program.name}`,
-              })
-          );
-          setOpenProgramDialog(false);
-        })
-        .catch(() => {
-          snackbar.error(t('common.errors.unexpected.subTitle'));
-        });
+      .then(() => {
+        snackbar.success(
+          t('userManagement.notifications.addSuccess', {
+            user: `${program.name}`,
+          })
+        );
+        setOpenProgramDialog(false);
+      })
+      .catch(() => {
+        snackbar.error(t('common.errors.unexpected.subTitle'));
+      });
   };
   const handleUpdateUser = async (program: Program) => {
     updateProgram(program)
-        .then(() => {
-          snackbar.success(
-              t('userManagement.notifications.updateSuccess', {
-                program: `${program.name}`,
-              })
-          );
-          setOpenProgramDialog(false);
-        })
-        .catch(() => {
-          snackbar.error(t('common.errors.unexpected.subTitle'));
-        });
+      .then(() => {
+        snackbar.success(
+          t('userManagement.notifications.updateSuccess', {
+            program: `${program.name}`,
+          })
+        );
+        setOpenProgramDialog(false);
+      })
+      .catch(() => {
+        snackbar.error(t('common.errors.unexpected.subTitle'));
+      });
   };
-
 
   const handleCloseProgramDialog = () => {
     setProgramUpdated(undefined);
@@ -111,7 +120,6 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
     setOpenProgramDialog(true);
   };
 
-
   return (
     <Fragment>
       <Card>
@@ -119,7 +127,7 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Box marginBottom={2}>
-                <Typography variant="h2" color="GrayText">
+                <Typography variant='h2' color='GrayText'>
                   {t(description)}
                 </Typography>
               </Box>
@@ -129,21 +137,27 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder="Tìm kiếm chương trình học"
+                  placeholder='Tìm kiếm chương trình học'
                   inputProps={{ 'aria-label': 'search' }}
                 />
               </Search>
             </Grid>
-            <Grid style={{ placeSelf: 'flex-end' }} item xs={12} md={6} >
-              <Grid container justifyContent="flex-end" >
-                <Box sx={{mt:5}}>
-                  <Button className="button" startIcon={<FileUploadIcon fontSize="small" />}>
+            <Grid style={{ placeSelf: 'flex-end' }} item xs={12} md={6}>
+              <Grid container justifyContent='flex-end'>
+                <Box sx={{ mt: 5 }}>
+                  <Button
+                    className='button'
+                    startIcon={<FileUploadIcon fontSize='small' />}
+                  >
                     {t('userManagement.listScreen.exportFile')}
                   </Button>
-                  <Button startIcon={<FileDownloadIcon fontSize="small" />}>
+                  <Button startIcon={<FileDownloadIcon fontSize='small' />}>
                     {t('userManagement.listScreen.importFile')}
                   </Button>
-                  <Button startIcon={<PersonAddAltIcon fontSize="small" />} onClick={() => handleOpenProgramDialog()} >
+                  <Button
+                    startIcon={<PersonAddAltIcon fontSize='small' />}
+                    onClick={() => handleOpenProgramDialog()}
+                  >
                     Thêm chương trình
                   </Button>
                 </Box>
@@ -153,14 +167,14 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
         </CardContent>
       </Card>
       {openProgramDialog && (
-          <ProgramAddEditDialog
-              onAdd={handleAddProgram}
-              onClose={handleCloseProgramDialog}
-              onUpdate={handleUpdateUser}
-              open={openProgramDialog}
-              processing={processing}
-              program={programUpdated}
-          />
+        <ProgramAddEditDialog
+          onAdd={handleAddProgram}
+          onClose={handleCloseProgramDialog}
+          onUpdate={handleUpdateUser}
+          open={openProgramDialog}
+          processing={processing}
+          program={programUpdated}
+        />
       )}
     </Fragment>
   );

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ConfirmDialog from '../../core/components/ConfirmDialog';
@@ -7,7 +6,7 @@ import ProgramTable from '../components/ProgramTable';
 import { Program } from '../types/program';
 import HeaderProgram from '../components/HeaderProgram';
 import { getAllProgram } from '../../dataProvider/agent';
-import ProgramAddEditDialog from "../components/ProgramAddEditDialog";
+import ProgramAddEditDialog from '../components/ProgramCreate';
 
 const ProgramManagement = () => {
   const [program, setPrograms] = React.useState([]);
@@ -29,7 +28,9 @@ const ProgramManagement = () => {
   const [openProgramDialog, setOpenProgramDialog] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [programDeleted, setProgramDeleted] = useState<string[]>([]);
-  const [programUpdated, setProgramUpdated] = useState<Program | undefined>(undefined);
+  const [programUpdated, setProgramUpdated] = useState<Program | undefined>(
+    undefined
+  );
 
   // @ts-ignore
   const { addProgram, isAdding } = useState('');
@@ -40,7 +41,6 @@ const ProgramManagement = () => {
   // @ts-ignore
   const { data } = useState('');
   const processing = isAdding || isDeleting || isUpdating;
-
 
   const handleDeletePrograms = async () => {
     setOpenConfirmDeleteDialog(false);
@@ -66,10 +66,7 @@ const ProgramManagement = () => {
 
   return (
     <React.Fragment>
-      <HeaderProgram
-        title={''}
-        description={'Danh sách chương trình học'}
-      />
+      <HeaderProgram title={''} description={'Danh sách chương trình học'} />
       <ProgramTable
         processing={processing}
         onDelete={handleOpenConfirmDeleteDialog}

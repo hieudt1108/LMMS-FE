@@ -12,7 +12,7 @@ import UserTable from '../components/UserTable';
 import { User } from '../types/user';
 import Header from '../components/Header';
 import { getAllUsers } from '../../dataProvider/agent';
-import ProgramAddEditDialog from "../../subsystem/components/ProgramAddEditDialog";
+import ProgramAddEditDialog from '../../subsystem/components/ProgramCreate';
 
 const UserManagement = () => {
   const [user, setUsers] = React.useState([]);
@@ -48,7 +48,6 @@ const UserManagement = () => {
 
   const processing = isAdding || isDeleting || isUpdating;
 
-
   const handleDeleteUsers = async () => {
     setOpenConfirmDeleteDialog(false);
     // deleteUsers(userDeleted)
@@ -62,7 +61,6 @@ const UserManagement = () => {
     //     snackbar.error(t('common.errors.unexpected.subTitle'));
     //   });
   };
-
 
   // const handleCancelSelected = () => {
   //   setSelected([]);
@@ -113,7 +111,6 @@ const UserManagement = () => {
         open={openConfirmDeleteDialog}
         title={t('common.confirmation')}
       />
-
     </React.Fragment>
   );
 };

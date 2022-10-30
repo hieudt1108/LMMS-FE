@@ -116,8 +116,8 @@ const createProgram = (payload) => {
   return postApi('Program', payload);
 };
 
-// User
-const createUser = (payload) => {
+// User Auth
+const createUserAuth = (payload) => {
   return postApi('Auth/registerSingleUser', payload);
 };
 
@@ -166,7 +166,7 @@ export {
   getClassbyId,
   getAllGrade,
   getAllUsers,
-  createUser,
+  createUserAuth,
   getGradebyId,
   postClass,
   postGrade,

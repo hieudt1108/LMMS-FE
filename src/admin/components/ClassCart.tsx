@@ -1,10 +1,6 @@
 import React from 'react';
 import Card from '@mui/material/Card';
-import {
-  Typography,
-  IconButton,
-  Avatar,
-} from '@mui/material';
+import { Typography, IconButton, Avatar } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { CardHeader, Grid } from '@material-ui/core';
 import Menu from '@mui/material/Menu';
@@ -13,7 +9,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useNavigate } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import { deepOrange } from '@mui/material/colors';
-import {getAllClass} from "../../dataProvider/agent";
+import { getAllClass } from '../../dataProvider/agent';
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -53,7 +49,6 @@ const ClassCart = () => {
     fetchClass();
   }, []);
 
-
   async function fetchClass() {
     const res = await getAllClass();
     if (res.status < 400) {
@@ -67,94 +62,91 @@ const ClassCart = () => {
   return (
     <React.Fragment>
       {classes?.map((c) => (
-      <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
-
-        <Card
-          elevation={8}
-          sx={{
-            cursor: 'pointer',
-            ':hover': { boxShadow: '0 0 0 1px #03a5fc' },
-          }}
-        >
-
-          <Stack
-            direction='row'
-            alignItems='flex-start'
-            justifyContent='space-between'
-            spacing={2}
-            sx={{ margin: 3 }}
+        <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+          <Card
+            elevation={8}
+            sx={{
+              cursor: 'pointer',
+              ':hover': { boxShadow: '0 0 0 1px #03a5fc' },
+            }}
           >
-            <Avatar
-              {...stringAvatar('Tim Neutkens')}
-              sx={{ width: 65, height: 65, bgcolor: deepOrange[500] }}
-            />
             <Stack
-              direction='column'
+              direction='row'
               alignItems='flex-start'
-              justifyContent='flex-start'
+              justifyContent='space-between'
               spacing={2}
+              sx={{ margin: 3 }}
             >
-              <Typography variant='h3'>{c.name}</Typography>
+              <Avatar
+                {...stringAvatar('Tim Neutkens')}
+                sx={{ width: 65, height: 65, bgcolor: deepOrange[500] }}
+              />
               <Stack
-                direction='row'
-                alignItems='center'
-                justifyContent='center'
-                sx={{ marginTop: '0px !important' }}
+                direction='column'
+                alignItems='flex-start'
+                justifyContent='flex-start'
+                spacing={2}
               >
-                <Typography variant='subtitle1'>Sỹ số:</Typography>
-                <Typography variant='subtitle2' sx={{ marginTop: '1.2px' }}>
-                  {c.size}
+                <Typography variant='h3'>{c.name}</Typography>
+                <Stack
+                  direction='row'
+                  alignItems='center'
+                  justifyContent='center'
+                  sx={{ marginTop: '0px !important' }}
+                >
+                  <Typography variant='subtitle1'>Sỹ số:</Typography>
+                  <Typography variant='subtitle2' sx={{ marginTop: '1.2px' }}>
+                    {c.size}
+                  </Typography>
+                </Stack>
+                <Stack
+                  direction='row'
+                  alignItems='center'
+                  justifyContent='center'
+                  sx={{ marginTop: '0px !important' }}
+                >
+                  <Typography variant='subtitle1'>Chủ nhiệm:</Typography>
+                  <Typography variant='subtitle2' sx={{ marginTop: '1px' }}>
+                    Chu Tuấn Thông
+                  </Typography>
+                </Stack>
+                <Stack
+                  direction='row'
+                  alignItems='center'
+                  justifyContent='center'
+                  sx={{ marginTop: '0px !important' }}
+                >
+                  <Typography variant='subtitle1'>Niên khóa:</Typography>
+                  <Typography variant='subtitle2' sx={{ marginTop: '1px' }}>
+                    {c.schoolYear}
+                  </Typography>
+                </Stack>
+              </Stack>
 
-                </Typography>
-              </Stack>
-              <Stack
-                direction='row'
-                alignItems='center'
-                justifyContent='center'
-                sx={{ marginTop: '0px !important' }}
-              >
-                <Typography variant='subtitle1'>Chủ nhiệm:</Typography>
-                <Typography variant='subtitle2' sx={{ marginTop: '1px' }}>
-                  Chu Tuấn Thông
-                </Typography>
-              </Stack>
-              <Stack
-                direction='row'
-                alignItems='center'
-                justifyContent='center'
-                sx={{ marginTop: '0px !important' }}
-              >
-                <Typography variant='subtitle1'>Niên khóa:</Typography>
-                <Typography variant='subtitle2' sx={{ marginTop: '1px' }}>
-                  {c.schoolYear}
-
-                </Typography>
-              </Stack>
+              <PopupState variant='popover' popupId='demo-popup-menu'>
+                {(popupState) => (
+                  <React.Fragment>
+                    <IconButton
+                      aria-label='settings'
+                      {...bindTrigger(popupState)}
+                      sx={{
+                        padding: '0px !important',
+                        margin: '0px !important',
+                      }}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu {...bindMenu(popupState)}>
+                      <MenuItem onClick={popupState.close}>Delte</MenuItem>
+                      <MenuItem onClick={popupState.close}>Update</MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </PopupState>
             </Stack>
-
-            <PopupState variant='popover' popupId='demo-popup-menu'>
-              {(popupState) => (
-                <React.Fragment>
-                  <IconButton
-                    aria-label='settings'
-                    {...bindTrigger(popupState)}
-                    sx={{ padding: '0px !important', margin: '0px !important' }}
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={popupState.close}>Delte</MenuItem>
-                    <MenuItem onClick={popupState.close}>Update</MenuItem>
-                  </Menu>
-                </React.Fragment>
-              )}
-            </PopupState>
-          </Stack>
-
-        </Card>
-
-      </Grid>
-          ))}
+          </Card>
+        </Grid>
+      ))}
     </React.Fragment>
   );
 };

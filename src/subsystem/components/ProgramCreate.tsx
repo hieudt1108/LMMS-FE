@@ -75,7 +75,6 @@ const ProgramDialog = ({
   processing,
   program,
 }: ProgramDialogProps) => {
-
   const { t } = useTranslation();
   const editMode = Boolean(program && program.id);
 
@@ -85,28 +84,26 @@ const ProgramDialog = ({
   };
 
   const [programData, setProgramData] = useState(initProgram);
-  function notify(type: string,text : string) {
-    if(type === 'success'){
+  function notify(type: string, text: string) {
+    if (type === 'success') {
       toast.success(text, {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
       });
-    }else{
+    } else {
       toast.error(text, {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
       });
     }
   }
@@ -116,110 +113,111 @@ const ProgramDialog = ({
 
     if (res.status < 400) {
       onClose();
-      notify("success","Thêm chương trình học thành công");
+      notify('success', 'Thêm chương trình học thành công');
     } else {
       onClose();
-      notify("error","Thất bại...");
+      notify('error', 'Thất bại...');
     }
     console.log('data: ', res);
   }
 
-
-
   return (
-      <>
-    <Dialog
-      open={open}
-      onClose={onClose}
-      aria-labelledby='program-dialog-title'
-      maxWidth={'md'}
-      fullWidth={true}
-    >
-
-      <form onSubmit={handleCreateProgram} noValidate>
-        <DialogTitle id='program-dialog-title'>
-          {editMode
-            ? t('programManagement.modal.edit.title')
-            : t('programManagement.modal.add.title')}
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2} columns={12}>
-              <Grid item xs={4} sx={{ mt: 3.5 }}>
-                <Typography component='div' variant='h6'>
-                  Tên chương trình học<span style={{ color: 'red' }}>*</span>
-                </Typography>
-              </Grid>
-              <Grid item xs={8}>
-                <TextField
-                  margin='normal'
-                  required
-                  fullWidth
-                  id='name'
-                  label={t('programManagement.form.name.label')}
-                  name='name'
-                  autoComplete='family-name'
-                  autoFocus
-                  value={programData.name}
-                  onChange={(e) =>
-                    setProgramData({ ...programData, name: e.target.value })
-                  }
-                />
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} columns={12}>
-              <Grid item xs={4} sx={{ mt: 3.5 }}>
-                <Typography component='div' variant='h6'>
-                  Mô tả chương trình học
-                </Typography>
-              </Grid>
-              <Grid item xs={8}>
-                <TextField
-                  margin='normal'
-                  required
-                  fullWidth
-                  id='description'
-                  label={t('programManagement.form.description.title')}
-                  name='description'
-                  autoComplete='family-name'
-                  autoFocus
-                  value={programData.description}
-                  onChange={(e) =>
-                    setProgramData({
-                      ...programData,
-                      description: e.target.value,
-                    })
-                  }
-                />
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} columns={12}>
-              <Grid item xs={4} sx={{ mt: 3.5 }}>
-                <Typography component='div' variant='h6'>
-                  Vô hiệu hóa
-                </Typography>
-              </Grid>
-              <Grid item xs={8}>
-                <FormControlLabel
-                  control={<Android12Switch defaultChecked />}
-                  label=''
-                  sx={{ mt: 3 }}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose}>{t('common.cancel')}</Button>
-          <LoadingButton loading={processing} type='submit' variant='contained'>
+    <>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        aria-labelledby='program-dialog-title'
+        maxWidth={'md'}
+        fullWidth={true}
+      >
+        <form onSubmit={handleCreateProgram} noValidate>
+          <DialogTitle id='program-dialog-title'>
             {editMode
-              ? t('userManagement.modal.edit.action')
-              : t('userManagement.modal.add.action')}
-          </LoadingButton>
-        </DialogActions>
-      </form>
-    </Dialog>
-      </>
+              ? t('programManagement.modal.edit.title')
+              : t('programManagement.modal.add.title')}
+          </DialogTitle>
+          <DialogContent>
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2} columns={12}>
+                <Grid item xs={4} sx={{ mt: 3.5 }}>
+                  <Typography component='div' variant='h6'>
+                    Tên chương trình học<span style={{ color: 'red' }}>*</span>
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    margin='normal'
+                    required
+                    fullWidth
+                    id='name'
+                    label={t('programManagement.form.name.label')}
+                    name='name'
+                    autoComplete='family-name'
+                    autoFocus
+                    value={programData.name}
+                    onChange={(e) =>
+                      setProgramData({ ...programData, name: e.target.value })
+                    }
+                  />
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} columns={12}>
+                <Grid item xs={4} sx={{ mt: 3.5 }}>
+                  <Typography component='div' variant='h6'>
+                    Mô tả chương trình học
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    margin='normal'
+                    required
+                    fullWidth
+                    id='description'
+                    label={t('programManagement.form.description.title')}
+                    name='description'
+                    autoComplete='family-name'
+                    autoFocus
+                    value={programData.description}
+                    onChange={(e) =>
+                      setProgramData({
+                        ...programData,
+                        description: e.target.value,
+                      })
+                    }
+                  />
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} columns={12}>
+                <Grid item xs={4} sx={{ mt: 3.5 }}>
+                  <Typography component='div' variant='h6'>
+                    Vô hiệu hóa
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <FormControlLabel
+                    control={<Android12Switch defaultChecked />}
+                    label=''
+                    sx={{ mt: 3 }}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onClose}>{t('common.cancel')}</Button>
+            <LoadingButton
+              loading={processing}
+              type='submit'
+              variant='contained'
+            >
+              {editMode
+                ? t('userManagement.modal.edit.action')
+                : t('userManagement.modal.add.action')}
+            </LoadingButton>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </>
   );
 };
 

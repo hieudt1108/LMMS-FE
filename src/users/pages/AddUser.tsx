@@ -25,7 +25,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import SvgContainer from "../../core/components/SvgContainer";
 import {ReactComponent as ConfirmSvg} from "../../core/assets/confirm.svg";
-import {createProgram, createUser} from '../../dataProvider/agent.js';
+import {createUser} from '../../dataProvider/agent.js';
 import {toast} from "react-toastify";
 import {SelectChangeEvent} from "@mui/material/Select";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -74,25 +74,12 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 const AddUser = () => {
     const { t } = useTranslation();
 
-    const initUser = {
-        userName: 'saa',
-        password : 'sadsada',
-        email: '',
-        firstName: '',
-        lastName: '',
-        gender: 0,
-        birthDate: '2014-11-18',
-        address : '',
-        phone : '',
-        isTeacher: 0,
-        roleID: [10],
-        enable : 0
-    };
+
 
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const [userData, setUserData] = useState(initUser);
+
     const [isTeacher, setIsTeacher] = React.useState('');
 
     const handleChange = (event: SelectChangeEvent) => {
@@ -136,6 +123,23 @@ const AddUser = () => {
     const [value, setValue] = React.useState<Dayjs | null>(
         dayjs('2014-08-18T21:11:54'),
     );
+
+    const initUser = {
+        userName: 'saa',
+        password : 'sadsada',
+        email: '',
+        firstName: '',
+        lastName: '',
+        gender: 0,
+        birthDate: '2014-11-18',
+        address : '',
+        phone : '',
+        isTeacher: 0,
+        roleID: [10],
+        enable : 0
+    };
+
+    const [userData, setUserData] = useState(initUser);
 
     async function handleCreateUser(e: { preventDefault: () => void }) {
         e.preventDefault();

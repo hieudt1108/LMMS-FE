@@ -66,8 +66,9 @@ const ClassCart = () => {
 
   return (
     <React.Fragment>
+      {classes?.map((c) => (
       <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
-        {classes?.map((c) => (
+
         <Card
           elevation={8}
           sx={{
@@ -75,6 +76,7 @@ const ClassCart = () => {
             ':hover': { boxShadow: '0 0 0 1px #03a5fc' },
           }}
         >
+
           <Stack
             direction='row'
             alignItems='flex-start'
@@ -102,6 +104,7 @@ const ClassCart = () => {
                 <Typography variant='subtitle1'>Sỹ số:</Typography>
                 <Typography variant='subtitle2' sx={{ marginTop: '1.2px' }}>
                   {c.size}
+
                 </Typography>
               </Stack>
               <Stack
@@ -124,6 +127,7 @@ const ClassCart = () => {
                 <Typography variant='subtitle1'>Niên khóa:</Typography>
                 <Typography variant='subtitle2' sx={{ marginTop: '1px' }}>
                   {c.schoolYear}
+
                 </Typography>
               </Stack>
             </Stack>
@@ -146,9 +150,11 @@ const ClassCart = () => {
               )}
             </PopupState>
           </Stack>
+
         </Card>
-        ))}
+
       </Grid>
+          ))}
     </React.Fragment>
   );
 };

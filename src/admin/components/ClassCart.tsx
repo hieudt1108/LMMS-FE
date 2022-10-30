@@ -1,31 +1,19 @@
 import React from 'react';
 import Card from '@mui/material/Card';
 import {
-  CardActionArea,
-  CardMedia,
-  CardContent,
   Typography,
   IconButton,
-  Divider,
-  Paper,
   Avatar,
 } from '@mui/material';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { CardHeader, Grid } from '@material-ui/core';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useNavigate } from 'react-router-dom';
-import { parseWithOptions } from 'date-fns/fp';
-import { ROUTER } from '../../Router';
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
 import { deepOrange } from '@mui/material/colors';
+import {getAllClass} from "../../dataProvider/agent";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -59,9 +47,27 @@ function stringAvatar(name: string) {
 const ClassCart = () => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
+  const [classes, setClasses] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    fetchClass();
+  }, []);
+
+
+  async function fetchClass() {
+    const res = await getAllClass();
+    if (res.status < 400) {
+      setClasses(res.data.data);
+    } else {
+      console.log('error fetch api');
+    }
+    console.log('data: ', res.data.data);
+  }
+
   return (
     <React.Fragment>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={4}>
+        {classes?.map((c) => (
         <Card
           elevation={8}
           sx={{
@@ -86,7 +92,7 @@ const ClassCart = () => {
               justifyContent='flex-start'
               spacing={2}
             >
-              <Typography variant='h3'>1A</Typography>
+              <Typography variant='h3'>{c.name}</Typography>
               <Stack
                 direction='row'
                 alignItems='center'
@@ -95,7 +101,7 @@ const ClassCart = () => {
               >
                 <Typography variant='subtitle1'>Sỹ số:</Typography>
                 <Typography variant='subtitle2' sx={{ marginTop: '1.2px' }}>
-                  15
+                  {c.size}
                 </Typography>
               </Stack>
               <Stack
@@ -117,7 +123,7 @@ const ClassCart = () => {
               >
                 <Typography variant='subtitle1'>Niên khóa:</Typography>
                 <Typography variant='subtitle2' sx={{ marginTop: '1px' }}>
-                  2022 - 2023
+                  {c.schoolYear}
                 </Typography>
               </Stack>
             </Stack>
@@ -141,6 +147,7 @@ const ClassCart = () => {
             </PopupState>
           </Stack>
         </Card>
+        ))}
       </Grid>
     </React.Fragment>
   );

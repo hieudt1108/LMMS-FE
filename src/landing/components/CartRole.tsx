@@ -25,28 +25,12 @@ const CartRole = (props: CartRoleProps) => {
   const { item } = props;
   return (
     <React.Fragment>
-      <Card sx={{ maxWidth: 400 }}>
+      <Card sx={{ maxWidth: 400,':hover': {boxShadow: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',transition:'transform 150ms', transform: 'translateY(-10px)'}}} >
         <CardActionArea
           onClick={() => {
             navigate("/admin");
           }}
         >
-          {/* <CardMedia
-            component='img'
-            height='140'
-            image='/static/images/cards/contemplative-reptile.jpg'
-            alt='green iguana'
-          />
-          <CardContent>
-            <Typography gutterBottom variant='h5' component='div'>
-              Lizard
-            </Typography>
-            <Typography variant='body2' color='text.secondary'>
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent> */}
-
           <ImageListItem key={item?.img}>
             <img
               src={`${item?.img}?w=248&fit=crop&auto=format`}

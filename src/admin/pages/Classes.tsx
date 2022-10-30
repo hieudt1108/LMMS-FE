@@ -47,11 +47,6 @@ const Classes = () => {
       <Stack spacing={2} direction='row' alignItems='center' mt={2.5}>
         <Grid container spacing={2}>
           <ClassCart></ClassCart>
-          <ClassCart></ClassCart>
-          <ClassCart></ClassCart>
-          <ClassCart></ClassCart>
-          <ClassCart></ClassCart>
-          <ClassCart></ClassCart>
         </Grid>
       </Stack>
 

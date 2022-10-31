@@ -55,8 +55,8 @@ export default function HeaderSubsystem() {
                         setValue(e.target.value);
                     }}
                 >
-                    <MenuItem value={''}>
-                        Tất cả
+                    <MenuItem value={'Tất Cả'}>
+                        Tất Cả
                     </MenuItem>
                     {level?.map((l) => (
                         <MenuItem value={l.name} key={l.id}>
@@ -72,7 +72,7 @@ export default function HeaderSubsystem() {
           <Card></Card>
         </Grid>
         <Grid container spacing={2}>
-          {value === null || value === '' ? (
+          {value === null || value === '' || value === 'Tất Cả' ? (
             <>
               <PrimarySchool />
               <SecondarySchool />

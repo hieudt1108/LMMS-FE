@@ -65,7 +65,7 @@ function getGradebyId(id) {
 
 // LEVEL
 function getAllLevel() {
-  return getApi(`/Level/getAll`);
+  return getApi(`/Level/getAll?page=1&pageSize=10`);
 }
 function getLevelById(id) {
   return getApi(`/Level/getOne/${id}`);

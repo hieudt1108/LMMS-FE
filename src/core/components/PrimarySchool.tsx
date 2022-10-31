@@ -6,7 +6,7 @@ import {
   Typography,
   IconButton,
 } from '@mui/material';
-import { getAllClass } from '../../dataProvider/agent';
+import { getAllGrade } from '../../dataProvider/agent';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { CardHeader, Grid, Card } from '@material-ui/core';
 import Menu from '@mui/material/Menu';
@@ -15,35 +15,27 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useNavigate } from 'react-router-dom';
 import { ROUTER } from '../../Router';
 
-const levels = [
-  { title: 'lớp 1', september: 'Kỳ 1', year: '2021-2022' },
-  { title: 'lớp 2', september: 'Kỳ 1', year: '2021-2022' },
-  { title: 'lớp 3', september: 'Kỳ 1', year: '2021-2022' },
-  { title: 'lớp 4', september: 'Kỳ 1', year: '2021-2022' },
-  { title: 'lớp 5', september: 'Kỳ 1', year: '2021-2022' },
-];
 
 export default function PrimarySchool() {
   const navigate = useNavigate();
-  const [value, setValue] = React.useState(0);
-  const [classes, setClass] = useState([]);
+  const [grade, setGrade] = React.useState<any[]>([]);
 
   useEffect(() => {
-    fetchProgram();
+    fetchGrade();
   }, []);
-  console.log(classes);
-  async function fetchProgram() {
-    const res = await getAllClass();
+
+  async function fetchGrade() {
+    const res = await getAllGrade(1,10,'',6);
+    console.log(res);
     if (res.status < 400) {
-      setClass(res.data.data);
+      setGrade(res.data.data);
     } else {
       console.log('error fetch api');
     }
-    // console.log('data: ', programs);
   }
   return (
     <React.Fragment>
-      {levels?.map((level) => (
+      {grade?.map((g) => (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
           <Card sx={{ maxWidth: 345 }}>
             <CardHeader
@@ -71,18 +63,9 @@ export default function PrimarySchool() {
                   variant='h4'
                   component='div'
                   align='center'
+                  sx={{ml:4}}
                 >
-                  {level.title}
-                </Typography>
-              }
-              subheader={
-                <Typography
-                  gutterBottom
-                  variant='h5'
-                  component='div'
-                  align='center'
-                >
-                  {level.year}
+                  {g.name}
                 </Typography>
               }
             />

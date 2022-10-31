@@ -6,15 +6,31 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { Grid } from '@material-ui/core';
 import PrimarySchool from '../../core/components/PrimarySchool';
 import SecondarySchool from '../../core/components/SecondarySchool';
-
+import {getAllLevel} from '../../dataProvider/agent'
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import {Select} from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
 interface FilmOptionType {
   title: string;
 }
 
 const Subsystem = ['Cấp 1', 'Cấp 2'];
 export default function HeaderSubsystem() {
-  const [value, setValue] = React.useState<string | null>(Subsystem[0]);
-  const [inputValue, setInputValue] = React.useState('');
+  const [value, setValue] = React.useState<string | null>('');
+  const [level, setLevel] = React.useState<any[]>([]);
+    React.useEffect(() => {
+        fetchLevel();
+    }, []);
+
+    async function fetchLevel() {
+        const res = await getAllLevel();
+        if (res.status < 400) {
+            setLevel(res.data.data);
+        } else {
+            console.log('error fetch api');
+        }
+    }
 
   return (
     <React.Fragment>
@@ -28,36 +44,40 @@ export default function HeaderSubsystem() {
                 justifyContent: 'space-between',
               }}
             >
-              <Autocomplete
-                value={value}
-                onChange={(event: any, newValue: string | null) => {
-                  setValue(newValue);
-                }}
-                inputValue={inputValue}
-                onInputChange={(
-                  event: any,
-                  newInputValue: React.SetStateAction<string>
-                ) => {
-                  setInputValue(newInputValue);
-                }}
-                id='controllable-states-demo'
-                options={Subsystem}
-                sx={{ width: 300 }}
-                renderInput={(
-                  params: JSX.IntrinsicAttributes & TextFieldProps
-                ) => <TextField {...params} label='Khối cấp' />}
-              />
+            <FormControl sx={{ m: 1, minWidth: 220 }}>
+                <InputLabel id="demo-simple-select-helper-label">Cấp học</InputLabel>
+                <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={value}
+                    label="Cấp học"
+                    onChange={(e) => {
+                        setValue(e.target.value);
+                    }}
+                >
+                    <MenuItem value={''}>
+                        Tất cả
+                    </MenuItem>
+                    {level?.map((l) => (
+                        <MenuItem value={l.name} key={l.id}>
+                            {l.name}
+                        </MenuItem>
+                    ))}
+
+                </Select>
+            </FormControl>
+
             </CardContent>
           </Card>
           <Card></Card>
         </Grid>
         <Grid container spacing={2}>
-          {value === null ? (
+          {value === null || value === '' ? (
             <>
               <PrimarySchool />
               <SecondarySchool />
             </>
-          ) : value === 'Cấp 1' ? (
+          ) : value === 'Tiểu Học' ? (
             <PrimarySchool />
           ) : (
             <SecondarySchool />

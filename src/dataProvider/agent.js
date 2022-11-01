@@ -76,7 +76,7 @@ function getAllUsers() {
 }
 // PROGRAM
 function getAllProgram() {
-  return getApi('/Program/getAll?page=1&pageSize=5');
+  return getApi('/Program/getAll?page=1&pageSize=10');
 }
 
 // POST API AREA ============================>

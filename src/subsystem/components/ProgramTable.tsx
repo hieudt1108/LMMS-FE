@@ -17,13 +17,14 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Empty from '../../core/components/Empty';
 import * as selectUtils from '../../core/utils/selectUtils';
 import { Program } from '../types/program';
 import { useParams, useNavigate } from 'react-router-dom';
-import {User} from "../../users/types/user";
+import { User } from '../../users/types/user';
+import { deleteProgram } from '../../dataProvider/agent.js';
 
 interface HeadCell {
   id: string;
@@ -70,7 +71,7 @@ function EnhancedTableHead() {
 
 type ProgramRowProps = {
   index: number;
-  onDelete: (programIds: string[]) => void;
+  onDelete: (programIds: any) => void;
   onEdit: (program: Program) => void;
   processing: boolean;
   selected: boolean;
@@ -86,11 +87,22 @@ const ProgramRow = ({
   program,
 }: ProgramRowProps) => {
   const { id } = useParams();
-  let navigate = useNavigate();
+  //console.log('ID: ', program.id);
+  //let navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation();
 
+  const handleDeleteProgram = async (id: any) => {
+    const res = await deleteProgram(id);
+    if (res.status < 400) {
+      //const updatData = prog
+      console.log('delete success');
+      handleCloseActions();
+    } else {
+      console.log('delete fail');
+    }
+  };
   const openActions = Boolean(anchorEl);
 
   const handleOpenActions = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -103,7 +115,8 @@ const ProgramRow = ({
 
   const handleDelete = () => {
     handleCloseActions();
-    onDelete([program.id]);
+    onDelete(program.id);
+    console.log(program.id);
   };
 
   const handleEdit = () => {
@@ -114,7 +127,7 @@ const ProgramRow = ({
   return (
     <TableRow sx={{ '& td': { bgcolor: 'background.paper', border: 0 } }}>
       <TableCell
-          sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}
+        sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography component='div' variant='h6'>
@@ -122,9 +135,7 @@ const ProgramRow = ({
           </Typography>
         </Box>
       </TableCell>
-      <TableCell
-          align='center'
-      >
+      <TableCell align='center'>
         <Box sx={{ alignItems: 'center' }}>
           <Box>
             <Typography component='div' variant='h6'>
@@ -176,7 +187,7 @@ const ProgramRow = ({
             </ListItemIcon>{' '}
             {t('common.edit')}
           </MenuItem>
-          <MenuItem onClick={handleDelete}>
+          <MenuItem onClick={() => handleDeleteProgram(program.id)}>
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>{' '}
@@ -197,19 +208,16 @@ type ProgramTableProps = {
   programs?: Program[];
 };
 
-
 const ProgramTable = ({
-   onDelete,
-   onEdit,
-   onSelectedChange,
-   processing,
-   selected,
-   programs = [],
- }: ProgramTableProps) => {
+  onDelete,
+  onEdit,
+  onSelectedChange,
+  processing,
+  selected,
+  programs = [],
+}: ProgramTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const programtable = programs;
 
   const handleClick = (id: string) => {
     let newSelected: string[] = selectUtils.selectOne(selected, id);
@@ -221,7 +229,7 @@ const ProgramTable = ({
   };
 
   const handleChangeRowsPerPage = (
-      event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -263,13 +271,13 @@ const ProgramTable = ({
         </Table>
       </TableContainer>
       <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component='div'
-          count={programs.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 10, 25]}
+        component='div'
+        count={programs.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </React.Fragment>
   );

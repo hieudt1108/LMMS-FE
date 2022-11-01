@@ -15,7 +15,7 @@ import ClassIcon from '@material-ui/icons/Class';
 import PersonIcon from '@material-ui/icons/Person';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { useTranslation } from 'react-i18next';
-import {NavLink, useNavigate} from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/contexts/AuthProvider';
 import Logo from '../../core/components/Logo';
 import { drawerCollapsedWidth, drawerWidth } from '../../core/config/layout';
@@ -90,12 +90,12 @@ const AdminDrawer = ({
 
   async function fetchProgram() {
     const res = await getAllProgram();
+    console.log('data: ', programs);
     if (res.status < 400) {
       setProgram(res.data.data);
     } else {
       console.log('error fetch api');
     }
-    // console.log('data: ', programs);
   }
 
   const navigate = useNavigate();
@@ -177,10 +177,11 @@ const AdminDrawer = ({
               <AutoStoriesIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText onClick={handleListProgram}
+          <ListItemText
+            onClick={handleListProgram}
             primary={t('admin.drawer.menu.sub-program')}
             sx={{
-              cursor:"pointer",
+              cursor: 'pointer',
               display: collapsed ? 'none' : 'block',
             }}
           />
@@ -193,7 +194,6 @@ const AdminDrawer = ({
                 button
                 component={NavLink}
                 key={'/admin/document'}
-
                 end={true}
                 to={ROUTER.ADMIN_SUBSYSTEM}
               >

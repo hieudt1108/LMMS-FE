@@ -5,16 +5,21 @@ import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 import ProgramTable from '../components/ProgramTable';
 import { Program } from '../types/program';
 import HeaderProgram from '../components/HeaderProgram';
-import { getAllProgram } from '../../dataProvider/agent';
+import { getAllProgram, deleteProgram } from '../../dataProvider/agent';
 import ProgramAddEditDialog from '../components/ProgramCreate';
+import { id } from 'date-fns/locale';
 
 const ProgramManagement = () => {
   const [program, setPrograms] = React.useState([]);
+
+  //console.log(program);
+
   React.useEffect(() => {
     fetchPrograms();
   }, []);
   async function fetchPrograms() {
     const res = await getAllProgram();
+    //console.log(res.data.data[0].id);
     if (res.status < 400) {
       setPrograms(res.data.data);
     } else {
@@ -22,7 +27,10 @@ const ProgramManagement = () => {
     }
   }
 
-  const snackbar = useSnackbar();
+  // async function fetchProgramdele(id: any) {
+  //   const res = await deleteProgram(id);
+  // }
+
   const { t } = useTranslation();
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
   const [openProgramDialog, setOpenProgramDialog] = useState(false);
@@ -42,16 +50,22 @@ const ProgramManagement = () => {
   const { data } = useState('');
   const processing = isAdding || isDeleting || isUpdating;
 
-  const handleDeletePrograms = async () => {
-    setOpenConfirmDeleteDialog(false);
-  };
+  // const handleDeletePrograms = async (pId: any) => {
+  //   const res = await deleteProgram(pId);
+  //   if (res.status < 400) {
+  //     console.log('delete success');
+  //   } else {
+  //     console.log('delete fail');
+  //   }
+  //   setOpenConfirmDeleteDialog(false);
+  // };
 
-  const handleCloseConfirmDeleteDialog = () => {
-    setOpenConfirmDeleteDialog(false);
-  };
+  // const handleCloseConfirmDeleteDialog = () => {
+  //   setOpenConfirmDeleteDialog(false);
+  // };
 
-  const handleOpenConfirmDeleteDialog = (userIds: string[]) => {
-    setProgramDeleted(userIds);
+  const handleOpenConfirmDeleteDialog = (id: string[]) => {
+    setProgramDeleted(id);
     setOpenConfirmDeleteDialog(true);
   };
 
@@ -75,14 +89,14 @@ const ProgramManagement = () => {
         selected={selected}
         programs={program}
       />
-      <ConfirmDialog
+      {/* <ConfirmDialog
         description={t('Bạn có chắc muốn xóa chương trình này không ?')}
         pending={processing}
         onClose={handleCloseConfirmDeleteDialog}
-        onConfirm={handleDeletePrograms}
+        onConfirm={() => handleDeletePrograms(id)}
         open={openConfirmDeleteDialog}
         title={t('common.confirmation')}
-      />
+      /> */}
     </React.Fragment>
   );
 };

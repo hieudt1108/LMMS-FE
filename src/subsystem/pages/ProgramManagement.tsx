@@ -7,6 +7,7 @@ import { Program } from '../types/program';
 import HeaderProgram from '../components/HeaderProgram';
 import { getAllProgram } from '../../dataProvider/agent';
 import { toast } from 'react-toastify';
+import ProgramUpdate from "../components/ProgramUpdate";
 
 const ProgramManagement = () => {
   const [program, setPrograms] = React.useState([]);
@@ -29,7 +30,7 @@ const ProgramManagement = () => {
   // async function fetchProgramdele(id: any) {
   //   const res = await deleteProgram(id);
   // }
-
+  const snackbar = useSnackbar();
   const { t } = useTranslation();
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
   const [openProgramDialog, setOpenProgramDialog] = useState(false);
@@ -54,13 +55,48 @@ const ProgramManagement = () => {
     setOpenConfirmDeleteDialog(true);
   };
 
-  const handleOpenUserDialog = (user?: Program) => {
+  const handleOpenProgramDialog = (user?: Program) => {
     setProgramUpdated(user);
     setOpenProgramDialog(true);
   };
 
+  const handleCloseProgramDialog = () => {
+    setProgramUpdated(undefined);
+    setOpenProgramDialog(false);
+  };
+
   const handleSelectedChange = (newSelected: string[]) => {
     setSelected(newSelected);
+  };
+
+  const handleAddProgram = async (program: Partial<Program>) => {
+    addProgram(program as Program)
+        .then(() => {
+          snackbar.success(
+              t('userManagement.notifications.addSuccess', {
+                program: `${program.name}`,
+              })
+          );
+          setOpenProgramDialog(false);
+        })
+        .catch(() => {
+          snackbar.error(t('common.errors.unexpected.subTitle'));
+        });
+  };
+
+  const handleUpdateProgram = async (program: Program) => {
+    updateProgram(program)
+        .then(() => {
+          snackbar.success(
+              t('userManagement.notifications.updateSuccess', {
+                program: `${program.name}`,
+              })
+          );
+          setOpenProgramDialog(false);
+        })
+        .catch(() => {
+          snackbar.error(t('common.errors.unexpected.subTitle'));
+        });
   };
 
   return (
@@ -69,11 +105,21 @@ const ProgramManagement = () => {
       <ProgramTable
         processing={processing}
         onDelete={handleOpenConfirmDeleteDialog}
-        onEdit={handleOpenUserDialog}
+        onEdit={handleOpenProgramDialog}
         onSelectedChange={handleSelectedChange}
         selected={selected}
         programs={program}
       />
+      {openProgramDialog && (
+          <ProgramUpdate
+              onAdd={handleAddProgram}
+              onClose={handleCloseProgramDialog}
+              onUpdate={handleUpdateProgram}
+              open={openProgramDialog}
+              processing={processing}
+              program={programUpdated}
+          />
+      )}
     </React.Fragment>
   );
 };

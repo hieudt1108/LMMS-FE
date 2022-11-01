@@ -17,6 +17,8 @@ import SwipeableViews from 'react-swipeable-views';
 import ListDocument from '../../document/components/ListDocument';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import MemberHeader from "../components/MemberHeader";
+import MemberTable from "../components/MemberTable";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -84,55 +86,28 @@ const ClassDetail = () => {
           <Typography variant='h1' className='h-75 ml-3 pt-3'>
             1A - Khối 1 - Năm học 2022 - 2023
           </Typography>
-          <Tabs
-            value={value}
-            textColor='secondary'
-            indicatorColor='secondary'
-            onChange={handleChange}
-            aria-label='nav tabs example'
-            centered
-          >
-            <Tab {...a11yProps(0)} label={t('classDetail.titleBar.document')} />
-            <Tab {...a11yProps(1)} label={t('classDetail.titleBar.member')} />
-          </Tabs>
-          <SwipeableViews
-            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-            index={value}
-            onChangeIndex={handleChangeIndex}
-          >
-            <TabPanel value={value} index={0} dir={theme.direction}>
-              <Stack spacing={2} direction='column' justifyContent='flex-end'>
-                <Stack spacing={2} direction='row' justifyContent='flex-end'>
-                  <ClassSelect></ClassSelect>
-                </Stack>
 
-                <Box>
-                  <Grid container spacing={2}>
-                    {Array.from(Array(10)).map((_, index) => (
-                      <Grid item xs={6} md={4} lg={3}>
-                        <Item>
-                          <ListDocument />
-                        </Item>
-                      </Grid>
-                    ))}
-                    ;
-                  </Grid>
-                </Box>
-                <Stack
-                  spacing={2}
-                  direction='row'
-                  justifyContent='flex-end'
-                  alignItems='center'
-                  mt={2}
-                >
-                  <Pagination count={10} color='secondary' size='large' />
-                </Stack>
-              </Stack>
-            </TabPanel>
-            <TabPanel value={value} index={1} dir={theme.direction}>
-              Item Two
-            </TabPanel>
-          </SwipeableViews>
+
+
+            <Stack spacing={2} direction="column" justifyContent="flex-start" mt={2}>
+              <MemberHeader
+                  title={t('classDetail.member.teacher')}
+                  numberMember={12}
+                  titleAction={t('classDetail.action.addTeacher')}
+              ></MemberHeader>
+              <MemberTable></MemberTable>
+            </Stack>
+
+            <Stack sx={{pb:2}} spacing={2} direction="column" justifyContent="flex-start" mt={2}>
+              <MemberHeader
+                  title={t('classDetail.member.student')}
+                  numberMember={12}
+                  titleAction={t('classDetail.action.addStudent')}
+              ></MemberHeader>
+              <MemberTable></MemberTable>
+            </Stack>
+
+
         </Box>
       </Stack>
     </React.Fragment>

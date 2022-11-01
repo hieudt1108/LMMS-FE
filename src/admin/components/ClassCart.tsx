@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import { deepOrange } from '@mui/material/colors';
 import { getAllClass } from '../../dataProvider/agent';
+import {ROUTER} from "../../Router";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -59,11 +60,21 @@ const ClassCart = () => {
     console.log('data: ', res.data.data);
   }
 
+  async function handleClassDetails(e: { preventDefault: () => void }) {
+    e.preventDefault();
+    navigate(ROUTER.ADMIN_CLASS_DETAIL, {
+      state: {
+        id: 1,
+      }
+    })
+  }
+
   return (
     <React.Fragment>
       {classes?.map((c) => (
         <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
           <Card
+            onClick={handleClassDetails}
             elevation={8}
             sx={{
               cursor: 'pointer',

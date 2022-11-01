@@ -78,12 +78,32 @@ const ProgramDialog = ({
   const { t } = useTranslation();
   const editMode = Boolean(program && program.id);
 
-  const initProgram = {
-    name: '',
-    description: '',
+  const handleSubmit = (values: Partial<Program>) => {
+    if (program && program.id) {
+      onUpdate({ ...values, id: program.id } as Program);
+    }else {
+      onAdd(values);
+    }
   };
 
-  const [programData, setProgramData] = useState(initProgram);
+  const formik = useFormik({
+    initialValues: {
+      name: program ? program.name : '',
+      description: program ? program.description : '',
+    },
+    validationSchema: Yup.object({
+      programName: Yup.string()
+          .max(20, t('common.validations.max', { size: 20 }))
+          .required(t('common.validations.required')),
+      description: Yup.string()
+          .max(30, t('common.validations.max', { size: 30 }))
+          .required(t('common.validations.required')),
+    }),
+    onSubmit: handleSubmit,
+  });
+
+
+  const [programData, setProgramData] = useState('');
   function notify(type: string, text: string) {
     if (type === 'success') {
       toast.success(text, {
@@ -154,10 +174,10 @@ const ProgramDialog = ({
                     name='name'
                     autoComplete='family-name'
                     autoFocus
-                    value={programData.name}
-                    onChange={(e) =>
-                      setProgramData({ ...programData, name: e.target.value })
-                    }
+                    value={formik.values.name}
+                    onChange={formik.handleChange}
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
                   />
                 </Grid>
               </Grid>
@@ -177,13 +197,24 @@ const ProgramDialog = ({
                     name='description'
                     autoComplete='family-name'
                     autoFocus
-                    value={programData.description}
-                    onChange={(e) =>
-                      setProgramData({
-                        ...programData,
-                        description: e.target.value,
-                      })
-                    }
+                    value={formik.values.description}
+                    onChange={formik.handleChange}
+                    error={formik.touched.description && Boolean(formik.errors.description)}
+                    helperText={formik.touched.description && formik.errors.description}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} columns={12}>
+                <Grid item xs={4} sx={{ mt: 3.5 }}>
+                  <Typography component='div' variant='h6'>
+                    Vô hiệu hóa
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <FormControlLabel
+                    control={<Android12Switch defaultChecked />}
+                    label=''
+                    sx={{ mt: 3 }}
                   />
                 </Grid>
               </Grid>

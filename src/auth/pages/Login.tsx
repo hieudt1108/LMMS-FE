@@ -16,7 +16,16 @@ import {
   getLocalStorage,
 } from '../../dataProvider/agent.js';
 import { dataLayerPush } from '../../Utils/dataLayerPush.js';
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import {InputAdornment, OutlinedInput} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
+interface State {
+    showPassword: boolean;
+}
 const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -24,6 +33,10 @@ const Login = () => {
     username: '',
     password: '',
   };
+  const [show, setShow] = React.useState<State>({
+      showPassword: false
+  });
+
   const [loginData, setLoginData] = useState(initUser);
   const [error, setError] = useState('');
   async function handleLogin(e: { preventDefault: () => void }) {
@@ -51,6 +64,17 @@ const Login = () => {
     }
     console.log('Data :', res);
   }
+
+    const handleClickShowPassword = () => {
+        setShow({
+            ...show,
+            showPassword: !show.showPassword,
+        });
+    };
+
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
 
   return (
     <Grid container component='main' sx={{ height: '100vh' }}>
@@ -105,7 +129,7 @@ const Login = () => {
               fullWidth
               name='password'
               label={t('auth.login.form.password.label')}
-              type='password'
+              type={show.showPassword ? 'text' : 'password'}
               id='password'
               autoComplete='current-password'
               value={loginData.password}
@@ -115,6 +139,20 @@ const Login = () => {
                   password: e.target.value,
                 })
               }
+              InputProps={{
+                  endAdornment: (
+                      <InputAdornment position="end">
+                          <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                          >
+                              {show.showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                      </InputAdornment>
+                  ),
+              }}
             />
             {error === 'password' && (
               <span style={{ color: 'red' }} className={`  text-danger `}>

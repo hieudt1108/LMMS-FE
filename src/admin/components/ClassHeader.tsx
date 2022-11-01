@@ -18,6 +18,8 @@ import InputLabel from "@mui/material/InputLabel";
 import Select, {SelectChangeEvent} from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import ClassDialog from "./ClassDialog";
+import {useNavigate} from "react-router-dom";
+import {ROUTER} from "../../Router";
 
 
 type HeaderProps = {
@@ -88,6 +90,13 @@ const ClassHeader = ({ title, description }: HeaderProps) => {
   const handleChangeSchoolYear = (event: SelectChangeEvent) => {
     setSchoolYear(event.target.value);
   };
+
+  const navigate = useNavigate();
+
+  async function handleAddClass(e: { preventDefault: () => void }) {
+    e.preventDefault();
+    navigate(ROUTER.ADMIN_ADD_CLASS, { replace: true });
+  }
 
   return (
       <Fragment>

@@ -3,6 +3,7 @@ export const ROUTER = {
 
   ADMIN: `/${process.env.PUBLIC_URL}/admin`,
   ADMIN_CLASS_DETAIL: `/${process.env.PUBLIC_URL}/admin/class/:id`,
+  ADMIN_ADD_CLASS: `/${process.env.PUBLIC_URL}/admin/addclass`,
   ADMIN_PROFILE: `/${process.env.PUBLIC_URL}/admin/profile`,
   ADMIN_DOCUMENT: `/${process.env.PUBLIC_URL}/admin/document`,
   ADMIN_DOUCUMENT_SUBJECT: `/${process.env.PUBLIC_URL}/admin/document/:subjectSlot`,

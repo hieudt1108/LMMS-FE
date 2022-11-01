@@ -204,20 +204,6 @@ const ProgramDialog = ({
                   />
                 </Grid>
               </Grid>
-              <Grid container spacing={2} columns={12}>
-                <Grid item xs={4} sx={{ mt: 3.5 }}>
-                  <Typography component='div' variant='h6'>
-                    Vô hiệu hóa
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <FormControlLabel
-                    control={<Android12Switch defaultChecked />}
-                    label=''
-                    sx={{ mt: 3 }}
-                  />
-                </Grid>
-              </Grid>
             </Box>
           </DialogContent>
           <DialogActions>

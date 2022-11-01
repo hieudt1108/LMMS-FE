@@ -5,7 +5,7 @@ import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 import ProgramTable from '../components/ProgramTable';
 import { Program } from '../types/program';
 import HeaderProgram from '../components/HeaderProgram';
-import { getAllProgram } from '../../dataProvider/agent';
+import { getAllProgram, deleteProgram } from '../../dataProvider/agent';
 import { toast } from 'react-toastify';
 import ProgramUpdate from "../components/ProgramUpdate";
 

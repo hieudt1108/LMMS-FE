@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   CardActionArea,
   CardMedia,
@@ -13,9 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useNavigate } from 'react-router-dom';
 import { ROUTER } from '../../Router';
-import {getAllGrade} from "../../dataProvider/agent";
-
-
+import { getAllGrade } from '../../dataProvider/agent';
 
 export default function SecondarySchool() {
   const navigate = useNavigate();
@@ -27,7 +25,7 @@ export default function SecondarySchool() {
   }, []);
 
   async function fetchGradeSecond() {
-    const res = await getAllGrade(1,10,'',7);
+    const res = await getAllGrade(1, 10, '', 7);
     console.log(res);
     if (res.status < 400) {
       setGrade(res.data.data);
@@ -65,7 +63,7 @@ export default function SecondarySchool() {
                   variant='h4'
                   component='div'
                   align='center'
-                  sx={{ml:4}}
+                  sx={{ ml: 4 }}
                 >
                   {g.name}
                 </Typography>
@@ -73,7 +71,7 @@ export default function SecondarySchool() {
             />
             <CardActionArea
               onClick={() => {
-                navigate(ROUTER.ADMIN_CLASS_DETAIL, {
+                navigate(ROUTER.ADMIN_DOUCUMENT_SUBJECT, {
                   state: {
                     id: 1,
                   },

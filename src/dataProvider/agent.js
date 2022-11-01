@@ -79,6 +79,11 @@ function getAllProgram() {
   return getApi('/Program/getAll?page=1&pageSize=10');
 }
 
+// DDOCUMENT
+function getAllDocument() {
+  return getApi('/Document/getAll?pageIndex=1&pageSize=50');
+}
+
 // POST API AREA ============================>
 function postApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -177,4 +182,5 @@ export {
   deleteProgram,
   updateProgram,
   createProgram,
+  getAllDocument,
 };

@@ -90,7 +90,7 @@ const AdminDrawer = ({
 
   async function fetchProgram() {
     const res = await getAllProgram();
-    console.log('data: ', programs);
+    //console.log('data: ', programs);
     if (res.status < 400) {
       setProgram(res.data.data);
     } else {

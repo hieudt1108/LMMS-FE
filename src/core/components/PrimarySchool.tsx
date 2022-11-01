@@ -15,7 +15,6 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useNavigate } from 'react-router-dom';
 import { ROUTER } from '../../Router';
 
-
 export default function PrimarySchool() {
   const navigate = useNavigate();
   const [grade, setGrade] = React.useState<any[]>([]);
@@ -25,7 +24,7 @@ export default function PrimarySchool() {
   }, []);
 
   async function fetchGrade() {
-    const res = await getAllGrade(1,10,'',6);
+    const res = await getAllGrade(1, 10, '', 6);
     console.log(res);
     if (res.status < 400) {
       setGrade(res.data.data);
@@ -63,7 +62,7 @@ export default function PrimarySchool() {
                   variant='h4'
                   component='div'
                   align='center'
-                  sx={{ml:4}}
+                  sx={{ ml: 4 }}
                 >
                   {g.name}
                 </Typography>
@@ -71,7 +70,7 @@ export default function PrimarySchool() {
             />
             <CardActionArea
               onClick={() => {
-                navigate(ROUTER.ADMIN_CLASS_DETAIL, {
+                navigate(ROUTER.ADMIN_DOUCUMENT_SUBJECT, {
                   state: {
                     id: 1,
                   },

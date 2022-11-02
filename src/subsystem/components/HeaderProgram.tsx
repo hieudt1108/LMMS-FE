@@ -19,7 +19,7 @@ import { Program } from '../types/program';
 import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 import { useNavigate } from 'react-router-dom';
 import { ROUTER } from '../../Router';
-import ProgramAddEditDialog from './ProgramCreate';
+import ProgramAddDialog from './ProgramCreate';
 import {toast, ToastContainer} from "react-toastify";
 
 type HeaderProps = {
@@ -169,7 +169,7 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
         </CardContent>
       </Card>
       {openProgramDialog && (
-        <ProgramAddEditDialog
+        <ProgramAddDialog
           onAdd={handleAddProgram}
           onClose={handleCloseProgramDialog}
           onUpdate={handleUpdateUser}

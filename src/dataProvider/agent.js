@@ -64,7 +64,7 @@ function getGradebyId(id) {
 
 // LEVEL
 function getAllLevel() {
-  return getApi(`/Level/getAll`);
+  return getApi(`/Level/getAll?page=1&pageSize=10`);
 }
 function getLevelById(id) {
   return getApi(`/Level/getOne/${id}`);
@@ -76,6 +76,11 @@ function getAllUsers() {
 // PROGRAM
 function getAllProgram(params) {
   return getApi('/Program/getAll', params);
+}
+
+// DDOCUMENT
+function getAllDocument() {
+  return getApi('/Document/getAll?pageIndex=1&pageSize=50');
 }
 
 // POST API AREA ============================>
@@ -185,4 +190,5 @@ export {
   deleteProgram,
   updateProgram,
   createProgram,
+  getAllDocument,
 };

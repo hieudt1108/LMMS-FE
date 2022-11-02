@@ -17,13 +17,13 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Empty from '../../core/components/Empty';
 import * as selectUtils from '../../core/utils/selectUtils';
 import { Program } from '../types/program';
 import { useParams, useNavigate } from 'react-router-dom';
-import {User} from "../../users/types/user";
+import { deleteProgram } from '../../dataProvider/agent.js';
 
 interface HeadCell {
   id: string;
@@ -70,7 +70,7 @@ function EnhancedTableHead() {
 
 type ProgramRowProps = {
   index: number;
-  onDelete: (programIds: string[]) => void;
+    onDelete: (programIds: any) => void;
   onEdit: (program: Program) => void;
   processing: boolean;
   selected: boolean;
@@ -91,6 +91,17 @@ const ProgramRow = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation();
 
+    const handleDeleteProgram = async (id: any) => {
+        const res = await deleteProgram(id);
+        if (res.status < 400) {
+            //const updatData = prog
+            console.log('delete success');
+            handleCloseActions();
+        } else {
+            console.log('delete fail');
+        }
+    };
+
   const openActions = Boolean(anchorEl);
 
   const handleOpenActions = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -103,13 +114,16 @@ const ProgramRow = ({
 
   const handleDelete = () => {
     handleCloseActions();
-    onDelete([program.id]);
+      onDelete(program.id);
+      console.log(program.id);
   };
 
   const handleEdit = () => {
     handleCloseActions();
-    onEdit(program);
+        onEdit(program);
   };
+
+
 
   return (
     <TableRow sx={{ '& td': { bgcolor: 'background.paper', border: 0 } }}>
@@ -176,7 +190,7 @@ const ProgramRow = ({
             </ListItemIcon>{' '}
             {t('common.edit')}
           </MenuItem>
-          <MenuItem onClick={handleDelete}>
+            <MenuItem onClick={() => handleDeleteProgram(program.id)}>
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>{' '}
@@ -209,7 +223,6 @@ const ProgramTable = ({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const programtable = programs;
 
   const handleClick = (id: string) => {
     let newSelected: string[] = selectUtils.selectOne(selected, id);

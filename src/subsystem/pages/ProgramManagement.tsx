@@ -5,23 +5,31 @@ import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 import ProgramTable from '../components/ProgramTable';
 import { Program } from '../types/program';
 import HeaderProgram from '../components/HeaderProgram';
-import { getAllProgram } from '../../dataProvider/agent';
-import ProgramAddEditDialog from '../components/ProgramCreate';
+import { getAllProgram, deleteProgram } from '../../dataProvider/agent';
+import { toast } from 'react-toastify';
+import ProgramUpdate from "../components/ProgramUpdate";
 
 const ProgramManagement = () => {
   const [program, setPrograms] = React.useState([]);
+
+  //console.log(program);
+
   React.useEffect(() => {
     fetchPrograms();
   }, []);
   async function fetchPrograms() {
     const res = await getAllProgram();
+    //console.log(res.data.data[0].id);
     if (res.status < 400) {
       setPrograms(res.data.data);
     } else {
-      console.log('error');
+      toast.error('Error : ' + res.response.status);
     }
   }
 
+  // async function fetchProgramdele(id: any) {
+  //   const res = await deleteProgram(id);
+  // }
   const snackbar = useSnackbar();
   const { t } = useTranslation();
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
@@ -42,26 +50,53 @@ const ProgramManagement = () => {
   const { data } = useState('');
   const processing = isAdding || isDeleting || isUpdating;
 
-  const handleDeletePrograms = async () => {
-    setOpenConfirmDeleteDialog(false);
-  };
-
-  const handleCloseConfirmDeleteDialog = () => {
-    setOpenConfirmDeleteDialog(false);
-  };
-
-  const handleOpenConfirmDeleteDialog = (userIds: string[]) => {
-    setProgramDeleted(userIds);
+  const handleOpenConfirmDeleteDialog = (id: string[]) => {
+    setProgramDeleted(id);
     setOpenConfirmDeleteDialog(true);
   };
 
-  const handleOpenUserDialog = (user?: Program) => {
+  const handleOpenProgramDialog = (user?: Program) => {
     setProgramUpdated(user);
     setOpenProgramDialog(true);
   };
 
+  const handleCloseProgramDialog = () => {
+    setProgramUpdated(undefined);
+    setOpenProgramDialog(false);
+  };
+
   const handleSelectedChange = (newSelected: string[]) => {
     setSelected(newSelected);
+  };
+
+  const handleAddProgram = async (program: Partial<Program>) => {
+    addProgram(program as Program)
+        .then(() => {
+          snackbar.success(
+              t('userManagement.notifications.addSuccess', {
+                program: `${program.name}`,
+              })
+          );
+          setOpenProgramDialog(false);
+        })
+        .catch(() => {
+          snackbar.error(t('common.errors.unexpected.subTitle'));
+        });
+  };
+
+  const handleUpdateProgram = async (program: Program) => {
+    updateProgram(program)
+        .then(() => {
+          snackbar.success(
+              t('userManagement.notifications.updateSuccess', {
+                program: `${program.name}`,
+              })
+          );
+          setOpenProgramDialog(false);
+        })
+        .catch(() => {
+          snackbar.error(t('common.errors.unexpected.subTitle'));
+        });
   };
 
   return (
@@ -70,19 +105,21 @@ const ProgramManagement = () => {
       <ProgramTable
         processing={processing}
         onDelete={handleOpenConfirmDeleteDialog}
-        onEdit={handleOpenUserDialog}
+        onEdit={handleOpenProgramDialog}
         onSelectedChange={handleSelectedChange}
         selected={selected}
         programs={program}
       />
-      <ConfirmDialog
-        description={t('Bạn có chắc muốn xóa chương trình này không ?')}
-        pending={processing}
-        onClose={handleCloseConfirmDeleteDialog}
-        onConfirm={handleDeletePrograms}
-        open={openConfirmDeleteDialog}
-        title={t('common.confirmation')}
-      />
+      {openProgramDialog && (
+          <ProgramUpdate
+              onAdd={handleAddProgram}
+              onClose={handleCloseProgramDialog}
+              onUpdate={handleUpdateProgram}
+              open={openProgramDialog}
+              processing={processing}
+              program={programUpdated}
+          />
+      )}
     </React.Fragment>
   );
 };

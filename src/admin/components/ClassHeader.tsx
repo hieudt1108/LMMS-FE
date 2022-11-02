@@ -21,6 +21,8 @@ import ClassDialog from './ClassDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert, IconButton, Modal, Paper, TextField } from '@mui/material';
 import { LoadingButton } from '@material-ui/lab';
+import { useNavigate } from 'react-router';
+import { ROUTER } from '../../Router';
 
 type HeaderProps = {
   title: string;
@@ -100,6 +102,13 @@ const ClassHeader = ({ title, description, data }: HeaderProps) => {
   const handleChangeSchoolYear = (event: SelectChangeEvent) => {
     setSchoolYear(event.target.value);
   };
+
+  const navigate = useNavigate();
+
+  async function handleAddClass(e: { preventDefault: () => void }) {
+    e.preventDefault();
+    navigate(ROUTER.ADMIN_ADD_CLASS, { replace: true });
+  }
 
   return (
     <Fragment>

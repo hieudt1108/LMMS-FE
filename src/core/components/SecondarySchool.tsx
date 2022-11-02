@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   CardActionArea,
   CardMedia,
@@ -13,21 +13,29 @@ import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { useNavigate } from 'react-router-dom';
 import { ROUTER } from '../../Router';
-
-const levels = [
-  { title: 'lớp 6', september: 'Kỳ 1', year: '2021-2022' },
-  { title: 'lớp 7', september: 'Kỳ 1', year: '2021-2022' },
-  { title: 'lớp 8', september: 'Kỳ 1', year: '2021-2022' },
-  { title: 'lớp 9', september: 'Kỳ 1', year: '2021-2022' },
-];
+import { getAllGrade } from '../../dataProvider/agent';
 
 export default function SecondarySchool() {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
+  const [grade, setGrade] = React.useState<any[]>([]);
 
+  useEffect(() => {
+    fetchGradeSecond();
+  }, []);
+
+  async function fetchGradeSecond() {
+    const res = await getAllGrade({ page: 1, pageSize: 10, levelId: 7 });
+    console.log(res);
+    if (res.status < 400) {
+      setGrade(res.data.data);
+    } else {
+      console.log('error fetch api');
+    }
+  }
   return (
     <React.Fragment>
-      {levels?.map((level) => (
+      {grade?.map((g) => (
         <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
           <Card sx={{ maxWidth: 345 }}>
             <CardHeader
@@ -55,24 +63,15 @@ export default function SecondarySchool() {
                   variant='h4'
                   component='div'
                   align='center'
+                  sx={{ ml: 4 }}
                 >
-                  {level.title}
-                </Typography>
-              }
-              subheader={
-                <Typography
-                  gutterBottom
-                  variant='h5'
-                  component='div'
-                  align='center'
-                >
-                  {level.year}
+                  {g.name}
                 </Typography>
               }
             />
             <CardActionArea
               onClick={() => {
-                navigate(ROUTER.ADMIN_CLASS_DETAIL, {
+                navigate(ROUTER.ADMIN_DOUCUMENT_SUBJECT, {
                   state: {
                     id: 1,
                   },

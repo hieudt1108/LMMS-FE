@@ -60,6 +60,7 @@ const AppRoutes = () => {
           element={<ViewDocumentDetail />}
         />
         <Route path='/classes' element={<Classes />} />
+
         <Route path='/class/:id' element={<ClassDetail />} />
         <Route path='dashboard' element={<Dashboard />} />
         <Route path='/user-management' element={<UserManagement />} />

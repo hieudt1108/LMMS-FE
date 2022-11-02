@@ -12,6 +12,8 @@ import { getAllDocument } from '../../dataProvider/agent';
 import { toast } from 'react-toastify';
 import HeaderListDocument from './HeaderSysllabusDetail';
 import { experimentalStyled as styled } from '@mui/material/styles';
+import { uploadFile, saveDocument } from '../../dataProvider/agent';
+import { object } from 'yup';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -37,15 +39,34 @@ export default function ListDocument() {
       toast.error('Error : ' + res.response.status);
     }
   }
+
+  const fetchUploadFiles = async (files: any) => {
+    let formData = new FormData();
+    for (const key of Object.keys(files)) {
+      formData.append('contentType', files[key], files[key].fileName);
+    }
+    let res = await uploadFile(formData);
+    if (res.status < 400) {
+      setDocuments([...documents, ...res.data.data]);
+      toast.success('Đã up file thành công');
+    } else {
+      toast.error('Đã up file thất bại ' + res.response.status);
+    }
+  };
   return (
     <>
       <Grid item xs={12} md={12} lg={12} mb={1}>
         <HeaderListDocument />
       </Grid>
-      <Box style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Box style={{ display: 'flex', justifyContent: 'flex-end' }} mb={2}>
         <Button variant='contained' component='label' size='small'>
           Upload
-          <input hidden accept='image/*' multiple type='file' />
+          <input
+            onChange={(e) => fetchUploadFiles(e.target.files)}
+            hidden
+            multiple
+            type='file'
+          />
         </Button>
       </Box>
 

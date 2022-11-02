@@ -126,6 +126,15 @@ const createUserAuth = (payload) => {
   return postApi('Auth/registerSingleUser', payload);
 };
 
+// UPLOAD FILE
+const uploadFile = (payload) => {
+  return postApi('/File/uploadFile', payload);
+};
+
+const saveDocument = () => {
+  return postApi('Document');
+};
+
 // DELETE API AREA ============================>
 function deleteApi(url) {
   const token = getLocalStorage('access_token');
@@ -183,4 +192,6 @@ export {
   updateProgram,
   createProgram,
   getAllDocument,
+  uploadFile,
+  saveDocument,
 };

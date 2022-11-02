@@ -24,6 +24,8 @@ import * as selectUtils from '../../core/utils/selectUtils';
 import { Program } from '../types/program';
 import { useParams, useNavigate } from 'react-router-dom';
 import { deleteProgram } from '../../dataProvider/agent.js';
+import ConfirmDialog from "../../core/components/ConfirmDialog";
+import {useSnackbar} from "../../core/contexts/SnackbarProvider";
 
 interface HeadCell {
   id: string;
@@ -70,7 +72,7 @@ function EnhancedTableHead() {
 
 type ProgramRowProps = {
   index: number;
-    onDelete: (programIds: any) => void;
+    onDelete: (programIds: string[]) => void;
   onEdit: (program: Program) => void;
   processing: boolean;
   selected: boolean;
@@ -85,23 +87,8 @@ const ProgramRow = ({
   selected,
   program,
 }: ProgramRowProps) => {
-  const { id } = useParams();
-  let navigate = useNavigate();
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation();
-
-    const handleDeleteProgram = async (id: any) => {
-        const res = await deleteProgram(id);
-        if (res.status < 400) {
-            //const updatData = prog
-            console.log('delete success');
-            handleCloseActions();
-        } else {
-            console.log('delete fail');
-        }
-    };
-
   const openActions = Boolean(anchorEl);
 
   const handleOpenActions = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -114,16 +101,13 @@ const ProgramRow = ({
 
   const handleDelete = () => {
     handleCloseActions();
-      onDelete(program.id);
-      console.log(program.id);
+    onDelete([program.id]);
   };
 
   const handleEdit = () => {
     handleCloseActions();
         onEdit(program);
   };
-
-
 
   return (
     <TableRow sx={{ '& td': { bgcolor: 'background.paper', border: 0 } }}>
@@ -190,7 +174,7 @@ const ProgramRow = ({
             </ListItemIcon>{' '}
             {t('common.edit')}
           </MenuItem>
-            <MenuItem onClick={() => handleDeleteProgram(program.id)}>
+            <MenuItem onClick={handleDelete}>
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>{' '}
@@ -222,7 +206,6 @@ const ProgramTable = ({
  }: ProgramTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
 
   const handleClick = (id: string) => {
     let newSelected: string[] = selectUtils.selectOne(selected, id);

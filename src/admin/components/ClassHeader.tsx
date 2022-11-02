@@ -100,7 +100,7 @@ const ClassHeader = ({ title, description }: HeaderProps) => {
 
   return (
       <Fragment>
-        <Card>
+        <Card sx={{boxShadow: '-8px 0 0 -4px lightblue'}}>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>

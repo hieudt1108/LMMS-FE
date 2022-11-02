@@ -14,6 +14,7 @@ import HeaderListDocument from './HeaderSysllabusDetail';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import { uploadFile, saveDocument } from '../../dataProvider/agent';
 import { object } from 'yup';
+import ButtonClone from './ButtonClone';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -42,10 +43,10 @@ export default function ListDocument() {
 
   const fetchUploadFiles = async (files: any) => {
     let formData = new FormData();
-    for (const key of Object.keys(files)) {
-      formData.append('contentType', files[key], files[key].fileName);
-    }
-    let res = await uploadFile(formData);
+    // for (const key of Object.keys(files)) {
+    //   formData.append('contentType', files[key], files[key].fileName);
+    // }
+    let res = await uploadFile(formData.append('file', files[0]));
     if (res.status < 400) {
       setDocuments([...documents, ...res.data.data]);
       toast.success('Đã up file thành công');
@@ -59,7 +60,7 @@ export default function ListDocument() {
         <HeaderListDocument />
       </Grid>
       <Box style={{ display: 'flex', justifyContent: 'flex-end' }} mb={2}>
-        <Button variant='contained' component='label' size='small'>
+        {/* <Button variant='contained' component='label' size='small'>
           Upload
           <input
             onChange={(e) => fetchUploadFiles(e.target.files)}
@@ -67,7 +68,8 @@ export default function ListDocument() {
             multiple
             type='file'
           />
-        </Button>
+        </Button> */}
+        <ButtonClone></ButtonClone>
       </Box>
 
       <Grid container spacing={2}>

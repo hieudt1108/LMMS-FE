@@ -33,31 +33,30 @@ const getLocalStorage = (key) => {
 };
 
 // GET API AREA ============================>
-function getApi(url) {
+function getApi(url, params) {
   const token = getLocalStorage('access_token');
   return instance
     .get(url, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no auth',
       },
+      params: params,
     })
     .then((res) => res)
     .catch((err) => err);
 }
 
 // CLASS
-function getAllClass() {
-  return getApi('/Class/getAll?pageIndex=1&pageSize=10');
+function getAllClass(params) {
+  return getApi('/Class/getAll', params);
 }
 function getClassbyId(id) {
   return getApi(`/Class/getOne/${id}`);
 }
 
 // GRADE
-function getAllGrade(page, pageSize, searchByName, levelId) {
-  return getApi(
-    `/Grade/getAll?page=${page}&pageSize=${pageSize}&searchByName=${searchByName}&levelId=${levelId}`
-  );
+function getAllGrade(params) {
+  return getApi(`/Grade/getAll`, params);
 }
 function getGradebyId(id) {
   return getApi(`/Grade/getOne/${id}`);
@@ -75,8 +74,8 @@ function getAllUsers() {
   return getApi('/User/getAll');
 }
 // PROGRAM
-function getAllProgram() {
-  return getApi('/Program/getAll?page=1&pageSize=5');
+function getAllProgram(params) {
+  return getApi('/Program/getAll', params);
 }
 
 // POST API AREA ============================>
@@ -157,6 +156,15 @@ const updateProgram = (id, payload) => {
   return putApi(`Program/${id}`, payload);
 };
 //export api here
+
+function addParameter(url, params) {
+  if (url)
+    Object.keys(params).forEach(function (key, index) {
+      if (params[key]) {
+        url = url.concat(`params[key]`);
+      }
+    });
+}
 
 export {
   setLocalStorage,

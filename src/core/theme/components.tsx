@@ -1,4 +1,4 @@
-import { Theme } from "@material-ui/core";
+import {Theme} from "@material-ui/core";
 import CheckCircle from "@material-ui/icons/CheckCircle";
 import RadioButtonUnchecked from "@material-ui/icons/RadioButtonUnchecked";
 import RemoveCircle from "@material-ui/icons/RemoveCircle";
@@ -102,9 +102,9 @@ export const createThemeComponents = (theme: Theme) => ({
   },
   MuiCheckbox: {
     defaultProps: {
-      checkedIcon: <CheckCircle />,
-      indeterminateIcon: <RemoveCircle />,
-      icon: <RadioButtonUnchecked />,
+      checkedIcon: <CheckCircle/>,
+      indeterminateIcon: <RemoveCircle/>,
+      icon: <RadioButtonUnchecked/>,
     },
   },
   MuiChip: {

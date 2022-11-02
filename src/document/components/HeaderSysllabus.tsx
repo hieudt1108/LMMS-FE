@@ -15,44 +15,44 @@ export default function Headersubjetc() {
   const [value, setValue] = React.useState<string | null>(options[0]);
   const [inputValue, setInputValue] = React.useState('');
   return (
-    <React.Fragment>
-      <Card sx={{ mb: 2 }}>
-        <CardContent
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Box>
-            <Typography component='div' variant='h4'>
-              Đề cương học môn toán
-            </Typography>
-            <Typography variant='body2' color='textSecondary' component='div'>
-              Chương trình: Hệ thường
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant='body2' color='textSecondary' component='div'>
-              1. Listen and read.
-            </Typography>
-          </Box>
-          <Autocomplete
-            value={value}
-            onChange={(event: any, newValue: string | null) => {
-              setValue(newValue);
-            }}
-            inputValue={inputValue}
-            onInputChange={(event, newInputValue) => {
-              setInputValue(newInputValue);
-            }}
-            id='controllable-states-demo'
-            options={options}
-            sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label='Subject' />}
-          />
-        </CardContent>
-      </Card>
-    </React.Fragment>
+      <React.Fragment>
+        <Card sx={{boxShadow: '-8px 0 0 -4px #747af2', mb: 2}}>
+          <CardContent
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+          >
+            <Box>
+              <Typography component='div' variant='h4'>
+                Đề cương học môn toán
+              </Typography>
+              <Typography variant='body2' color='textSecondary' component='div'>
+                Chương trình: Hệ thường
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant='body2' color='textSecondary' component='div'>
+                1. Listen and read.
+              </Typography>
+            </Box>
+            <Autocomplete
+                value={value}
+                onChange={(event: any, newValue: string | null) => {
+                  setValue(newValue);
+                }}
+                inputValue={inputValue}
+                onInputChange={(event, newInputValue) => {
+                  setInputValue(newInputValue);
+                }}
+                id='controllable-states-demo'
+                options={options}
+                sx={{width: 300}}
+                renderInput={(params) => <TextField {...params} label='Subject'/>}
+            />
+          </CardContent>
+        </Card>
+      </React.Fragment>
   );
 }

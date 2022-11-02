@@ -1,4 +1,5 @@
-import { PaletteMode } from "@material-ui/core";
+import {PaletteMode} from "@material-ui/core";
+import typography from "./typography";
 
 const palette = {
   grey: {
@@ -13,6 +14,9 @@ const palette = {
     "800": "#37474F",
     "900": "#263238",
   },
+  black : {
+    "50":'#090909'
+  }
 };
 
 export const darkPalette = {
@@ -79,8 +83,8 @@ export const lightPalette = {
   },
   text: {
     primary: palette.grey[700],
-    secondary: palette.grey[500],
-    disabled: palette.grey[300],
+    secondary: palette.black[50],
+    disabled: palette.black[50],
   },
   divider: palette.grey[100],
   background: {
@@ -89,6 +93,6 @@ export const lightPalette = {
   },
   action: {
     selectedOpacity: 0,
-    selected: palette.grey[50],
+    selected: '#202534',
   },
 };

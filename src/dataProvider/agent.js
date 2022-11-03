@@ -85,12 +85,13 @@ function getAllDocument() {
 }
 
 // POST API AREA ============================>
-function postApi(url, payload) {
+function postApi(url, payload, file) {
   const token = getLocalStorage('access_token');
   return instance
     .post(`/${url}`, payload, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no-author',
+        'content-type': file ? 'multipart/form-data' : 'application/json',
       },
     })
     .then((res) => res)
@@ -114,6 +115,10 @@ const postGrade = () => {
 // LEVEL
 const postLevel = () => {
   return postApi('Level');
+};
+
+const postFile = (payload) => {
+  return postApi('File/UploadFile', payload, 1);
 };
 
 // Program
@@ -194,4 +199,5 @@ export {
   getAllDocument,
   uploadFile,
   saveDocument,
+  postFile,
 };

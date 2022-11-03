@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
+import { postFile } from '../../dataProvider/agent';
 
 function ButtonClone() {
   const [file, setFile] = useState(null);
@@ -12,22 +13,18 @@ function ButtonClone() {
     //if await is removed, console log will be called before the uploadFile() is executed completely.
     //since the await is added, this will pause here then console log will be called
     let res = await uploadFile(file);
-    console.log(res.data);
+    console.log(res);
   };
 
   const uploadFile = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
 
-    return await axios.post(UPLOAD_ENDPOINT, formData, {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    });
+    return await postFile(formData);
   };
 
   const handleOnChange = (e) => {
-    console.log(e.target.files[0]);
+    console.log('handleOnChange', e.target.files[0]);
     setFile(e.target.files[0]);
   };
 

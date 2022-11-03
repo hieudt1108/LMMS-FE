@@ -59,11 +59,11 @@ const ClassCart = ({ data }: ClassCartProps) => {
   async function handleClassDetails(e: { preventDefault: () => void }) {
     e.preventDefault();
     console.log('handleClassDetails', e);
-    // navigate(ROUTER.ADMIN_CLASS_DETAIL, {
-    //   state: {
-    //     id: 1,
-    //   },
-    // });
+    navigate(ROUTER.ADMIN_CLASS_DETAIL, {
+      state: {
+        id: 1,
+      },
+    });
   }
   return (
     <React.Fragment>

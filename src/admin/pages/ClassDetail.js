@@ -59,12 +59,11 @@ const Item = styled(Paper)(({ theme }) => ({
 const ClassDetail = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  let { id } = useParams();
   let location = useLocation();
   const [value, setValue] = React.useState(0);
 
   const theme = useTheme();
-  console.log('ClassDetail:', id, location);
+  console.log('ClassDetail:', location);
   const handleChange = (newValue) => {
     setValue(newValue);
   };

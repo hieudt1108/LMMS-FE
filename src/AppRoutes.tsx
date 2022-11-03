@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROUTER } from './Router';
 import PrivateRoute from './core/components/PrivateRoute';
 import ProtectedRoute from './core/components/ProtectedRoute.js';
+import { ClassSubject } from './admin/pages/ClassSubject';
 // Admin
 const Dashboard = lazy(() => import('./admin/pages/Dashboard'));
 
@@ -61,11 +62,15 @@ const AppRoutes = () => {
         />
         <Route path='/classes' element={<Classes />} />
 
-        <Route path='/class/:id' element={<ClassDetail />} />
+        <Route
+          path='/class/:class_id/subject/:subject_id'
+          element={<ClassDetail />}
+        />
+        <Route path='/class/:class_id/subject' element={<ClassSubject />} />
         <Route path='dashboard' element={<Dashboard />} />
         <Route path='/user-management' element={<UserManagement />} />
-        <Route path='/adduser' element={<AddUser />} />
-        <Route path='/edituser' element={<EditUser />} />
+        <Route path='/add-user' element={<AddUser />} />
+        <Route path='/edit-user' element={<EditUser />} />
         <Route path='profile' element={<Profile />}>
           <Route path='/' element={<ProfileInformation />} />
           <Route path='password' element={<ProfilePassword />} />

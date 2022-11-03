@@ -51,11 +51,10 @@ function stringAvatar(name) {
 
 const ClassCart = ({ data }) => {
   const navigate = useNavigate();
-  const [value, setValue] = React.useState(0);
   const handleClassDetails = useCallback((classId) => {
-    navigate(ROUTER.ADMIN_CLASS_DETAIL, {
+    navigate(ROUTER.ADMIN_CLASS_SUBJECT, {
       state: {
-        id: classId,
+        class_id: classId,
       },
     });
   }, []);

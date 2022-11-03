@@ -139,7 +139,7 @@ export default function Document() {
                       <Button
                         color='secondary'
                         component={RouterLink}
-                        to={ROUTER.ADMIN_DOUCUMENT_SUBJECT}
+                        to={ROUTER.ADMIN_DOCUMENT_SUBJECT}
                         variant='contained'
                       >
                         Document

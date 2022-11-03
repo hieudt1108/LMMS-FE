@@ -76,7 +76,7 @@ export default function ListDocument() {
                   <Button
                     size='large'
                     component={RouterLink}
-                    to={ROUTER.ADMIN_DOUCUMENT_SUBJECT_DETAIL}
+                    to={ROUTER.ADMIN_DOCUMENT_SUBJECT_DETAIL}
                   >
                     View
                   </Button>

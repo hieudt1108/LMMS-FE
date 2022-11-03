@@ -106,8 +106,25 @@ const AdminDrawer = ({
   }
 
   const drawer = (
+      // <Box className="navbar" sx={{
+      //   display: 'flex', flexDirection: 'column', minHeight: '100%'
+      // }}>
       <Box className="navbar" sx={{
-        display: 'flex', flexDirection: 'column', minHeight: '100%'
+        display: 'flex', flexDirection: 'column', minHeight: '100%',
+        overflow: "auto",
+        scrollbarWidth: 'thin',
+        '&::-webkit-scrollbar': {
+          width: '0.4em',
+        },
+        '&::-webkit-scrollbar-track': {
+          background: "#f1f1f1",
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: '#212736',
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+          background: '#181c26'
+        }
       }}>
         <Logo style={{marginLeft: 60}} sx={{display: 'flex', p: 4}}/>
         <List component='nav' sx={{px: 2}}>

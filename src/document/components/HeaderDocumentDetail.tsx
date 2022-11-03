@@ -40,7 +40,7 @@ const SearchIconWrapper = styled('div')(({theme}) => ({
   alignItems: 'center',
   justifyContent: 'center',
 }));
-
+ 
 const StyledInputBase = styled(InputBase)(({theme}) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {

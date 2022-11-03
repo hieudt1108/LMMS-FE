@@ -49,16 +49,6 @@ const UserManagement = () => {
 
   const handleDeleteUsers = async () => {
     setOpenConfirmDeleteDialog(false);
-    // deleteUsers(userDeleted)
-    //   .then(() => {
-    //     snackbar.success(t('userManagement.notifications.deleteSuccess'));
-    //     setSelected([]);
-    //     setUserDeleted([]);
-    //     setOpenConfirmDeleteDialog(false);
-    //   })
-    //   .catch(() => {
-    //     snackbar.error(t('common.errors.unexpected.subTitle'));
-    //   });
   };
 
   // const handleCancelSelected = () => {

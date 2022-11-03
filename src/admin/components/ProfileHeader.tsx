@@ -28,7 +28,7 @@ const ProfileHeader = ({ title }: HeaderProps) => {
 
   return (
     <React.Fragment>
-      <Card sx={{ mb: 2 }}>
+      <Card sx={{ mb: 2,boxShadow: '-8px 0 0 -4px #747af2' }}>
         <CardContent
           sx={{
             display: "flex",

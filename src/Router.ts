@@ -2,6 +2,7 @@ export const ROUTER = {
   UNDER_CONSTRUCTION: `/${process.env.PUBLIC_URL}/under-construction`,
 
   ADMIN: `/${process.env.PUBLIC_URL}/admin`,
+  ADMIN_CLASS: `/${process.env.PUBLIC_URL}/admin/classes`,
   ADMIN_CLASS_DETAIL: `/${process.env.PUBLIC_URL}/admin/class/:id`,
   ADMIN_ADD_CLASS: `/${process.env.PUBLIC_URL}/admin/addclass`,
   ADMIN_PROFILE: `/${process.env.PUBLIC_URL}/admin/profile`,

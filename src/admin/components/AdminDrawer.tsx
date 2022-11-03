@@ -12,6 +12,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PeopleIcon from '@material-ui/icons/People';
 import ClassIcon from '@material-ui/icons/Class';
+import SettingsSystemDaydreamIcon from '@mui/icons-material/SettingsSystemDaydream';
 import PersonIcon from '@material-ui/icons/Person';
 import SettingsIcon from '@material-ui/icons/Settings';
 import {useTranslation} from 'react-i18next';
@@ -25,6 +26,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import {getAllProgram} from '../../dataProvider/agent';
+import {ListItemButton} from "@mui/material";
 
 type AdminDrawerProps = {
   collapsed: boolean;
@@ -84,12 +86,18 @@ const AdminDrawer = ({
     setOpen(!open);
   };
 
+    const [openSystem, setOpenSystem] = React.useState(false);
+
+    const handleClickSystem = () => {
+        setOpenSystem(!openSystem);
+    };
+
   React.useEffect(() => {
     fetchProgram();
   }, []);
 
   async function fetchProgram() {
-    const res = await getAllProgram();
+    const res = await getAllProgram({ pageIndex: 1, pageSize: 10 });
     //console.log('data: ', programs);
     if (res.status < 400) {
       setProgram(res.data.data);
@@ -106,9 +114,6 @@ const AdminDrawer = ({
   }
 
   const drawer = (
-      // <Box className="navbar" sx={{
-      //   display: 'flex', flexDirection: 'column', minHeight: '100%'
-      // }}>
       <Box className="navbar" sx={{
         display: 'flex', flexDirection: 'column', minHeight: '100%',
         overflow: "auto",
@@ -259,27 +264,69 @@ const AdminDrawer = ({
                 }}
             />
           </ListItem>
-          <ListItem
-              button
-              component={NavLink}
-              key={'/admin/user-management'}
-              activeClassName='selectItemMenuBar'
-              end={true}
-              to={`/${process.env.PUBLIC_URL}${'/admin/user-management'}`}
-          >
-            <ListItemAvatar>
-              <Avatar sx={{color: 'white', bgcolor: 'transparent'}}>
-                <PeopleIcon/>
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-                primary={t('admin.drawer.menu.userManagement')}
-                sx={{
-                  display: collapsed ? 'none' : 'block',
-                  color: 'white'
-                }}
-            />
-          </ListItem>
+
+            <ListItemButton onClick={handleClickSystem}>
+                <ListItemAvatar>
+                    <Avatar sx={{color: 'white', bgcolor: 'transparent'}}>
+                        <SettingsSystemDaydreamIcon/>
+                    </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                    primary={'Cấu hình hệ thống'}
+                    sx={{
+                        cursor: 'pointer',
+                        display: collapsed ? 'none' : 'block',
+                        color: 'white'
+                    }}
+                />
+                {openSystem ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={openSystem} timeout="auto" unmountOnExit>
+                <List component='nav' sx={{px: 2}}>
+                    <ListItem
+                        button
+                        component={NavLink}
+                        key={'/admin/user-management'}
+                        activeClassName='selectItemMenuBar'
+                        end={true}
+                        to={`/${process.env.PUBLIC_URL}${'/admin/user-management'}`}
+                    >
+                        <ListItemAvatar>
+                            <Avatar sx={{color: 'white', bgcolor: 'transparent'}}>
+                                <PeopleIcon/>
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={t('admin.drawer.menu.userManagement')}
+                            sx={{
+                                display: collapsed ? 'none' : 'block',
+                                color: 'white'
+                            }}
+                        />
+                    </ListItem>
+                    <ListItem
+                        button
+                        component={NavLink}
+                        key={'/admin/program'}
+                        activeClassName='selectItemMenuBar'
+                        end={true}
+                        to={`/${process.env.PUBLIC_URL}${'/admin/program'}`}
+                    >
+                        <ListItemAvatar>
+                            <Avatar sx={{color: 'white', bgcolor: 'transparent'}}>
+                                <AutoStoriesIcon/>
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={t('admin.drawer.menu.sub-program')}
+                            sx={{
+                                display: collapsed ? 'none' : 'block',
+                                color: 'white'
+                            }}
+                        />
+                    </ListItem>
+                </List>
+            </Collapse>
           <ListItem
               button
               component={NavLink}
@@ -303,29 +350,14 @@ const AdminDrawer = ({
           </ListItem>
         </List>
         <Box sx={{flexGrow: 1}}/>
-        <List component='nav' sx={{p: 2}}>
-          <ListItem button onClick={onSettingsToggle}>
-            <ListItemAvatar>
-              <Avatar>
-                <SettingsIcon/>
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-                primary={t('admin.drawer.menu.settings')}
-                sx={{
-                  display: collapsed ? 'none' : 'block',
-                  color: 'white'
-                }}
-            />
-          </ListItem>
-        </List>
       </Box>
   );
 
   return (
       <Box
           aria-label='Admin drawer'
-          component='nav'
+          // component='nav'
+          className="navbar"
           sx={{
             width: {lg: width},
             flexShrink: {lg: 0},

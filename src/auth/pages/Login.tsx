@@ -93,12 +93,14 @@ const Login = () => {
           backgroundPosition: 'center',
         }}
       />
+
       <Grid item xs={12} sm={8} md={5} component={Paper} square>
         <BoxedLayout>
           <Typography component='h1' variant='h5'>
             {t('auth.login.title')}
           </Typography>
-          <Box component='form' marginTop={3} noValidate onSubmit={handleLogin}>
+            {/*<form onSubmit={handleLogin}>*/}
+          <Box component='form' marginTop={3} onSubmit={handleLogin} noValidate >
             <TextField
               margin='normal'
               variant='filled'
@@ -169,6 +171,7 @@ const Login = () => {
               </Link>
             </Box>
             <LoadingButton
+              onSubmit={handleLogin}
               type='submit'
               fullWidth
               variant='contained'
@@ -182,8 +185,10 @@ const Login = () => {
               </span>
             )}
           </Box>
+            {/*</form>*/}
         </BoxedLayout>
       </Grid>
+
     </Grid>
   );
 };

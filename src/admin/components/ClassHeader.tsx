@@ -17,7 +17,6 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import ClassDialog from './ClassDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Alert, IconButton, Modal, Paper, TextField} from '@mui/material';
 import {LoadingButton} from '@material-ui/lab';
@@ -236,10 +235,11 @@ const ClassHeader = ({title, description, data}: HeaderProps) => {
                               autoFocus
                           />
                         </Grid>
-                        <Grid item md={4} xs={12}>
+                        <Grid item md={5} xs={12}>
                           <Typography>Tên</Typography>
                           <TextField
                               margin='normal'
+                              fullWidth
                               required
                               id='name'
                               label={'Tên Lớp'}
@@ -308,7 +308,7 @@ const ClassHeader = ({title, description, data}: HeaderProps) => {
                           type='submit'
                           variant='contained'
                       >
-                        {t('common.createClass')}
+                        {t('common.createclass')}
                       </LoadingButton>
                     </Grid>
                   </BoxCreateClass>

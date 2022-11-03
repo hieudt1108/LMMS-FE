@@ -56,26 +56,25 @@ type ClassCartProps = {
 const ClassCart = ({ data }: ClassCartProps) => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
+
   async function handleClassDetails(e: { preventDefault: () => void }) {
     e.preventDefault();
     console.log('handleClassDetails', e);
-    // navigate(ROUTER.ADMIN_CLASS_DETAIL, {
-    //   state: {
-    //     id: 1,
-    //   },
-    // });
+    navigate(ROUTER.ADMIN_CLASS_DETAIL, {
+      state: {
+        id: 1,
+      },
+    });
   }
   return (
     <React.Fragment>
       {data.length ? (
         data.map((obj: any, index: any) => (
-          <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
+          <Grid item xs={12} sm={12} md={6} lg={4} xl={4} key={index}>
             <Card
               elevation={8}
               sx={{
-                width: '408px',
                 cursor: 'pointer',
-                height: '170px',
                 ':hover': { boxShadow: '0 0 0 1px #03a5fc' },
               }}
               accessKey={'thongchu'}

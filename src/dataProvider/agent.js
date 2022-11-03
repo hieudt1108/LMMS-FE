@@ -143,6 +143,10 @@ function deleteApi(url) {
 const deleteProgram = (id) => {
   return deleteApi(`Program/${id}`);
 };
+// USER
+const deleteUser = (id) => {
+  return deleteApi(`User/${id}`);
+};
 // PUT API AREA ============================>
 function putApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -179,6 +183,7 @@ export {
   getClassbyId,
   getAllGrade,
   getAllUsers,
+  deleteUser,
   createUserAuth,
   getGradebyId,
   postClass,

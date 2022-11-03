@@ -40,7 +40,7 @@ const ProgramManagement = () => {
     },  );
 
   async function fetchPrograms() {
-    const res = await getAllProgram();
+    const res = await getAllProgram({ pageIndex: 1, pageSize: 10 });
     if (res.status < 400) {
       setPrograms(res.data.data);
     } else {

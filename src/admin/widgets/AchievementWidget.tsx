@@ -12,7 +12,7 @@ const AchievementWidget = () => {
       <Fab
         color="secondary"
         component={RouterLink}
-        to={ROUTER.ADMIN_PROFILE}
+        to={ROUTER.ADMIN_CLASS}
         variant="extended"
       >
         {t("admin.home.achievement.action")}

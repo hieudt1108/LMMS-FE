@@ -10,26 +10,15 @@ import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 import UserTable from '../components/UserTable';
 import { User } from '../types/user';
 import Header from '../components/Header';
-import { getAllUsers } from '../../dataProvider/agent';
+import {deleteUser, getAllUsers} from '../../dataProvider/agent';
 import ProgramAddEditDialog from '../../subsystem/components/ProgramCreate';
+import {toast} from "react-toastify";
 
 const UserManagement = () => {
+
   const [user, setUsers] = React.useState([]);
-  React.useEffect(() => {
-    fetchUsers();
-  }, []);
-  async function fetchUsers() {
-    const res = await getAllUsers();
-    if (res.status < 400) {
-      setUsers(res.data.data);
-    } else {
-      console.log('error');
-    }
-  }
-  // console.log(user);
   const snackbar = useSnackbar();
   const { t } = useTranslation();
-
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
   const [openUserDialog, setOpenUserDialog] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
@@ -44,25 +33,48 @@ const UserManagement = () => {
   const { isUpdating, updateUser } = useState('');
   // @ts-ignore
   const { data } = useState('');
-
   const processing = isAdding || isDeleting || isUpdating;
 
-  const handleDeleteUsers = async () => {
-    setOpenConfirmDeleteDialog(false);
-  };
+  function notify(type: string, text: string) {
+    if (type === 'success') {
+      toast.success(text, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      toast.error(text, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
 
-  // const handleCancelSelected = () => {
-  //   setSelected([]);
-  // };
+  React.useEffect(() => {
+    fetchUsers();
+  }, []);
+  async function fetchUsers() {
+    const res = await getAllUsers();
+    if (res.status < 400) {
+      setUsers(res.data.data);
+    } else {
+      console.log('error');
+    }
+  }
 
   const handleCloseConfirmDeleteDialog = () => {
     setOpenConfirmDeleteDialog(false);
   };
 
-  const handleCloseUserDialog = () => {
-    setUserUpdated(undefined);
-    setOpenUserDialog(false);
-  };
 
   const handleOpenConfirmDeleteDialog = (userIds: string[]) => {
     setUserDeleted(userIds);
@@ -76,6 +88,20 @@ const UserManagement = () => {
 
   const handleSelectedChange = (newSelected: string[]) => {
     setSelected(newSelected);
+  };
+
+  const handleDeleteUser = async () => {
+    deleteUser(userDeleted)
+        .then(() => {
+          notify('success','Xóa người dùng thành công')
+          fetchUsers()
+          setSelected([]);
+          setUserDeleted([]);
+          setOpenConfirmDeleteDialog(false);
+        })
+        .catch(() => {
+          notify('error',t('common.errors.unexpected.subTitle'))
+        });
   };
 
   return (
@@ -96,7 +122,7 @@ const UserManagement = () => {
         description={t('userManagement.confirmations.delete')}
         pending={processing}
         onClose={handleCloseConfirmDeleteDialog}
-        onConfirm={handleDeleteUsers}
+        onConfirm={handleDeleteUser}
         open={openConfirmDeleteDialog}
         title={t('common.confirmation')}
       />

@@ -36,7 +36,7 @@ const SettingsDrawer = ({ onDrawerToggle, open }: SettingsDrawerProps) => {
 
   return (
     <Drawer
-      anchor="left"
+      anchor="right"
       open={open}
       onClose={onDrawerToggle}
       sx={{

@@ -16,6 +16,9 @@ import { useAuth } from '../../auth/contexts/AuthProvider';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { ROUTER } from '../../Router';
+import SettingsDrawer from "../../core/components/SettingsDrawer";
+import {useState} from "react";
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 
 interface ToolbarProps {
   toggleDrawer: () => void;
@@ -48,6 +51,11 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  // const { t } = useTranslation();
+  const handleSettingsToggle = () => {
+    setSettingsOpen(!settingsOpen);
   };
 
   const menuId = 'primary-search-account-menu';
@@ -84,6 +92,7 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
   );
 
   return (
+      <>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static'>
         <Toolbar
@@ -119,9 +128,7 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
             >
               <AccountCircle fontSize='large' />
             </IconButton>
-            {/* <IconButton size="large" aria-label="show 4 new mails" sx={{ color: 'grey[900]' }}>
-              <SettingsIcon />
-            </IconButton> */}
+
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -141,5 +148,10 @@ export default function ToolBar({ toggleDrawer }: ToolbarProps) {
       </AppBar>
       {renderMobileMenu}
     </Box>
+  <SettingsDrawer
+      onDrawerToggle={handleSettingsToggle}
+      open={settingsOpen}
+  />
+      </>
   );
 }

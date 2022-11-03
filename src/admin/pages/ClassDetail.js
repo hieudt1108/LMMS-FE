@@ -17,17 +17,11 @@ import SwipeableViews from 'react-swipeable-views';
 import ListDocument from '../../document/components/ListDocument';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import MemberHeader from "../components/MemberHeader";
-import MemberTable from "../components/MemberTable";
+import MemberHeader from '../components/MemberHeader';
+import MemberTable from '../components/MemberTable';
+import { useLocation, useNavigate, useParams } from 'react-router';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  dir?: string;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
+function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -47,7 +41,7 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-function a11yProps(index: number) {
+function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
     'aria-controls': `full-width-tabpanel-${index}`,
@@ -64,13 +58,17 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const ClassDetail = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  let { id } = useParams();
+  let location = useLocation();
   const [value, setValue] = React.useState(0);
 
   const theme = useTheme();
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  console.log('ClassDetail:', id, location);
+  const handleChange = (newValue) => {
     setValue(newValue);
   };
-  const handleChangeIndex = (index: number) => {
+  const handleChangeIndex = (index) => {
     setValue(index);
   };
   return (
@@ -87,27 +85,34 @@ const ClassDetail = () => {
             1A - Khối 1 - Năm học 2022 - 2023
           </Typography>
 
+          <Stack
+            spacing={2}
+            direction='column'
+            justifyContent='flex-start'
+            mt={2}
+          >
+            <MemberHeader
+              title={t('classDetail.member.teacher')}
+              numberMember={12}
+              titleAction={t('classDetail.action.addTeacher')}
+            ></MemberHeader>
+            <MemberTable></MemberTable>
+          </Stack>
 
-
-            <Stack spacing={2} direction="column" justifyContent="flex-start" mt={2}>
-              <MemberHeader
-                  title={t('classDetail.member.teacher')}
-                  numberMember={12}
-                  titleAction={t('classDetail.action.addTeacher')}
-              ></MemberHeader>
-              <MemberTable></MemberTable>
-            </Stack>
-
-            <Stack sx={{pb:2}} spacing={2} direction="column" justifyContent="flex-start" mt={2}>
-              <MemberHeader
-                  title={t('classDetail.member.student')}
-                  numberMember={12}
-                  titleAction={t('classDetail.action.addStudent')}
-              ></MemberHeader>
-              <MemberTable></MemberTable>
-            </Stack>
-
-
+          <Stack
+            sx={{ pb: 2 }}
+            spacing={2}
+            direction='column'
+            justifyContent='flex-start'
+            mt={2}
+          >
+            <MemberHeader
+              title={t('classDetail.member.student')}
+              numberMember={12}
+              titleAction={t('classDetail.action.addStudent')}
+            ></MemberHeader>
+            <MemberTable></MemberTable>
+          </Stack>
         </Box>
       </Stack>
     </React.Fragment>

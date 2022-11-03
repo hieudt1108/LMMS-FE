@@ -8,7 +8,7 @@ import {
   Stack,
 } from '@material-ui/core';
 import CreateIcon from '@mui/icons-material/Create';
-import React, { Fragment } from 'react';
+import React, { Fragment, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
@@ -21,12 +21,6 @@ import { Alert, IconButton, Modal, Paper, TextField } from '@mui/material';
 import { LoadingButton } from '@material-ui/lab';
 import { useNavigate } from 'react-router';
 import { ROUTER } from '../../Router';
-
-type HeaderProps = {
-  title: string;
-  description: string;
-  data: Array<Object>;
-};
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -49,7 +43,7 @@ const BoxCreateClass = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   textAlign: 'center',
   color: theme.palette.text.secondary,
-  position: 'absolute' as 'absolute',
+  position: 'absolute',
   top: '50%',
   left: '50%',
   width: 'auto',
@@ -83,30 +77,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const ClassHeader = ({ title, description, data }: HeaderProps) => {
-  console.log('ClassHeader data: ', data);
+const ClassHeader = ({ title, description, data }) => {
+  console.log('ClassHeader data: ', title, description, data);
   const { t } = useTranslation();
   const [toggleCreateClass, setToggleCreateClass] = React.useState(false);
   const [age, setAge] = React.useState('');
   const [schoolYear, setSchoolYear] = React.useState('');
-  const handleToggleCreateClass = () => {
+  const handleToggleCreateClass = useCallback(() => {
     setToggleCreateClass(toggleCreateClass ? false : true);
-  };
+  }, []);
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = useCallback((event) => {
     setAge(event.target.value);
-  };
+  }, []);
 
-  const handleChangeSchoolYear = (event: SelectChangeEvent) => {
+  const handleChangeSchoolYear = useCallback((event) => {
     setSchoolYear(event.target.value);
-  };
+  }, []);
 
   const navigate = useNavigate();
-
-  async function handleAddClass(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    navigate(ROUTER.ADMIN_ADD_CLASS, { replace: true });
-  }
 
   return (
     <Fragment>
@@ -141,9 +130,11 @@ const ClassHeader = ({ title, description, data }: HeaderProps) => {
                     label='Khối'
                     onChange={handleChange}
                   >
-                    {data.length ? (
-                      data.map((obj: any, index: number) => (
-                        <MenuItem value={obj.id}>{obj.name}</MenuItem>
+                    {data ? (
+                      data.map((obj, index) => (
+                        <MenuItem value={obj.id} key={index}>
+                          {obj.name}
+                        </MenuItem>
                       ))
                     ) : (
                       <MenuItem value={20}>
@@ -258,8 +249,10 @@ const ClassHeader = ({ title, description, data }: HeaderProps) => {
                         name='level'
                       >
                         {data.length ? (
-                          data.map((obj: any, index: number) => (
-                            <MenuItem value={obj.id}>{obj.name}</MenuItem>
+                          data.map((obj, index) => (
+                            <MenuItem value={obj.id} key={index}>
+                              {obj.name}
+                            </MenuItem>
                           ))
                         ) : (
                           <MenuItem value={20}>

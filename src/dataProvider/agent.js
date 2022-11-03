@@ -32,6 +32,10 @@ const getLocalStorage = (key) => {
   return JSON.parse(localStorage.getItem(key));
 };
 
+const clearLocalStorage = () => {
+  localStorage.clear();
+};
+
 // GET API AREA ============================>
 function getApi(url, params) {
   const token = getLocalStorage('access_token');
@@ -174,6 +178,7 @@ function addParameter(url, params) {
 export {
   setLocalStorage,
   getLocalStorage,
+  clearLocalStorage,
   loginAuth,
   getAllClass,
   getClassbyId,

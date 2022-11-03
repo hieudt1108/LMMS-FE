@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Card from '@mui/material/Card';
 import {
   Typography,
@@ -20,7 +20,7 @@ import Stack from '@mui/material/Stack';
 import { deepOrange } from '@mui/material/colors';
 import { ROUTER } from '../../Router';
 
-function stringToColor(string: string) {
+function stringToColor(string) {
   let hash = 0;
   let i;
 
@@ -40,7 +40,7 @@ function stringToColor(string: string) {
   return color;
 }
 
-function stringAvatar(name: string) {
+function stringAvatar(name) {
   return {
     sx: {
       bgcolor: stringToColor(name),
@@ -49,26 +49,20 @@ function stringAvatar(name: string) {
   };
 }
 
-type ClassCartProps = {
-  data: Array<Object>;
-};
-
-const ClassCart = ({ data }: ClassCartProps) => {
+const ClassCart = ({ data }) => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
-  async function handleClassDetails(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    console.log('handleClassDetails', e);
+  const handleClassDetails = useCallback((classId) => {
     navigate(ROUTER.ADMIN_CLASS_DETAIL, {
       state: {
-        id: 1,
+        id: classId,
       },
     });
-  }
+  }, []);
   return (
     <React.Fragment>
-      {data.length ? (
-        data.map((obj: any, index: any) => (
+      {data ? (
+        data.map((obj, index) => (
           <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
             <Card
               elevation={8}
@@ -78,8 +72,7 @@ const ClassCart = ({ data }: ClassCartProps) => {
                 height: '170px',
                 ':hover': { boxShadow: '0 0 0 1px #03a5fc' },
               }}
-              accessKey={'thongchu'}
-              onClick={handleClassDetails}
+              onClick={() => handleClassDetails(obj.id)}
             >
               <Stack
                 direction='row'

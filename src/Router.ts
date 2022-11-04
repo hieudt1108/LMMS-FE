@@ -18,6 +18,7 @@ export const ROUTER = {
   ADMIN_DASHBOARD: `/${process.env.PUBLIC_URL}/admin/dashboard`,
   ADMIN_SUBSYSTEM: `/${process.env.PUBLIC_URL}/admin/sub-system/:id`,
   ADMIN_PROGRAM: `/${process.env.PUBLIC_URL}/admin/program`,
+  ADMIN_LEVEL: `/${process.env.PUBLIC_URL}/admin/level-management`,
   ROLES: `/${process.env.PUBLIC_URL}/roles`,
   LANDING: `/${process.env.PUBLIC_URL}/`,
 

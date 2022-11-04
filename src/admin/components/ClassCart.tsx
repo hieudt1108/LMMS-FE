@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import { deepOrange } from '@mui/material/colors';
 import { ROUTER } from '../../Router';
+import Empty from "../../core/components/Empty";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -158,7 +159,8 @@ const ClassCart = ({ data }: ClassCartProps) => {
           </Grid>
         ))
       ) : (
-        <Alert severity='error'>This is an error !</Alert>
+          <Empty title='No class yet' />
+
       )}
     </React.Fragment>
   );

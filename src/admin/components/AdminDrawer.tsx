@@ -27,6 +27,7 @@ import Collapse from '@mui/material/Collapse';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import {getAllProgram} from '../../dataProvider/agent';
 import {ListItemButton} from "@mui/material";
+import InsightsIcon from '@mui/icons-material/Insights';
 
 type AdminDrawerProps = {
   collapsed: boolean;
@@ -98,19 +99,11 @@ const AdminDrawer = ({
 
   async function fetchProgram() {
     const res = await getAllProgram({ pageIndex: 1, pageSize: 10 });
-    //console.log('data: ', programs);
     if (res.status < 400) {
       setProgram(res.data.data);
     } else {
       console.log('error fetch api');
     }
-  }
-
-  const navigate = useNavigate();
-
-  async function handleListProgram(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    navigate(ROUTER.ADMIN_PROGRAM, {replace: true});
   }
 
   const drawer = (
@@ -207,7 +200,6 @@ const AdminDrawer = ({
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-                onClick={handleListProgram}
                 primary={t('admin.drawer.menu.sub-program')}
                 sx={{
                   cursor: 'pointer',
@@ -319,6 +311,27 @@ const AdminDrawer = ({
                         </ListItemAvatar>
                         <ListItemText
                             primary={t('admin.drawer.menu.sub-program')}
+                            sx={{
+                                display: collapsed ? 'none' : 'block',
+                                color: 'white'
+                            }}
+                        />
+                    </ListItem>
+                    <ListItem
+                        button
+                        component={NavLink}
+                        key={'/admin/level-management'}
+                        activeClassName='selectItemMenuBar'
+                        end={true}
+                        to={`/${process.env.PUBLIC_URL}${'/admin/level-management'}`}
+                    >
+                        <ListItemAvatar>
+                            <Avatar sx={{color: 'white', bgcolor: 'transparent'}}>
+                                <InsightsIcon/>
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={'Cấp học'}
                             sx={{
                                 display: collapsed ? 'none' : 'block',
                                 color: 'white'

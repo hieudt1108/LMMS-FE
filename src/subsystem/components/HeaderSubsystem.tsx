@@ -24,7 +24,7 @@ export default function HeaderSubsystem() {
     }, []);
 
     async function fetchLevel() {
-        const res = await getAllLevel();
+        const res = await getAllLevel({ pageIndex: 1, pageSize: 10 });
         if (res.status < 400) {
             setLevel(res.data.data);
         } else {

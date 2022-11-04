@@ -63,8 +63,8 @@ function getGradebyId(id) {
 }
 
 // LEVEL
-function getAllLevel() {
-  return getApi(`/Level/getAll?page=1&pageSize=10`);
+function getAllLevel(params) {
+  return getApi(`/Level/getAll`, params);
 }
 function getLevelById(id) {
   return getApi(`/Level/getOne/${id}`);
@@ -120,6 +120,11 @@ const createProgram = (payload) => {
   return postApi('Program', payload);
 };
 
+// Level
+const createLevel = (payload) => {
+  return postApi('Level', payload);
+};
+
 // User Auth
 const createUserAuth = (payload) => {
   return postApi('Auth/registerSingleUser', payload);
@@ -147,6 +152,10 @@ const deleteProgram = (id) => {
 const deleteUser = (id) => {
   return deleteApi(`User/${id}`);
 };
+// LEVEL
+const deleteLevel = (id) => {
+  return deleteApi(`Level/${id}`);
+};
 // PUT API AREA ============================>
 function putApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -163,6 +172,11 @@ function putApi(url, payload) {
 // PROGRAM
 const updateProgram = (id, payload) => {
   return putApi(`Program/${id}`, payload);
+};
+
+// LEVEL
+const updateLevel = (id, payload) => {
+  return putApi(`Level/${id}`, payload);
 };
 //export api here
 
@@ -190,6 +204,9 @@ export {
   postGrade,
   postLevel,
   getAllLevel,
+  createLevel,
+  updateLevel,
+  deleteLevel,
   getLevelById,
   getAllProgram,
   deleteProgram,

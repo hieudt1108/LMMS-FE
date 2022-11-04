@@ -28,6 +28,7 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import {getAllProgram} from '../../dataProvider/agent';
 import {ListItemButton} from "@mui/material";
 import InsightsIcon from '@mui/icons-material/Insights';
+import GradeIcon from '@mui/icons-material/Grade';
 
 type AdminDrawerProps = {
   collapsed: boolean;
@@ -332,6 +333,27 @@ const AdminDrawer = ({
                         </ListItemAvatar>
                         <ListItemText
                             primary={'Cấp học'}
+                            sx={{
+                                display: collapsed ? 'none' : 'block',
+                                color: 'white'
+                            }}
+                        />
+                    </ListItem>
+                    <ListItem
+                        button
+                        component={NavLink}
+                        key={'/admin/grade-management'}
+                        activeClassName='selectItemMenuBar'
+                        end={true}
+                        to={`/${process.env.PUBLIC_URL}${'/admin/grade-management'}`}
+                    >
+                        <ListItemAvatar>
+                            <Avatar sx={{color: 'white', bgcolor: 'transparent'}}>
+                                <GradeIcon/>
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={'Khối học'}
                             sx={{
                                 display: collapsed ? 'none' : 'block',
                                 color: 'white'

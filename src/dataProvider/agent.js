@@ -105,16 +105,6 @@ const postClass = (payload) => {
   return postApi('Class', payload);
 };
 
-// GRADE
-const postGrade = () => {
-  return postApi('Grade');
-};
-
-// LEVEL
-const postLevel = () => {
-  return postApi('Level');
-};
-
 // Program
 const createProgram = (payload) => {
   return postApi('Program', payload);
@@ -123,6 +113,11 @@ const createProgram = (payload) => {
 // Level
 const createLevel = (payload) => {
   return postApi('Level', payload);
+};
+
+// Grade
+const createGrade = (payload) => {
+  return postApi('Grade', payload);
 };
 
 // User Auth
@@ -156,6 +151,11 @@ const deleteUser = (id) => {
 const deleteLevel = (id) => {
   return deleteApi(`Level/${id}`);
 };
+
+// GRADE
+const deleteGrade = (id) => {
+  return deleteApi(`Grade/${id}`);
+};
 // PUT API AREA ============================>
 function putApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -178,6 +178,11 @@ const updateProgram = (id, payload) => {
 const updateLevel = (id, payload) => {
   return putApi(`Level/${id}`, payload);
 };
+
+// GRADE
+const updateGrade = (id, payload) => {
+  return putApi(`Grade/${id}`, payload);
+};
 //export api here
 
 function addParameter(url, params) {
@@ -196,13 +201,14 @@ export {
   getAllClass,
   getClassbyId,
   getAllGrade,
+  createGrade,
+  deleteGrade,
+  updateGrade,
   getAllUsers,
   deleteUser,
   createUserAuth,
   getGradebyId,
   postClass,
-  postGrade,
-  postLevel,
   getAllLevel,
   createLevel,
   updateLevel,

@@ -20,6 +20,8 @@ const ViewDocumentDetail = lazy(
 const Program = lazy(() => import('./subsystem/pages/ProgramManagement'));
 //Level
 const Level = lazy(() => import('./level/pages/LevelManagement'));
+//Grade
+const Grade = lazy(() => import('./grade/pages/GradeManagement'));
 
 const Login = lazy(() => import('./auth/pages/Login'));
 const Admin = lazy(() => import('./admin/pages/Admin'));
@@ -55,7 +57,8 @@ const AppRoutes = () => {
         <Route path='/' element={<Home />} />
         <Route path='/sub-system/:id' element={<SubSystem />} />
         <Route path='/program' element={<Program />} />
-          <Route path='/level-management' element={<Level />} />
+        <Route path='/level-management' element={<Level />} />
+        <Route path='/grade-management' element={<Grade />} />
         <Route path='/document' element={<Document />} />
         <Route path='/document/:subjectSlot' element={<DocumentbySyllabus />} />
         <Route

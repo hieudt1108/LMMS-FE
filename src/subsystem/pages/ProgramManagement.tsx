@@ -18,7 +18,7 @@ const ProgramManagement = () => {
     fetchPrograms();
   }, []);
   async function fetchPrograms() {
-    const res = await getAllProgram();
+    const res = await getAllProgram({ pageIndex: 1, pageSize: 10 });
     //console.log(res.data.data[0].id);
     if (res.status < 400) {
       setPrograms(res.data.data);

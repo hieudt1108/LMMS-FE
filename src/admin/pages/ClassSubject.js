@@ -9,9 +9,14 @@ export const ClassSubject = () => {
         Học liệu SGK Tiếng Anh
       </Typography>
 
-      <Stack spacing={2} direction='row' alignItems='center' mt={2.5}>
+      <Stack spacing={2} direction='row' alignItems='center' mt={2.5} ml={6}>
         <Grid container spacing={2}>
-          <SubjectCart></SubjectCart>
+            <SubjectCart></SubjectCart>
+            <SubjectCart></SubjectCart>
+            <SubjectCart></SubjectCart>
+            <SubjectCart></SubjectCart>
+            <SubjectCart></SubjectCart>
+            <SubjectCart></SubjectCart>
         </Grid>
       </Stack>
     </React.Fragment>

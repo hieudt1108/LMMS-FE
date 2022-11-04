@@ -89,7 +89,7 @@ const AdminDrawer = ({
   }, []);
 
   async function fetchProgram() {
-    const res = await getAllProgram();
+    const res = await getAllProgram({ pageIndex: 1, pageSize: 10 });
     //console.log('data: ', programs);
     if (res.status < 400) {
       setProgram(res.data.data);

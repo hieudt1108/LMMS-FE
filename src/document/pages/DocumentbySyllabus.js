@@ -79,7 +79,7 @@ export default function DocumentbySyllabus() {
                     {document?.name}.{document.type}
                   </Typography>
                   <Typography variant='body2' color='text.secondary'>
-                    {document.type}
+                    {document.size}
                   </Typography>
                   <CardActions
                     style={{ display: 'flex', justifyContent: 'space-around' }}

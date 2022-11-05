@@ -81,7 +81,7 @@ const ProgramDialog = ({
   const handleSubmit = (values: Partial<Program>) => {
     if (program && program.id) {
       onUpdate({ ...values, id: program.id } as Program);
-    }else {
+    } else {
       onAdd(values);
     }
   };
@@ -93,15 +93,14 @@ const ProgramDialog = ({
     },
     validationSchema: Yup.object({
       programName: Yup.string()
-          .max(20, t('common.validations.max', { size: 20 }))
-          .required(t('common.validations.required')),
+        .max(20, t('common.validations.max', { size: 20 }))
+        .required(t('common.validations.required')),
       description: Yup.string()
-          .max(30, t('common.validations.max', { size: 30 }))
-          .required(t('common.validations.required')),
+        .max(30, t('common.validations.max', { size: 30 }))
+        .required(t('common.validations.required')),
     }),
     onSubmit: handleSubmit,
   });
-
 
   const [programData, setProgramData] = useState('');
   function notify(type: string, text: string) {
@@ -133,7 +132,7 @@ const ProgramDialog = ({
 
     if (res.status < 400) {
       onClose();
-      notify('success', 'Thêm chương trình học thành công');
+      notify('success', 'Cập nhật chương trình học thành công');
     } else {
       onClose();
       notify('error', 'Thất bại...');
@@ -152,9 +151,7 @@ const ProgramDialog = ({
       >
         <form onSubmit={handleCreateProgram} noValidate>
           <DialogTitle id='program-dialog-title'>
-            {editMode
-              ? t('programManagement.modal.edit.title')
-              : t('programManagement.modal.add.title')}
+            {t('programManagement.modal.edit.title')}
           </DialogTitle>
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
@@ -190,7 +187,6 @@ const ProgramDialog = ({
                 <Grid item xs={8}>
                   <TextField
                     margin='normal'
-                    required
                     fullWidth
                     id='description'
                     label={t('programManagement.form.description.title')}
@@ -199,8 +195,13 @@ const ProgramDialog = ({
                     autoFocus
                     value={formik.values.description}
                     onChange={formik.handleChange}
-                    error={formik.touched.description && Boolean(formik.errors.description)}
-                    helperText={formik.touched.description && formik.errors.description}
+                    error={
+                      formik.touched.description &&
+                      Boolean(formik.errors.description)
+                    }
+                    helperText={
+                      formik.touched.description && formik.errors.description
+                    }
                   />
                 </Grid>
               </Grid>

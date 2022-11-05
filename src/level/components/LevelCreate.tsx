@@ -25,7 +25,6 @@ import { styled } from '@mui/material/styles';
 import { Switch } from '@mui/material';
 import { createLevel } from '../../dataProvider/agent.js';
 
-
 type LevelDialogProps = {
   onAdd: (level: Partial<Level>) => void;
   onClose: () => void;
@@ -48,7 +47,7 @@ const LevelDialog = ({
   const initLevel = {
     name: '',
     description: '',
-    levelProgram: []
+    levelProgram: [],
   };
 
   const [levelData, setLevelData] = useState(initLevel);
@@ -99,7 +98,7 @@ const LevelDialog = ({
       >
         <form onSubmit={handleCreateLevel} noValidate>
           <DialogTitle id='program-dialog-title'>
-            {t('programManagement.modal.add.title')}
+            {t('level.modal.add.title')}
           </DialogTitle>
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
@@ -115,7 +114,7 @@ const LevelDialog = ({
                     required
                     fullWidth
                     id='name'
-                    label={t('programManagement.form.name.label')}
+                    label={t('level.form.name.label')}
                     name='name'
                     autoComplete='family-name'
                     autoFocus
@@ -135,10 +134,9 @@ const LevelDialog = ({
                 <Grid item xs={8}>
                   <TextField
                     margin='normal'
-                    required
                     fullWidth
                     id='description'
-                    label={t('programManagement.form.description.title')}
+                    label={t('level.form.description.title')}
                     name='description'
                     autoComplete='family-name'
                     autoFocus
@@ -161,7 +159,7 @@ const LevelDialog = ({
               type='submit'
               variant='contained'
             >
-              {t('userManagement.modal.add.action')}
+              {t('level.modal.add.action')}
             </LoadingButton>
           </DialogActions>
         </form>

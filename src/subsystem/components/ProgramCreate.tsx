@@ -170,7 +170,6 @@ const ProgramDialog = ({
                 <Grid item xs={8}>
                   <TextField
                     margin='normal'
-                    required
                     fullWidth
                     id='description'
                     label={t('programManagement.form.description.title')}

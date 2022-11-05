@@ -185,9 +185,9 @@
     "confirmation": "Xác nhận",
     "delete": "Xóa",
     "edit": "Sửa",
-    "add" : "Thêm",
-    "return" : "Quay lại",
-    "createclass" : "Tạo lớp học",
+    "add": "Thêm",
+    "return": "Quay lại",
+    "createclass": "Tạo lớp học",
     "errors": {
       "forbidden": {
         "subTitle": "Bạn không có quyền truy cập để xem trang này"
@@ -440,7 +440,7 @@
         "label": "Tên chương trình học"
       },
       "description": {
-        "title" : "Mô tả",
+        "title": "Mô tả",
         "label": "Mô tả chương trình học:"
       }
     },
@@ -451,7 +451,7 @@
       },
       "edit": {
         "action": "Sửa",
-        "title": "Sửa chương trình học"
+        "title": "Cập nhật chương trình học"
       },
       "delete": {
         "action": "Xóa",
@@ -598,6 +598,74 @@
     "action": {
       "addTeacher": "Thêm giáo viên",
       "addStudent": "Thêm học sinh"
+    }
+  },
+  "level": {
+    "confirmations": {
+      "delete": "Bạn có chắc chắn muốn xóa cấp học này không?"
+    },
+    "form": {
+      "disabled": {
+        "label": "Vô hiệu hóa"
+      },
+      "id": {
+        "label": "Mã cấp học"
+      },
+      "name": {
+        "label": "Tên cấp học"
+      },
+      "description": {
+        "title": "Mô tả",
+        "label": "Mô tả cấp học:"
+      }
+    },
+    "modal": {
+      "add": {
+        "action": "Thêm",
+        "title": "Thêm cấp học"
+      },
+      "edit": {
+        "action": "Sửa",
+        "title": "Cập nhật cấp học"
+      },
+      "delete": {
+        "action": "Xóa",
+        "title": "Xóa cấp học"
+      }
+    }
+  },
+  "grade": {
+    "confirmations": {
+      "delete": "Bạn có chắc chắn muốn xóa khối học này không?"
+    },
+    "form": {
+      "disabled": {
+        "label": "Vô hiệu hóa"
+      },
+      "id": {
+        "label": "Mã khối học"
+      },
+      "name": {
+        "label": "Tên khối học"
+      },
+      "description": {
+        "title": "Mô tả",
+        "label": "Mô tả khối học:"
+      }
+    },
+    "modal": {
+      "add": {
+        "action": "Thêm",
+        "title": "Thêm khối học"
+      },
+      "edit": {
+        "action": "Sửa",
+        "title": "Cập nhật khối học"
+      },
+      "delete": {
+        "action": "Xóa",
+        "title": "Xóa khối học"
+      }
     }
   }
 }

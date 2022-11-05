@@ -3,87 +3,49 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import LoadingButton from '@material-ui/lab/LoadingButton';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
-import { Program } from '../types/program';
+import { Grade } from '../types/grade';
 import {
   Box,
-  CardContent,
   Grid,
   Typography,
-  InputBase,
 } from '@material-ui/core';
-import Stack from '@mui/material/Stack';
 import React, { useState, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
-import { Switch } from '@mui/material';
-import { createProgram } from '../../dataProvider/agent.js';
+import { createGrade } from '../../dataProvider/agent.js';
 
-const Android12Switch = styled(Switch)(({ theme }) => ({
-  padding: 8,
-  '& .MuiSwitch-track': {
-    borderRadius: 22 / 2,
-    '&:before, &:after': {
-      content: '""',
-      position: 'absolute',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      width: 16,
-      height: 16,
-    },
-    '&:before': {
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
-        theme.palette.getContrastText(theme.palette.primary.main)
-      )}" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>')`,
-      left: 12,
-    },
-    '&:after': {
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
-        theme.palette.getContrastText(theme.palette.primary.main)
-      )}" d="M19,13H5V11H19V13Z" /></svg>')`,
-      right: 12,
-    },
-  },
-  '& .MuiSwitch-thumb': {
-    boxShadow: 'none',
-    width: 16,
-    height: 16,
-    margin: 2,
-  },
-}));
 
-type ProgramDialogProps = {
-  onAdd: (user: Partial<Program>) => void;
+type GradeDialogProps = {
+  onAdd: (grade: Partial<Grade>) => void;
   onClose: () => void;
-  onUpdate: (program: Program) => void;
+  onUpdate: (grade: Grade) => void;
   open: boolean;
   processing: boolean;
-  program?: Program;
+  grade?: Grade;
 };
 
-const ProgramDialog = ({
+const GradeDialog = ({
   onAdd,
   onClose,
   onUpdate,
   open,
   processing,
-  program,
-}: ProgramDialogProps) => {
+  grade,
+}: GradeDialogProps) => {
   const { t } = useTranslation();
-  const editMode = Boolean(program && program.id);
 
-  const initProgram = {
+  const initGrade = {
     name: '',
     description: '',
   };
 
-  const [programData, setProgramData] = useState(initProgram);
+  const [gradeData, setGradeData] = useState(initGrade);
+
   function notify(type: string, text: string) {
     if (type === 'success') {
       toast.success(text, {
@@ -107,14 +69,12 @@ const ProgramDialog = ({
       });
     }
   }
-  async function handleCreateProgram(e: { preventDefault: () => void }) {
+  async function handleCreateGrade(e: { preventDefault: () => void }) {
     e.preventDefault();
-    const res = await createProgram(programData);
-
+    const res = await createGrade(gradeData);
     if (res.status < 400) {
-      setProgramData(res.data.data);
       onClose();
-      notify('success', 'Thêm chương trình học thành công');
+      notify('success', 'Thêm khối học thành công');
     } else {
       onClose();
       notify('error', 'Thất bại...');
@@ -131,18 +91,16 @@ const ProgramDialog = ({
         maxWidth={'md'}
         fullWidth={true}
       >
-        <form onSubmit={handleCreateProgram} noValidate>
+        <form onSubmit={handleCreateGrade} noValidate>
           <DialogTitle id='program-dialog-title'>
-            {editMode
-              ? t('programManagement.modal.edit.title')
-              : t('programManagement.modal.add.title')}
+            {t('programManagement.modal.add.title')}
           </DialogTitle>
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2} columns={12}>
                 <Grid item xs={4} sx={{ mt: 3.5 }}>
                   <Typography component='div' variant='h6'>
-                    Tên chương trình học<span style={{ color: 'red' }}>*</span>
+                    Tên khối học<span style={{ color: 'red' }}>*</span>
                   </Typography>
                 </Grid>
                 <Grid item xs={8}>
@@ -155,9 +113,9 @@ const ProgramDialog = ({
                     name='name'
                     autoComplete='family-name'
                     autoFocus
-                    value={programData.name}
+                    value={gradeData.name}
                     onChange={(e) =>
-                      setProgramData({ ...programData, name: e.target.value })
+                      setGradeData({ ...gradeData, name: e.target.value })
                     }
                   />
                 </Grid>
@@ -165,7 +123,7 @@ const ProgramDialog = ({
               <Grid container spacing={2} columns={12}>
                 <Grid item xs={4} sx={{ mt: 3.5 }}>
                   <Typography component='div' variant='h6'>
-                    Mô tả chương trình học
+                    Mô tả khối học
                   </Typography>
                 </Grid>
                 <Grid item xs={8}>
@@ -178,10 +136,10 @@ const ProgramDialog = ({
                     name='description'
                     autoComplete='family-name'
                     autoFocus
-                    value={programData.description}
+                    value={gradeData.description}
                     onChange={(e) =>
-                      setProgramData({
-                        ...programData,
+                      setGradeData({
+                        ...gradeData,
                         description: e.target.value,
                       })
                     }
@@ -197,9 +155,7 @@ const ProgramDialog = ({
               type='submit'
               variant='contained'
             >
-              {editMode
-                ? t('userManagement.modal.edit.action')
-                : t('userManagement.modal.add.action')}
+              {t('userManagement.modal.add.action')}
             </LoadingButton>
           </DialogActions>
         </form>
@@ -208,4 +164,4 @@ const ProgramDialog = ({
   );
 };
 
-export default ProgramDialog;
+export default GradeDialog;

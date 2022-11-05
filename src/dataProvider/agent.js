@@ -33,39 +33,38 @@ const getLocalStorage = (key) => {
 };
 
 // GET API AREA ============================>
-function getApi(url) {
+function getApi(url, params) {
   const token = getLocalStorage('access_token');
   return instance
     .get(url, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no auth',
       },
+      params: params,
     })
     .then((res) => res)
     .catch((err) => err);
 }
 
 // CLASS
-function getAllClass() {
-  return getApi('/Class/getAll?pageIndex=1&pageSize=10');
+function getAllClass(params) {
+  return getApi('/Class/getAll', params);
 }
 function getClassbyId(id) {
   return getApi(`/Class/getOne/${id}`);
 }
 
 // GRADE
-function getAllGrade(page, pageSize, searchByName, levelId) {
-  return getApi(
-    `/Grade/getAll?page=${page}&pageSize=${pageSize}&searchByName=${searchByName}&levelId=${levelId}`
-  );
+function getAllGrade(params) {
+  return getApi(`/Grade/getAll`, params);
 }
 function getGradebyId(id) {
   return getApi(`/Grade/getOne/${id}`);
 }
 
 // LEVEL
-function getAllLevel() {
-  return getApi(`/Level/getAll?page=1&pageSize=10`);
+function getAllLevel(params) {
+  return getApi(`/Level/getAll`, params);
 }
 function getLevelById(id) {
   return getApi(`/Level/getOne/${id}`);
@@ -75,8 +74,8 @@ function getAllUsers() {
   return getApi('/User/getAll');
 }
 // PROGRAM
-function getAllProgram() {
-  return getApi('/Program/getAll?page=1&pageSize=10');
+function getAllProgram(params) {
+  return getApi('/Program/getAll', params);
 }
 
 // DDOCUMENT
@@ -135,6 +134,16 @@ const createProgram = (payload) => {
   return postApi('Program', payload);
 };
 
+// Level
+const createLevel = (payload) => {
+  return postApi('Level', payload);
+};
+
+// Grade
+const createGrade = (payload) => {
+  return postApi('Grade', payload);
+};
+
 // User Auth
 const createUserAuth = (payload) => {
   return postApi('Auth/registerSingleUser', payload);
@@ -167,6 +176,19 @@ function deleteApi(url) {
 const deleteProgram = (id) => {
   return deleteApi(`Program/${id}`);
 };
+// USER
+const deleteUser = (id) => {
+  return deleteApi(`User/${id}`);
+};
+// LEVEL
+const deleteLevel = (id) => {
+  return deleteApi(`Level/${id}`);
+};
+
+// GRADE
+const deleteGrade = (id) => {
+  return deleteApi(`Grade/${id}`);
+};
 // PUT API AREA ============================>
 function putApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -184,7 +206,26 @@ function putApi(url, payload) {
 const updateProgram = (id, payload) => {
   return putApi(`Program/${id}`, payload);
 };
+
+// LEVEL
+const updateLevel = (id, payload) => {
+  return putApi(`Level/${id}`, payload);
+};
+
+// GRADE
+const updateGrade = (id, payload) => {
+  return putApi(`Grade/${id}`, payload);
+};
 //export api here
+
+function addParameter(url, params) {
+  if (url)
+    Object.keys(params).forEach(function (key, index) {
+      if (params[key]) {
+        url = url.concat(`params[key]`);
+      }
+    });
+}
 
 export {
   setLocalStorage,
@@ -193,13 +234,18 @@ export {
   getAllClass,
   getClassbyId,
   getAllGrade,
+  createGrade,
+  deleteGrade,
+  updateGrade,
   getAllUsers,
+  deleteUser,
   createUserAuth,
   getGradebyId,
   postClass,
-  postGrade,
-  postLevel,
   getAllLevel,
+  createLevel,
+  updateLevel,
+  deleteLevel,
   getLevelById,
   getAllProgram,
   deleteProgram,
@@ -211,4 +257,6 @@ export {
   getALlSlot,
   getAllTypeDocument,
   postDocument,
+  postGrade,
+  postLevel,
 };

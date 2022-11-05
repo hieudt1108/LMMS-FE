@@ -24,7 +24,7 @@ export default function HeaderSubsystem() {
     }, []);
 
     async function fetchLevel() {
-        const res = await getAllLevel();
+        const res = await getAllLevel({ pageIndex: 1, pageSize: 10 });
         if (res.status < 400) {
             setLevel(res.data.data);
         } else {
@@ -36,7 +36,7 @@ export default function HeaderSubsystem() {
     <React.Fragment>
       <Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <Card sx={{ mb: 2 }}>
+          <Card sx={{ mb: 2,boxShadow: '-8px 0 0 -4px #747af2' }}>
             <CardContent
               sx={{
                 display: 'flex',

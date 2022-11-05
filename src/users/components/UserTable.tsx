@@ -118,6 +118,8 @@ const UserRow = ({
     onEdit(user);
   };
 
+
+
   async function handleEditUser(e: { preventDefault: () => void }) {
     e.preventDefault();
     navigate(ROUTER.ADMIN_EDIT_USER, { replace: true });

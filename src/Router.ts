@@ -2,7 +2,9 @@ export const ROUTER = {
   UNDER_CONSTRUCTION: `/${process.env.PUBLIC_URL}/under-construction`,
 
   ADMIN: `/${process.env.PUBLIC_URL}/admin`,
+  ADMIN_CLASS: `/${process.env.PUBLIC_URL}/admin/classes`,
   ADMIN_CLASS_DETAIL: `/${process.env.PUBLIC_URL}/admin/class/:id`,
+  ADMIN_ADD_CLASS: `/${process.env.PUBLIC_URL}/admin/addclass`,
   ADMIN_PROFILE: `/${process.env.PUBLIC_URL}/admin/profile`,
   ADMIN_DOCUMENT: `/${process.env.PUBLIC_URL}/admin/document`,
   ADMIN_DOUCUMENT_SUBJECT: `/${process.env.PUBLIC_URL}/admin/document/:subjectSlot`,
@@ -16,6 +18,8 @@ export const ROUTER = {
   ADMIN_DASHBOARD: `/${process.env.PUBLIC_URL}/admin/dashboard`,
   ADMIN_SUBSYSTEM: `/${process.env.PUBLIC_URL}/admin/sub-system/:id`,
   ADMIN_PROGRAM: `/${process.env.PUBLIC_URL}/admin/program`,
+  ADMIN_LEVEL: `/${process.env.PUBLIC_URL}/admin/level-management`,
+  ADMIN_GRADE: `/${process.env.PUBLIC_URL}/admin/grade-management`,
   ROLES: `/${process.env.PUBLIC_URL}/roles`,
   LANDING: `/${process.env.PUBLIC_URL}/`,
 

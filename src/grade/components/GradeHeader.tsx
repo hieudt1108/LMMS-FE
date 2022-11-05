@@ -7,20 +7,14 @@ import {
   Typography,
   InputBase,
 } from '@material-ui/core';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import React, { Fragment, useState } from 'react';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
-
 import { styled, alpha } from '@mui/material/styles';
-import { Program } from '../types/program';
+import { Grade } from '../types/grade';
 import { useSnackbar } from '../../core/contexts/SnackbarProvider';
-import { useNavigate } from 'react-router-dom';
-import { ROUTER } from '../../Router';
-import ProgramAddDialog from './ProgramCreate';
-import { toast, ToastContainer } from 'react-toastify';
+import GradeAddDialog from './GradeCreate';
 
 type HeaderProps = {
   title: string;
@@ -55,7 +49,8 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
-
+  border: '1px solid #3F435C',
+  borderRadius: '12px',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -68,61 +63,61 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const HeaderProgram = ({ title, description }: HeaderProps) => {
+const HeaderGrade = ({ title, description }: HeaderProps) => {
   const { t } = useTranslation();
-  const [openProgramDialog, setOpenProgramDialog] = useState(false);
+  const [openGradeDialog, setOpenGradeDialog] = useState(false);
   const snackbar = useSnackbar();
   // @ts-ignore
-  const { addProgram, isAdding } = useState('');
+  const { addGrade, isAdding } = useState('');
   // @ts-ignore
-  const { isUpdating, updateProgram } = useState('');
-  const [programUpdated, setProgramUpdated] = useState<Program | undefined>(
+  const { isUpdating, updateGrade } = useState('');
+  const [gradeUpdated, setGradeUpdated] = useState<Grade | undefined>(
     undefined
   );
   const processing = isAdding || isUpdating;
 
-  const handleAddProgram = async (program: Partial<Program>) => {
-    addProgram(program as Program)
+  const handleAddGrade = async (grade: Partial<Grade>) => {
+    addGrade(grade as Grade)
       .then(() => {
         snackbar.success(
           t('userManagement.notifications.addSuccess', {
-            user: `${program.name}`,
+            user: `${grade.name}`,
           })
         );
-        setOpenProgramDialog(false);
+        setOpenGradeDialog(false);
       })
       .catch(() => {
         snackbar.error(t('common.errors.unexpected.subTitle'));
       });
   };
-  const handleUpdateUser = async (program: Program) => {
-    updateProgram(program)
+  const handleUpdateGrade = async (grade: Grade) => {
+    updateGrade(grade)
       .then(() => {
         snackbar.success(
           t('userManagement.notifications.updateSuccess', {
-            program: `${program.name}`,
+            grade: `${grade.name}`,
           })
         );
-        setOpenProgramDialog(false);
+        setOpenGradeDialog(false);
       })
       .catch(() => {
         snackbar.error(t('common.errors.unexpected.subTitle'));
       });
   };
 
-  const handleCloseProgramDialog = () => {
-    setProgramUpdated(undefined);
-    setOpenProgramDialog(false);
+  const handleCloseGradeDialog = () => {
+    setGradeUpdated(undefined);
+    setOpenGradeDialog(false);
   };
 
-  const handleOpenProgramDialog = (program?: Program) => {
-    setProgramUpdated(program);
-    setOpenProgramDialog(true);
+  const handleOpenGradeDialog = (grade?: Grade) => {
+    setGradeUpdated(grade);
+    setOpenGradeDialog(true);
   };
 
   return (
     <Fragment>
-      <Card sx={{ boxShadow: '-8px 0 0 -4px #747af2' }}>
+      <Card sx={{boxShadow: '-8px 0 0 -4px #747af2'}}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
@@ -137,7 +132,7 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder='Tìm kiếm chương trình học'
+                  placeholder='Tìm kiếm khối học'
                   inputProps={{ 'aria-label': 'search' }}
                 />
               </Search>
@@ -146,19 +141,10 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
               <Grid container justifyContent='flex-end'>
                 <Box sx={{ mt: 5 }}>
                   <Button
-                    className='button'
-                    startIcon={<FileUploadIcon fontSize='small' />}
-                  >
-                    {t('userManagement.listScreen.exportFile')}
-                  </Button>
-                  <Button startIcon={<FileDownloadIcon fontSize='small' />}>
-                    {t('userManagement.listScreen.importFile')}
-                  </Button>
-                  <Button
                     startIcon={<PersonAddAltIcon fontSize='small' />}
-                    onClick={() => handleOpenProgramDialog()}
+                    onClick={() => handleOpenGradeDialog()}
                   >
-                    Thêm chương trình
+                    Thêm khối học
                   </Button>
                 </Box>
               </Grid>
@@ -166,18 +152,20 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
           </Grid>
         </CardContent>
       </Card>
-      {openProgramDialog && (
-        <ProgramAddDialog
-          onAdd={handleAddProgram}
-          onClose={handleCloseProgramDialog}
-          onUpdate={handleUpdateUser}
-          open={openProgramDialog}
+      {openGradeDialog && (
+        <GradeAddDialog
+          onAdd={handleAddGrade}
+          onClose={handleCloseGradeDialog}
+          onUpdate={handleUpdateGrade}
+          open={openGradeDialog}
           processing={processing}
-          program={programUpdated}
+          grade={gradeUpdated}
         />
       )}
     </Fragment>
+
+
   );
 };
 
-export default HeaderProgram;
+export default HeaderGrade;

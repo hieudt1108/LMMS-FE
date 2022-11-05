@@ -185,9 +185,9 @@
     "confirmation": "Confirmation",
     "delete": "Delete",
     "edit": "Edit",
-    "add" : "Add",
-    "return" : "Return",
-    "createclass" : "Create class",
+    "add": "Add",
+    "return": "Return",
+    "createClass": "Create class",
     "errors": {
       "forbidden": {
         "subTitle": "You don't have access to view this page"
@@ -433,7 +433,7 @@
         "label": "Program study name"
       },
       "description": {
-        "title" : "Description",
+        "title": "Description",
         "label": "Description study program"
       }
     },

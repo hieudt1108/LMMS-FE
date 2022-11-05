@@ -18,11 +18,7 @@ type LandingLayoutProps = {
 };
 
 const LandingLayout = ({ children }: LandingLayoutProps) => {
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  // const { t } = useTranslation();
-  const handleSettingsToggle = () => {
-    setSettingsOpen(!settingsOpen);
-  };
+
 
   return (
     <Paper
@@ -58,19 +54,6 @@ const LandingLayout = ({ children }: LandingLayoutProps) => {
             </Typography>
           </Typography>
 
-          <IconButton
-            color='default'
-            aria-label='settings'
-            style={{ color: 'white' }}
-            component='span'
-            onClick={handleSettingsToggle}
-          >
-            <SettingsIcon />
-          </IconButton>
-          <SettingsDrawer
-            onDrawerToggle={handleSettingsToggle}
-            open={settingsOpen}
-          />
         </Toolbar>
       </AppBar>
       <main>{children}</main>

@@ -24,7 +24,7 @@ export default function PrimarySchool() {
   }, []);
 
   async function fetchGrade() {
-    const res = await getAllGrade(1, 10, '', 6);
+    const res = await getAllGrade({ page: 1, pageSize: 10, levelId: 6 });
     console.log(res);
     if (res.status < 400) {
       setGrade(res.data.data);

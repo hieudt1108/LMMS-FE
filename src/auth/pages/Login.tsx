@@ -16,7 +16,16 @@ import {
   getLocalStorage,
 } from '../../dataProvider/agent.js';
 import { dataLayerPush } from '../../Utils/dataLayerPush.js';
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import {InputAdornment, OutlinedInput} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
+interface State {
+    showPassword: boolean;
+}
 const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -24,6 +33,10 @@ const Login = () => {
     username: '',
     password: '',
   };
+  const [show, setShow] = React.useState<State>({
+      showPassword: false
+  });
+
   const [loginData, setLoginData] = useState(initUser);
   const [error, setError] = useState('');
   async function handleLogin(e: { preventDefault: () => void }) {
@@ -52,6 +65,17 @@ const Login = () => {
     console.log('Data :', res);
   }
 
+    const handleClickShowPassword = () => {
+        setShow({
+            ...show,
+            showPassword: !show.showPassword,
+        });
+    };
+
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
+
   return (
     <Grid container component='main' sx={{ height: '100vh' }}>
       <Grid
@@ -69,12 +93,14 @@ const Login = () => {
           backgroundPosition: 'center',
         }}
       />
+
       <Grid item xs={12} sm={8} md={5} component={Paper} square>
         <BoxedLayout>
           <Typography component='h1' variant='h5'>
             {t('auth.login.title')}
           </Typography>
-          <Box component='form' marginTop={3} noValidate onSubmit={handleLogin}>
+            {/*<form onSubmit={handleLogin}>*/}
+          <Box component='form' marginTop={3} onSubmit={handleLogin} noValidate >
             <TextField
               margin='normal'
               variant='filled'
@@ -105,7 +131,7 @@ const Login = () => {
               fullWidth
               name='password'
               label={t('auth.login.form.password.label')}
-              type='password'
+              type={show.showPassword ? 'text' : 'password'}
               id='password'
               autoComplete='current-password'
               value={loginData.password}
@@ -115,6 +141,20 @@ const Login = () => {
                   password: e.target.value,
                 })
               }
+              InputProps={{
+                  endAdornment: (
+                      <InputAdornment position="end">
+                          <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                          >
+                              {show.showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                      </InputAdornment>
+                  ),
+              }}
             />
             {error === 'password' && (
               <span style={{ color: 'red' }} className={`  text-danger `}>
@@ -131,6 +171,7 @@ const Login = () => {
               </Link>
             </Box>
             <LoadingButton
+              onSubmit={handleLogin}
               type='submit'
               fullWidth
               variant='contained'
@@ -144,8 +185,10 @@ const Login = () => {
               </span>
             )}
           </Box>
+            {/*</form>*/}
         </BoxedLayout>
       </Grid>
+
     </Grid>
   );
 };

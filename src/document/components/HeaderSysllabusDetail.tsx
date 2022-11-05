@@ -4,13 +4,13 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import SearchIcon from '@mui/icons-material/Search';
-import { styled, alpha } from '@mui/material/styles';
+import {styled, alpha} from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 
 //Subject img
 import Math from '../../Assets/Subjects/mathLogo.png';
 
-const Search = styled('div')(({ theme }) => ({
+const Search = styled('div')(({theme}) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -26,7 +26,7 @@ const Search = styled('div')(({ theme }) => ({
   },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled('div')(({theme}) => ({
   padding: theme.spacing(0, 2),
   height: '100%',
   position: 'absolute',
@@ -36,7 +36,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = styled(InputBase)(({theme}) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
@@ -51,42 +51,42 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 export default function HeaderSyllabus() {
   return (
-    <React.Fragment>
-      <Card sx={{ mb: 2 }}>
-        <CardContent
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Box sx={{ mr: 2 }}>
-            <img src={Math} />
-          </Box>
-          <Box>
-            <Typography component='div' variant='h4'>
-              Unit 1. My new school
-            </Typography>
-            <Typography variant='body2' color='textSecondary' component='div'>
-              Getting started
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant='body2' color='textSecondary' component='div'>
-              1. Listen and read.
-            </Typography>
-          </Box>
-          <Search style={{ border: '1px solid', borderRadius: '12px' }}>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder='Search…'
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-        </CardContent>
-      </Card>
-    </React.Fragment>
+      <React.Fragment>
+        <Card sx={{boxShadow: '-8px 0 0 -4px #747af2', mb: 2}}>
+          <CardContent
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+          >
+            <Box sx={{mr: 2}}>
+              <img src={Math}/>
+            </Box>
+            <Box>
+              <Typography component='div' variant='h4'>
+                Unit 1. My new school
+              </Typography>
+              <Typography variant='body2' color='textSecondary' component='div'>
+                Getting started
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant='body2' color='textSecondary' component='div'>
+                1. Listen and read.
+              </Typography>
+            </Box>
+            <Search style={{border: '1px solid', borderRadius: '12px'}}>
+              <SearchIconWrapper>
+                <SearchIcon/>
+              </SearchIconWrapper>
+              <StyledInputBase
+                  placeholder='Search…'
+                  inputProps={{'aria-label': 'search'}}
+              />
+            </Search>
+          </CardContent>
+        </Card>
+      </React.Fragment>
   );
 }

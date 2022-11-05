@@ -1,6 +1,4 @@
-import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -21,11 +19,8 @@ import React, { useEffect,useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Empty from '../../core/components/Empty';
 import * as selectUtils from '../../core/utils/selectUtils';
-import { Program } from '../types/program';
-import { useParams, useNavigate } from 'react-router-dom';
-import { deleteProgram } from '../../dataProvider/agent.js';
-import ConfirmDialog from "../../core/components/ConfirmDialog";
-import {useSnackbar} from "../../core/contexts/SnackbarProvider";
+import {Grade} from "../types/grade";
+
 
 interface HeadCell {
   id: string;
@@ -40,14 +35,9 @@ const headCells: HeadCell[] = [
     label: 'ID',
   },
   {
-    id: 'program',
+    id: 'grade',
     align: 'center',
-    label: 'Tên chương trình',
-  },
-  {
-    id: 'status',
-    align: 'center',
-    label: 'Trạng thái',
+    label: 'Tên khối học',
   },
 ];
 
@@ -70,23 +60,23 @@ function EnhancedTableHead() {
   );
 }
 
-type ProgramRowProps = {
+type GradeRowProps = {
   index: number;
-    onDelete: (programIds: string[]) => void;
-  onEdit: (program: Program) => void;
+  onDelete: (gradeIds: string[]) => void;
+  onEdit: (grade: Grade) => void;
   processing: boolean;
   selected: boolean;
-  program: Program;
+  grade: Grade;
 };
 
-const ProgramRow = ({
+const GradeRow = ({
   index,
   onDelete,
   onEdit,
   processing,
   selected,
-  program,
-}: ProgramRowProps) => {
+  grade,
+}: GradeRowProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation();
   const openActions = Boolean(anchorEl);
@@ -101,12 +91,12 @@ const ProgramRow = ({
 
   const handleDelete = () => {
     handleCloseActions();
-    onDelete([program.id]);
+    onDelete([grade.id]);
   };
 
   const handleEdit = () => {
     handleCloseActions();
-        onEdit(program);
+        onEdit(grade);
   };
 
   return (
@@ -116,7 +106,7 @@ const ProgramRow = ({
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography component='div' variant='h6'>
-            {`${program.id}`}
+            {`${grade.id}`}
           </Typography>
         </Box>
       </TableCell>
@@ -126,17 +116,10 @@ const ProgramRow = ({
         <Box sx={{ alignItems: 'center' }}>
           <Box>
             <Typography component='div' variant='h6'>
-              {`${program.name}`}
+              {`${grade.name}`}
             </Typography>
           </Box>
         </Box>
-      </TableCell>
-      <TableCell align='center'>
-        {program.enable ? (
-          <Chip label='Disabled' />
-        ) : (
-          <Chip color='primary' label='Active' />
-        )}
       </TableCell>
       <TableCell
         align='right'
@@ -186,24 +169,24 @@ const ProgramRow = ({
   );
 };
 
-type ProgramTableProps = {
+type GradeTableProps = {
   processing: boolean;
-  onDelete: (programIds: string[]) => void;
-  onEdit: (program: Program) => void;
+  onDelete: (gradeIds: string[]) => void;
+  onEdit: (grade: Grade) => void;
   onSelectedChange: (selected: string[]) => void;
   selected: string[];
-  programs?: Program[];
+  grades?: Grade[];
 };
 
 
-const ProgramTable = ({
+const GradeTable = ({
    onDelete,
    onEdit,
    onSelectedChange,
    processing,
    selected,
-   programs = [],
- }: ProgramTableProps) => {
+   grades = [],
+ }: GradeTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -225,8 +208,8 @@ const ProgramTable = ({
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
-  if (programs.length === 0) {
-    return <Empty title='No program yet' />;
+  if (grades.length === 0) {
+    return <Empty title='No grade yet' />;
   }
 
   return (
@@ -242,17 +225,17 @@ const ProgramTable = ({
         >
           <EnhancedTableHead />
           <TableBody>
-            {programs
+            {grades
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((program, index) => (
-                <ProgramRow
+              .map((grade, index) => (
+                <GradeRow
                   index={index}
-                  key={program.id}
+                  key={grade.id}
                   onDelete={onDelete}
                   onEdit={onEdit}
                   processing={processing}
-                  selected={isSelected(program.id)}
-                  program={program}
+                  selected={isSelected(grade.id)}
+                  grade={grade}
                 />
               ))}
           </TableBody>
@@ -261,7 +244,7 @@ const ProgramTable = ({
       <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component='div'
-          count={programs.length}
+          count={grades.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -271,4 +254,4 @@ const ProgramTable = ({
   );
 };
 
-export default ProgramTable;
+export default GradeTable;

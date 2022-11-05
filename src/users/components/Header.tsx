@@ -19,6 +19,7 @@ type HeaderProps = {
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
+  border: 'none',
   borderRadius: 'none',
   backgroundColor: alpha(theme.palette.common.white, 0.15),
   '&:hover': {
@@ -46,7 +47,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   border: '1px solid #3F435C',
-  borderRadius: '12px',
+  borderRadius: '5px',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -101,7 +102,7 @@ const Header = ({ title, description }: HeaderProps) => {
 
   return (
     <Fragment>
-      <Card>
+      <Card sx={{boxShadow: '-8px 0 0 -4px #747af2'}}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>

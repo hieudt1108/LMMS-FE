@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
-import { Program } from '../types/program';
+import { Level } from '../types/level';
 import {
   Box,
   CardContent,
@@ -23,67 +23,35 @@ import Stack from '@mui/material/Stack';
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Switch } from '@mui/material';
-import { createProgram } from '../../dataProvider/agent.js';
+import { createLevel } from '../../dataProvider/agent.js';
 
-const Android12Switch = styled(Switch)(({ theme }) => ({
-  padding: 8,
-  '& .MuiSwitch-track': {
-    borderRadius: 22 / 2,
-    '&:before, &:after': {
-      content: '""',
-      position: 'absolute',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      width: 16,
-      height: 16,
-    },
-    '&:before': {
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
-        theme.palette.getContrastText(theme.palette.primary.main)
-      )}" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>')`,
-      left: 12,
-    },
-    '&:after': {
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
-        theme.palette.getContrastText(theme.palette.primary.main)
-      )}" d="M19,13H5V11H19V13Z" /></svg>')`,
-      right: 12,
-    },
-  },
-  '& .MuiSwitch-thumb': {
-    boxShadow: 'none',
-    width: 16,
-    height: 16,
-    margin: 2,
-  },
-}));
 
-type ProgramDialogProps = {
-  onAdd: (user: Partial<Program>) => void;
+type LevelDialogProps = {
+  onAdd: (level: Partial<Level>) => void;
   onClose: () => void;
-  onUpdate: (program: Program) => void;
+  onUpdate: (level: Level) => void;
   open: boolean;
   processing: boolean;
-  program?: Program;
+  level?: Level;
 };
 
-const ProgramDialog = ({
+const LevelDialog = ({
   onAdd,
   onClose,
   onUpdate,
   open,
   processing,
-  program,
-}: ProgramDialogProps) => {
+  level,
+}: LevelDialogProps) => {
   const { t } = useTranslation();
-  const editMode = Boolean(program && program.id);
 
-  const initProgram = {
+  const initLevel = {
     name: '',
     description: '',
+    levelProgram: []
   };
 
-  const [programData, setProgramData] = useState(initProgram);
+  const [levelData, setLevelData] = useState(initLevel);
   function notify(type: string, text: string) {
     if (type === 'success') {
       toast.success(text, {
@@ -107,14 +75,12 @@ const ProgramDialog = ({
       });
     }
   }
-  async function handleCreateProgram(e: { preventDefault: () => void }) {
+  async function handleCreateLevel(e: { preventDefault: () => void }) {
     e.preventDefault();
-    const res = await createProgram(programData);
-
+    const res = await createLevel(levelData);
     if (res.status < 400) {
-      setProgramData(res.data.data);
       onClose();
-      notify('success', 'Thêm chương trình học thành công');
+      notify('success', 'Thêm cấp học thành công');
     } else {
       onClose();
       notify('error', 'Thất bại...');
@@ -131,18 +97,16 @@ const ProgramDialog = ({
         maxWidth={'md'}
         fullWidth={true}
       >
-        <form onSubmit={handleCreateProgram} noValidate>
+        <form onSubmit={handleCreateLevel} noValidate>
           <DialogTitle id='program-dialog-title'>
-            {editMode
-              ? t('programManagement.modal.edit.title')
-              : t('programManagement.modal.add.title')}
+            {t('programManagement.modal.add.title')}
           </DialogTitle>
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2} columns={12}>
                 <Grid item xs={4} sx={{ mt: 3.5 }}>
                   <Typography component='div' variant='h6'>
-                    Tên chương trình học<span style={{ color: 'red' }}>*</span>
+                    Tên cấp học<span style={{ color: 'red' }}>*</span>
                   </Typography>
                 </Grid>
                 <Grid item xs={8}>
@@ -155,9 +119,9 @@ const ProgramDialog = ({
                     name='name'
                     autoComplete='family-name'
                     autoFocus
-                    value={programData.name}
+                    value={levelData.name}
                     onChange={(e) =>
-                      setProgramData({ ...programData, name: e.target.value })
+                      setLevelData({ ...levelData, name: e.target.value })
                     }
                   />
                 </Grid>
@@ -165,7 +129,7 @@ const ProgramDialog = ({
               <Grid container spacing={2} columns={12}>
                 <Grid item xs={4} sx={{ mt: 3.5 }}>
                   <Typography component='div' variant='h6'>
-                    Mô tả chương trình học
+                    Mô tả cấp học
                   </Typography>
                 </Grid>
                 <Grid item xs={8}>
@@ -178,10 +142,10 @@ const ProgramDialog = ({
                     name='description'
                     autoComplete='family-name'
                     autoFocus
-                    value={programData.description}
+                    value={levelData.description}
                     onChange={(e) =>
-                      setProgramData({
-                        ...programData,
+                      setLevelData({
+                        ...levelData,
                         description: e.target.value,
                       })
                     }
@@ -197,9 +161,7 @@ const ProgramDialog = ({
               type='submit'
               variant='contained'
             >
-              {editMode
-                ? t('userManagement.modal.edit.action')
-                : t('userManagement.modal.add.action')}
+              {t('userManagement.modal.add.action')}
             </LoadingButton>
           </DialogActions>
         </form>
@@ -208,4 +170,4 @@ const ProgramDialog = ({
   );
 };
 
-export default ProgramDialog;
+export default LevelDialog;

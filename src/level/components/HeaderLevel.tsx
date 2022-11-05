@@ -7,20 +7,17 @@ import {
   Typography,
   InputBase,
 } from '@material-ui/core';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import React, { Fragment, useState } from 'react';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
-
 import { styled, alpha } from '@mui/material/styles';
-import { Program } from '../types/program';
+import { Level } from '../types/level';
 import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 import { useNavigate } from 'react-router-dom';
 import { ROUTER } from '../../Router';
-import ProgramAddDialog from './ProgramCreate';
-import { toast, ToastContainer } from 'react-toastify';
+import LevelAddDialog from './LevelCreate';
+import {toast, ToastContainer} from "react-toastify";
 
 type HeaderProps = {
   title: string;
@@ -55,7 +52,8 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
-
+  border: '1px solid #3F435C',
+  borderRadius: '12px',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -68,61 +66,61 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const HeaderProgram = ({ title, description }: HeaderProps) => {
+const HeaderLevel = ({ title, description }: HeaderProps) => {
   const { t } = useTranslation();
-  const [openProgramDialog, setOpenProgramDialog] = useState(false);
+  const [openLevelDialog, setOpenLevelDialog] = useState(false);
   const snackbar = useSnackbar();
   // @ts-ignore
-  const { addProgram, isAdding } = useState('');
+  const { addLevel, isAdding } = useState('');
   // @ts-ignore
-  const { isUpdating, updateProgram } = useState('');
-  const [programUpdated, setProgramUpdated] = useState<Program | undefined>(
+  const { isUpdating, updateLevel } = useState('');
+  const [levelUpdated, setLevelUpdated] = useState<Level | undefined>(
     undefined
   );
   const processing = isAdding || isUpdating;
 
-  const handleAddProgram = async (program: Partial<Program>) => {
-    addProgram(program as Program)
+  const handleAddLevel = async (level: Partial<Level>) => {
+    addLevel(level as Level)
       .then(() => {
         snackbar.success(
           t('userManagement.notifications.addSuccess', {
-            user: `${program.name}`,
+            user: `${level.name}`,
           })
         );
-        setOpenProgramDialog(false);
+        setOpenLevelDialog(false);
       })
       .catch(() => {
         snackbar.error(t('common.errors.unexpected.subTitle'));
       });
   };
-  const handleUpdateUser = async (program: Program) => {
-    updateProgram(program)
+  const handleUpdateLevel = async (level: Level) => {
+    updateLevel(level)
       .then(() => {
         snackbar.success(
           t('userManagement.notifications.updateSuccess', {
-            program: `${program.name}`,
+            level: `${level.name}`,
           })
         );
-        setOpenProgramDialog(false);
+        setOpenLevelDialog(false);
       })
       .catch(() => {
         snackbar.error(t('common.errors.unexpected.subTitle'));
       });
   };
 
-  const handleCloseProgramDialog = () => {
-    setProgramUpdated(undefined);
-    setOpenProgramDialog(false);
+  const handleCloseLevelDialog = () => {
+    setLevelUpdated(undefined);
+    setOpenLevelDialog(false);
   };
 
-  const handleOpenProgramDialog = (program?: Program) => {
-    setProgramUpdated(program);
-    setOpenProgramDialog(true);
+  const handleOpenLevelDialog = (level?: Level) => {
+    setLevelUpdated(level);
+    setOpenLevelDialog(true);
   };
 
   return (
     <Fragment>
-      <Card sx={{ boxShadow: '-8px 0 0 -4px #747af2' }}>
+      <Card sx={{boxShadow: '-8px 0 0 -4px #747af2'}}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
@@ -137,7 +135,7 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder='Tìm kiếm chương trình học'
+                  placeholder='Tìm kiếm cấp học'
                   inputProps={{ 'aria-label': 'search' }}
                 />
               </Search>
@@ -146,19 +144,10 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
               <Grid container justifyContent='flex-end'>
                 <Box sx={{ mt: 5 }}>
                   <Button
-                    className='button'
-                    startIcon={<FileUploadIcon fontSize='small' />}
-                  >
-                    {t('userManagement.listScreen.exportFile')}
-                  </Button>
-                  <Button startIcon={<FileDownloadIcon fontSize='small' />}>
-                    {t('userManagement.listScreen.importFile')}
-                  </Button>
-                  <Button
                     startIcon={<PersonAddAltIcon fontSize='small' />}
-                    onClick={() => handleOpenProgramDialog()}
+                    onClick={() => handleOpenLevelDialog()}
                   >
-                    Thêm chương trình
+                    Thêm cấp học
                   </Button>
                 </Box>
               </Grid>
@@ -166,18 +155,20 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
           </Grid>
         </CardContent>
       </Card>
-      {openProgramDialog && (
-        <ProgramAddDialog
-          onAdd={handleAddProgram}
-          onClose={handleCloseProgramDialog}
-          onUpdate={handleUpdateUser}
-          open={openProgramDialog}
+      {openLevelDialog && (
+        <LevelAddDialog
+          onAdd={handleAddLevel}
+          onClose={handleCloseLevelDialog}
+          onUpdate={handleUpdateLevel}
+          open={openLevelDialog}
           processing={processing}
-          program={programUpdated}
+          level={levelUpdated}
         />
       )}
     </Fragment>
+
+
   );
 };
 
-export default HeaderProgram;
+export default HeaderLevel;

@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
-import { Program } from '../types/program';
+import { Level } from '../types/level';
 import {
   Box,
   CardContent,
@@ -23,67 +23,52 @@ import Stack from '@mui/material/Stack';
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Switch } from '@mui/material';
-import { createProgram } from '../../dataProvider/agent.js';
+import {createLevel, createProgram, updateLevel} from '../../dataProvider/agent.js';
 
-const Android12Switch = styled(Switch)(({ theme }) => ({
-  padding: 8,
-  '& .MuiSwitch-track': {
-    borderRadius: 22 / 2,
-    '&:before, &:after': {
-      content: '""',
-      position: 'absolute',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      width: 16,
-      height: 16,
-    },
-    '&:before': {
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
-        theme.palette.getContrastText(theme.palette.primary.main)
-      )}" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>')`,
-      left: 12,
-    },
-    '&:after': {
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
-        theme.palette.getContrastText(theme.palette.primary.main)
-      )}" d="M19,13H5V11H19V13Z" /></svg>')`,
-      right: 12,
-    },
-  },
-  '& .MuiSwitch-thumb': {
-    boxShadow: 'none',
-    width: 16,
-    height: 16,
-    margin: 2,
-  },
-}));
 
-type ProgramDialogProps = {
-  onAdd: (user: Partial<Program>) => void;
+type LevelDialogProps = {
   onClose: () => void;
-  onUpdate: (program: Program) => void;
+  onUpdate: (level: Level) => void;
   open: boolean;
   processing: boolean;
-  program?: Program;
+  level?: Level;
 };
 
-const ProgramDialog = ({
-  onAdd,
+const LevelDialog = ({
   onClose,
   onUpdate,
   open,
   processing,
-  program,
-}: ProgramDialogProps) => {
+  level,
+}: LevelDialogProps) => {
   const { t } = useTranslation();
-  const editMode = Boolean(program && program.id);
+  const editMode = Boolean(level && level.id);
 
-  const initProgram = {
-    name: '',
-    description: '',
+  const handleSubmit = (values: Partial<Level>) => {
+    if (level && level.id) {
+      onUpdate({ ...values, id: level.id } as Level);
+    }
   };
 
-  const [programData, setProgramData] = useState(initProgram);
+  const formik = useFormik({
+    initialValues: {
+      id : level ? level.id : '',
+      name: level ? level.name : '',
+      description: level ? level.description : '',
+    },
+    validationSchema: Yup.object({
+      programName: Yup.string()
+          .max(20, t('common.validations.max', { size: 20 }))
+          .required(t('common.validations.required')),
+      description: Yup.string()
+          .max(30, t('common.validations.max', { size: 30 }))
+          .required(t('common.validations.required')),
+    }),
+    onSubmit: handleSubmit,
+  });
+
+
+  const [levelData, setLevelData] = useState(formik.initialValues);
   function notify(type: string, text: string) {
     if (type === 'success') {
       toast.success(text, {
@@ -107,14 +92,13 @@ const ProgramDialog = ({
       });
     }
   }
-  async function handleCreateProgram(e: { preventDefault: () => void }) {
+  async function handleUpdateLevel(e: { preventDefault: () => void }) {
     e.preventDefault();
-    const res = await createProgram(programData);
+    const res = await updateLevel(formik.values.id, { name: formik.values.name, description: formik.values.description });
 
     if (res.status < 400) {
-      setProgramData(res.data.data);
       onClose();
-      notify('success', 'Thêm chương trình học thành công');
+      notify('success', 'Cập nhật cấp học thành công');
     } else {
       onClose();
       notify('error', 'Thất bại...');
@@ -131,7 +115,7 @@ const ProgramDialog = ({
         maxWidth={'md'}
         fullWidth={true}
       >
-        <form onSubmit={handleCreateProgram} noValidate>
+        <form onSubmit={handleUpdateLevel} noValidate>
           <DialogTitle id='program-dialog-title'>
             {editMode
               ? t('programManagement.modal.edit.title')
@@ -142,7 +126,30 @@ const ProgramDialog = ({
               <Grid container spacing={2} columns={12}>
                 <Grid item xs={4} sx={{ mt: 3.5 }}>
                   <Typography component='div' variant='h6'>
-                    Tên chương trình học<span style={{ color: 'red' }}>*</span>
+                    Mã cấp học<span style={{ color: 'red' }}>*</span>
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                      margin='normal'
+                      disabled
+                      fullWidth
+                      id="outlined-disabled"
+                      label={t('programManagement.form.id.label')}
+                      name='id'
+                      autoComplete='family-name'
+                      value={formik.values.id}
+                      onChange={formik.handleChange}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} columns={12}>
+                <Grid item xs={4} sx={{ mt: 3.5 }}>
+                  <Typography component='div' variant='h6'>
+                    Tên cấp học<span style={{ color: 'red' }}>*</span>
                   </Typography>
                 </Grid>
                 <Grid item xs={8}>
@@ -155,17 +162,17 @@ const ProgramDialog = ({
                     name='name'
                     autoComplete='family-name'
                     autoFocus
-                    value={programData.name}
-                    onChange={(e) =>
-                      setProgramData({ ...programData, name: e.target.value })
-                    }
+                    value={formik.values.name}
+                    onChange={formik.handleChange}
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
                   />
                 </Grid>
               </Grid>
               <Grid container spacing={2} columns={12}>
                 <Grid item xs={4} sx={{ mt: 3.5 }}>
                   <Typography component='div' variant='h6'>
-                    Mô tả chương trình học
+                    Mô tả cấp học
                   </Typography>
                 </Grid>
                 <Grid item xs={8}>
@@ -178,13 +185,10 @@ const ProgramDialog = ({
                     name='description'
                     autoComplete='family-name'
                     autoFocus
-                    value={programData.description}
-                    onChange={(e) =>
-                      setProgramData({
-                        ...programData,
-                        description: e.target.value,
-                      })
-                    }
+                    value={formik.values.description}
+                    onChange={formik.handleChange}
+                    error={formik.touched.description && Boolean(formik.errors.description)}
+                    helperText={formik.touched.description && formik.errors.description}
                   />
                 </Grid>
               </Grid>
@@ -208,4 +212,4 @@ const ProgramDialog = ({
   );
 };
 
-export default ProgramDialog;
+export default LevelDialog;

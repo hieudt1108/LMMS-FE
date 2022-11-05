@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, TextField } from '@mui/material';
 import ClassCart from '../components/ClassCart';
@@ -10,12 +10,17 @@ import MenuItem from '@mui/material/MenuItem';
 import { SelectChangeEvent } from '@mui/material/Select';
 import TablePagination from '@mui/material/TablePagination';
 import ClassHeader from '../components/ClassHeader';
+import { getAllClass, getAllGrade } from '../../dataProvider/agent';
 
 const Classes = () => {
   const { t } = useTranslation();
   const [age, setAge] = React.useState<number | string>('');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [classObj, setClassObj] = React.useState<{ data: any }>({
+    data: [],
+  });
+  const [grade, setGrade] = React.useState<{ data: any }>({ data: [] });
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -31,9 +36,19 @@ const Classes = () => {
     setPage(0);
   };
 
-  const handleChange = (event: SelectChangeEvent<typeof age>) => {
-    setAge(Number(event.target.value) || '');
-  };
+  useEffect(() => {
+    async function fetchMyAPI() {
+      let response = await Promise.all([
+        getAllClass({ pageIndex: 1, pageSize: 10 }),
+        getAllGrade({ pageIndex: 1, pageSize: 10 }),
+      ]);
+      setClassObj(response[0].data);
+      setGrade(response[1].data);
+      console.log('response', response);
+    }
+
+    fetchMyAPI();
+  }, []);
 
   return (
     <React.Fragment>
@@ -43,10 +58,11 @@ const Classes = () => {
       <ClassHeader
         title={'classes.description'}
         description={'classes.create'}
+        data={grade.data}
       />
       <Stack spacing={2} direction='row' alignItems='center' mt={2.5}>
         <Grid container spacing={2}>
-          <ClassCart></ClassCart>
+          <ClassCart data={classObj.data}></ClassCart>
         </Grid>
       </Stack>
 

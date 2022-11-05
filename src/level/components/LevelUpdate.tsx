@@ -3,28 +3,17 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import LoadingButton from '@material-ui/lab/LoadingButton';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { Level } from '../types/level';
-import {
-  Box,
-  CardContent,
-  Grid,
-  Typography,
-  InputBase,
-} from '@material-ui/core';
-import Stack from '@mui/material/Stack';
-import React, { useState, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
-import { Switch } from '@mui/material';
-import {createLevel, createProgram, updateLevel} from '../../dataProvider/agent.js';
-
+import { Box, Grid, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { updateLevel } from '../../dataProvider/agent.js';
 
 type LevelDialogProps = {
   onClose: () => void;
@@ -52,21 +41,20 @@ const LevelDialog = ({
 
   const formik = useFormik({
     initialValues: {
-      id : level ? level.id : '',
+      id: level ? level.id : '',
       name: level ? level.name : '',
       description: level ? level.description : '',
     },
     validationSchema: Yup.object({
       programName: Yup.string()
-          .max(20, t('common.validations.max', { size: 20 }))
-          .required(t('common.validations.required')),
+        .max(20, t('common.validations.max', { size: 20 }))
+        .required(t('common.validations.required')),
       description: Yup.string()
-          .max(30, t('common.validations.max', { size: 30 }))
-          .required(t('common.validations.required')),
+        .max(30, t('common.validations.max', { size: 30 }))
+        .required(t('common.validations.required')),
     }),
     onSubmit: handleSubmit,
   });
-
 
   const [levelData, setLevelData] = useState(formik.initialValues);
   function notify(type: string, text: string) {
@@ -94,7 +82,10 @@ const LevelDialog = ({
   }
   async function handleUpdateLevel(e: { preventDefault: () => void }) {
     e.preventDefault();
-    const res = await updateLevel(formik.values.id, { name: formik.values.name, description: formik.values.description });
+    const res = await updateLevel(formik.values.id, {
+      name: formik.values.name,
+      description: formik.values.description,
+    });
 
     if (res.status < 400) {
       onClose();
@@ -117,9 +108,7 @@ const LevelDialog = ({
       >
         <form onSubmit={handleUpdateLevel} noValidate>
           <DialogTitle id='program-dialog-title'>
-            {editMode
-              ? t('programManagement.modal.edit.title')
-              : t('programManagement.modal.add.title')}
+            {t('level.modal.edit.title')}
           </DialogTitle>
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
@@ -131,18 +120,18 @@ const LevelDialog = ({
                 </Grid>
                 <Grid item xs={8}>
                   <TextField
-                      margin='normal'
-                      disabled
-                      fullWidth
-                      id="outlined-disabled"
-                      label={t('programManagement.form.id.label')}
-                      name='id'
-                      autoComplete='family-name'
-                      value={formik.values.id}
-                      onChange={formik.handleChange}
-                      InputProps={{
-                        readOnly: true,
-                      }}
+                    margin='normal'
+                    disabled
+                    fullWidth
+                    id='outlined-disabled'
+                    label={t('level.form.id.label')}
+                    name='id'
+                    autoComplete='family-name'
+                    value={formik.values.id}
+                    onChange={formik.handleChange}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -158,7 +147,7 @@ const LevelDialog = ({
                     required
                     fullWidth
                     id='name'
-                    label={t('programManagement.form.name.label')}
+                    label={t('level.form.name.label')}
                     name='name'
                     autoComplete='family-name'
                     autoFocus
@@ -178,17 +167,21 @@ const LevelDialog = ({
                 <Grid item xs={8}>
                   <TextField
                     margin='normal'
-                    required
                     fullWidth
                     id='description'
-                    label={t('programManagement.form.description.title')}
+                    label={t('level.form.description.title')}
                     name='description'
                     autoComplete='family-name'
                     autoFocus
                     value={formik.values.description}
                     onChange={formik.handleChange}
-                    error={formik.touched.description && Boolean(formik.errors.description)}
-                    helperText={formik.touched.description && formik.errors.description}
+                    error={
+                      formik.touched.description &&
+                      Boolean(formik.errors.description)
+                    }
+                    helperText={
+                      formik.touched.description && formik.errors.description
+                    }
                   />
                 </Grid>
               </Grid>
@@ -202,8 +195,8 @@ const LevelDialog = ({
               variant='contained'
             >
               {editMode
-                ? t('userManagement.modal.edit.action')
-                : t('userManagement.modal.add.action')}
+                ? t('level.modal.edit.action')
+                : t('level.modal.add.action')}
             </LoadingButton>
           </DialogActions>
         </form>

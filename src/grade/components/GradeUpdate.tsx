@@ -11,14 +11,9 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { Grade } from '../types/grade';
-import {
-  Box,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
-import {updateGrade} from '../../dataProvider/agent.js';
-
+import { updateGrade } from '../../dataProvider/agent.js';
 
 type GradeDialogProps = {
   onClose: () => void;
@@ -46,21 +41,20 @@ const GradeDialog = ({
 
   const formik = useFormik({
     initialValues: {
-      id : grade ? grade.id : '',
+      id: grade ? grade.id : '',
       name: grade ? grade.name : '',
       description: grade ? grade.description : '',
     },
     validationSchema: Yup.object({
       programName: Yup.string()
-          .max(20, t('common.validations.max', { size: 20 }))
-          .required(t('common.validations.required')),
+        .max(20, t('common.validations.max', { size: 20 }))
+        .required(t('common.validations.required')),
       description: Yup.string()
-          .max(30, t('common.validations.max', { size: 30 }))
-          .required(t('common.validations.required')),
+        .max(30, t('common.validations.max', { size: 30 }))
+        .required(t('common.validations.required')),
     }),
     onSubmit: handleSubmit,
   });
-
 
   const [gradeData, setGradeData] = useState(formik.initialValues);
   function notify(type: string, text: string) {
@@ -88,7 +82,10 @@ const GradeDialog = ({
   }
   async function handleUpdateGrade(e: { preventDefault: () => void }) {
     e.preventDefault();
-    const res = await updateGrade(formik.values.id, { name: formik.values.name, description: formik.values.description });
+    const res = await updateGrade(formik.values.id, {
+      name: formik.values.name,
+      description: formik.values.description,
+    });
 
     if (res.status < 400) {
       onClose();
@@ -111,9 +108,7 @@ const GradeDialog = ({
       >
         <form onSubmit={handleUpdateGrade} noValidate>
           <DialogTitle id='program-dialog-title'>
-            {editMode
-              ? t('programManagement.modal.edit.title')
-              : t('programManagement.modal.add.title')}
+            {t('grade.modal.edit.title')}
           </DialogTitle>
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
@@ -125,18 +120,18 @@ const GradeDialog = ({
                 </Grid>
                 <Grid item xs={8}>
                   <TextField
-                      margin='normal'
-                      disabled
-                      fullWidth
-                      id="outlined-disabled"
-                      label={t('programManagement.form.id.label')}
-                      name='id'
-                      autoComplete='family-name'
-                      value={formik.values.id}
-                      onChange={formik.handleChange}
-                      InputProps={{
-                        readOnly: true,
-                      }}
+                    margin='normal'
+                    disabled
+                    fullWidth
+                    id='outlined-disabled'
+                    label={t('grade.form.id.label')}
+                    name='id'
+                    autoComplete='family-name'
+                    value={formik.values.id}
+                    onChange={formik.handleChange}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -152,7 +147,7 @@ const GradeDialog = ({
                     required
                     fullWidth
                     id='name'
-                    label={t('programManagement.form.name.label')}
+                    label={t('grade.form.name.label')}
                     name='name'
                     autoComplete='family-name'
                     autoFocus
@@ -175,14 +170,19 @@ const GradeDialog = ({
                     required
                     fullWidth
                     id='description'
-                    label={t('programManagement.form.description.title')}
+                    label={t('grade.form.description.title')}
                     name='description'
                     autoComplete='family-name'
                     autoFocus
                     value={formik.values.description}
                     onChange={formik.handleChange}
-                    error={formik.touched.description && Boolean(formik.errors.description)}
-                    helperText={formik.touched.description && formik.errors.description}
+                    error={
+                      formik.touched.description &&
+                      Boolean(formik.errors.description)
+                    }
+                    helperText={
+                      formik.touched.description && formik.errors.description
+                    }
                   />
                 </Grid>
               </Grid>
@@ -195,9 +195,7 @@ const GradeDialog = ({
               type='submit'
               variant='contained'
             >
-              {editMode
-                ? t('userManagement.modal.edit.action')
-                : t('userManagement.modal.add.action')}
+              {t('grade.modal.edit.action')}
             </LoadingButton>
           </DialogActions>
         </form>

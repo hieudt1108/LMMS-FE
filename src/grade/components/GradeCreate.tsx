@@ -11,14 +11,9 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { Grade } from '../types/grade';
-import {
-  Box,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { createGrade } from '../../dataProvider/agent.js';
-
 
 type GradeDialogProps = {
   onAdd: (grade: Partial<Grade>) => void;
@@ -93,7 +88,7 @@ const GradeDialog = ({
       >
         <form onSubmit={handleCreateGrade} noValidate>
           <DialogTitle id='program-dialog-title'>
-            {t('programManagement.modal.add.title')}
+            {t('grade.modal.add.title')}
           </DialogTitle>
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
@@ -109,7 +104,7 @@ const GradeDialog = ({
                     required
                     fullWidth
                     id='name'
-                    label={t('programManagement.form.name.label')}
+                    label={t('grade.form.name.label')}
                     name='name'
                     autoComplete='family-name'
                     autoFocus
@@ -132,7 +127,7 @@ const GradeDialog = ({
                     required
                     fullWidth
                     id='description'
-                    label={t('programManagement.form.description.title')}
+                    label={t('grade.form.description.title')}
                     name='description'
                     autoComplete='family-name'
                     autoFocus
@@ -155,7 +150,7 @@ const GradeDialog = ({
               type='submit'
               variant='contained'
             >
-              {t('userManagement.modal.add.action')}
+              {t('grade.modal.add.action')}
             </LoadingButton>
           </DialogActions>
         </form>

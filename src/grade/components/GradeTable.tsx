@@ -15,12 +15,11 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Empty from '../../core/components/Empty';
 import * as selectUtils from '../../core/utils/selectUtils';
-import {Grade} from "../types/grade";
-
+import { Grade } from '../types/grade';
 
 interface HeadCell {
   id: string;
@@ -53,7 +52,7 @@ function EnhancedTableHead() {
           </TableCell>
         ))}
         <TableCell align='right' sx={{ py: 0 }}>
-          {t('userManagement.table.headers.actions')}
+          Hành động
         </TableCell>
       </TableRow>
     </TableHead>
@@ -96,13 +95,13 @@ const GradeRow = ({
 
   const handleEdit = () => {
     handleCloseActions();
-        onEdit(grade);
+    onEdit(grade);
   };
 
   return (
     <TableRow sx={{ '& td': { bgcolor: 'background.paper', border: 0 } }}>
       <TableCell
-          sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}
+        sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography component='div' variant='h6'>
@@ -110,9 +109,7 @@ const GradeRow = ({
           </Typography>
         </Box>
       </TableCell>
-      <TableCell
-          align='center'
-      >
+      <TableCell align='center'>
         <Box sx={{ alignItems: 'center' }}>
           <Box>
             <Typography component='div' variant='h6'>
@@ -157,7 +154,7 @@ const GradeRow = ({
             </ListItemIcon>{' '}
             {t('common.edit')}
           </MenuItem>
-            <MenuItem onClick={handleDelete}>
+          <MenuItem onClick={handleDelete}>
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>{' '}
@@ -178,15 +175,14 @@ type GradeTableProps = {
   grades?: Grade[];
 };
 
-
 const GradeTable = ({
-   onDelete,
-   onEdit,
-   onSelectedChange,
-   processing,
-   selected,
-   grades = [],
- }: GradeTableProps) => {
+  onDelete,
+  onEdit,
+  onSelectedChange,
+  processing,
+  selected,
+  grades = [],
+}: GradeTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -200,7 +196,7 @@ const GradeTable = ({
   };
 
   const handleChangeRowsPerPage = (
-      event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -242,13 +238,13 @@ const GradeTable = ({
         </Table>
       </TableContainer>
       <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component='div'
-          count={grades.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 10, 25]}
+        component='div'
+        count={grades.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </React.Fragment>
   );

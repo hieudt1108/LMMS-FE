@@ -80,7 +80,7 @@ const HeaderGrade = ({ title, description }: HeaderProps) => {
     addGrade(grade as Grade)
       .then(() => {
         snackbar.success(
-          t('userManagement.notifications.addSuccess', {
+          t('grade.notifications.addSuccess', {
             user: `${grade.name}`,
           })
         );
@@ -94,7 +94,7 @@ const HeaderGrade = ({ title, description }: HeaderProps) => {
     updateGrade(grade)
       .then(() => {
         snackbar.success(
-          t('userManagement.notifications.updateSuccess', {
+          t('grade.notifications.updateSuccess', {
             grade: `${grade.name}`,
           })
         );
@@ -117,7 +117,7 @@ const HeaderGrade = ({ title, description }: HeaderProps) => {
 
   return (
     <Fragment>
-      <Card sx={{boxShadow: '-8px 0 0 -4px #747af2'}}>
+      <Card sx={{ boxShadow: '-8px 0 0 -4px #747af2' }}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
@@ -163,8 +163,6 @@ const HeaderGrade = ({ title, description }: HeaderProps) => {
         />
       )}
     </Fragment>
-
-
   );
 };
 

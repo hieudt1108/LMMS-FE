@@ -82,8 +82,8 @@ const ProgramManagement = () => {
     setOpenConfirmDeleteDialog(true);
   };
 
-  const handleOpenProgramDialog = (user?: Program) => {
-    setProgramUpdated(user);
+  const handleOpenProgramDialog = (program?: Program) => {
+    setProgramUpdated(program);
     setOpenProgramDialog(true);
   };
 
@@ -104,7 +104,7 @@ const ProgramManagement = () => {
     addProgram(program as Program)
       .then(() => {
         snackbar.success(
-          t('userManagement.notifications.addSuccess', {
+          t('programManagement.notifications.addSuccess', {
             program: `${program.name}`,
           })
         );
@@ -119,7 +119,7 @@ const ProgramManagement = () => {
     updateProgram(program)
       .then(() => {
         snackbar.success(
-          t('userManagement.notifications.updateSuccess', {
+          t('programManagement.notifications.updateSuccess', {
             program: `${program.name}`,
           })
         );

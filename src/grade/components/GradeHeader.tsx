@@ -23,7 +23,6 @@ type HeaderProps = {
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
-  borderRadius: 'none',
   backgroundColor: alpha(theme.palette.common.white, 0.15),
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
@@ -49,8 +48,6 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
-  border: '1px solid #3F435C',
-  borderRadius: '12px',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon

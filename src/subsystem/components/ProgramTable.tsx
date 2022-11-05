@@ -44,11 +44,6 @@ const headCells: HeadCell[] = [
     align: 'center',
     label: 'Tên chương trình',
   },
-  {
-    id: 'status',
-    align: 'center',
-    label: 'Trạng thái',
-  },
 ];
 
 function EnhancedTableHead() {
@@ -63,7 +58,7 @@ function EnhancedTableHead() {
           </TableCell>
         ))}
         <TableCell align='right' sx={{ py: 0 }}>
-          {t('userManagement.table.headers.actions')}
+          {t('programManagement.table.headers.actions')}
         </TableCell>
       </TableRow>
     </TableHead>
@@ -130,13 +125,6 @@ const ProgramRow = ({
             </Typography>
           </Box>
         </Box>
-      </TableCell>
-      <TableCell align='center'>
-        {program.enable ? (
-          <Chip label='Disabled' />
-        ) : (
-          <Chip color='primary' label='Active' />
-        )}
       </TableCell>
       <TableCell
         align='right'

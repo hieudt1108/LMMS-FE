@@ -265,7 +265,7 @@ const AdminDrawer = ({
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                    primary={'Cấu hình hệ thống'}
+                    primary={'Quản lý hệ thống'}
                     sx={{
                         cursor: 'pointer',
                         display: collapsed ? 'none' : 'block',

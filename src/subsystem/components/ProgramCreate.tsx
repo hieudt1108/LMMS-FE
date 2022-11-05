@@ -59,7 +59,7 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 }));
 
 type ProgramDialogProps = {
-  onAdd: (user: Partial<Program>) => void;
+  onAdd: (program: Partial<Program>) => void;
   onClose: () => void;
   onUpdate: (program: Program) => void;
   open: boolean;
@@ -197,8 +197,8 @@ const ProgramDialog = ({
               variant='contained'
             >
               {editMode
-                ? t('userManagement.modal.edit.action')
-                : t('userManagement.modal.add.action')}
+                ? t('programManagement.modal.edit.action')
+                : t('programManagement.modal.add.action')}
             </LoadingButton>
           </DialogActions>
         </form>

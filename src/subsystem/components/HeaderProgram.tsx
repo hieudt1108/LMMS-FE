@@ -85,8 +85,8 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
     addProgram(program as Program)
       .then(() => {
         snackbar.success(
-          t('userManagement.notifications.addSuccess', {
-            user: `${program.name}`,
+          t('programManagement.notifications.addSuccess', {
+            program: `${program.name}`,
           })
         );
         setOpenProgramDialog(false);
@@ -95,11 +95,11 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
         snackbar.error(t('common.errors.unexpected.subTitle'));
       });
   };
-  const handleUpdateUser = async (program: Program) => {
+  const handleUpdateProgram = async (program: Program) => {
     updateProgram(program)
       .then(() => {
         snackbar.success(
-          t('userManagement.notifications.updateSuccess', {
+          t('programManagement.notifications.updateSuccess', {
             program: `${program.name}`,
           })
         );
@@ -146,15 +146,6 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
               <Grid container justifyContent='flex-end'>
                 <Box sx={{ mt: 5 }}>
                   <Button
-                    className='button'
-                    startIcon={<FileUploadIcon fontSize='small' />}
-                  >
-                    {t('userManagement.listScreen.exportFile')}
-                  </Button>
-                  <Button startIcon={<FileDownloadIcon fontSize='small' />}>
-                    {t('userManagement.listScreen.importFile')}
-                  </Button>
-                  <Button
                     startIcon={<PersonAddAltIcon fontSize='small' />}
                     onClick={() => handleOpenProgramDialog()}
                   >
@@ -170,7 +161,7 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
         <ProgramAddDialog
           onAdd={handleAddProgram}
           onClose={handleCloseProgramDialog}
-          onUpdate={handleUpdateUser}
+          onUpdate={handleUpdateProgram}
           open={openProgramDialog}
           processing={processing}
           program={programUpdated}

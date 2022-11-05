@@ -92,6 +92,11 @@ function getALlSlot() {
   return getApi('/Slot/getAll?pageIndex=1&pageSize=1000');
 }
 
+// ROLES
+function getALlRoles(params) {
+  return getApi('/Role/getAll', params);
+}
+
 // POST API AREA ============================>
 function postApi(url, payload, file) {
   const token = getLocalStorage('access_token');
@@ -234,6 +239,7 @@ export {
   getAllClass,
   getClassbyId,
   getAllGrade,
+  getALlRoles,
   createGrade,
   deleteGrade,
   updateGrade,

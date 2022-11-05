@@ -436,6 +436,9 @@
       "disabled": {
         "label": "Vô hiệu hóa"
       },
+      "id": {
+        "label": "Mã chương trình học"
+      },
       "name": {
         "label": "Tên chương trình học"
       },

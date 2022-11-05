@@ -24,12 +24,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import SvgContainer from '../../core/components/SvgContainer';
 import { ReactComponent as ConfirmSvg } from '../../core/assets/confirm.svg';
-import { createUserAuth } from '../../dataProvider/agent.js';
+import {createUserAuth, getAllProgram, getALlRoles} from '../../dataProvider/agent.js';
 import { toast } from 'react-toastify';
 import { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import { DatePicker } from '@material-ui/lab';
 import dayjs, { Dayjs } from 'dayjs';
+import Autocomplete from "@mui/material/Autocomplete";
 
 const genders = [
   { label: 'userManagement.form.gender.options.f', value: '0' },
@@ -68,6 +69,18 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
     margin: 2,
   },
 }));
+
+
+const topRoles = [
+  { title: 'Học sinh', id: 10 },
+  { title: 'Quản trị viên', id: 2 },
+  { title: 'Giáo viên', id: 11 },
+  { title: 'Phụ huynh', id: 12 },
+  { title: 'Trưởng bộ môn', id: 13 },
+  { title: "Giáo viên chủ nhiệm", id: 14 },
+]
+
+
 
 const AddUser = () => {
   const { t } = useTranslation();
@@ -121,7 +134,7 @@ const AddUser = () => {
   const initUser = {
     userName: 'saa',
     password: 'sadsada',
-    email: '',
+    email: 'sdadasd@gmail.com',
     firstName: '',
     lastName: '',
     gender: 0,
@@ -134,14 +147,27 @@ const AddUser = () => {
   };
 
   const [userData, setUserData] = useState(initUser);
+  const [userRole, setUserRole] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    fetchRoles();
+  }, []);
+
+  async function fetchRoles() {
+    const res = await getALlRoles({ pageIndex: 1, pageSize: 10 });
+    console.log('data: ',res.data.data);
+    if (res.status < 400) {
+      setUserRole(res.data.data);
+    } else {
+      console.log('error fetch api');
+    }
+  }
 
   async function handleCreateUser(e: { preventDefault: () => void }) {
     e.preventDefault();
     const res = await createUserAuth(userData);
 
     if (res.status < 400) {
-      // setOpen(false);
-      // notify('success', 'Thêm người dùng thành công');
       console.log('add success');
     } else {
       setOpen(false);
@@ -308,17 +334,21 @@ const AddUser = () => {
                 <Typography component='div' variant='h6' sx={{ mt: 3 }}>
                   Role
                 </Typography>
-                <FormControlLabel
-                  sx={{ ml: 9, mt: 1.85 }}
-                  // value={userData.isTeacher}
-                  control={
-                    <Checkbox
-                    // onChange={(e) =>
-                    // setUserData({ ...userData, isTeacher: parseInt(e.target.value) })}
-                    />
-                  }
-                  label='Is Teacher'
-                />
+                {/*{userRole?.map((role) => (*/}
+                  <Autocomplete
+                      multiple
+                      fullWidth
+                      id="size-small-outlined-multi"
+                      size="small"
+                      options={topRoles}
+                      getOptionLabel={(option) => option.title}
+                      defaultValue={[topRoles[0]]}
+                      renderInput={(params) => (
+                          <TextField style={{color:'white'}} {...params} label="Role" placeholder="Chức vụ" />
+                      )}
+                      sx={{ ml: 10, mt: 2 }}
+                  />
+                {/*))}*/}
               </Stack>
               <Box marginBottom={2} marginTop={3}>
                 <Typography variant='h2' color='GrayText'>

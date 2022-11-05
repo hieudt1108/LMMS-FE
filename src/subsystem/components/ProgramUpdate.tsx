@@ -23,7 +23,7 @@ import Stack from '@mui/material/Stack';
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Switch } from '@mui/material';
-import { createProgram } from '../../dataProvider/agent.js';
+import {createProgram, updateLevel, updateProgram} from '../../dataProvider/agent.js';
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -59,7 +59,7 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 }));
 
 type ProgramDialogProps = {
-  onAdd: (user: Partial<Program>) => void;
+  onAdd: (program: Partial<Program>) => void;
   onClose: () => void;
   onUpdate: (program: Program) => void;
   open: boolean;
@@ -81,13 +81,12 @@ const ProgramDialog = ({
   const handleSubmit = (values: Partial<Program>) => {
     if (program && program.id) {
       onUpdate({ ...values, id: program.id } as Program);
-    } else {
-      onAdd(values);
     }
   };
 
   const formik = useFormik({
     initialValues: {
+      id: program ? program.id : '',
       name: program ? program.name : '',
       description: program ? program.description : '',
     },
@@ -126,9 +125,12 @@ const ProgramDialog = ({
       });
     }
   }
-  async function handleCreateProgram(e: { preventDefault: () => void }) {
+  async function handleUpdateProgram(e: { preventDefault: () => void }) {
     e.preventDefault();
-    const res = await createProgram(programData);
+    const res = await updateProgram(formik.values.id, {
+      name: formik.values.name,
+      description: formik.values.description,
+    });
 
     if (res.status < 400) {
       onClose();
@@ -149,12 +151,35 @@ const ProgramDialog = ({
         maxWidth={'md'}
         fullWidth={true}
       >
-        <form onSubmit={handleCreateProgram} noValidate>
+        <form onSubmit={handleUpdateProgram} noValidate>
           <DialogTitle id='program-dialog-title'>
             {t('programManagement.modal.edit.title')}
           </DialogTitle>
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2} columns={12}>
+                <Grid item xs={4} sx={{ mt: 3.5 }}>
+                  <Typography component='div' variant='h6'>
+                    Mã chương trình học<span style={{ color: 'red' }}>*</span>
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                      margin='normal'
+                      disabled
+                      fullWidth
+                      id='outlined-disabled'
+                      label={t('programManagement.form.id.label')}
+                      name='id'
+                      autoComplete='family-name'
+                      value={formik.values.id}
+                      onChange={formik.handleChange}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                  />
+                </Grid>
+              </Grid>
               <Grid container spacing={2} columns={12}>
                 <Grid item xs={4} sx={{ mt: 3.5 }}>
                   <Typography component='div' variant='h6'>
@@ -215,8 +240,8 @@ const ProgramDialog = ({
               variant='contained'
             >
               {editMode
-                ? t('userManagement.modal.edit.action')
-                : t('userManagement.modal.add.action')}
+                ? t('programManagement.modal.edit.action')
+                : t('programManagement.modal.add.action')}
             </LoadingButton>
           </DialogActions>
         </form>

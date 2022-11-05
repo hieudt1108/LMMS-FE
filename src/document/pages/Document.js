@@ -8,21 +8,48 @@ import MenuItem from '@mui/material/MenuItem';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import FolderIcon from '@mui/icons-material/Folder';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+import { getAllDocument } from '../../dataProvider/agent';
+import { toast } from 'react-toastify';
 
 export default function Document() {
+  const [documents, setDocuments] = React.useState([]);
+
+  //const [files, setFiles] = React.useState([]);
+
+  React.useEffect(() => {
+    fetchAllDocument();
+  }, []);
+  console.log('data: ', documents);
+  async function fetchAllDocument() {
+    const res = await getAllDocument();
+    console.log(documents);
+    if (res.status < 400) {
+      setDocuments(res.data.data);
+    } else {
+      toast.error('Error : ' + res.response.status);
+    }
+  }
   const [value, setValue] = React.useState('');
   return (
     <React.Fragment>
       <Box sx={{ background: '#fff', borderRadius: '12px' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }} p={3}>
+        <Box
+          sx={{
+            borderBottom: '1px solid #EEEEEE',
+            display: 'flex',
+            alignItems: 'center',
+            flexGrow: 1,
+          }}
+          p={2}
+        >
           <FilterAltOutlinedIcon color='primary' />
           <FormControl sx={{ m: 1, minWidth: 200 }}>
             <InputLabel id='demo-simple-select-helper-label'>Lớp</InputLabel>
@@ -82,20 +109,53 @@ export default function Document() {
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{ borderTop: '1px solid #EEEEEE', display: 'flex' }} p={3}>
-          <Grid container spacing={2}>
-            <Grid item xs={6} md={4}>
-              <Item>xs=6 md=8</Item>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <Item>xs=6 md=4</Item>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <Item>xs=6 md=4</Item>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <Item>xs=6 md=8</Item>
-            </Grid>
+        <Box p={2}>
+          <Typography variant='h4' gutterBottom>
+            Tài liệu tổng hợp
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex' }} p={3}>
+          <Grid container spacing={3}>
+            {documents.length === 0 ? (
+              <Grid item xs={12} md={12}>
+                <Stack sx={{ width: '100%' }} spacing={2}>
+                  <Alert onClose={() => {}} severity='warning'>
+                    Tài liệu trống
+                  </Alert>
+                </Stack>
+              </Grid>
+            ) : (
+              <>
+                {' '}
+                {documents?.map((document) => (
+                  <Grid item xs={6} md={3}>
+                    <Card sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Box ml={2}>
+                        <FolderIcon
+                          fontSize='large'
+                          style={{ color: '#E6CB1C' }}
+                        />
+                      </Box>
+
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <CardContent sx={{ flex: '1 0 auto' }}>
+                          <Typography component='div' variant='h6'>
+                            {document.name}.{document.type}
+                          </Typography>
+                          <Typography
+                            variant='subtitle1'
+                            color='text.secondary'
+                            component='div'
+                          >
+                            Author: Tien Manh
+                          </Typography>
+                        </CardContent>
+                      </Box>
+                    </Card>
+                  </Grid>
+                ))}
+              </>
+            )}
           </Grid>
         </Box>
       </Box>

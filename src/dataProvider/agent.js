@@ -84,6 +84,15 @@ function getAllDocument() {
   return getApi('/Document/getAll?pageIndex=1&pageSize=50');
 }
 
+function getAllTypeDocument() {
+  return getApi('/TypeDocument/getAll?pageIndex=1&pageSize=1000');
+}
+
+// SLOT
+function getALlSlot() {
+  return getApi('/Slot/getAll?pageIndex=1&pageSize=1000');
+}
+
 // POST API AREA ============================>
 function postApi(url, payload, file) {
   const token = getLocalStorage('access_token');
@@ -133,10 +142,10 @@ const createUserAuth = (payload) => {
 
 // UPLOAD FILE
 const uploadFile = (payload) => {
-  return postApi('/File/uploadFile', payload);
+  return postApi('File/uploadFile', payload);
 };
-
-const saveDocument = () => {
+// DOCUMENT
+const postDocument = (payload) => {
   return postApi('Document');
 };
 
@@ -198,6 +207,8 @@ export {
   createProgram,
   getAllDocument,
   uploadFile,
-  saveDocument,
   postFile,
+  getALlSlot,
+  getAllTypeDocument,
+  postDocument,
 };

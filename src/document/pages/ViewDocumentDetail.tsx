@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
 import InforDetail from '../components/InforDetail';
-import HeaderDocumentDetail from "../components/HeaderDocumentDetail";
+import HeaderDocumentDetail from '../components/HeaderDocumentDetail';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -23,15 +23,10 @@ export default function ViewDocumentDetail() {
 
   return (
     <React.Fragment>
-      <HeaderDocumentDetail
-          title={"Tài liệu ?"}
-      />
+      <HeaderDocumentDetail title={'Tài liệu ?'} />
       <Box>
         <Grid container spacing={1}>
-          <Grid item xs={12} md={9}>
-            <Item style={{ height: '900px' }}>View file word ở đây</Item>
-          </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={12} lg={12}>
             <Item>
               <InforDetail />
             </Item>

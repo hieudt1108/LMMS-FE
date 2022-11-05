@@ -20,7 +20,7 @@ import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 import { useNavigate } from 'react-router-dom';
 import { ROUTER } from '../../Router';
 import ProgramAddEditDialog from './ProgramCreate';
-import {toast, ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from 'react-toastify';
 
 type HeaderProps = {
   title: string;
@@ -55,8 +55,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
-  border: '1px solid #3F435C',
-  borderRadius: '12px',
+
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -122,7 +121,6 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
   };
 
   return (
-
     <Fragment>
       <Card>
         <CardContent>
@@ -179,8 +177,6 @@ const HeaderProgram = ({ title, description }: HeaderProps) => {
         />
       )}
     </Fragment>
-
-
   );
 };
 

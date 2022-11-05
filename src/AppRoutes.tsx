@@ -12,7 +12,7 @@ const ClassDetail = lazy(() => import('./admin/pages/ClassDetail'));
 const DocumentbySyllabus = lazy(
   () => import('./document/pages/DocumentbySyllabus')
 );
-const Document = lazy(() => import('./document/pages/Sysllabus'));
+const Document = lazy(() => import('./document/pages/Document'));
 const ViewDocumentDetail = lazy(
   () => import('./document/pages/ViewDocumentDetail')
 );

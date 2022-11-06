@@ -23,7 +23,7 @@ export default function ViewDocumentDetail() {
 
   return (
     <React.Fragment>
-      <HeaderDocumentDetail title={'Tài liệu ?'} />
+      <HeaderDocumentDetail title={'Thêm tài liệu'} />
       <Box>
         <Grid container spacing={1}>
           <Grid item xs={12} md={12} lg={12}>

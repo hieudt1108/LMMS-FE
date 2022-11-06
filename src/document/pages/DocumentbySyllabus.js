@@ -52,12 +52,13 @@ export default function DocumentbySyllabus() {
           <HeaderSysllabusDetail />
         </Grid>
         <Box style={{ display: 'flex', justifyContent: 'flex-end' }} mb={2}>
-          <UploadFile files={files} setFiles={setFiles} />
+          {/* <UploadFile files={files} setFiles={setFiles} /> */}
           <Button
             component={RouterLink}
+            variant='contained'
             to={ROUTER.ADMIN_DOUCUMENT_SUBJECT_DETAIL}
           >
-            Add
+            Thêm tài liệu
           </Button>
         </Box>
         <Grid container spacing={2}>

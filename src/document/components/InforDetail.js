@@ -96,11 +96,15 @@ export default function InforDetail() {
       <form onSubmit={handleSubmitDocument}>
         <Box
           sx={{
-            width: 500,
-            maxWidth: '100%',
+            maxWidth: '800px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            margin: '0 auto',
           }}
+          p={2}
         >
-          <FormControl sx={{ m: 1, minWidth: 220 }}>
+          <FormControl sx={{ minWidth: 300, marginBottom: '20px' }}>
             <InputLabel id='demo-simple-select-helper-label'>SlotId</InputLabel>
             <Select
               labelId='demo-simple-select-helper-label'
@@ -120,7 +124,7 @@ export default function InforDetail() {
             </Select>
           </FormControl>
 
-          <FormControl sx={{ m: 1, minWidth: 220 }}>
+          <FormControl sx={{ minWidth: 300, marginBottom: '20px' }}>
             <InputLabel id='demo-simple-select-helper-label'>
               TypeDoc
             </InputLabel>
@@ -141,7 +145,7 @@ export default function InforDetail() {
               ))}
             </Select>
           </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 220 }}>
+          <FormControl sx={{ minWidth: 300, marginBottom: '20px' }}>
             <InputLabel id='demo-simple-select-helper-label'>
               Subject Id
             </InputLabel>
@@ -163,11 +167,31 @@ export default function InforDetail() {
             </Select>
           </FormControl>
 
-          <TextField fullWidth label='code' id='fullWidth' mt={2} />
-          <TextField fullWidth label='name' id='fullWidth' mt={2} />
-          <TextField fullWidth label='link' id='fullWidth' mt={2} />
-          <TextField fullWidth label='description' id='fullWidth' mt={2} />
-          <TextField fullWidth label='typeFile' id='fullWidth' mt={2} />
+          <TextField
+            label='code'
+            id='fullWidth'
+            sx={{ marginBottom: '20px' }}
+          />
+          <TextField
+            label='name'
+            id='fullWidth'
+            sx={{ marginBottom: '20px' }}
+          />
+          <TextField
+            label='link'
+            id='fullWidth'
+            sx={{ marginBottom: '20px' }}
+          />
+          <TextField
+            label='description'
+            id='fullWidth'
+            sx={{ marginBottom: '20px' }}
+          />
+          <TextField
+            label='typeFile'
+            id='fullWidth'
+            sx={{ marginBottom: '20px' }}
+          />
           <div>
             <form onSubmit={handleSubmit}>
               <input type='file' onChange={handleOnChange} />

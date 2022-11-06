@@ -1,20 +1,7 @@
-import {
-  Grid,
-  Pagination,
-  Stack,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
+import { Stack, Typography, useTheme } from '@material-ui/core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import AdminAppBar from '../components/AdminAppBar';
 import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import AdminToolbar from '../components/AdminToolbar';
-import { ClassSelect } from '../components/ClassSelect';
-import SwipeableViews from 'react-swipeable-views';
-import ListDocument from '../../document/components/ListDocument';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import MemberHeader from '../components/MemberHeader';

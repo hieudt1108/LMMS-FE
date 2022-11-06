@@ -5,28 +5,37 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { Select } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import { experimentalStyled as styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import FolderIcon from '@mui/icons-material/Folder';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 
-import { getAllDocument } from '../../dataProvider/agent';
+import { getAllDocument, getAllProgram } from '../../dataProvider/agent';
 import { toast } from 'react-toastify';
 
 export default function Document() {
   const [documents, setDocuments] = React.useState([]);
+  const [programs, setProgram] = React.useState([]);
 
   //const [files, setFiles] = React.useState([]);
 
   React.useEffect(() => {
     fetchAllDocument();
+    fetchProgram();
   }, []);
+
+  async function fetchProgram() {
+    const res = await getAllProgram({ pageIndex: 1, pageSize: 10 });
+    if (res.status < 400) {
+      setProgram(res.data.data);
+    } else {
+      console.log('error fetch api');
+    }
+  }
+
   console.log('data: ', documents);
   async function fetchAllDocument() {
     const res = await getAllDocument();
@@ -63,6 +72,7 @@ export default function Document() {
               }}
             >
               <MenuItem value={'Tất Cả'}>Tất cả</MenuItem>
+
               <MenuItem value={value}>Lớp 1</MenuItem>
               <MenuItem value={value}>Lớp 2</MenuItem>
               <MenuItem value={value}>Lớp 3</MenuItem>
@@ -83,9 +93,11 @@ export default function Document() {
               }}
             >
               <MenuItem value={'Tất Cả'}>Tất cả</MenuItem>
-              <MenuItem value={value}>Hệ thường</MenuItem>
-              <MenuItem value={value}>Song ngữ</MenuItem>
-              <MenuItem value={value}>Chất lượng cao</MenuItem>
+              {programs?.map((program) => (
+                <MenuItem value={program.name} key={program.id}>
+                  {program.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
 

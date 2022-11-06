@@ -160,7 +160,7 @@ const uploadFile = (payload) => {
 };
 // DOCUMENT
 const postDocument = (payload) => {
-  return postApi('Document');
+  return postApi('Document', payload);
 };
 
 // DELETE API AREA ============================>

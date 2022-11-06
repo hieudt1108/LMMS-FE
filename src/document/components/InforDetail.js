@@ -42,7 +42,6 @@ export default function InforDetail() {
       console.log('add ok');
     } else {
       console.log('fail');
-      console.log('data: ', res);
     }
   }
   const handleSubmit = async (e) => {
@@ -59,7 +58,9 @@ export default function InforDetail() {
 
     const res = await postFile(formData);
     if (res.status < 400) {
-      console.log('ok');
+      const fileName = res.data.fileName;
+      const contentType = res.data.contentType;
+      console.log('upload file success', fileName, contentType);
     } else {
       console.log('fail');
     }
@@ -93,7 +94,7 @@ export default function InforDetail() {
 
   return (
     <>
-      <form onSubmit={handleSubmitDocument}>
+      <form>
         <Box
           sx={{
             maxWidth: '800px',
@@ -192,15 +193,31 @@ export default function InforDetail() {
             id='fullWidth'
             sx={{ marginBottom: '20px' }}
           />
-          <div>
+          {/* <div>
             <form onSubmit={handleSubmit}>
               <input type='file' onChange={handleOnChange} />
 
               <Button type='submit'>Upload File</Button>
             </form>
-          </div>
+          </div> */}
         </Box>
       </form>
+      <div>
+        <div>
+          <form onSubmit={handleSubmit}>
+            <input type='file' onChange={handleOnChange} />
+
+            <Button type='submit'>Upload File</Button>
+          </form>
+        </div>
+        <h3>test render</h3>
+        {/* {files.map((file) => (
+          <Box>
+            <p>{file.name}</p>
+            <p>{file.size}</p>
+          </Box>
+        ))} */}
+      </div>
     </>
   );
 }

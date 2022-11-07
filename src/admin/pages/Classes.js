@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, TextField } from '@mui/material';
+import { Alert, Grid, TextField } from '@mui/material';
 import ClassCart from '../components/ClassCart';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -34,8 +34,8 @@ const Classes = () => {
         getAllClass({ pageIndex: 1, pageSize: 10 }),
         getAllGrade({ pageIndex: 1, pageSize: 10 }),
       ]);
-      setClassObj(response[0].data);
-      setGrade(response[1].data);
+      setClassObj(response[0].data.data);
+      setGrade(response[1].data.data);
       console.log('response', response);
     }
 
@@ -47,13 +47,18 @@ const Classes = () => {
       <ClassHeader
         title={'classes.description'}
         description={'classes.create'}
-        data={grade.data}
+        data={grade}
       />
-      <Stack spacing={2} direction='row' alignItems='center' mt={2.5}>
-        <Grid container spacing={2}>
-          <ClassCart data={classObj.data}></ClassCart>
-        </Grid>
-      </Stack>
+
+      <Grid mt={2.5} container spacing={2}>
+        {classObj ? (
+          classObj.map((obj, index) => (
+            <ClassCart key={index} data={obj}></ClassCart>
+          ))
+        ) : (
+          <Alert severity='error'>This is an error !</Alert>
+        )}
+      </Grid>
 
       <Stack
         spacing={2}

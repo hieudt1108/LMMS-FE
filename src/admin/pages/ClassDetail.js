@@ -50,17 +50,13 @@ const ClassDetail = () => {
   const navigate = useNavigate();
   let location = useLocation();
   const [value, setValue] = React.useState(0);
-  const [buttonHeader, setButtonHeader] = React.useState('document');
 
   const theme = useTheme();
   console.log('ClassDetail:', location);
   const handleChange = (newValue) => {
     setValue(newValue);
   };
-  const handleButtonHeaderChange = useCallback((value) => {
-    console.log('handleButtonHeaderChange', value);
-    setButtonHeader(value);
-  }, []);
+
   return (
     <React.Fragment>
       <Card
@@ -74,67 +70,9 @@ const ClassDetail = () => {
             1A - Khối 1 - Năm học 2022 - 2023
           </Typography>
         </CardContent>
-        <Stack
-          spacing={2}
-          direction='row'
-          justifyContent='center'
-          alignItems='center'
-        >
-          <CardActions
-            sx={{
-              padding: 0,
-            }}
-          >
-            <Button
-              size='small'
-              onClick={() => handleButtonHeaderChange('document')}
-            >
-              Document
-            </Button>
-            <Button
-              size='small'
-              onClick={() => handleButtonHeaderChange('member')}
-            >
-              Member
-            </Button>
-          </CardActions>
-        </Stack>
       </Card>
 
-      {buttonHeader === 'document' ? (
-        <Document />
-      ) : (
-        <>
-          <Stack
-            spacing={2}
-            direction='column'
-            justifyContent='flex-start'
-            mt={2}
-          >
-            <MemberHeader
-              title={t('classDetail.member.teacher')}
-              numberMember={12}
-              titleAction={t('classDetail.action.addTeacher')}
-            ></MemberHeader>
-            <MemberTable></MemberTable>
-          </Stack>
-
-          <Stack
-            sx={{ pb: 2 }}
-            spacing={2}
-            direction='column'
-            justifyContent='flex-start'
-            mt={2}
-          >
-            <MemberHeader
-              title={t('classDetail.member.student')}
-              numberMember={12}
-              titleAction={t('classDetail.action.addStudent')}
-            ></MemberHeader>
-            <MemberTable></MemberTable>
-          </Stack>
-        </>
-      )}
+      <Document />
     </React.Fragment>
   );
 };

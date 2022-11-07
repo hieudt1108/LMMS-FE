@@ -20,6 +20,7 @@ import Stack from '@mui/material/Stack';
 import { deepOrange } from '@mui/material/colors';
 import { ROUTER } from '../../Router';
 import Empty from '../../core/components/Empty';
+import undraw_teaching_re_g7e3 from '../../Assets/Class/undraw_teaching_re_g7e3.svg';
 
 function stringToColor(string) {
   let hash = 0;
@@ -61,97 +62,102 @@ const ClassCart = ({ data }) => {
   }, []);
   return (
     <React.Fragment>
-      {data ? (
-        data.map((obj, index) => (
-          <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
-            <Card
-              elevation={8}
-              sx={{
-                cursor: 'pointer',
-                ':hover': { boxShadow: '0 0 0 1px #03a5fc' },
-              }}
-              onClick={() => handleClassDetails(obj.id)}
+      <Grid item xs={12} sm={12} md={6} lg={4} xl={3}>
+        <Stack
+          spacing={2}
+          direction='row'
+          alignItems='center'
+          justifyContent='center'
+        >
+          <Card
+            elevation={8}
+            sx={{
+              cursor: 'pointer',
+              width: '362px',
+              ':hover': { boxShadow: '0 0 0 1px #03a5fc' },
+              backgroundColor: '#99C276',
+              // backgroundImage: `url(${undraw_teaching_re_g7e3})`,
+              // backgroundSize: '100%',
+            }}
+            onClick={() => handleClassDetails(data.id)}
+          >
+            <Stack
+              direction='row'
+              alignItems='flex-start'
+              justifyContent='space-between'
+              spacing={2}
+              sx={{ margin: 3 }}
             >
+              <Avatar
+                {...stringAvatar('Tim Neutkens')}
+                sx={{ width: 65, height: 65, bgcolor: '#FED98E' }}
+              />
               <Stack
-                direction='row'
+                direction='column'
                 alignItems='flex-start'
-                justifyContent='space-between'
+                justifyContent='flex-start'
                 spacing={2}
-                sx={{ margin: 3 }}
               >
-                <Avatar
-                  {...stringAvatar('Tim Neutkens')}
-                  sx={{ width: 65, height: 65, bgcolor: deepOrange[500] }}
-                />
+                <Typography variant='h3'>{data.code}</Typography>
                 <Stack
-                  direction='column'
-                  alignItems='flex-start'
-                  justifyContent='flex-start'
-                  spacing={2}
+                  direction='row'
+                  alignItems='center'
+                  justifyContent='center'
+                  sx={{ marginTop: '0px !important' }}
                 >
-                  <Typography variant='h3'>{obj.code}</Typography>
-                  <Stack
-                    direction='row'
-                    alignItems='center'
-                    justifyContent='center'
-                    sx={{ marginTop: '0px !important' }}
-                  >
-                    <Typography variant='subtitle1'>Sỹ số:</Typography>
-                    <Typography variant='subtitle2' sx={{ marginTop: '1.2px' }}>
-                      {obj.size}
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction='row'
-                    alignItems='center'
-                    justifyContent='center'
-                    sx={{ marginTop: '0px !important' }}
-                  >
-                    <Typography variant='subtitle1'>Chủ nhiệm:</Typography>
-                    <Typography variant='subtitle2' sx={{ marginTop: '1px' }}>
-                      Chu Tuấn Thông
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction='row'
-                    alignItems='center'
-                    justifyContent='center'
-                    sx={{ marginTop: '0px !important' }}
-                  >
-                    <Typography variant='subtitle1'>Niên khóa:</Typography>
-                    <Typography variant='subtitle2' sx={{ marginTop: '1px' }}>
-                      2022 - 2023
-                    </Typography>
-                  </Stack>
+                  <Typography variant='subtitle1'>Sỹ số:</Typography>
+                  <Typography variant='subtitle2' sx={{ marginTop: '1.2px' }}>
+                    {data.size}
+                  </Typography>
                 </Stack>
-
-                <PopupState variant='popover' popupId='demo-popup-menu'>
-                  {(popupState) => (
-                    <React.Fragment>
-                      <IconButton
-                        aria-label='settings'
-                        {...bindTrigger(popupState)}
-                        sx={{
-                          padding: '0px !important',
-                          margin: '0px !important',
-                        }}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                      <Menu {...bindMenu(popupState)}>
-                        <MenuItem onClick={popupState.close}>Delte</MenuItem>
-                        <MenuItem onClick={popupState.close}>Update</MenuItem>
-                      </Menu>
-                    </React.Fragment>
-                  )}
-                </PopupState>
+                <Stack
+                  direction='row'
+                  alignItems='center'
+                  justifyContent='center'
+                  sx={{ marginTop: '0px !important' }}
+                >
+                  <Typography variant='subtitle1'>Chủ nhiệm:</Typography>
+                  <Typography variant='subtitle2' sx={{ marginTop: '1px' }}>
+                    ThongCT
+                  </Typography>
+                </Stack>
+                <Stack
+                  direction='row'
+                  alignItems='center'
+                  justifyContent='center'
+                  sx={{ marginTop: '0px !important' }}
+                >
+                  <Typography variant='subtitle1'>Niên khóa:</Typography>
+                  <Typography variant='subtitle2' sx={{ marginTop: '1px' }}>
+                    2022 - 2023
+                  </Typography>
+                </Stack>
               </Stack>
-            </Card>
-          </Grid>
-        ))
-      ) : (
-        <Empty title='No class yet' />
-      )}
+
+              <PopupState variant='popover' popupId='demo-popup-menu'>
+                {(popupState) => (
+                  <React.Fragment>
+                    <IconButton
+                      aria-label='settings'
+                      {...bindTrigger(popupState)}
+                      sx={{
+                        padding: '0px !important',
+                        margin: '0px !important',
+                      }}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu {...bindMenu(popupState)}>
+                      <MenuItem onClick={popupState.close}>Delte</MenuItem>
+                      <MenuItem onClick={popupState.close}>Update</MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </PopupState>
+            </Stack>
+          </Card>
+        </Stack>
+      </Grid>
     </React.Fragment>
   );
 };

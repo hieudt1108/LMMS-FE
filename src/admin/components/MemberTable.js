@@ -34,12 +34,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  account: String,
-  subject: String,
-  homeroomTeacher: React.ReactNode,
-  tools: React.ReactNode
-) {
+function createData(account, subject, homeroomTeacher, tools) {
   return { account, subject, homeroomTeacher, tools };
 }
 

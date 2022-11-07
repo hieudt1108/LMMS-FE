@@ -63,7 +63,7 @@ const UserManagement = () => {
     fetchUsers();
   }, []);
   async function fetchUsers() {
-    const res = await getAllUsers();
+    const res = await getAllUsers({pageIndex : 1,pageSize:100});
     if (res.status < 400) {
       setUsers(res.data.data);
     } else {

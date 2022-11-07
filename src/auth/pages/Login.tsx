@@ -14,17 +14,18 @@ import {
   loginAuth,
   setLocalStorage,
   getLocalStorage,
+  clearLocalStorage,
 } from '../../dataProvider/agent.js';
 import { dataLayerPush } from '../../Utils/dataLayerPush.js';
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import {InputAdornment, OutlinedInput} from "@mui/material";
-import IconButton from "@mui/material/IconButton";
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import { InputAdornment, OutlinedInput } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 interface State {
-    showPassword: boolean;
+  showPassword: boolean;
 }
 const Login = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Login = () => {
     password: '',
   };
   const [show, setShow] = React.useState<State>({
-      showPassword: false
+    showPassword: false,
   });
 
   const [loginData, setLoginData] = useState(initUser);
@@ -42,39 +43,36 @@ const Login = () => {
   async function handleLogin(e: { preventDefault: () => void }) {
     e.preventDefault();
     const res = await loginAuth(loginData);
+    console.log('handleLogin :', res);
     // optional
-    if (!loginData.username) {
-      setError('username');
+    if (res.status !== 200) {
+      setError('username or password incorrect');
       return;
-    } else if (!loginData.password) {
-      setError('password');
-      return;
-    } else if (res.status < 400) {
-      setLocalStorage('access_token', res.data.accessToken);
-      setLocalStorage('user_info', res.config.data);
-      setLocalStorage('isAuthenticated', true);
-      dataLayerPush('test', {
-        type: 'login',
-        login: loginData,
-      });
-      navigate(ROUTER.ROLES, { replace: true });
-      // window.location.reload();
-    } else {
-      setError('wrong');
     }
-    console.log('Data :', res);
+    clearLocalStorage();
+    setLocalStorage('access_token', res.data.accessToken);
+    setLocalStorage('user_info', res.config.data);
+    setLocalStorage('isAuthenticated', true);
+    dataLayerPush('test', {
+      type: 'login',
+      login: loginData,
+    });
+    navigate(ROUTER.ROLES, { replace: true });
+    // window.location.reload();
   }
 
-    const handleClickShowPassword = () => {
-        setShow({
-            ...show,
-            showPassword: !show.showPassword,
-        });
-    };
+  const handleClickShowPassword = () => {
+    setShow({
+      ...show,
+      showPassword: !show.showPassword,
+    });
+  };
 
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
 
   return (
     <Grid container component='main' sx={{ height: '100vh' }}>
@@ -142,18 +140,18 @@ const Login = () => {
                 })
               }
               InputProps={{
-                  endAdornment: (
-                      <InputAdornment position="end">
-                          <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                              edge="end"
-                          >
-                              {show.showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                      </InputAdornment>
-                  ),
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton
+                      aria-label='toggle password visibility'
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge='end'
+                    >
+                      {show.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
             />
             {error === 'password' && (

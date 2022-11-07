@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Card from '@mui/material/Card';
 import {
   Typography,
@@ -19,9 +19,9 @@ import { useNavigate } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import { deepOrange } from '@mui/material/colors';
 import { ROUTER } from '../../Router';
-import Empty from "../../core/components/Empty";
+import Empty from '../../core/components/Empty';
 
-function stringToColor(string: string) {
+function stringToColor(string) {
   let hash = 0;
   let i;
 
@@ -41,7 +41,7 @@ function stringToColor(string: string) {
   return color;
 }
 
-function stringAvatar(name: string) {
+function stringAvatar(name) {
   return {
     sx: {
       bgcolor: stringToColor(name),
@@ -50,36 +50,27 @@ function stringAvatar(name: string) {
   };
 }
 
-type ClassCartProps = {
-  data: Array<Object>;
-};
-
-const ClassCart = ({ data }: ClassCartProps) => {
+const ClassCart = ({ data }) => {
   const navigate = useNavigate();
-  const [value, setValue] = React.useState(0);
-
-  async function handleClassDetails(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    console.log('handleClassDetails', e);
-    navigate(ROUTER.ADMIN_CLASS_DETAIL, {
+  const handleClassDetails = useCallback((classId) => {
+    navigate(ROUTER.ADMIN_CLASS_SUBJECT, {
       state: {
-        id: 1,
+        class_id: classId,
       },
     });
-  }
+  }, []);
   return (
     <React.Fragment>
-      {data.length ? (
-        data.map((obj: any, index: any) => (
-          <Grid item xs={12} sm={12} md={6} lg={4} xl={4} key={index}>
+      {data ? (
+        data.map((obj, index) => (
+          <Grid item xs={12} sm={6} md={6} lg={6} xl={4} key={index}>
             <Card
               elevation={8}
               sx={{
                 cursor: 'pointer',
                 ':hover': { boxShadow: '0 0 0 1px #03a5fc' },
               }}
-              accessKey={'thongchu'}
-              onClick={handleClassDetails}
+              onClick={() => handleClassDetails(obj.id)}
             >
               <Stack
                 direction='row'
@@ -159,8 +150,7 @@ const ClassCart = ({ data }: ClassCartProps) => {
           </Grid>
         ))
       ) : (
-          <Empty title='No class yet' />
-
+        <Empty title='No class yet' />
       )}
     </React.Fragment>
   );

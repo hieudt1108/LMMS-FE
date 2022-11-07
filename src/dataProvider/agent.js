@@ -32,6 +32,10 @@ const getLocalStorage = (key) => {
   return JSON.parse(localStorage.getItem(key));
 };
 
+const clearLocalStorage = () => {
+  localStorage.clear();
+};
+
 // GET API AREA ============================>
 function getApi(url, params) {
   const token = getLocalStorage('access_token');
@@ -50,15 +54,19 @@ function getApi(url, params) {
 function getAllClass(params) {
   return getApi('/Class/getAll', params);
 }
-function getClassbyId(id) {
+function getClassById(id) {
   return getApi(`/Class/getOne/${id}`);
+}
+
+function getAllSubjectInClass(params) {
+  return getApi('/Class/getAll', params);
 }
 
 // GRADE
 function getAllGrade(params) {
   return getApi(`/Grade/getAll`, params);
 }
-function getGradebyId(id) {
+function getGradeById(id) {
   return getApi(`/Grade/getOne/${id}`);
 }
 
@@ -235,9 +243,12 @@ function addParameter(url, params) {
 export {
   setLocalStorage,
   getLocalStorage,
+  clearLocalStorage,
   loginAuth,
   getAllClass,
-  getClassbyId,
+  getClassById,
+  getAllSubjectInClass,
+  postClass,
   getAllGrade,
   getALlRoles,
   createGrade,
@@ -246,8 +257,8 @@ export {
   getAllUsers,
   deleteUser,
   createUserAuth,
-  getGradebyId,
-  postClass,
+  getGradeById,
+  postGrade,
   getAllLevel,
   createLevel,
   updateLevel,
@@ -263,6 +274,5 @@ export {
   getALlSlot,
   getAllTypeDocument,
   postDocument,
-  postGrade,
   postLevel,
 };

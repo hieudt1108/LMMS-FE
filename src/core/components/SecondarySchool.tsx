@@ -71,7 +71,7 @@ export default function SecondarySchool() {
             />
             <CardActionArea
               onClick={() => {
-                navigate(ROUTER.ADMIN_DOUCUMENT_SUBJECT, {
+                navigate(ROUTER.ADMIN_DOCUMENT_SUBJECT, {
                   state: {
                     id: 1,
                   },

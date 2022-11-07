@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, TextField } from '@mui/material';
 import ClassCart from '../components/ClassCart';
@@ -14,27 +14,19 @@ import { getAllClass, getAllGrade } from '../../dataProvider/agent';
 
 const Classes = () => {
   const { t } = useTranslation();
-  const [age, setAge] = React.useState<number | string>('');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [classObj, setClassObj] = React.useState<{ data: any }>({
-    data: [],
-  });
-  const [grade, setGrade] = React.useState<{ data: any }>({ data: [] });
+  const [classObj, setClassObj] = React.useState([]);
+  const [grade, setGrade] = React.useState([]);
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
+  const handleChangePage = useCallback((newPage) => {
     setPage(newPage);
-  };
+  }, []);
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChangeRowsPerPage = useCallback((event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
+  }, []);
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -52,9 +44,6 @@ const Classes = () => {
 
   return (
     <React.Fragment>
-      {/* <AdminAppBar>
-        <AdminToolbar title={t("classes.title")} />
-      </AdminAppBar> */}
       <ClassHeader
         title={'classes.description'}
         description={'classes.create'}

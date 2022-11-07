@@ -9,6 +9,7 @@ export const ROUTER = {
   ADMIN_DOCUMENT: `/${process.env.PUBLIC_URL}/admin/document`,
   ADMIN_DOUCUMENT_SUBJECT: `/${process.env.PUBLIC_URL}/admin/document/:subjectSlot`,
   ADMIN_DOUCUMENT_SUBJECT_DETAIL: `/${process.env.PUBLIC_URL}/admin/document/:subjectSlot/:id`,
+  ADMIN_DOUCUMENT_SUBJECT_DETAIL_ID: `/${process.env.PUBLIC_URL}/admin/document/:subjectSlot/:id/detail`,
   ADMIN_HELP: `/${process.env.PUBLIC_URL}/admin/help`,
   ADMIN_FAP: `/${process.env.PUBLIC_URL}/admin/faq`,
   ADMIN_PAGE_FAQ: `/${process.env.PUBLIC_URL}/admin/pages/Faq`,

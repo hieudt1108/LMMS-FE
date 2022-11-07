@@ -16,6 +16,9 @@ const Document = lazy(() => import('./document/pages/Document'));
 const ViewDocumentDetail = lazy(
   () => import('./document/pages/ViewDocumentDetail')
 );
+const DocumentDetail = lazy(
+    () => import('./document/pages/DetailDocument')
+);
 //Program
 const Program = lazy(() => import('./subsystem/pages/ProgramManagement'));
 //Level
@@ -65,6 +68,10 @@ const AppRoutes = () => {
           path='/document/:subjectSlot/:id'
           element={<ViewDocumentDetail />}
         />
+          <Route
+              path='/document/:subjectSlot/:id/detail'
+              element={<DocumentDetail />}
+          />
         <Route path='/classes' element={<Classes />} />
 
         <Route path='/class/:id' element={<ClassDetail />} />

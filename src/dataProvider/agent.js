@@ -80,7 +80,7 @@ function getAllProgram(params) {
 
 // DDOCUMENT
 function getAllDocument() {
-  return getApi('/Document/getAll?pageIndex=1&pageSize=50');
+  return getApi('/Document/getAllDocumentsPublic?pageIndex=1&pageSize=50');
 }
 
 function getAllTypeDocument() {

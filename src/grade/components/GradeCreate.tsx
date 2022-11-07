@@ -69,9 +69,11 @@ const GradeDialog = ({
     const res = await createGrade(gradeData);
     if (res.status < 400) {
       onClose();
+      window.location.reload();
       notify('success', 'Thêm khối học thành công');
     } else {
       onClose();
+
       notify('error', 'Thất bại...');
     }
     console.log('data: ', res);

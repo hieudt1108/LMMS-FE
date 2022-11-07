@@ -24,13 +24,17 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import SvgContainer from '../../core/components/SvgContainer';
 import { ReactComponent as ConfirmSvg } from '../../core/assets/confirm.svg';
-import {createUserAuth, getAllProgram, getALlRoles} from '../../dataProvider/agent.js';
+import {
+  createUserAuth,
+  getAllProgram,
+  getALlRoles,
+} from '../../dataProvider/agent.js';
 import { toast } from 'react-toastify';
 import { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import { DatePicker } from '@material-ui/lab';
 import dayjs, { Dayjs } from 'dayjs';
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete from '@mui/material/Autocomplete';
 
 const genders = [
   { label: 'userManagement.form.gender.options.f', value: '0' },
@@ -70,17 +74,14 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-
 const topRoles = [
   { title: 'Học sinh', id: 10 },
   { title: 'Quản trị viên', id: 2 },
   { title: 'Giáo viên', id: 11 },
   { title: 'Phụ huynh', id: 12 },
   { title: 'Trưởng bộ môn', id: 13 },
-  { title: "Giáo viên chủ nhiệm", id: 14 },
-]
-
-
+  { title: 'Giáo viên chủ nhiệm', id: 14 },
+];
 
 const AddUser = () => {
   const { t } = useTranslation();
@@ -155,7 +156,7 @@ const AddUser = () => {
 
   async function fetchRoles() {
     const res = await getALlRoles({ pageIndex: 1, pageSize: 10 });
-    console.log('data: ',res.data.data);
+    console.log('data: ', res.data.data);
     if (res.status < 400) {
       setUserRole(res.data.data);
     } else {
@@ -168,6 +169,7 @@ const AddUser = () => {
     const res = await createUserAuth(userData);
 
     if (res.status < 400) {
+      window.location.reload();
       console.log('add success');
     } else {
       setOpen(false);
@@ -334,21 +336,26 @@ const AddUser = () => {
                 <Typography component='div' variant='h6' sx={{ mt: 3 }}>
                   Role
                 </Typography>
-                {/*{userRole?.map((role) => (*/}
-                  <Autocomplete
-                      multiple
-                      fullWidth
-                      id="size-small-outlined-multi"
-                      size="small"
-                      options={topRoles}
-                      getOptionLabel={(option) => option.title}
-                      defaultValue={[topRoles[0]]}
-                      renderInput={(params) => (
-                          <TextField style={{color:'white'}} {...params} label="Role" placeholder="Chức vụ" />
-                      )}
-                      sx={{ ml: 10, mt: 2 }}
-                  />
-                {/*))}*/}
+                <Autocomplete
+                  multiple
+                  fullWidth
+                  id='size-small-outlined-multi'
+                  size='small'
+                  options={userRole}
+                  getOptionLabel={(option) => option.name}
+                  style={{
+                    background: '#e1e1e1 !important',
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      style={{ color: 'white' }}
+                      {...params}
+                      label='Role'
+                      placeholder='Chức vụ'
+                    />
+                  )}
+                  sx={{ ml: 10, mt: 2 }}
+                />
               </Stack>
               <Box marginBottom={2} marginTop={3}>
                 <Typography variant='h2' color='GrayText'>

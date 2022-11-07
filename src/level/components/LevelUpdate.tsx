@@ -89,6 +89,7 @@ const LevelDialog = ({
 
     if (res.status < 400) {
       onClose();
+      window.location.reload();
       notify('success', 'Cập nhật cấp học thành công');
     } else {
       onClose();

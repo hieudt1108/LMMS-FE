@@ -3,27 +3,20 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import LoadingButton from '@material-ui/lab/LoadingButton';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { Program } from '../types/program';
-import {
-  Box,
-  CardContent,
-  Grid,
-  Typography,
-  InputBase,
-} from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import Stack from '@mui/material/Stack';
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Switch } from '@mui/material';
-import {createProgram, updateLevel, updateProgram} from '../../dataProvider/agent.js';
+import { updateProgram, getAllProgram } from '../../dataProvider/agent.js';
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -101,7 +94,6 @@ const ProgramDialog = ({
     onSubmit: handleSubmit,
   });
 
-  const [programData, setProgramData] = useState('');
   function notify(type: string, text: string) {
     if (type === 'success') {
       toast.success(text, {
@@ -134,6 +126,7 @@ const ProgramDialog = ({
 
     if (res.status < 400) {
       onClose();
+      window.location.reload();
       notify('success', 'Cập nhật chương trình học thành công');
     } else {
       onClose();
@@ -165,18 +158,18 @@ const ProgramDialog = ({
                 </Grid>
                 <Grid item xs={8}>
                   <TextField
-                      margin='normal'
-                      disabled
-                      fullWidth
-                      id='outlined-disabled'
-                      label={t('programManagement.form.id.label')}
-                      name='id'
-                      autoComplete='family-name'
-                      value={formik.values.id}
-                      onChange={formik.handleChange}
-                      InputProps={{
-                        readOnly: true,
-                      }}
+                    margin='normal'
+                    disabled
+                    fullWidth
+                    id='outlined-disabled'
+                    label={t('programManagement.form.id.label')}
+                    name='id'
+                    autoComplete='family-name'
+                    value={formik.values.id}
+                    onChange={formik.handleChange}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </Grid>
               </Grid>

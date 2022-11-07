@@ -24,8 +24,7 @@ import Empty from '../../core/components/Empty';
 import * as selectUtils from '../../core/utils/selectUtils';
 import { User } from '../types/user';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getAllUsers, loginAuth } from '../../dataProvider/agent.js';
-import {ROUTER} from "../../Router";
+import { ROUTER } from '../../Router';
 
 interface HeadCell {
   id: string;

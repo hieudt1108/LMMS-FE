@@ -8,8 +8,6 @@ import HeaderProgram from '../components/HeaderProgram';
 import { getAllProgram, deleteProgram } from '../../dataProvider/agent';
 import { toast } from 'react-toastify';
 import ProgramUpdate from '../components/ProgramUpdate';
-import { useMutation, useQueryClient } from 'react-query';
-import { removeMany } from '../../core/utils/crudUtils';
 
 const ProgramManagement = () => {
   const [program, setPrograms] = React.useState([]);
@@ -35,8 +33,6 @@ const ProgramManagement = () => {
     fetchPrograms();
   }, []);
 
-  React.useEffect(() => {});
-
   async function fetchPrograms() {
     const res = await getAllProgram({ pageIndex: 1, pageSize: 10 });
     if (res.status < 400) {
@@ -45,13 +41,6 @@ const ProgramManagement = () => {
       toast.error('Error : ' + res.response.status);
     }
   }
-
-  // async function fetchPrograms2() {
-  //     const res = await getAllProgram();
-  //     if (res.status < 400) {
-  //         setPrograms(res.data.data);
-  //     }
-  // }
 
   function notify(type: string, text: string) {
     if (type === 'success') {
@@ -108,6 +97,7 @@ const ProgramManagement = () => {
             program: `${program.name}`,
           })
         );
+        fetchPrograms();
         setOpenProgramDialog(false);
       })
       .catch(() => {

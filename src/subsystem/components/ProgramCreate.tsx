@@ -112,8 +112,8 @@ const ProgramDialog = ({
     const res = await createProgram(programData);
 
     if (res.status < 400) {
-      setProgramData(res.data.data);
       onClose();
+      window.location.reload();
       notify('success', 'Thêm chương trình học thành công');
     } else {
       onClose();

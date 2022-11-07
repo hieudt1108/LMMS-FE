@@ -78,7 +78,10 @@ const LevelDialog = ({
     e.preventDefault();
     const res = await createLevel(levelData);
     if (res.status < 400) {
+      // setLevelData(res.data.data);
+      // console.log(levelData);
       onClose();
+      window.location.reload();
       notify('success', 'Thêm cấp học thành công');
     } else {
       onClose();

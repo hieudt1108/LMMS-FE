@@ -97,9 +97,9 @@ export default function Document() {
 
   return (
     <React.Fragment>
-      <Box>
+      {/* <Box>
         <HeaderSyllabus />
-      </Box>
+      </Box> */}
       <Box mt={2}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label='simple table'>

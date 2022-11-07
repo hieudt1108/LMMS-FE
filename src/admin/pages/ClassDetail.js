@@ -1,5 +1,5 @@
 import { Stack, Typography, useTheme } from '@material-ui/core';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import { experimentalStyled as styled } from '@mui/material/styles';
@@ -7,6 +7,8 @@ import Paper from '@mui/material/Paper';
 import MemberHeader from '../components/MemberHeader';
 import MemberTable from '../components/MemberTable';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { Button, Card, CardActions, CardContent } from '@mui/material';
+import Document from '../../document/pages/Sysllabus';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,29 +50,61 @@ const ClassDetail = () => {
   const navigate = useNavigate();
   let location = useLocation();
   const [value, setValue] = React.useState(0);
+  const [buttonHeader, setButtonHeader] = React.useState('document');
 
   const theme = useTheme();
   console.log('ClassDetail:', location);
   const handleChange = (newValue) => {
     setValue(newValue);
   };
-  const handleChangeIndex = (index) => {
-    setValue(index);
-  };
+  const handleButtonHeaderChange = useCallback((value) => {
+    console.log('handleButtonHeaderChange', value);
+    setButtonHeader(value);
+  }, []);
   return (
     <React.Fragment>
-      <Stack spacing={2} direction='row' alignItems='center' mt={2}>
-        <Box
-          sx={{
-            width: '100%',
-            height: 186,
-          }}
-          className='rounded bg-light'
-        >
+      <Card
+        sx={{
+          width: '100%',
+          backgroundColor: '#fff',
+        }}
+      >
+        <CardContent>
           <Typography variant='h1' className='h-75 ml-3 pt-3'>
             1A - Khối 1 - Năm học 2022 - 2023
           </Typography>
+        </CardContent>
+        <Stack
+          spacing={2}
+          direction='row'
+          justifyContent='center'
+          alignItems='center'
+        >
+          <CardActions
+            sx={{
+              padding: 0,
+            }}
+          >
+            <Button
+              size='small'
+              onClick={() => handleButtonHeaderChange('document')}
+            >
+              Document
+            </Button>
+            <Button
+              size='small'
+              onClick={() => handleButtonHeaderChange('member')}
+            >
+              Member
+            </Button>
+          </CardActions>
+        </Stack>
+      </Card>
 
+      {buttonHeader === 'document' ? (
+        <Document />
+      ) : (
+        <>
           <Stack
             spacing={2}
             direction='column'
@@ -99,8 +133,8 @@ const ClassDetail = () => {
             ></MemberHeader>
             <MemberTable></MemberTable>
           </Stack>
-        </Box>
-      </Stack>
+        </>
+      )}
     </React.Fragment>
   );
 };

@@ -44,9 +44,6 @@ const Classes = () => {
 
   return (
     <React.Fragment>
-      {/* <AdminAppBar>
-        <AdminToolbar title={t("classes.title")} />
-      </AdminAppBar> */}
       <ClassHeader
         title={'classes.description'}
         description={'classes.create'}

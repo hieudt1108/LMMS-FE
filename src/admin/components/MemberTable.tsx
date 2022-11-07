@@ -14,8 +14,6 @@ import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
 import AutoFixHighTwoToneIcon from '@mui/icons-material/AutoFixHighTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 
-
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -36,7 +34,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-
 function createData(
   account: String,
   subject: String,
@@ -48,7 +45,7 @@ function createData(
 
 const rows = [
   createData(
-    'Thong Chu Toi choi',
+    'Chu Tuan Thong',
     'Math',
     <CheckCircleRoundedIcon></CheckCircleRoundedIcon>,
     <>
@@ -57,7 +54,7 @@ const rows = [
     </>
   ),
   createData(
-    'Thong Chu Toi choi',
+    'Chu Tuan Thong',
     'Math',
     <HighlightOffTwoToneIcon></HighlightOffTwoToneIcon>,
     <>
@@ -66,7 +63,7 @@ const rows = [
     </>
   ),
   createData(
-    'Thong Chu Toi choi',
+    'Chu Tuan Thong',
     'Math',
     <CheckCircleRoundedIcon></CheckCircleRoundedIcon>,
     <>
@@ -75,7 +72,7 @@ const rows = [
     </>
   ),
   createData(
-    'Thong Chu Toi choi',
+    'Chu Tuan Thong',
     'Math',
     <HighlightOffTwoToneIcon></HighlightOffTwoToneIcon>,
     <>
@@ -84,7 +81,7 @@ const rows = [
     </>
   ),
   createData(
-    'Thong Chu Toi choi',
+    'Chu Tuan Thong',
     'Math',
     <CheckCircleRoundedIcon></CheckCircleRoundedIcon>,
     <>
@@ -98,34 +95,49 @@ export default function MemberTable() {
   const { t } = useTranslation();
   return (
     <React.Fragment>
-      <Stack spacing={2} justifyContent="center" direction="column" alignItems="flex-end">
+      <Stack
+        spacing={2}
+        justifyContent='center'
+        direction='column'
+        alignItems='flex-end'
+      >
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <Table sx={{ minWidth: 700 }} aria-label='customized table'>
             <TableHead>
               <TableRow>
-                <StyledTableCell>{t('classDetail.member.account')}</StyledTableCell>
-                <StyledTableCell align="center">{t('classDetail.member.subject')}</StyledTableCell>
-                <StyledTableCell align="center">
+                <StyledTableCell>
+                  {t('classDetail.member.account')}
+                </StyledTableCell>
+                <StyledTableCell align='center'>
+                  {t('classDetail.member.subject')}
+                </StyledTableCell>
+                <StyledTableCell align='center'>
                   {t('classDetail.member.homeroomTeacher')}
                 </StyledTableCell>
-                <StyledTableCell align="center">{t('classDetail.member.tools')}</StyledTableCell>
+                <StyledTableCell align='center'>
+                  {t('classDetail.member.tools')}
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row, index) => (
                 <StyledTableRow key={index}>
-                  <StyledTableCell component="th" scope="row">
+                  <StyledTableCell component='th' scope='row'>
                     {row.account}
                   </StyledTableCell>
-                  <StyledTableCell align="center">{row.subject}</StyledTableCell>
-                  <StyledTableCell align="center">{row.homeroomTeacher}</StyledTableCell>
-                  <StyledTableCell align="center">{row.tools}</StyledTableCell>
+                  <StyledTableCell align='center'>
+                    {row.subject}
+                  </StyledTableCell>
+                  <StyledTableCell align='center'>
+                    {row.homeroomTeacher}
+                  </StyledTableCell>
+                  <StyledTableCell align='center'>{row.tools}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        <Pagination count={10} color="primary" />
+        <Pagination count={10} color='primary' />
       </Stack>
     </React.Fragment>
   );

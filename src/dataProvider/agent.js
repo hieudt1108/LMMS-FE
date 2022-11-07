@@ -59,7 +59,7 @@ function getClassById(id) {
 }
 
 function getAllSubjectInClass(params) {
-  return getApi('/Class/getAll', params);
+  return getApi('/Subject/getAll', params);
 }
 
 // GRADE
@@ -78,8 +78,8 @@ function getLevelById(id) {
   return getApi(`/Level/getOne/${id}`);
 }
 // USERS
-function getAllUsers() {
-  return getApi('/User/getAll');
+function getAllUsers(params) {
+  return getApi('/User/getAll',params);
 }
 // PROGRAM
 function getAllProgram(params) {

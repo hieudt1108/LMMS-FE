@@ -12,6 +12,7 @@ i18n
       loadPath: `${process.env.PUBLIC_URL}/locales/{{lng}}/translation.json`,
     },
     fallbackLng: "vi",
+    lng: 'vi',
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },

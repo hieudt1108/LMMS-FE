@@ -56,14 +56,14 @@ export default function DocumentbySyllabus() {
           <Button
             component={RouterLink}
             variant='contained'
-            to={ROUTER.ADMIN_DOUCUMENT_SUBJECT_DETAIL}
+            to={ROUTER.ADMIN_DOCUMENT_SUBJECT_DETAIL}
           >
             Thêm tài liệu
           </Button>
         </Box>
         <Grid container spacing={2}>
           {documents?.map((document) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
               <Item>
                 <Card
                   style={{

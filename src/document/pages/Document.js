@@ -15,8 +15,8 @@ import Stack from '@mui/material/Stack';
 
 import { getAllDocument, getAllProgram } from '../../dataProvider/agent';
 import { toast } from 'react-toastify';
-import {useNavigate} from "react-router-dom";
-import {ROUTER} from "../../Router";
+import { useNavigate } from 'react-router-dom';
+import { ROUTER } from '../../Router';
 
 export default function Document() {
   const [documents, setDocuments] = React.useState([]);
@@ -53,7 +53,7 @@ export default function Document() {
 
   async function handleDetailDoc(e) {
     e.preventDefault();
-    navigate(ROUTER.ADMIN_DOUCUMENT_SUBJECT_DETAIL_ID, { replace: true });
+    navigate(ROUTER.ADMIN_DOCUMENT_SUBJECT_DETAIL_ID, { replace: true });
   }
   return (
     <React.Fragment>
@@ -149,7 +149,14 @@ export default function Document() {
                 {' '}
                 {documents?.map((document) => (
                   <Grid item xs={6} md={3}>
-                    <Card onClick={handleDetailDoc} sx={{ display: 'flex', alignItems: 'center', cursor : 'pointer' }}>
+                    <Card
+                      onClick={handleDetailDoc}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                      }}
+                    >
                       <Box ml={2}>
                         <FolderIcon
                           fontSize='large'

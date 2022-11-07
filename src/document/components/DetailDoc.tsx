@@ -16,27 +16,46 @@ export default function DetailDoc() {
           // alignItems: "center",
         }}
       >
-        <Typography variant="h4" className="mb-3">
+        <Typography variant='h4' mb={3}>
           Lecture_7_p2.ppt
         </Typography>
-        <div className="d-flex justify-content-between">
-          <div className="d-flex flex-column text-left">
-            <Typography className="font-weight-bold">Author</Typography>
-            <Typography className="font-weight-bold">Filesize</Typography>
-            <Typography className="font-weight-bold">Downloads:</Typography>
-            <Typography className="font-weight-bold">Uploaded: </Typography>
-            <Typography className="font-weight-bold">Permissions: </Typography>
-            <Typography className="font-weight-bold">Sharing: </Typography>
-          </div>
-          <div className="d-flex flex-column text-left">
+        <Box
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Box
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              textAlign: 'left',
+            }}
+          >
+            <Typography style={{ fontWeight: 'bold' }}>Author</Typography>
+            <Typography style={{ fontWeight: 'bold' }}>Filesize</Typography>
+            <Typography style={{ fontWeight: 'bold' }}>Downloads:</Typography>
+            <Typography style={{ fontWeight: 'bold' }}>Uploaded: </Typography>
+            <Typography style={{ fontWeight: 'bold' }}>
+              Permissions:{' '}
+            </Typography>
+            <Typography style={{ fontWeight: 'bold' }}>Sharing: </Typography>
+          </Box>
+          <Box
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              textAlign: 'left',
+            }}
+          >
             <Typography>Minh Quang</Typography>
             <Typography>968.00kb</Typography>
             <Typography>9</Typography>
             <Typography>22/09/2022 16:42:09 </Typography>
             <Typography>View & Dowload</Typography>
             <Typography>Public File - Can be Shared</Typography>
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         <CardActions
           style={{
@@ -45,7 +64,7 @@ export default function DetailDoc() {
           }}
         >
           <Button
-            size="large"
+            size='large'
             component={RouterLink}
             to={`/${process.env.PUBLIC_URL}/admin/document/math/1`}
           >
@@ -54,7 +73,7 @@ export default function DetailDoc() {
           <Button
             component={RouterLink}
             to={`/${process.env.PUBLIC_URL}/admin/document/math/1`}
-            size="large"
+            size='large'
           >
             Download
           </Button>

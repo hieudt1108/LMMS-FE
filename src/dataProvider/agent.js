@@ -38,13 +38,21 @@ const clearLocalStorage = () => {
 
 // GET API AREA ============================>
 function getApi(url, params) {
+  // delete all params fail
+  const paramObj = {};
+  Object.keys(params).forEach(function (key) {
+    if (params[key]) {
+      paramObj[key] = params[key];
+    }
+  });
+
   const token = getLocalStorage('access_token');
   return instance
     .get(url, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no auth',
       },
-      params: params,
+      params: paramObj,
     })
     .then((res) => res)
     .catch((err) => err);
@@ -79,7 +87,7 @@ function getLevelById(id) {
 }
 // USERS
 function getAllUsers(params) {
-  return getApi('/User/getAll',params);
+  return getApi('/User/getAll', params);
 }
 // PROGRAM
 function getAllProgram(params) {

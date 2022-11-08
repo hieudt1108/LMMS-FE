@@ -22,80 +22,22 @@ import { LoadingButton } from '@material-ui/lab';
 import { useNavigate } from 'react-router';
 import { ROUTER } from '../../Router';
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: 'none',
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(1),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: 0,
-    width: 'auto',
-  },
-}));
-
-const BoxCreateClass = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#263238' : '#fff',
-  ...theme.typography.body2,
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  width: 'auto',
-  height: 'auto',
-  transform: 'translate(-50%, -50%)',
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  border: '1px solid #3F435C',
-  borderRadius: '12px',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 0.6, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '30ch',
-    },
-  },
-}));
-
-const ClassHeader = ({ title, description, data }) => {
-  console.log('ClassHeader data: ', title, description, data);
+const ClassHeader = ({
+  grade,
+  program,
+  grades,
+  programs,
+  handleGradeChange,
+  handleProgramChange,
+  handleSearchChange,
+}) => {
+  console.log('ClassHeader data: ', grade, program, grades, programs);
   const { t } = useTranslation();
   const [toggleCreateClass, setToggleCreateClass] = React.useState(false);
-  const [age, setAge] = React.useState('');
-  const [schoolYear, setSchoolYear] = React.useState('');
+
   const handleToggleCreateClass = useCallback(() => {
     setToggleCreateClass(toggleCreateClass ? false : true);
   }, []);
-
-  const handleChange = useCallback((event) => {
-    setAge(event.target.value);
-  }, []);
-
-  const handleChangeSchoolYear = useCallback((event) => {
-    setSchoolYear(event.target.value);
-  }, []);
-
-  const navigate = useNavigate();
 
   return (
     <Fragment>
@@ -114,6 +56,7 @@ const ClassHeader = ({ title, description, data }) => {
                     <SearchIcon />
                   </SearchIconWrapper>
                   <StyledInputBase
+                    onChange={handleSearchChange}
                     placeholder='Tìm kiếm người dùng'
                     inputProps={{ 'aria-label': 'search' }}
                   />
@@ -124,20 +67,19 @@ const ClassHeader = ({ title, description, data }) => {
                     Khối
                   </InputLabel>
                   <Select
-                    labelId='demo-simple-select-helper-label'
                     id='demo-simple-select-helper'
-                    value={age}
+                    value={grade}
                     label='Khối'
-                    onChange={handleChange}
+                    onChange={handleGradeChange}
                   >
-                    {data ? (
-                      data.map((obj, index) => (
-                        <MenuItem value={obj.id} key={index}>
+                    {grades && grades.length ? (
+                      grades.map((obj, index) => (
+                        <MenuItem value={obj} key={index + 1}>
                           {obj.name}
                         </MenuItem>
                       ))
                     ) : (
-                      <MenuItem value={20}>
+                      <MenuItem>
                         <Alert severity='error'>This is an error !</Alert>
                       </MenuItem>
                     )}
@@ -146,17 +88,25 @@ const ClassHeader = ({ title, description, data }) => {
 
                 <FormControl sx={{ minWidth: 150, ml: 1 }} size='small'>
                   <InputLabel id='demo-simple-select-helper-label'>
-                    Niên khóa
+                    Chương trình Học
                   </InputLabel>
                   <Select
-                    labelId='demo-simple-select-helper-label'
                     id='demo-simple-select-helper'
-                    value={schoolYear}
-                    label='Niên khóa'
-                    onChange={handleChangeSchoolYear}
+                    value={program}
+                    label='Chương trình Học'
+                    onChange={handleProgramChange}
                   >
-                    <MenuItem value={10}>2021 - 2022</MenuItem>
-                    <MenuItem value={20}>2022 - 2023</MenuItem>
+                    {programs && programs.length ? (
+                      programs.map((obj, index) => (
+                        <MenuItem value={obj} key={index}>
+                          {obj.name}
+                        </MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem>
+                        <Alert severity='error'>This is an error !</Alert>
+                      </MenuItem>
+                    )}
                   </Select>
                 </FormControl>
               </Stack>
@@ -172,7 +122,7 @@ const ClassHeader = ({ title, description, data }) => {
                 <Button
                   className='button'
                   startIcon={<CreateIcon fontSize='small' />}
-                  onClick={() => handleToggleCreateClass()}
+                  onClick={() => handleToggleCreateClass(true)}
                 >
                   Tạo lớp học
                 </Button>
@@ -192,7 +142,7 @@ const ClassHeader = ({ title, description, data }) => {
           <div>
             <Modal
               open={toggleCreateClass}
-              onClose={handleToggleCreateClass}
+              onClose={() => handleToggleCreateClass(false)}
               aria-labelledby='modal-modal-title'
               aria-describedby='modal-modal-description'
             >
@@ -248,8 +198,8 @@ const ClassHeader = ({ title, description, data }) => {
                         label={'Khối'}
                         name='level'
                       >
-                        {data.length ? (
-                          data.map((obj, index) => (
+                        {grades && grades.length ? (
+                          grades.map((obj, index) => (
                             <MenuItem value={obj.id} key={index}>
                               {obj.name}
                             </MenuItem>
@@ -271,33 +221,18 @@ const ClassHeader = ({ title, description, data }) => {
                         name='size'
                       />
                     </Grid>
-                    {/* <Grid item md={1} xs={12}>
-                      <Typography>Xóa</Typography>
-                      <IconButton sx={{ mt: 3 }}>
-                        <DeleteIcon style={{ color: 'gray' }} />
-                      </IconButton>
-                    </Grid> */}
-                    {/* <LoadingButton
-                      sx={{ ml: 2, mt: 3 }}
-                      style={{ float: 'left' }}
-                      onClick={handleToggleCreateClass}
-                      type='submit'
-                      variant='contained'
-                    >
-                      {t('common.add')}
-                    </LoadingButton> */}
                   </Grid>
                 </Stack>
 
                 <Grid sx={{ mt: 3, mr: 5, mb: 2 }} style={{ float: 'right' }}>
-                  <Button onClick={handleToggleCreateClass}>
+                  <Button onClick={() => handleToggleCreateClass(false)}>
                     {t('common.return')}
                   </Button>
                   <LoadingButton
                     sx={{ ml: 2 }}
-                    onClick={handleToggleCreateClass}
                     type='submit'
                     variant='contained'
+                    onClick={() => handleToggleCreateClass(false)}
                   >
                     {t('common.createClass')}
                   </LoadingButton>
@@ -310,5 +245,60 @@ const ClassHeader = ({ title, description, data }) => {
     </Fragment>
   );
 };
+
+let Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: 'none',
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(1),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: 0,
+    width: 'auto',
+  },
+}));
+
+let BoxCreateClass = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#263238' : '#fff',
+  ...theme.typography.body2,
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  width: 'auto',
+  height: 'auto',
+  transform: 'translate(-50%, -50%)',
+}));
+
+let SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+let StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  border: '1px solid #3F435C',
+  borderRadius: '12px',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 0.6, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '30ch',
+    },
+  },
+}));
 
 export default ClassHeader;

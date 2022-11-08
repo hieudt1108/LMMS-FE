@@ -1,42 +1,85 @@
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Grid, TextField } from '@mui/material';
+import { Alert, Grid } from '@mui/material';
 import ClassCart from '../components/ClassCart';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import { SelectChangeEvent } from '@mui/material/Select';
-import TablePagination from '@mui/material/TablePagination';
+import {
+  getAllClass,
+  getAllGrade,
+  getAllProgram,
+} from '../../dataProvider/agent';
+
 import ClassHeader from '../components/ClassHeader';
-import { getAllClass, getAllGrade } from '../../dataProvider/agent';
 
 const Classes = () => {
   const { t } = useTranslation();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [pagingClass, setPagingClass] = React.useState({
+    pageIndex: 1,
+    pageSize: 6,
+    searchByName: '',
+    gradeId: '',
+    programId: '',
+  });
   const [classObj, setClassObj] = React.useState([]);
-  const [grade, setGrade] = React.useState([]);
+  const [grades, setGrades] = React.useState([]);
+  const [programs, setPrograms] = React.useState([]);
+  const [grade, setGrade] = React.useState('');
+  const [program, setProgram] = React.useState('');
 
-  const handleChangePage = useCallback((newPage) => {
-    setPage(newPage);
+  const handleGradeChange = useCallback(async (event, value) => {
+    console.log('handleGradeChange', value);
+    let response = await getAllClass({
+      ...pagingClass,
+      gradeId: value.props.value.id,
+    });
+    setClassObj(response.data.data);
+    setPagingClass({ ...pagingClass, gradeId: value.props.value.id });
+    setGrade(value.props.value);
   }, []);
 
-  const handleChangeRowsPerPage = useCallback((event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleProgramChange = useCallback(
+    async (event, value) => {
+      console.log('handleProgramChange', value, pagingClass);
+      let response = await getAllClass({
+        ...pagingClass,
+        programId: value.props.value.id,
+      });
+      setClassObj(response.data.data);
+      setPagingClass({ ...pagingClass, programId: value.props.value.id });
+      setProgram(value.props.value);
+    },
+    [pagingClass]
+  );
+
+  const handleSearchChange = useCallback(
+    async (event, value) => {
+      let response = await getAllClass({
+        ...pagingClass,
+        searchByName: event.target.value,
+      });
+      setClassObj(response.data.data);
+      setPagingClass({ ...pagingClass, searchByName: event.target.value });
+    },
+    [pagingClass]
+  );
+
+  const handlePageChange = useCallback(async (event, pageIndex) => {
+    let response = await getAllClass({ ...pagingClass, pageIndex: pageIndex });
+    setClassObj(response.data.data);
+    setPagingClass({ ...pagingClass, pageIndex: pageIndex });
   }, []);
 
   useEffect(() => {
     async function fetchMyAPI() {
       let response = await Promise.all([
-        getAllClass({ pageIndex: 1, pageSize: 10 }),
-        getAllGrade({ pageIndex: 1, pageSize: 10 }),
+        getAllClass(pagingClass),
+        getAllGrade({ pageIndex: 1, pageSize: 15 }),
+        getAllProgram({ pageIndex: 1, pageSize: 15 }),
       ]);
       setClassObj(response[0].data.data);
-      setGrade(response[1].data.data);
-      console.log('response', response);
+      setGrades(response[1].data.data);
+      setPrograms(response[2].data.data);
     }
 
     fetchMyAPI();
@@ -45,13 +88,16 @@ const Classes = () => {
   return (
     <React.Fragment>
       <ClassHeader
-        title={'classes.description'}
-        description={'classes.create'}
-        data={grade}
+        grades={grades}
+        programs={programs}
+        grade={grade}
+        program={program}
+        handleGradeChange={handleGradeChange}
+        handleProgramChange={handleProgramChange}
+        handleSearchChange={handleSearchChange}
       />
-
       <Grid mt={2.5} container spacing={2}>
-        {classObj ? (
+        {classObj && classObj.length ? (
           classObj.map((obj, index) => (
             <ClassCart key={index} data={obj}></ClassCart>
           ))
@@ -67,14 +113,12 @@ const Classes = () => {
         alignItems='center'
         mt={2}
       >
-        <TablePagination
-          component='div'
-          labelRowsPerPage={'Trang'}
+        <Pagination
+          size='large'
           count={100}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsperpage={pagingClass.pageSize}
+          onChange={handlePageChange}
+          color='primary'
         />
       </Stack>
     </React.Fragment>

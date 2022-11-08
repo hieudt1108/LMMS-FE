@@ -1,0 +1,34 @@
+A movie rental company has stores in USA and abroad. To obtain a card allowing to rent 
+movies, customers must fill out a form mentioning their first name, last name, date of birth, 
+phone number, gender (male/ female), email and address (street, district, city, state, country).
+When a customer wants to rent a movie, he/she can go to an automatic machine, select the 
+movie(s) he/she wants to rent. Each machine has a kind, an address (street, district, city, state, 
+country). When the customer chooses to show the detail information of a movie, he/she can 
+view some information such as title, category, release year, duration, ranking, producer,
+director, country, a price per day and the number of DVDs available in the machine. DVDs of 
+a same movie have different codes for keep tracking. The price per day of a movie is the same 
+in all machines. The customers can rent several DVDs of a same movie or different movies at 
+the same time. In the case that he/she rented several DVDs, the customer can bring back his 
+DVDs at different dates. However, all DVDs/movies rented at the same time will have the same 
+rental number in the system. Note that a movie could be available in different automatic 
+machines. For simplifying, we assume that a movie is classified to only one category. A 
+customer rents a DVD from a machine could bring it back to another machine.
+The rental price of a movie is given per day, it means that if for example a customer rents a film 
+on November 27, 2012 and brings it back on the same day, he must pay the amount of the rental 
+for a day. If he brings it back on 28 November (whatever the time), he must pay twice the 
+amount of the rental per day, etc. This is not very realistic, but it saves us from having to 
+consider the hours of rental and return, which would complicate the task of this first lab.
+The customer pays for his rentals when he brings back the movies. For example, A customer 
+borrows two movies “Gone with the wind” and “The imitation game” on January 10. If he 
+brings back the movie “Gone with the wind” on January 11 and the film “The imitation game” 
+on January 12, he must pay twice the unit price of the movie “Gone with the wind” on January 
+11 and three times the unit price of the movie “The imitation game” on January 12. Note that 
+the unit price of the movie could be changed by time, but the price that customer must pay when 
+he/she returns the movie is the price on the rental date. Note that the customer could return at 
+the same time the movies rented in different times.
+Now, let’s look at the operational database that is used to bill the customer. The purpose of the 
+operational database is therefore to calculate, for each rented DVD, the amount that each 
+customer should pay. As soon as a customer brings back the movies and pays for the rental, the 
+machine will print a receipt mentioning the rental number, the rental date, the return date, the 
+rented DVD, the unit price and the amount of each DVD as well as the total amount that he/she 
+must pay

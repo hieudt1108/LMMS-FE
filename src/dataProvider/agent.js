@@ -40,11 +40,12 @@ const clearLocalStorage = () => {
 function getApi(url, params) {
   // delete all params fail
   const paramObj = {};
-  Object.keys(params).forEach(function (key) {
-    if (params[key]) {
-      paramObj[key] = params[key];
-    }
-  });
+  if (params && Object.keys(params).length)
+    Object.keys(params).forEach(function (key) {
+      if (params[key]) {
+        paramObj[key] = params[key];
+      }
+    });
 
   const token = getLocalStorage('access_token');
   return instance

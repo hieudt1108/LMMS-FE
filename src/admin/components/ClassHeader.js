@@ -6,6 +6,13 @@ import {
   Typography,
   InputBase,
   Stack,
+  Chip,
+  OutlinedInput,
+  Checkbox,
+  ListItemText,
+  FormControl,
+  InputLabel,
+  Select,
 } from '@material-ui/core';
 import CreateIcon from '@mui/icons-material/Create';
 import React, { Fragment, useCallback } from 'react';
@@ -13,16 +20,36 @@ import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { Alert, IconButton, Modal, Paper, TextField } from '@mui/material';
 import { LoadingButton } from '@material-ui/lab';
-import { useNavigate } from 'react-router';
-import { ROUTER } from '../../Router';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [
+  'Oliver Hansen',
+  'Van Henry',
+  'April Tucker',
+  'Ralph Hubbard',
+  'Omar Alexander',
+  'Carlos Abbott',
+  'Miriam Wagner',
+  'Bradley Wilkerson',
+  'Virginia Andrews',
+  'Kelly Snyder',
+];
 
 const ClassHeader = ({
+  createClass,
   grade,
   program,
   grades,
@@ -30,13 +57,58 @@ const ClassHeader = ({
   handleGradeChange,
   handleProgramChange,
   handleSearchChange,
+  handleCreateClassChange,
+  handleSubmitCreateClass,
 }) => {
-  console.log('ClassHeader data: ', grade, program, grades, programs);
+  console.log('ClassHeader data: ', createClass);
   const { t } = useTranslation();
   const [toggleCreateClass, setToggleCreateClass] = React.useState(false);
+  const [personName, setPersonName] = React.useState([]);
 
-  const handleToggleCreateClass = useCallback(() => {
-    setToggleCreateClass(toggleCreateClass ? false : true);
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value
+    );
+  };
+
+  const handleToggleCreateClass = useCallback((value) => {
+    setToggleCreateClass(value);
+  }, []);
+
+  const renderMenuItem = useCallback((item) => {
+    if (item && item.length) {
+      return item.map((obj, index) => (
+        <MenuItem value={obj} key={index}>
+          {obj.name}
+        </MenuItem>
+      ));
+    }
+    return (
+      <MenuItem>
+        <Alert severity='error'>This is an error !</Alert>
+      </MenuItem>
+    );
+  });
+
+  const renderYearPicker = useCallback(() => {
+    let years = [];
+    for (
+      let i = new Date().getFullYear() - 5;
+      i < new Date().getFullYear() + 5;
+      i++
+    ) {
+      years.push(`${i}-${i + 1}`);
+    }
+    console.log('renderYearPicker', years);
+    return years.map((element, index) => (
+      <MenuItem value={element} key={index}>
+        {element}
+      </MenuItem>
+    ));
   }, []);
 
   return (
@@ -72,21 +144,11 @@ const ClassHeader = ({
                     label='Khối'
                     onChange={handleGradeChange}
                   >
-                    {grades && grades.length ? (
-                      grades.map((obj, index) => (
-                        <MenuItem value={obj} key={index + 1}>
-                          {obj.name}
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem>
-                        <Alert severity='error'>This is an error !</Alert>
-                      </MenuItem>
-                    )}
+                    {renderMenuItem(grades)}
                   </Select>
                 </FormControl>
 
-                <FormControl sx={{ minWidth: 150, ml: 1 }} size='small'>
+                <FormControl sx={{ minWidth: 175, ml: 1 }} size='small'>
                   <InputLabel id='demo-simple-select-helper-label'>
                     Chương trình Học
                   </InputLabel>
@@ -96,17 +158,7 @@ const ClassHeader = ({
                     label='Chương trình Học'
                     onChange={handleProgramChange}
                   >
-                    {programs && programs.length ? (
-                      programs.map((obj, index) => (
-                        <MenuItem value={obj} key={index}>
-                          {obj.name}
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem>
-                        <Alert severity='error'>This is an error !</Alert>
-                      </MenuItem>
-                    )}
+                    {renderMenuItem(programs)}
                   </Select>
                 </FormControl>
               </Stack>
@@ -133,7 +185,7 @@ const ClassHeader = ({
       </Card>
       {toggleCreateClass && (
         <Stack
-          spacing={2}
+          spacing={0.5}
           direction='row'
           alignItems='center'
           justifyContent='space-between'
@@ -156,7 +208,12 @@ const ClassHeader = ({
                   Tạo lớp học mới
                 </Typography>
 
-                <Stack sx={{ mt: 5 }} direction='row' spacing={2}>
+                <Stack
+                  sx={{ mt: 5 }}
+                  direction='row'
+                  align='center'
+                  justifyContent='center'
+                >
                   <Grid
                     sx={{ ml: 5, mr: 5 }}
                     item
@@ -173,53 +230,114 @@ const ClassHeader = ({
                         label={'Mã lớp'}
                         name='code'
                         autoFocus
+                        value={createClass.code}
+                        onChange={handleCreateClassChange}
                       />
                     </Grid>
                     <Grid item md={4} xs={12}>
                       <Typography>Tên</Typography>
+
                       <TextField
                         margin='normal'
                         required
+                        fullWidth
                         id='name'
                         label={'Tên Lớp'}
                         name='name'
                         autoFocus
+                        value={createClass.name}
+                        onChange={handleCreateClassChange}
                       />
                     </Grid>
+
                     <Grid item md={3} xs={12}>
-                      <Typography>Khối</Typography>
-                      <TextField
-                        margin='normal'
-                        required
-                        id='level'
-                        // disabled={processing}
-                        fullWidth
-                        select
-                        label={'Khối'}
-                        name='level'
-                      >
-                        {grades && grades.length ? (
-                          grades.map((obj, index) => (
-                            <MenuItem value={obj.id} key={index}>
-                              {obj.name}
-                            </MenuItem>
-                          ))
-                        ) : (
-                          <MenuItem value={20}>
-                            <Alert severity='error'>This is an error !</Alert>
-                          </MenuItem>
-                        )}
-                      </TextField>
-                    </Grid>
-                    <Grid item md={2} xs={12}>
                       <Typography>Sĩ số</Typography>
                       <TextField
+                        type='number'
                         margin='normal'
                         required
                         id='size'
                         label={'Sĩ số'}
                         name='size'
+                        value={createClass.size}
+                        onChange={handleCreateClassChange}
                       />
+                    </Grid>
+
+                    <Grid item md={3} xs={12}>
+                      <Typography>Năm Học</Typography>
+                      <TextField
+                        margin='normal'
+                        sx={{ margin: '16px 0 8px 0' }}
+                        name='schoolYear'
+                        fullWidth
+                        required
+                        select
+                        label={'Năm học'}
+                        value={createClass.schoolYear}
+                        onChange={handleCreateClassChange}
+                      >
+                        {renderYearPicker()}
+                      </TextField>
+                    </Grid>
+
+                    <Grid item md={4} xs={12}>
+                      <Typography>Giáo viên chủ nhiệm</Typography>
+                      <Select
+                        sx={{ margin: '16px 0 8px 0' }}
+                        fullWidth
+                        multiple
+                        name='teacher'
+                        value={createClass.teacher}
+                        onChange={handleCreateClassChange}
+                        input={
+                          <OutlinedInput
+                            sx={{ backgroundColor: 'rgba(255,255,255,)' }}
+                            label='Chủ Nhiệm'
+                          />
+                        }
+                        renderValue={(selected) => selected.join(', ')}
+                        MenuProps={MenuProps}
+                      >
+                        {names.map((name) => (
+                          <MenuItem key={name} value={name}>
+                            <Checkbox checked={personName.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Grid>
+
+                    <Grid item md={4} xs={12}>
+                      <Typography>Khối</Typography>
+                      <TextField
+                        margin='normal'
+                        required
+                        fullWidth
+                        select
+                        name='grade'
+                        label={'Khối'}
+                        value={createClass.grade}
+                        onChange={handleCreateClassChange}
+                      >
+                        {renderMenuItem(grades)}
+                      </TextField>
+                    </Grid>
+
+                    <Grid item md={4} xs={12}>
+                      <Typography>Chương Trình Học</Typography>
+                      <TextField
+                        margin='normal'
+                        fullWidth
+                        name='program'
+                        required
+                        select
+                        label={'Chương Trình Học'}
+                        value={createClass.program}
+                        onChange={handleCreateClassChange}
+                      >
+                        {renderMenuItem(programs)}
+                      </TextField>
                     </Grid>
                   </Grid>
                 </Stack>
@@ -232,9 +350,9 @@ const ClassHeader = ({
                     sx={{ ml: 2 }}
                     type='submit'
                     variant='contained'
-                    onClick={() => handleToggleCreateClass(false)}
+                    onClick={handleSubmitCreateClass}
                   >
-                    {t('common.createClass')}
+                    Tạo Lớp
                   </LoadingButton>
                 </Grid>
               </BoxCreateClass>

@@ -1,5 +1,5 @@
 import { paramCase } from 'change-case';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -42,6 +42,7 @@ import {
 } from '../../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
+import {getAllUsers} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -61,11 +62,14 @@ const ROLE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
-  { id: 'isVerified', label: 'Verified', align: 'center' },
-  { id: 'status', label: 'Status', align: 'left' },
+  { id: 'name', label: 'Tên', align: 'left' },
+  { id: 'email', label: 'Email', align: 'left' },
+  { id: 'gender', label: 'Giới tính', align: 'left' },
+  { id: 'birthdate', label: 'Sinh nhật', align: 'left' },
+  { id: 'phone', label: 'SĐT', align: 'left' },
+  { id: 'address', label: 'Địa chỉ', align: 'left' },
+  { id: 'role', label: 'Vai trò', align: 'left' },
+  { id: 'status', label: 'Trạng thái', align: 'left' },
   { id: '' },
 ];
 
@@ -109,8 +113,10 @@ export default function UserListPage() {
 
   const [filterStatus, setFilterStatus] = useState('all');
 
+  const [listUsers, setListUsers] = useState([]);
+
   const dataFiltered = applyFilter({
-    inputData: tableData,
+    inputData: listUsers,
     comparator: getComparator(order, orderBy),
     filterName,
     filterRole,
@@ -190,30 +196,46 @@ export default function UserListPage() {
     setFilterStatus('all');
   };
 
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  async function fetchUsers() {
+    const res = await getAllUsers({pageIndex : 1,pageSize:100});
+    console.log('data',res.data.data);
+    if (res.status < 400) {
+      setListUsers(res.data.data);
+      console.log("check", res.data.data[1].roles)
+    } else {
+      console.log('error');
+    }
+  }
+
   return (
     <>
       <Head>
         <title> User: List | Minimal UI</title>
       </Head>
 
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={1000}>
         <CustomBreadcrumbs
-          heading="User List"
+          heading="Danh sách người dùng"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'List' },
+            { name: 'Trang chủ', href: PATH_DASHBOARD.root },
+            { name: 'Người dùng', href: PATH_DASHBOARD.user.root },
+            { name: 'Danh sách' },
           ]}
           action={
             <NextLink href={PATH_DASHBOARD.user.new} passHref>
               <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                New User
+                Thêm nguời dùng
               </Button>
             </NextLink>
           }
         />
 
-        <Card>
+        <Card >
+
           <Tabs
             value={filterStatus}
             onChange={handleFilterStatus}
@@ -277,14 +299,14 @@ export default function UserListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
                     <UserTableRow
-                      key={row.id}
-                      row={row}
-                      selected={selected.includes(row.id)}
-                      onSelectRow={() => onSelectRow(row.id)}
-                      onDeleteRow={() => handleDeleteRow(row.id)}
-                      onEditRow={() => handleEditRow(row.name)}
+                      key={user.id}
+                      row={user}
+                      selected={selected.includes(user.id)}
+                      onSelectRow={() => onSelectRow(user.id)}
+                      onDeleteRow={() => handleDeleteRow(user.id)}
+                      onEditRow={() => handleEditRow(user.name)}
                     />
                   ))}
 
@@ -312,7 +334,7 @@ export default function UserListPage() {
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Delete"
+        title="Xóa"
         content={
           <>
             Are you sure want to delete <strong> {selected.length} </strong> items?

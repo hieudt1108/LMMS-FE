@@ -1,5 +1,6 @@
 import _mock from '../_mock';
 import { randomNumberRange, randomInArray } from '../utils';
+import {any} from "prop-types";
 
 // ----------------------------------------------------------------------
 
@@ -119,12 +120,20 @@ export const _userInvoices = [...Array(10)].map((_, index) => ({
   price: _mock.number.price(index),
 }));
 
+export const _roleList = [...Array(24)].map((_, index) => ({
+  id: _mock.id(index),
+  name: _mock.name.fullName(index),
+}));
 export const _userList = [...Array(24)].map((_, index) => ({
   id: _mock.id(index),
   avatarUrl: _mock.image.avatar(index),
-  name: _mock.name.fullName(index),
+  firstName: _mock.name.fullName(index),
+  lastName: _mock.name.fullName(index),
   email: _mock.email(index),
-  phoneNumber: _mock.phoneNumber(index),
+  gender:  _mock.boolean(index),
+  enable: _mock.boolean(index),
+  phone: _mock.phoneNumber(index),
+  birthDate: any,
   address: '908 Jack Locks',
   country: _mock.address.country(index),
   state: 'Virginia',
@@ -133,5 +142,7 @@ export const _userList = [...Array(24)].map((_, index) => ({
   company: _mock.company(index),
   isVerified: _mock.boolean(index),
   status: randomInArray(['active', 'banned']),
-  role: _mock.role(index),
+  roles: any,
 }));
+
+

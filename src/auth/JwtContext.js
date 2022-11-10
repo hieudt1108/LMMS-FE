@@ -4,7 +4,7 @@ import { createContext, useEffect, useReducer, useCallback } from 'react';
 import axios from '../utils/axios';
 //
 import { isValidToken, setSession } from './utils';
-import {loginAuth} from "../dataProvider/agent";
+import {clearLocalStorage, loginAuth, setLocalStorage} from "../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -115,7 +115,6 @@ export function AuthProvider({ children }) {
     console.log('login', response, username, password);
     const { accessToken, user } = response.data;
     setSession(accessToken);
-
     dispatch({
       type: 'LOGIN',
       payload: {

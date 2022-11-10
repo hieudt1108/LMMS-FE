@@ -6,7 +6,7 @@ import NextLink from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Link, Stack, Alert, IconButton, InputAdornment } from '@mui/material';
+import {Link, Stack, Alert, IconButton, InputAdornment, TextField, MenuItem} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
@@ -14,9 +14,17 @@ import { PATH_AUTH } from '../../routes/paths';
 import { useAuthContext } from '../../auth/useAuthContext';
 // components
 import Iconify from '../../components/iconify';
-import FormProvider, { RHFTextField } from '../../components/hook-form';
+import FormProvider, {RHFSelect, RHFTextField} from '../../components/hook-form';
+import {BlogPostsSort} from "../@dashboard/blog";
 
 // ----------------------------------------------------------------------
+
+
+const SORT_OPTIONS = [
+    { value: 'admin', label: 'Quản trị viên' },
+    { value: 'teacher', label: 'Giáo viên' },
+    { value: 'student', label: 'Học sinh' },
+];
 
 export default function AuthLoginForm() {
   const { login } = useAuthContext();
@@ -28,14 +36,10 @@ export default function AuthLoginForm() {
     password: Yup.string().required('Password is required'),
   });
 
-  const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
-  };
+
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
-    defaultValues,
   });
 
   const {
@@ -60,16 +64,43 @@ export default function AuthLoginForm() {
     }
   };
 
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
-        <RHFTextField name="email" label="Email address" />
+
+          <TextField
+              select
+              size="small"
+              SelectProps={{
+                  sx: { typography: 'body2' },
+              }}
+          >
+              {SORT_OPTIONS.map((option) => (
+                  <MenuItem
+                      key={option.value}
+                      value={option.value}
+                      sx={{
+                          mx: 1,
+                          my: 0.5,
+                          borderRadius: 0.75,
+                          textTransform: 'capitalize',
+                          '&:first-of-type': { mt: 0 },
+                          '&:last-of-type': { mb: 0 },
+                      }}
+                  >
+                      {option.label}
+                  </MenuItem>
+              ))}
+          </TextField>
+
+        <RHFTextField name="email" label="Tên đăng nhập" />
 
         <RHFTextField
           name="password"
-          label="Password"
+          label="Mật khẩu"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -86,7 +117,7 @@ export default function AuthLoginForm() {
       <Stack alignItems="flex-end" sx={{ my: 2 }}>
         <NextLink href={PATH_AUTH.resetPassword} passHref>
           <Link variant="body2" color="inherit" underline="always">
-            Forgot password?
+            Quên mật khẩu
           </Link>
         </NextLink>
       </Stack>
@@ -107,7 +138,7 @@ export default function AuthLoginForm() {
           },
         }}
       >
-        Login
+        Đăng nhập
       </LoadingButton>
     </FormProvider>
   );

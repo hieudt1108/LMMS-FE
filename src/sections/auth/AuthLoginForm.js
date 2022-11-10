@@ -43,6 +43,7 @@ export default function AuthLoginForm() {
 
   const onSubmit = async (data) => {
     try {
+      console.log('data', data);
       await login(data.username, data.password);
     } catch (error) {
       console.error(error);

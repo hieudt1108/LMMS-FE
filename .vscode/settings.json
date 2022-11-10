@@ -1,9 +1,4 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-  "prettier.printWidth": 100,
-  "prettier.tabWidth": 3,
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "javascript.validate.enable": false,
+  "typescript.validate.enable": false,
 }

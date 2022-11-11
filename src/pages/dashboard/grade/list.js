@@ -21,7 +21,7 @@ import {
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // _mock_
-import { _userList } from '../../../_mock/arrays';
+import { _gradeList } from '../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
@@ -41,45 +41,27 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
-import {getAllUsers} from "../../../dataProvider/agent";
+import { GradeTableToolbar, GradeTableRow } from '../../../sections/@dashboard/grade/list';
+import {getAllGrade} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
 
-const ROLE_OPTIONS = [
-  'all',
-  'ux designer',
-  'full stack designer',
-  'backend developer',
-  'project manager',
-  'leader',
-  'ui designer',
-  'ui/ux designer',
-  'front end developer',
-  'full stack developer',
-];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Tên', align: 'left' },
-  { id: 'email', label: 'Email', align: 'left' },
-  { id: 'gender', label: 'Giới tính', align: 'left' },
-  { id: 'birthdate', label: 'Sinh nhật', align: 'left' },
-  { id: 'phone', label: 'SĐT', align: 'left' },
-  { id: 'address', label: 'Địa chỉ', align: 'left' },
-  { id: 'role', label: 'Vai trò', align: 'left' },
-  { id: 'status', label: 'Trạng thái', align: 'left' },
+  { id: 'id', label: 'ID', align: 'left' },
+  { id: 'name', label: 'Tên khối học', align: 'left' },
+  { id: 'description', label: 'Mô tả', align: 'left' },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
 
-UserListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+GradeListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function UserListPage() {
+export default function GradeListPage() {
   const {
     dense,
     page,
@@ -103,36 +85,28 @@ export default function UserListPage() {
 
   const { push } = useRouter();
 
-  const [tableData, setTableData] = useState(_userList);
+  const [tableData, setTableData] = useState(_gradeList);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterName, setFilterName] = useState('');
 
-  const [filterRole, setFilterRole] = useState('all');
-
-  const [filterStatus, setFilterStatus] = useState('all');
-
-  const [listUsers, setListUsers] = useState([]);
+  const [listGrades, setListGrades] = useState([]);
 
   const dataFiltered = applyFilter({
-    inputData: listUsers,
+    inputData: listGrades,
     comparator: getComparator(order, orderBy),
     filterName,
-    filterRole,
-    filterStatus,
   });
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
+  const isFiltered = filterName !== '';
 
   const isNotFound =
-    (!dataFiltered.length && !!filterName) ||
-    (!dataFiltered.length && !!filterRole) ||
-    (!dataFiltered.length && !!filterStatus);
+    (!dataFiltered.length && !!filterName);
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -152,10 +126,6 @@ export default function UserListPage() {
     setFilterName(event.target.value);
   };
 
-  const handleFilterRole = (event) => {
-    setPage(0);
-    setFilterRole(event.target.value);
-  };
 
   const handleDeleteRow = (id) => {
     const deleteRow = tableData.filter((row) => row.id !== id);
@@ -187,23 +157,21 @@ export default function UserListPage() {
   };
 
   const handleEditRow = (id) => {
-    push(PATH_DASHBOARD.user.edit(paramCase(id)));
+    push(PATH_DASHBOARD.grade.edit(paramCase(id)));
   };
 
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterRole('all');
-    setFilterStatus('all');
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchGrades();
   }, []);
 
-  async function fetchUsers() {
-    const res = await getAllUsers({pageIndex : 1,pageSize:100});
+  async function fetchGrades() {
+    const res = await getAllGrade({pageIndex : 1,pageSize: 100});
     if (res.status < 400) {
-      setListUsers(res.data.data);
+      setListGrades(res.data.data);
     } else {
       console.log('error');
     }
@@ -212,21 +180,21 @@ export default function UserListPage() {
   return (
     <>
       <Head>
-        <title> User: List | Minimal UI</title>
+        <title> Grade: List | Minimal UI</title>
       </Head>
 
       <Container maxWidth={1000}>
         <CustomBreadcrumbs
-          heading="Danh sách người dùng"
+          heading="Danh sách khối học"
           links={[
             { name: 'Trang chủ', href: PATH_DASHBOARD.root },
-            { name: 'Người dùng', href: PATH_DASHBOARD.user.root },
+            { name: 'Khối học', href: PATH_DASHBOARD.grade.root },
             { name: 'Danh sách' },
           ]}
           action={
-            <NextLink href={PATH_DASHBOARD.user.new} passHref>
+            <NextLink href={PATH_DASHBOARD.grade.new} passHref>
               <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                Thêm nguời dùng
+                Thêm khối học
               </Button>
             </NextLink>
           }
@@ -234,28 +202,12 @@ export default function UserListPage() {
 
         <Card >
 
-          <Tabs
-            value={filterStatus}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2,
-              bgcolor: 'background.neutral',
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab key={tab} label={tab} value={tab} />
-            ))}
-          </Tabs>
-
           <Divider />
 
-          <UserTableToolbar
+          <GradeTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
-            filterRole={filterRole}
-            optionsRole={ROLE_OPTIONS}
             onFilterName={handleFilterName}
-            onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
           />
 
@@ -297,14 +249,14 @@ export default function UserListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
-                    <UserTableRow
-                      key={user.id}
-                      row={user}
-                      selected={selected.includes(user.id)}
-                      onSelectRow={() => onSelectRow(user.id)}
-                      onDeleteRow={() => handleDeleteRow(user.id)}
-                      onEditRow={() => handleEditRow(user.name)}
+                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((grade) => (
+                    <GradeTableRow
+                      key={grade.id}
+                      row={grade}
+                      selected={selected.includes(grade.id)}
+                      onSelectRow={() => onSelectRow(grade.id)}
+                      onDeleteRow={() => handleDeleteRow(grade.id)}
+                      onEditRow={() => handleEditRow(grade.name)}
                     />
                   ))}
 
@@ -335,7 +287,7 @@ export default function UserListPage() {
         title="Xóa"
         content={
           <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
+            Bạn có chắc chắn muốn xóa <strong> {selected.length} </strong>?
           </>
         }
         action={
@@ -347,7 +299,7 @@ export default function UserListPage() {
               handleCloseConfirm();
             }}
           >
-            Delete
+            Xóa
           </Button>
         }
       />
@@ -357,7 +309,7 @@ export default function UserListPage() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filterName, filterStatus, filterRole }) {
+function applyFilter({ inputData, comparator, filterName}) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -369,16 +321,9 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
-    inputData = inputData.filter((user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
+    inputData = inputData.filter((grade) => grade.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
   }
 
-  if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => user.status === filterStatus);
-  }
-
-  if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.role === filterRole);
-  }
 
   return inputData;
 }

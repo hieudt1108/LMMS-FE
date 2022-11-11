@@ -23,7 +23,7 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 
 
 
-UserTableRow.propTypes = {
+LevelTableRow.propTypes = {
   row: PropTypes.array,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
@@ -32,11 +32,9 @@ UserTableRow.propTypes = {
 };
 
 
+export default function LevelTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
 
-
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-
-  const { firstName, lastName, email,roles, gender,phone,address,birthDate, enable  } = row;
+  const { id, name , description  } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -67,48 +65,17 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar src='/img/avatar_13.jpg' />
-
             <Typography variant="subtitle2" noWrap>
-              {`${lastName} ${firstName}`}
+              {id}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{email}</TableCell>
+        <TableCell align="left">{name}</TableCell>
 
-        <TableCell align="left">{gender ? 'Nam' : 'Nữ'}</TableCell>
+        <TableCell align="left">{description}</TableCell>
 
 
-
-          <TableCell align="left">{new Date(birthDate)?.toLocaleDateString().padStart(10, '0')}</TableCell>
-          <TableCell align="left">{phone}</TableCell>
-          <TableCell align="left">{address}</TableCell>
-
-          <TableCell>
-            {roles.map((r) => (
-                (r === null || "" ?
-                (<Label
-                >
-                </Label>) :
-                (<Label
-
-                    variant="soft"
-                    color={(status === 'banned' && 'error') || 'success'}
-                    sx={{ textTransform: 'capitalize'}}
-                >
-                    {r.name}
-                </Label>))
-            ))}
-          </TableCell>
-
-          <TableCell align='left'>
-              {enable ? (
-                  <Chip label='Disabled' />
-              ) : (
-                  <Chip color='primary' label='Active' />
-              )}
-          </TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
@@ -126,7 +93,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="eva:trash-2-outline" />
-          Delete
+          Xóa
         </MenuItem>
 
         <MenuItem
@@ -136,18 +103,18 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Edit
+          Sửa
         </MenuItem>
       </MenuPopover>
 
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
+        title="Xóa cấp học"
+        content="Bạn có chắc chắn muốn xóa?"
         action={
           <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
+            Xóa
           </Button>
         }
       />

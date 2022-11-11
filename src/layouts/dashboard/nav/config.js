@@ -4,6 +4,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import Label from '../../../components/label';
 import Iconify from '../../../components/iconify';
 import SvgColor from '../../../components/svg-color';
+import AutoStoriesIcon from '@mui/material/';
 
 // ----------------------------------------------------------------------
 
@@ -56,15 +57,28 @@ const navConfig = [
       // USER
       {
         title: 'Người dùng',
-        path: PATH_DASHBOARD.user.root,
+        path: PATH_DASHBOARD.user.list,
         icon: ICONS.user,
-        children: [
-          { title: 'list', path: PATH_DASHBOARD.user.list },
-        ],
       },
 
+      {
+        title: 'Chương trình học',
+        path: PATH_DASHBOARD.program.list,
+        icon: ICONS.kanban,
 
+      },
 
+      {
+        title: 'Cấp học',
+        path: PATH_DASHBOARD.level.list,
+        icon: ICONS.menuItem,
+      },
+
+      {
+        title: 'Khối học',
+        path: PATH_DASHBOARD.grade.list,
+        icon: ICONS.label,
+      },
 
       // BLOG
       {

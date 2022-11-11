@@ -120,10 +120,7 @@ export const _userInvoices = [...Array(10)].map((_, index) => ({
   price: _mock.number.price(index),
 }));
 
-export const _roleList = [...Array(24)].map((_, index) => ({
-  id: _mock.id(index),
-  name: _mock.name.fullName(index),
-}));
+
 export const _userList = [...Array(24)].map((_, index) => ({
   id: _mock.id(index),
   avatarUrl: _mock.image.avatar(index),

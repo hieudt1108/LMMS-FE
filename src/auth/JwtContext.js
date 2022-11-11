@@ -109,12 +109,14 @@ export function AuthProvider({ children }) {
     initialize();
   }, [initialize]);
 
-  // LOGIN
+// LOGIN
   const login = async (username, password) => {
     const response = await loginAuth({ username, password });
     console.log('login', response, username, password);
     const { accessToken, user } = response.data;
-    setSession(accessToken);
+    clearLocalStorage();
+    setLocalStorage('access_token', accessToken);
+    setLocalStorage('isAuthenticated', true);
     dispatch({
       type: 'LOGIN',
       payload: {

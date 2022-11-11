@@ -1,5 +1,5 @@
 import { paramCase } from 'change-case';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -42,7 +42,7 @@ import {
 } from '../../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
-import {getAllUsers} from "../../../dataProvider/agent";
+import { getAllUsers } from '../../../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -201,7 +201,7 @@ export default function UserListPage() {
   }, []);
 
   async function fetchUsers() {
-    const res = await getAllUsers({pageIndex : 1,pageSize:100});
+    const res = await getAllUsers({ pageIndex: 1, pageSize: 100 });
     if (res.status < 400) {
       setListUsers(res.data.data);
     } else {
@@ -232,8 +232,7 @@ export default function UserListPage() {
           }
         />
 
-        <Card >
-
+        <Card>
           <Tabs
             value={filterStatus}
             onChange={handleFilterStatus}

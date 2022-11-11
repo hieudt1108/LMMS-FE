@@ -15,8 +15,11 @@ import {
   AnalyticsCurrentSubject,
   AnalyticsConversionRates,
 } from '../../sections/@dashboard/general/analytics';
+import DashboardLayout from '../../layouts/dashboard';
 
-export default function classes() {
+Classes.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+export default function Classes() {
   const theme = useTheme();
 
   const { themeStretch } = useSettingsContext();

@@ -31,6 +31,7 @@ const ICONS = {
   ecommerce: icon('ic_ecommerce'),
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
+  class: icon('ic_classroom'),
 };
 
 const navConfig = [
@@ -39,11 +40,12 @@ const navConfig = [
   {
     subheader: 'Chung',
     items: [
-      // { title: 'app', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
-      // { title: 'ecommerce', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
-      // { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
-      // { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
-      // { title: 'booking', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
+      { title: 'app--Template', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
+      { title: 'ecommerce--Template', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
+      { title: 'analytics--Template', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
+      { title: 'banking--Template', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
+      { title: 'booking--Template', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
+      { title: 'Lớp học', path: PATH_DASHBOARD.class.all, icon: ICONS.class },
       { title: 'Học liệu', path: PATH_DASHBOARD.general.file, icon: ICONS.file },
     ],
   },
@@ -58,13 +60,8 @@ const navConfig = [
         title: 'Người dùng',
         path: PATH_DASHBOARD.user.root,
         icon: ICONS.user,
-        children: [
-          { title: 'list', path: PATH_DASHBOARD.user.list },
-        ],
+        children: [{ title: 'list', path: PATH_DASHBOARD.user.list }],
       },
-
-
-
 
       // BLOG
       {
@@ -84,9 +81,6 @@ const navConfig = [
       },
     ],
   },
-
-
-
 ];
 
 export default navConfig;

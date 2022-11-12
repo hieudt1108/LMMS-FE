@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
@@ -7,20 +8,33 @@ import { bgGradient } from '../../../../utils/cssStyles';
 import { fShortenNumber } from '../../../../utils/formatNumber';
 // components
 import Iconify from '../../../../components/iconify';
+import { useCallback } from 'react';
 
 // ----------------------------------------------------------------------
 
 AnalyticsWidgetSummary.propTypes = {
   sx: PropTypes.object,
-  icon: PropTypes.string,
-  color: PropTypes.string,
-  title: PropTypes.string,
-  total: PropTypes.number,
+  data: PropTypes.object,
 };
 
-export default function AnalyticsWidgetSummary({ title, total, icon, color = 'primary', sx, ...other }) {
-  const theme = useTheme();
+const colors = ['primary', 'info', 'warning'];
 
+export default function AnalyticsWidgetSummary({
+  data,
+  color = data ? colors[Math.floor((data.gradeId - 1) / 5)] : 'primary',
+  sx,
+  ...other
+}) {
+  // const navigate = useNavigate();
+  const theme = useTheme();
+  const handleClassDetails = useCallback((classId) => {
+    console.log('handleClassDetails', classId);
+    // navigate(ROUTER.ADMIN_CLASS_SUBJECT, {
+    //   state: {
+    //     class_id: classId,
+    //   },
+    // });
+  }, []);
   return (
     <Card
       sx={{
@@ -32,9 +46,10 @@ export default function AnalyticsWidgetSummary({ title, total, icon, color = 'pr
         ...sx,
       }}
       {...other}
+      onClick={() => handleClassDetails(data.id)}
     >
       <Iconify
-        icon={icon}
+        icon={'ant-design:android-filled'}
         sx={{
           mb: 3,
           p: 2.5,
@@ -50,10 +65,10 @@ export default function AnalyticsWidgetSummary({ title, total, icon, color = 'pr
         }}
       />
 
-      <Typography variant="h3">{fShortenNumber(total)}</Typography>
+      <Typography variant="h3">{data ? data.name : 'Undefined'}</Typography>
 
       <Typography variant="subtitle2" sx={{ opacity: 0.64 }}>
-        {title}
+        {data ? data.schoolYear : 'Undefined'}
       </Typography>
     </Card>
   );

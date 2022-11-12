@@ -20,11 +20,7 @@ import {BlogPostsSort} from "../@dashboard/blog";
 // ----------------------------------------------------------------------
 
 
-const SORT_OPTIONS = [
-    { value: 'admin', label: 'Quản trị viên' },
-    { value: 'teacher', label: 'Giáo viên' },
-    { value: 'student', label: 'Học sinh' },
-];
+
 
 export default function AuthLoginForm() {
   const { login } = useAuthContext();
@@ -71,30 +67,7 @@ export default function AuthLoginForm() {
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
 
-          <TextField
-              select
-              size="small"
-              SelectProps={{
-                  sx: { typography: 'body2' },
-              }}
-          >
-              {SORT_OPTIONS.map((option) => (
-                  <MenuItem
-                      key={option.value}
-                      value={option.value}
-                      sx={{
-                          mx: 1,
-                          my: 0.5,
-                          borderRadius: 0.75,
-                          textTransform: 'capitalize',
-                          '&:first-of-type': { mt: 0 },
-                          '&:last-of-type': { mb: 0 },
-                      }}
-                  >
-                      {option.label}
-                  </MenuItem>
-              ))}
-          </TextField>
+
 
         <RHFTextField name="email" label="Tên đăng nhập" />
 

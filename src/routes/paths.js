@@ -72,6 +72,24 @@ export const PATH_DASHBOARD = {
     edit: (name) => path(ROOTS_DASHBOARD, `/user/${name}/edit`),
     demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
   },
+  program: {
+    root: path(ROOTS_DASHBOARD, '/program'),
+    new: path(ROOTS_DASHBOARD, '/program/new'),
+    list: path(ROOTS_DASHBOARD, '/program/list'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/program/${name}/edit`),
+  },
+  grade: {
+    root: path(ROOTS_DASHBOARD, '/grade'),
+    new: path(ROOTS_DASHBOARD, '/grade/new'),
+    list: path(ROOTS_DASHBOARD, '/grade/list'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/grade/${name}/edit`),
+  },
+  level: {
+    root: path(ROOTS_DASHBOARD, '/level'),
+    new: path(ROOTS_DASHBOARD, '/level/new'),
+    list: path(ROOTS_DASHBOARD, '/level/list'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/level/${name}/edit`),
+  },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),
     shop: path(ROOTS_DASHBOARD, '/e-commerce/shop'),

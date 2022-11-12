@@ -1,5 +1,5 @@
 import { paramCase } from 'change-case';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -21,7 +21,7 @@ import {
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // _mock_
-import { _userList } from '../../../_mock/arrays';
+import { _programList } from '../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
@@ -41,45 +41,27 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
-import { getAllUsers } from '../../../dataProvider/agent';
+import { ProgramTableToolbar, ProgramTableRow } from '../../../sections/@dashboard/program/list';
+import {getAllProgram} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
 
-const ROLE_OPTIONS = [
-  'all',
-  'ux designer',
-  'full stack designer',
-  'backend developer',
-  'project manager',
-  'leader',
-  'ui designer',
-  'ui/ux designer',
-  'front end developer',
-  'full stack developer',
-];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Tên', align: 'left' },
-  { id: 'email', label: 'Email', align: 'left' },
-  { id: 'gender', label: 'Giới tính', align: 'left' },
-  { id: 'birthdate', label: 'Sinh nhật', align: 'left' },
-  { id: 'phone', label: 'SĐT', align: 'left' },
-  { id: 'address', label: 'Địa chỉ', align: 'left' },
-  { id: 'role', label: 'Vai trò', align: 'left' },
-  { id: 'status', label: 'Trạng thái', align: 'left' },
+  { id: 'id', label: 'Mã', align: 'left' },
+  { id: 'name', label: 'Tên chương trình', align: 'left' },
+  { id: 'description', label: 'Mô tả', align: 'left' },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
 
-UserListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+ProgramListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function UserListPage() {
+export default function ProgramListPage() {
   const {
     dense,
     page,
@@ -103,36 +85,28 @@ export default function UserListPage() {
 
   const { push } = useRouter();
 
-  const [tableData, setTableData] = useState(_userList);
+  const [tableData, setTableData] = useState(_programList);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterName, setFilterName] = useState('');
 
-  const [filterRole, setFilterRole] = useState('all');
-
-  const [filterStatus, setFilterStatus] = useState('all');
-
-  const [listUsers, setListUsers] = useState([]);
+  const [listPrograms, setListPrograms] = useState([]);
 
   const dataFiltered = applyFilter({
-    inputData: listUsers,
+    inputData: listPrograms,
     comparator: getComparator(order, orderBy),
     filterName,
-    filterRole,
-    filterStatus,
   });
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
 
-  const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
+  const isFiltered = filterName !== '';
 
   const isNotFound =
-    (!dataFiltered.length && !!filterName) ||
-    (!dataFiltered.length && !!filterRole) ||
-    (!dataFiltered.length && !!filterStatus);
+    (!dataFiltered.length && !!filterName);
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -152,10 +126,6 @@ export default function UserListPage() {
     setFilterName(event.target.value);
   };
 
-  const handleFilterRole = (event) => {
-    setPage(0);
-    setFilterRole(event.target.value);
-  };
 
   const handleDeleteRow = (id) => {
     const deleteRow = tableData.filter((row) => row.id !== id);
@@ -187,7 +157,7 @@ export default function UserListPage() {
   };
 
   const handleEditRow = (id) => {
-    push(PATH_DASHBOARD.user.edit(paramCase(id)));
+    push(PATH_DASHBOARD.program.edit(paramCase(id)));
   };
 
   const handleResetFilter = () => {
@@ -197,13 +167,13 @@ export default function UserListPage() {
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchPrograms();
   }, []);
 
-  async function fetchUsers() {
-    const res = await getAllUsers({ pageIndex: 1, pageSize: 100 });
+  async function fetchPrograms() {
+    const res = await getAllProgram({pageIndex : 1,pageSize: 100});
     if (res.status < 400) {
-      setListUsers(res.data.data);
+      setListPrograms(res.data.data);
     } else {
       console.log('error');
     }
@@ -212,19 +182,19 @@ export default function UserListPage() {
   return (
     <>
       <Head>
-        <title> User: List | Minimal UI</title>
+        <title> Program: List | Minimal UI</title>
       </Head>
 
       <Container maxWidth={1000}>
         <CustomBreadcrumbs
-          heading="Danh sách người dùng"
+          heading="Danh sách chương trình học"
           links={[
             { name: 'Trang chủ', href: PATH_DASHBOARD.root },
-            { name: 'Người dùng', href: PATH_DASHBOARD.user.root },
+            { name: 'Chương trình học', href: PATH_DASHBOARD.program.root },
             { name: 'Danh sách' },
           ]}
           action={
-            <NextLink href={PATH_DASHBOARD.user.new} passHref>
+            <NextLink href={PATH_DASHBOARD.program.new} passHref>
               <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                 Thêm nguời dùng
               </Button>
@@ -232,29 +202,14 @@ export default function UserListPage() {
           }
         />
 
-        <Card>
-          <Tabs
-            value={filterStatus}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2,
-              bgcolor: 'background.neutral',
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab key={tab} label={tab} value={tab} />
-            ))}
-          </Tabs>
+        <Card >
 
           <Divider />
 
-          <UserTableToolbar
+          <ProgramTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
-            filterRole={filterRole}
-            optionsRole={ROLE_OPTIONS}
             onFilterName={handleFilterName}
-            onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
           />
 
@@ -296,14 +251,14 @@ export default function UserListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
-                    <UserTableRow
-                      key={user.id}
-                      row={user}
-                      selected={selected.includes(user.id)}
-                      onSelectRow={() => onSelectRow(user.id)}
-                      onDeleteRow={() => handleDeleteRow(user.id)}
-                      onEditRow={() => handleEditRow(user.name)}
+                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((program) => (
+                    <ProgramTableRow
+                      key={program.id}
+                      row={program}
+                      selected={selected.includes(program.id)}
+                      onSelectRow={() => onSelectRow(program.id)}
+                      onDeleteRow={() => handleDeleteRow(program.id)}
+                      onEditRow={() => handleEditRow(program.name)}
                     />
                   ))}
 
@@ -334,7 +289,7 @@ export default function UserListPage() {
         title="Xóa"
         content={
           <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
+            Bạn có chắc chắn muốn xóa <strong> {selected.length} </strong>?
           </>
         }
         action={
@@ -346,7 +301,7 @@ export default function UserListPage() {
               handleCloseConfirm();
             }}
           >
-            Delete
+            Xóa
           </Button>
         }
       />
@@ -356,7 +311,7 @@ export default function UserListPage() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filterName, filterStatus, filterRole }) {
+function applyFilter({ inputData, comparator, filterName}) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -368,16 +323,9 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
-    inputData = inputData.filter((user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
+    inputData = inputData.filter((program) => program.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
   }
 
-  if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => user.status === filterStatus);
-  }
-
-  if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.role === filterRole);
-  }
 
   return inputData;
 }

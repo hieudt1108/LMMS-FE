@@ -38,7 +38,6 @@ export default function AuthGuard({ children }) {
     if (pathname !== requestedLocation) {
       setRequestedLocation(pathname);
     }
-    return <Login />;
   }
 
   return <>{children}</>;

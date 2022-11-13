@@ -18,16 +18,18 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import { AnalyticsWidgetSummary } from '../../../sections/@dashboard/general/analytics';
+import { ClassBanner } from '../../../sections/@dashboard/class';
 import DashboardLayout from '../../../layouts/dashboard';
 import { getAllClass, getAllGrade, getAllProgram } from 'src/dataProvider/agent';
 import { AppFeatured, AppWelcome } from 'src/sections/@dashboard/general/app';
 import { SeoIllustration } from 'src/assets/illustrations';
 import { _appFeatured } from 'src/_mock/arrays';
 import Iconify from 'src/components/iconify';
+import Head from 'next/head';
 
 Classes.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-export default function Classes() {
+export default function Classes({ data }) {
+  console.log('Classes', data);
   const theme = useTheme();
   const [pagingClass, setPagingClass] = React.useState({
     pageIndex: 1,
@@ -48,9 +50,10 @@ export default function Classes() {
     program: {},
     teacher: [],
   });
-  const [classObj, setClassObj] = React.useState([]);
-  const [grades, setGrades] = React.useState([]);
-  const [programs, setPrograms] = React.useState([]);
+
+  const [classObj, setClassObj] = React.useState(data[0].data.data);
+  const [grades, setGrades] = React.useState(data[1].data.data);
+  const [programs, setPrograms] = React.useState(data[2].data.data);
   const [grade, setGrade] = React.useState('');
   const [program, setProgram] = React.useState('');
 
@@ -149,24 +152,12 @@ export default function Classes() {
     [createClass]
   );
 
-  useEffect(() => {
-    async function fetchMyAPI() {
-      let response = await Promise.all([
-        getAllClass(pagingClass),
-        getAllGrade({ pageIndex: 1, pageSize: 15 }),
-        getAllProgram({ pageIndex: 1, pageSize: 15 }),
-      ]);
-      setClassObj(response[0].data.data);
-      setGrades(response[1].data.data);
-      setPrograms(response[2].data.data);
-      console.log('useEffect Class', response);
-    }
-    fetchMyAPI();
-  }, []);
-
   const { themeStretch } = useSettingsContext();
   return (
     <React.Fragment>
+      <Head>
+        <title> Class: List ALl Class</title>
+      </Head>
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
@@ -227,12 +218,7 @@ export default function Classes() {
           {classObj && classObj.length ? (
             classObj.map((obj, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
-                <AnalyticsWidgetSummary
-                  data={obj}
-                  title="Weekly Sales"
-                  total={714000}
-                  icon={'ant-design:android-filled'}
-                />
+                <ClassBanner data={obj} title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
               </Grid>
             ))
           ) : (
@@ -254,6 +240,22 @@ export default function Classes() {
     </React.Fragment>
   );
 }
+
+Classes.getInitialProps = async (ctx) => {
+  let response = await Promise.all([
+    getAllClass({
+      pageIndex: 1,
+      pageSize: 8,
+      searchByName: '',
+      gradeId: '',
+      programId: '',
+    }),
+    getAllGrade({ pageIndex: 1, pageSize: 15 }),
+    getAllProgram({ pageIndex: 1, pageSize: 15 }),
+  ]);
+  console.log('Classes.getInitialProps', ctx, response);
+  return { data: response };
+};
 
 let Search = styled('div')(({ theme }) => ({
   position: 'relative',

@@ -46,7 +46,6 @@ const navConfig = [
       { title: 'analytics--Template', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
       { title: 'banking--Template', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
       { title: 'booking--Template', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
-      { title: 'Lớp học', path: PATH_DASHBOARD.class.all, icon: ICONS.class },
       { title: 'Học liệu', path: PATH_DASHBOARD.general.file, icon: ICONS.file },
     ],
   },
@@ -56,6 +55,15 @@ const navConfig = [
   {
     subheader: 'Quản lý hệ thống',
     items: [
+      {
+        title: 'Lớp học',
+        path: PATH_DASHBOARD.class.root,
+        icon: ICONS.class,
+        children: [
+          { title: 'Danh sách', path: PATH_DASHBOARD.class.root },
+          { title: 'Tạo lớp', path: PATH_DASHBOARD.class.new },
+        ],
+      },
       // USER
       {
         title: 'Người dùng',

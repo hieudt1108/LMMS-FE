@@ -19,6 +19,9 @@ import { useSettingsContext } from '../../../components/settings';
 // sections
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../../../sections/@dashboard/blog';
 
+// api
+import { getAllDocument } from '../../../dataProvider/agent';
+
 // ----------------------------------------------------------------------
 
 const SORT_OPTIONS = [
@@ -38,6 +41,7 @@ export default function BlogPostsPage() {
 
   const [posts, setPosts] = useState([]);
 
+  const [documents, setDocuments] = useState([]);
   const [sortBy, setSortBy] = useState('latest');
 
   const sortedPosts = applySortBy(posts, sortBy);
@@ -51,10 +55,28 @@ export default function BlogPostsPage() {
     }
   }, []);
 
-  useEffect(() => {
-    getAllPosts();
-  }, [getAllPosts]);
+  console.log('data: ', documents);
 
+  async function fetchAllDocument() {
+    const res = await getAllDocument({ pageIndex: 1, pageSize: 100 });
+    console.log(documents);
+    if (res.status < 400) {
+      setDocuments(res.data.data);
+    } else {
+      console.log('error');
+    }
+  }
+  useEffect(() => {
+    fetchAllDocument();
+  }, []);
+
+  // useEffect(() => {
+  //   getAllPosts();
+  // }, [getAllPosts]);
+
+  // useEffect(() => {
+  //   getAllDocument();
+  // }, []);
   const handleChangeSortBy = (event) => {
     setSortBy(event.target.value);
   };
@@ -96,15 +118,20 @@ export default function BlogPostsPage() {
         </Stack>
 
         <Grid container spacing={3}>
-          {(!posts.length ? [...Array(12)] : sortedPosts).map((post, index) =>
+          {/* {(!posts.length ? [...Array(12)] : sortedPosts).map((post, index) =>
             post ? (
-              <Grid key={post.id} item xs={12} sm={6} md={(index === 0 && 6) || 3}>
-                <BlogPostCard post={post} index={index} />
+              <Grid key={post.id} item xs={12} sm={6} md={3}>
+                <BlogPostCard documents={documents} post={post} index={index} />
               </Grid>
             ) : (
               <SkeletonPostItem key={index} />
             )
-          )}
+          )} */}
+          {documents?.map((document, index) => (
+            <Grid key={document.id} item xs={12} sm={6} md={3}>
+              <BlogPostCard document={document} index={index} />
+            </Grid>
+          ))}
         </Grid>
       </Container>
     </>

@@ -1,0 +1,10 @@
+export { default as ClassBanner } from './ClassBanner';
+export { default as CLassCheckInWidgets } from './CLassCheckInWidgets';
+export { default as ClassCustomerReviews } from './ClassCustomerReviews';
+export { default as CLassDetails } from './CLassDetails';
+export { default as ClassNewestBooking } from './ClassNewestBooking';
+export { default as ClassReservationStats } from './ClassReservationStats';
+export { default as ClassRoomAvailable } from './ClassRoomAvailable';
+export { default as ClassTotalIncomes } from './ClassTotalIncomes';
+export { default as ClassWidgetSummary } from './ClassWidgetSummary';
+export { default as ClassBookedRoom } from './ClassBookedRoom';

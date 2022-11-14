@@ -39,7 +39,7 @@ BlogPostCard.propTypes = {
 export default function BlogPostCard({ document }) {
   // const isDesktop = useResponsive('up', 'md');
 
-  const { code, name, typeFile } = document;
+  const { code, name, typeFile, id } = document;
 
   // const latestPost = index === 0 || index === 1 || index === 2;
 
@@ -97,7 +97,7 @@ export default function BlogPostCard({ document }) {
         <Image alt="cover" src="https://api-dev-minimal-v4.vercel.app/assets/images/covers/cover_8.jpg" ratio="4/3" />
       </Box>
 
-      <PostContent code={code} name={name} typeFile={typeFile} />
+      <PostContent code={code} name={name} typeFile={typeFile} id={id} />
     </Card>
   );
 }
@@ -108,12 +108,13 @@ PostContent.propTypes = {
   code: PropTypes.string,
   name: PropTypes.string,
   typeFile: PropTypes.string,
+  id: PropTypes.number,
 };
 
-export function PostContent({ code, name, typeFile }) {
+export function PostContent({ code, name, typeFile, id }) {
   // const isDesktop = useResponsive('up', 'md');
 
-  const linkTo = PATH_DASHBOARD.blog.view(paramCase(code));
+  const linkTo = PATH_DASHBOARD.blog.view(id);
 
   // const latestPostLarge = index === 0;
 

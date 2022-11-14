@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import { Card, Typography, Stack } from '@mui/material';
 // utils
-import { fCurrency, fPercent } from '../../../utils/formatNumber';
+import { fCurrency, fPercent } from '../../../../utils/formatNumber';
 // components
-import Iconify from '../../../components/iconify';
-import Chart, { useChart } from '../../../components/chart';
+import Iconify from '../../../../components/iconify';
+import Chart, { useChart } from '../../../../components/chart';
 
 // ----------------------------------------------------------------------
 

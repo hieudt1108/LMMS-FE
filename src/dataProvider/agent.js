@@ -26,7 +26,10 @@ const setLocalStorage = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 const getLocalStorage = (key) => {
-  return JSON.parse(localStorage.getItem(key));
+  if (typeof window !== 'undefined') {
+    return JSON.parse(localStorage.getItem(key));
+  }
+  return {};
 };
 
 const clearLocalStorage = () => {

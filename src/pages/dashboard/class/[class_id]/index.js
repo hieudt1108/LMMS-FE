@@ -4,14 +4,13 @@ import Head from 'next/head';
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container } from '@mui/material';
 // layouts
-import DashboardLayout from '../../../layouts/dashboard';
+import DashboardLayout from '../../../../layouts/dashboard';
 // _mock_
-import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../../../_mock/arrays';
+import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../../../../_mock/arrays';
 // components
-import { useSettingsContext } from '../../../components/settings';
+import { useSettingsContext } from '../../../../components/settings';
 // sections
 import {
-  CLassCheckInWidgets,
   ClassCustomerReviews,
   CLassDetails,
   ClassNewestBooking,
@@ -20,9 +19,9 @@ import {
   ClassTotalIncomes,
   ClassWidgetSummary,
   ClassBookedRoom,
-} from '../../../sections/@dashboard/class';
+} from '../../../../sections/@dashboard/class';
 // assets
-import { BookingIllustration, CheckInIllustration, CheckOutIllustration } from '../../../assets/illustrations';
+import { BookingIllustration, CheckInIllustration, CheckOutIllustration } from '../../../../assets/illustrations';
 import { useRouter } from 'next/router';
 
 // ----------------------------------------------------------------------
@@ -31,9 +30,13 @@ ClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 export default function ClassDetail() {
-  console.log('ClassDetail');
   const router = useRouter();
   const theme = useTheme();
+
+  const {
+    query: { class_id },
+  } = useRouter();
+  console.log('ClassDetail', class_id);
 
   const { themeStretch } = useSettingsContext();
 

@@ -20,17 +20,27 @@ import {
 } from '@mui/material';
 import { ClassBanner } from '../../../sections/@dashboard/class';
 import DashboardLayout from '../../../layouts/dashboard';
-import { getAllClass, getAllGrade, getAllProgram } from 'src/dataProvider/agent';
+import { getAllClass } from 'src/dataProvider/agent';
 import { AppFeatured, AppWelcome } from 'src/sections/@dashboard/general/app';
 import { SeoIllustration } from 'src/assets/illustrations';
 import { _appFeatured } from 'src/_mock/arrays';
 import Iconify from 'src/components/iconify';
 import Head from 'next/head';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { getClassesRedux } from 'src/redux/slices/class';
+import { getProgramsRedux } from 'src/redux/slices/program';
+import { getGradesRedux } from 'src/redux/slices/grade';
 
 Classes.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-export default function Classes({ data }) {
-  console.log('Classes', data);
-  const theme = useTheme();
+export default function Classes() {
+  const dispatch = useDispatch();
+
+  const { classes } = useSelector((state) => state.class);
+  const { programs } = useSelector((state) => state.program);
+  const { grades } = useSelector((state) => state.grade);
+  console.log('Classes', classes);
+
   const [pagingClass, setPagingClass] = React.useState({
     pageIndex: 1,
     pageSize: 8,
@@ -38,24 +48,15 @@ export default function Classes({ data }) {
     gradeId: '',
     programId: '',
   });
-  const [createClass, setCreateClass] = React.useState({
-    code: '',
-    name: '',
-    gradeId: '',
-    programId: '',
-    size: '',
-    schoolYear: '',
-    userClass: [],
-    grade: {},
-    program: {},
-    teacher: [],
-  });
 
-  const [classObj, setClassObj] = React.useState(data[0].data.data);
-  const [grades, setGrades] = React.useState(data[1].data.data);
-  const [programs, setPrograms] = React.useState(data[2].data.data);
   const [grade, setGrade] = React.useState('');
   const [program, setProgram] = React.useState('');
+
+  useEffect(() => {
+    dispatch(getClassesRedux(pagingClass));
+    dispatch(getProgramsRedux({ pageIndex: 1, pageSize: 15 }));
+    dispatch(getGradesRedux({ pageIndex: 1, pageSize: 15 }));
+  }, [dispatch]);
 
   const renderMenuItem = useCallback((item) => {
     if (item && item.length) {
@@ -72,85 +73,43 @@ export default function Classes({ data }) {
     );
   });
 
-  const renderYearPicker = useCallback(() => {
-    let years = [];
-    for (let i = new Date().getFullYear() - 5; i < new Date().getFullYear() + 5; i++) {
-      years.push(`${i}-${i + 1}`);
-    }
-    console.log('renderYearPicker', years);
-    return years.map((element, index) => (
-      <MenuItem value={element} key={index}>
-        {element}
-      </MenuItem>
-    ));
-  }, []);
-
   const handleGradeChange = useCallback(
     async (event, value) => {
-      let response = await getAllClass({
-        ...pagingClass,
-        gradeId: value.props.value.id,
-      });
-      setClassObj(response.data.data);
       setPagingClass({ ...pagingClass, gradeId: value.props.value.id });
       setGrade(value.props.value);
+      dispatch(getClassesRedux({ ...pagingClass, gradeId: value.props.value.id }));
     },
     [pagingClass]
   );
-
   const handleProgramChange = useCallback(
-    async (event, value) => {
-      console.log('handleProgramChange', value, pagingClass);
-      let response = await getAllClass({
-        ...pagingClass,
-        programId: value.props.value.id,
-      });
-      setClassObj(response.data.data);
+    (event, value) => {
       setPagingClass({ ...pagingClass, programId: value.props.value.id });
       setProgram(value.props.value);
+      dispatch(getClassesRedux({ ...pagingClass, programId: value.props.value.id }));
     },
     [pagingClass]
   );
 
   const handleSearchChange = useCallback(
-    async (event, value) => {
-      let response = await getAllClass({
-        ...pagingClass,
-        searchByName: event.target.value,
-      });
-      setClassObj(response.data.data);
+    (event, value) => {
       setPagingClass({ ...pagingClass, searchByName: event.target.value });
+      dispatch(
+        getClassesRedux({
+          ...pagingClass,
+          searchByName: event.target.value,
+        })
+      );
     },
     [pagingClass]
   );
 
-  const handlePageChange = useCallback(
-    async (event, pageIndex) => {
-      let response = await getAllClass({
-        ...pagingClass,
-        pageIndex: pageIndex,
-      });
-      setClassObj(response.data.data);
-      setPagingClass({ ...pagingClass, pageIndex: pageIndex });
-    },
-    [createClass]
-  );
-
-  const handleCreateClassChange = useCallback(
-    (event) => {
-      setCreateClass({
-        ...createClass,
-        [event.target.name]: event.target.value,
-      });
-    },
-    [createClass]
-  );
-  const handleSubmitCreateClass = useCallback(
-    (event, value) => {
-      console.log('handleSubmitCreateClass :', createClass);
-    },
-    [createClass]
-  );
+  const handlePageChange = useCallback(async (event, pageIndex) => {
+    let response = await getAllClass({
+      ...pagingClass,
+      pageIndex: pageIndex,
+    });
+    setPagingClass({ ...pagingClass, pageIndex: pageIndex });
+  }, []);
 
   const { themeStretch } = useSettingsContext();
   return (
@@ -215,8 +174,8 @@ export default function Classes({ data }) {
             </Stack>
           </Grid>
 
-          {classObj && classObj.length ? (
-            classObj.map((obj, index) => (
+          {classes && classes.length ? (
+            classes.map((obj, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <ClassBanner data={obj} title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
               </Grid>
@@ -241,21 +200,21 @@ export default function Classes({ data }) {
   );
 }
 
-Classes.getInitialProps = async (ctx) => {
-  let response = await Promise.all([
-    getAllClass({
-      pageIndex: 1,
-      pageSize: 8,
-      searchByName: '',
-      gradeId: '',
-      programId: '',
-    }),
-    getAllGrade({ pageIndex: 1, pageSize: 15 }),
-    getAllProgram({ pageIndex: 1, pageSize: 15 }),
-  ]);
-  console.log('Classes.getInitialProps', ctx, response);
-  return { data: response };
-};
+// Classes.getInitialProps = async (ctx) => {
+//   let response = await Promise.all([
+//     getAllClass({
+//       pageIndex: 1,
+//       pageSize: 8,
+//       searchByName: '',
+//       gradeId: '',
+//       programId: '',
+//     }),
+//     getAllGrade({ pageIndex: 1, pageSize: 15 }),
+//     getAllProgram({ pageIndex: 1, pageSize: 15 }),
+//   ]);
+//   console.log('Classes.getInitialProps', ctx, response);
+//   return { data: response };
+// };
 
 let Search = styled('div')(({ theme }) => ({
   position: 'relative',

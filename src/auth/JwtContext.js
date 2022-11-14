@@ -112,7 +112,6 @@ export function AuthProvider({ children }) {
   // LOGIN
   const login = async (username, password) => {
     const response = await loginAuth({ username, password });
-    console.log('login', response, username, password);
     const { accessToken, user } = response.data;
     clearLocalStorage();
     setLocalStorage('access_token', accessToken);

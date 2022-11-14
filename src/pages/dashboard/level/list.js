@@ -42,7 +42,8 @@ import {
 } from '../../../components/table';
 // sections
 import { LevelTableToolbar, LevelTableRow } from '../../../sections/@dashboard/level/list';
-import {getAllLevel} from "../../../dataProvider/agent";
+import {deleteLevel, deleteProgram, getAllLevel} from "../../../dataProvider/agent";
+import {useSnackbar} from "../../../components/snackbar";
 
 // ----------------------------------------------------------------------
 
@@ -80,6 +81,8 @@ export default function LevelListPage() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
+
+  const enqueueSnackbar = useSnackbar();
 
   const { themeStretch } = useSettingsContext();
 
@@ -127,10 +130,15 @@ export default function LevelListPage() {
   };
 
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
+  const handleDeleteRow = async (id) => {
+    const response = await deleteLevel(id)
+    if(response.status < 400){
+      setSelected([]);
+      await fetchLevels();
+      enqueueSnackbar('Xóa cấp học thành công');
+    }else{
+      enqueueSnackbar('Xóa cấp học thất bại');
+    }
 
     if (page > 0) {
       if (dataInPage.length < 2) {
@@ -139,10 +147,15 @@ export default function LevelListPage() {
     }
   };
 
-  const handleDeleteRows = (selected) => {
-    const deleteRows = tableData.filter((row) => !selected.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
+  const handleDeleteRows = async (selected) => {
+    const response = await deleteLevel(selected)
+    if(response.status < 400){
+      setSelected([]);
+      await fetchLevels();
+      enqueueSnackbar('Xóa cấp học thành công');
+    }else{
+      enqueueSnackbar('Xóa cấp học thất bại');
+    }
 
     if (page > 0) {
       if (selected.length === dataInPage.length) {

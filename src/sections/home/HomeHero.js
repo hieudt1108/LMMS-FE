@@ -94,7 +94,7 @@ export default function HomeHero() {
       <StyledRoot>
         <Container component={MotionContainer} sx={{ height: 1 }}>
           <Grid container spacing={10} sx={{ height: 1 }}>
-            <Grid item xs={12} md={6} sx={{ height: 1,ml:-15 }}>
+            <Grid item xs={12} md={6} sx={{ height: 1,ml:-20,mt:10 }}>
               <Description />
             </Grid>
             <Grid item xs={12} md={6} sx={{ height: 1 }}>
@@ -192,31 +192,31 @@ function Content() {
           component={m.img}
           animate={{ y: ['0%', '100%'] }}
           transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_1.png`}
+          src={`/assets/images/home/hero_dark_1.png`}
           sx={{ position: 'absolute' }}
         />
         <Box
           component={m.img}
           animate={{ y: ['-100%', '0%'] }}
           transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_1.png`}
+          src={`/assets/images/home/hero_dark_2.png`}
           sx={{ position: 'absolute' }}
         />
       </Stack>
 
-      <Stack component={m.div} variants={varFade().in} sx={{ width: 720, position: 'relative', ml: -2 }}>
+      <Stack component={m.div} variants={varFade().in} sx={{ width: 530, position: 'relative', ml: -2 }}>
         <Box
           component={m.img}
           animate={{ y: ['100%', '0%'] }}
           transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_2.png`}
+          src={`/assets/images/home/hero_dark_1.png`}
           sx={{ position: 'absolute' }}
         />
         <Box
           component={m.img}
           animate={{ y: ['0%', '-100%'] }}
           transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_2.png`}
+          src={`/assets/images/home/hero_dark_2.png`}
           sx={{ position: 'absolute' }}
         />
       </Stack>

@@ -42,7 +42,8 @@ import {
 } from '../../../components/table';
 // sections
 import { ProgramTableToolbar, ProgramTableRow } from '../../../sections/@dashboard/program/list';
-import {getAllProgram} from "../../../dataProvider/agent";
+import {deleteProgram, deleteUser, getAllProgram} from "../../../dataProvider/agent";
+import {useSnackbar} from "../../../components/snackbar";
 
 // ----------------------------------------------------------------------
 
@@ -80,6 +81,8 @@ export default function ProgramListPage() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
+
+  const enqueueSnackbar = useSnackbar();
 
   const { themeStretch } = useSettingsContext();
 
@@ -127,11 +130,15 @@ export default function ProgramListPage() {
   };
 
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-
+  const handleDeleteRow = async (id) => {
+    const response = await deleteProgram(id)
+    if(response.status < 400){
+      setSelected([]);
+      await fetchPrograms();
+      enqueueSnackbar('Xóa chương trình học thành công');
+    }else{
+      enqueueSnackbar('Xóa chương trình học thất bại');
+    }
     if (page > 0) {
       if (dataInPage.length < 2) {
         setPage(page - 1);
@@ -139,10 +146,15 @@ export default function ProgramListPage() {
     }
   };
 
-  const handleDeleteRows = (selected) => {
-    const deleteRows = tableData.filter((row) => !selected.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
+  const handleDeleteRows = async (selected) => {
+    const response = await deleteProgram(selected)
+    if(response.status < 400){
+      setSelected([]);
+      await fetchPrograms();
+      enqueueSnackbar('Xóa chương trình học thành công');
+    }else{
+      enqueueSnackbar('Xóa chương trình học thất bại');
+    }
 
     if (page > 0) {
       if (selected.length === dataInPage.length) {

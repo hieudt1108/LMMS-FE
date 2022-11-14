@@ -127,6 +127,7 @@ function postApi(url, payload, file) {
     .then((res) => res)
     .catch((err) => err);
 }
+
 // LOGIN
 const loginAuth = (payload) => {
   return postApi('Auth/login', payload);

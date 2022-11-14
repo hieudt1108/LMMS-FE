@@ -18,12 +18,13 @@ import {
   description,
   fullAddress,
   phoneNumber,
+  subject,
 } from './assets';
 
 // ----------------------------------------------------------------------
 
 const _mock = {
-  id: (index) => `e99f09a7-dd88-49d5-b1c8-1daf80c2d7b${index + 1}`,
+  id: (index) => `${index + 1}`,
   email: (index) => email[index],
   phoneNumber: (index) => phoneNumber[index],
   time: (index) => sub(new Date(), { days: index, hours: index }),
@@ -55,6 +56,7 @@ const _mock = {
     product: (index) => `https://api-dev-minimal-v4.vercel.app/assets/images/products/product_${index + 1}.jpg`,
     avatar: (index) => `https://api-dev-minimal-v4.vercel.app/assets/images/avatars/avatar_${index + 1}.jpg`,
   },
+  subject: (index) => `/assets/images/subjects/${subject[index]}.png`,
 };
 
 export default _mock;

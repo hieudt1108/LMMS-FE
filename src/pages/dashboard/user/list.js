@@ -42,7 +42,8 @@ import {
 } from '../../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
-import { getAllUsers } from '../../../dataProvider/agent';
+import {deleteUser, getAllUsers} from '../../../dataProvider/agent';
+import {useSnackbar} from "../../../components/snackbar";
 
 // ----------------------------------------------------------------------
 
@@ -50,18 +51,12 @@ const STATUS_OPTIONS = ['all', 'active', 'banned'];
 
 const ROLE_OPTIONS = [
   'all',
-  'ux designer',
-  'full stack designer',
-  'backend developer',
-  'project manager',
-  'leader',
-  'ui designer',
-  'ui/ux designer',
-  'front end developer',
-  'full stack developer',
+  'admin',
+  'hocsinh',
 ];
 
 const TABLE_HEAD = [
+  { id: 'id', label: 'ID', align: 'left' },
   { id: 'name', label: 'Tên', align: 'left' },
   { id: 'email', label: 'Email', align: 'left' },
   { id: 'gender', label: 'Giới tính', align: 'left' },
@@ -99,6 +94,8 @@ export default function UserListPage() {
     onChangeRowsPerPage,
   } = useTable();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const { themeStretch } = useSettingsContext();
 
   const { push } = useRouter();
@@ -134,6 +131,19 @@ export default function UserListPage() {
     (!dataFiltered.length && !!filterRole) ||
     (!dataFiltered.length && !!filterStatus);
 
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  async function fetchUsers() {
+    const res = await getAllUsers({ pageIndex: 1, pageSize: 100 });
+    if (res.status < 400) {
+      setListUsers(res.data.data);
+    } else {
+      console.log('error');
+    }
+  }
+
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
@@ -157,11 +167,15 @@ export default function UserListPage() {
     setFilterRole(event.target.value);
   };
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-
+  const handleDeleteRow = async (id) => {
+    const res = await deleteUser(id)
+    if(res.status < 400){
+      setSelected([]);
+      await fetchUsers();
+      enqueueSnackbar('Xóa người dùng thành công');
+    }else{
+      enqueueSnackbar('Xóa người dùng thất bại');
+    }
     if (page > 0) {
       if (dataInPage.length < 2) {
         setPage(page - 1);
@@ -169,11 +183,15 @@ export default function UserListPage() {
     }
   };
 
-  const handleDeleteRows = (selected) => {
-    const deleteRows = tableData.filter((row) => !selected.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
-
+  const handleDeleteRows = async (selected) => {
+    const deleteRows = await deleteUser(selected)
+    if(deleteRows.status < 400){
+      setSelected([]);
+      await fetchUsers();
+      enqueueSnackbar('Xóa người dùng thành công');
+    }else{
+      enqueueSnackbar('Xóa người dùng thất bại');
+    }
     if (page > 0) {
       if (selected.length === dataInPage.length) {
         setPage(page - 1);
@@ -196,18 +214,7 @@ export default function UserListPage() {
     setFilterStatus('all');
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
-  async function fetchUsers() {
-    const res = await getAllUsers({ pageIndex: 1, pageSize: 100 });
-    if (res.status < 400) {
-      setListUsers(res.data.data);
-    } else {
-      console.log('error');
-    }
-  }
 
   return (
     <>
@@ -215,7 +222,7 @@ export default function UserListPage() {
         <title> User: List | Minimal UI</title>
       </Head>
 
-      <Container maxWidth={1000}>
+      <Container  >
         <CustomBreadcrumbs
           heading="Danh sách người dùng"
           links={[
@@ -368,15 +375,15 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
-    inputData = inputData.filter((user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
+    inputData = inputData.filter((user) => user.lastName.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
   }
 
   if (filterStatus !== 'all') {
-    inputData = inputData.filter((user) => user.status === filterStatus);
+    inputData = inputData.filter((user) => user.enable === filterStatus);
   }
 
   if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.role === filterRole);
+    inputData = inputData.filter((user) => user.roles === filterRole);
   }
 
   return inputData;

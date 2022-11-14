@@ -42,7 +42,8 @@ import {
 } from '../../../components/table';
 // sections
 import { GradeTableToolbar, GradeTableRow } from '../../../sections/@dashboard/grade/list';
-import {getAllGrade} from "../../../dataProvider/agent";
+import {deleteGrade, deleteLevel, getAllGrade} from "../../../dataProvider/agent";
+import {useSnackbar} from "../../../components/snackbar";
 
 // ----------------------------------------------------------------------
 
@@ -80,6 +81,8 @@ export default function GradeListPage() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
+
+  const enqueueSnackbar = useSnackbar();
 
   const { themeStretch } = useSettingsContext();
 
@@ -127,10 +130,15 @@ export default function GradeListPage() {
   };
 
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
+  const handleDeleteRow = async (id) => {
+    const response = await deleteGrade(id)
+    if(response.status < 400){
+      setSelected([]);
+      await fetchGrades();
+      enqueueSnackbar('Xóa khối học thành công');
+    }else{
+      enqueueSnackbar('Xóa khối học thất bại');
+    }
 
     if (page > 0) {
       if (dataInPage.length < 2) {
@@ -139,10 +147,15 @@ export default function GradeListPage() {
     }
   };
 
-  const handleDeleteRows = (selected) => {
-    const deleteRows = tableData.filter((row) => !selected.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
+  const handleDeleteRows = async (selected) => {
+    const response = await deleteGrade(selected)
+    if(response.status < 400){
+      setSelected([]);
+      await fetchGrades();
+      enqueueSnackbar('Xóa khối học thành công');
+    }else{
+      enqueueSnackbar('Xóa khối học thất bại');
+    }
 
     if (page > 0) {
       if (selected.length === dataInPage.length) {

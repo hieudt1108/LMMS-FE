@@ -36,7 +36,7 @@ UserTableRow.propTypes = {
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
 
-  const { firstName, lastName, email,roles, gender,phone,address,birthDate, enable  } = row;
+  const { id,firstName, lastName, email,roles, gender,phone,address,birthDate, enable  } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -64,6 +64,8 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
+
+        <TableCell align="left">{id}</TableCell>
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
@@ -146,7 +148,12 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         title="Delete"
         content="Are you sure want to delete?"
         action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
+          <Button variant="contained" color="error"
+                  onClick={() => {
+                      onDeleteRow();
+                      handleCloseConfirm();
+                  }}
+          >
             Delete
           </Button>
         }

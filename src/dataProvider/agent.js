@@ -120,14 +120,14 @@ function postApi(url, payload, file) {
     return instance
         .post(`/${url}`, payload, {
             headers: {
-                // Authorization: token ? `Bearer ${token}` : 'no-author',
-                // 'content-type': file ? 'multipart/form-data' : 'application/json',
-                // 'content-type':  'application/json',
+                Authorization: token ? `Bearer ${token}` : 'no-author',
+                'Content-Type': file ? 'multipart/form-data' : 'application/json; charset=utf-8'
             },
         })
         .then((res) => res)
         .catch((err) => err);
 }
+
 // LOGIN
 const loginAuth = (payload) => {
     return postApi('Auth/login', payload);

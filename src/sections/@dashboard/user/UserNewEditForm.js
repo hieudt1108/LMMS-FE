@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 // next
 import { useRouter } from 'next/router';
+import { useFormik } from 'formik';
 // form
-import { useForm, Controller } from 'react-hook-form';
+import {useForm, Controller, useFormContext} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import {Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, TextField, Chip} from '@mui/material';
 // utils
 import { fData } from '../../../utils/formatNumber';
 // routes
@@ -18,9 +19,22 @@ import { countries } from '../../../assets/data';
 // components
 import Label from '../../../components/label';
 import { useSnackbar } from '../../../components/snackbar';
-import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
+import FormProvider, {
+    RHFAutocomplete,
+    RHFRadioGroup,
+    RHFSelect,
+    RHFSwitch,
+    RHFTextField,
+    RHFUploadAvatar
+} from '../../../components/hook-form';
+import {DatePicker} from "@mui/x-date-pickers";
+import {createUserAuth, getALlRoles} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
+const GENDER_OPTION = [
+    { label: 'Nam', value: '0' },
+    { label: 'Nữ', value: '1' },
+];
 
 UserNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
@@ -32,41 +46,33 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email(),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role Number is required'),
-    avatarUrl: Yup.mixed().test('required', 'Avatar is required', (value) => value !== ''),
-  });
+    const validationSchema = Yup.object().shape({
+        userName: Yup.string().trim().required('Tên đăng nhập không được trống'),
+        password: Yup.string().trim().required('Mật khẩu không được trống'),
+        firstName: Yup.string().trim().required('Không được để trống'),
+        lastName: Yup.string().trim().required('Không được để trống'),
+        email: Yup.string().notRequired(),
+        phone: Yup.string().notRequired(),
+        address: Yup.mixed().notRequired(),
+        rolesID: Yup.array().min(1, 'Hãy chọn vai trò')
+    })
 
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
-      avatarUrl: currentUser?.avatarUrl || '',
-      isVerified: currentUser?.isVerified || true,
-      status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.role || '',
+        userName: currentUser?.userName || '',
+        password: currentUser?.password || '',
+        firstName: currentUser?.firstName || '',
+        lastName: currentUser?.lastName || '',
+        email: currentUser?.email || '',
+        phone: currentUser?.phone || '',
+        address: currentUser?.address || '',
+        rolesID: currentUser?.rolesID || ['HOCSINH'],
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewUserSchema),
+    resolver: yupResolver(validationSchema),
     defaultValues,
   });
 
@@ -79,8 +85,6 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
-
   useEffect(() => {
     if (isEdit && currentUser) {
       reset(defaultValues);
@@ -88,121 +92,71 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     if (!isEdit) {
       reset(defaultValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
 
-  const onSubmit = async () => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      push(PATH_DASHBOARD.user.list);
-    } catch (error) {
-      console.error(error);
+    const [userRole, setUserRole] = useState([]);
+    const initialValues = {
+        userName: "",
+        password: "",
+        email: "",
+        firstName: "",
+        lastName: "",
+        gender: 0,
+        birthDate: "2022-11-14T03:36:01.972Z",
+        address: "",
+        phone: "",
+        isTeacher: 0,
+        rolesID: [2],
+    };
+
+    useEffect(() => {
+        fetchRoles();
+    }, []);
+
+    async function fetchRoles() {
+        const res = await getALlRoles({ pageIndex: 1, pageSize: 10 });
+        console.log('data: ', res.data.data);
+        if (res.status < 400) {
+            setUserRole(res.data.data);
+        } else {
+            console.log('error fetch api');
+        }
     }
-  };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
+    const submitHandler = async (values, actions) => {
+        const { userName, password, email, firstName, lastName, gender, birthDate, address, phone, isTeacher, rolesID } = values
+        console.log('birthdate',birthDate)
+        const usersData = {
+            userName: userName,
+            password: password,
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            gender: gender,
+            birthDate: initialValues.birthDate,
+            address: address,
+            phone: phone,
+            isTeacher: isTeacher,
+            rolesID: initialValues.rolesID,
+        };
 
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
+        const res = await createUserAuth(usersData)
+        console.log('data create',res)
+        if (res.status < 400) {
+            actions.resetForm();
+            reset();
+            enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+            push(PATH_DASHBOARD.user.list);
+        }else {
+            enqueueSnackbar('Create Fail');
+        }
+    };
+    const formik = useFormik({ initialValues: initialValues, validationSchema: validationSchema, onSubmit: submitHandler });
 
-      if (file) {
-        setValue('avatarUrl', newFile);
-      }
-    },
-    [setValue]
-  );
-
-  return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    return (
+    <FormProvider methods={methods} onSubmit={formik.handleSubmit}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-            {isEdit && (
-              <Label
-                color={values.status === 'active' ? 'success' : 'error'}
-                sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
-              >
-                {values.status}
-              </Label>
-            )}
-
-            <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="avatarUrl"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 2,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
-            </Box>
-
-            {isEdit && (
-              <FormControlLabel
-                labelPlacement="start"
-                control={
-                  <Controller
-                    name="status"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        {...field}
-                        checked={field.value !== 'active'}
-                        onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
-                      />
-                    )}
-                  />
-                }
-                label={
-                  <>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Banned
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Apply disable account
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
-              />
-            )}
-
-            <RHFSwitch
-              name="isVerified"
-              labelPlacement="start"
-              label={
-                <>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Email Verified
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Disabling this will automatically send the user a verification email
-                  </Typography>
-                </>
-              }
-              sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-            />
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} >
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
@@ -213,30 +167,181 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
+                <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                    Tài khoản
+                </Typography>
+                <div></div>
+              <RHFTextField
+                  name="userName"
+                  label="Tên người dùng"
+                  id="userName"
+                  value={formik.values.userName}
+                  onChange={(e) => {
+                      formik.handleChange(e)
+                  }}
+                  error={formik.touched.userName && Boolean(formik.errors.userName)}
+                  helperText={formik.touched.userName && formik.errors.userName}
+              />
+                <RHFTextField
+                  name="password"
+                  label="Mật khẩu"
+                  id="password"
+                  value={formik.values.password}
+                  onChange={(e) => {
+                      formik.handleChange(e)
+                  }}
+                  error={formik.touched.password && Boolean(formik.errors.password)}
+                  helperText={formik.touched.password && formik.errors.password}
+                />
+                <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                    Cài đặt tài khoản
+                </Typography>
+                <div></div>
+                <RHFAutocomplete
+                    name="rolesID"
+                    multiple
+                    freeSolo
+                    onChange={(event, newValue) => setValue('rolesID', newValue)}
+                    options={userRole.map((option) => option.name)}
+                    renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                            <Chip {
+                                ...getTagProps({ index })}
+                                  key={option} size="small"
+                                  label={option}
+                            />
+                        ))
+                    }
+                    renderInput={(params) => <TextField label="Vai trò" {...params} />}
+                />
+                <div></div>
+                {isEdit && (
+                <FormControlLabel
+                    labelPlacement="start"
+                    control={
+                        <Controller
+                            name="status"
+                            control={control}
+                            render={({ field }) => (
+                                <Switch
+                                    {...field}
+                                    checked={field.value !== 'active'}
+                                    onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
+                                />
+                            )}
+                        />
+                    }
+                    label={
+                        <>
+                            <Typography variant="subtitle2" sx={{ mb: 0.5,ml:2 }}>
+                                Banned
+                            </Typography>
+                            <Typography variant="body2" sx={{ ml:2,color: 'text.secondary' }}>
+                                Apply disable account
+                            </Typography>
+                        </>
+                    }
+                    sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+                />
+                )}
 
-              <RHFSelect name="country" label="Country" placeholder="Country">
-                <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFSelect>
 
-              <RHFTextField name="state" label="State/Region" />
-              <RHFTextField name="city" label="City" />
-              <RHFTextField name="address" label="Address" />
-              <RHFTextField name="zipCode" label="Zip/Code" />
-              <RHFTextField name="company" label="Company" />
-              <RHFTextField name="role" label="Role" />
+                <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                    Thông tin cá nhân
+                </Typography>
+                <div></div>
+              <RHFTextField
+                name="firstName"
+                label="Họ"
+                id="firstName"
+                value={formik.values.firstName}
+                onChange={(e) => {
+                    formik.handleChange(e)
+                }}
+                error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                helperText={formik.touched.firstName && formik.errors.firstName}
+              />
+              <RHFTextField
+                  name="lastName"
+                  label="Tên"
+                  id="lastName"
+                  value={formik.values.lastName}
+                  onChange={(e) => {
+                      formik.handleChange(e)
+                  }}
+                  error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                  helperText={formik.touched.lastName && formik.errors.lastName}
+              />
+                <Stack sx={{ml:1.5}}>
+                    <Typography variant="subtitle2" sx={{ color: 'text.secondary',mt: 1 }}>
+                        Giới tính
+                    </Typography>
+                    <RHFRadioGroup
+                        name="gender"
+                        options={GENDER_OPTION}
+                        value={formik.values.gender}
+                        sx={{
+                            mt:0.5,
+                            '& .MuiFormControlLabel-root': { mr: 4 },
+                        }}
+                    />
+                </Stack>
+                <Stack sx={{mt:2.5}}>
+                    <Controller
+                    name="birthdate"
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                        <DatePicker
+                            label="Sinh nhật"
+                            value={field.value}
+                            onChange={(newValue) => {
+                                field.onChange(newValue);
+                            }}
+                            renderInput={(params) => (
+                                <TextField {...params} value={formik.values.birthDate}
+                                           onChange={(e) => {
+                                    formik.handleChange(e)
+                                }} fullWidth error={!!error} helperText={error?.message} />
+                            )}
+                        />
+                    )}
+                /></Stack>
+                <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                    Thông tin liên hệ
+                </Typography>
+
+                <div></div>
+                <RHFTextField
+                    name="email"
+                    label="Email"
+                    id="email"
+                    value={formik.values.email}
+                    onChange={(e) => {
+                        formik.handleChange(e)
+                    }}
+                />
+                <RHFTextField
+                    name="phone"
+                    label="Số điện thoại"
+                    id="phone"
+                    value={formik.values.phone}
+                    onChange={(e) => {
+                        formik.handleChange(e)
+                    }}
+                />
+                <RHFTextField
+                    name="address"
+                    label="Địa chỉ"
+                    id="address"
+                    value={formik.values.address}
+                    onChange={(e) => {
+                        formik.handleChange(e)
+                    }}
+                />
             </Box>
-
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Create User' : 'Save Changes'}
+                {!isEdit ? 'Tạo người dùng' : 'Cập nhật người dùng'}
               </LoadingButton>
             </Stack>
           </Card>

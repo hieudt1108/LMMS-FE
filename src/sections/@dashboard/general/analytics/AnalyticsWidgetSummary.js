@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';

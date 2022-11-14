@@ -115,7 +115,6 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
 
     async function fetchRoles() {
         const res = await getALlRoles({ pageIndex: 1, pageSize: 10 });
-        console.log('data: ', res.data.data);
         if (res.status < 400) {
             setUserRole(res.data.data);
         } else {
@@ -280,6 +279,9 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                         name="gender"
                         options={GENDER_OPTION}
                         value={formik.values.gender}
+                        onChange={(e) => {
+                            formik.handleChange(e)
+                        }}
                         sx={{
                             mt:0.5,
                             '& .MuiFormControlLabel-root': { mr: 4 },
@@ -296,6 +298,10 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                             value={field.value}
                             onChange={(newValue) => {
                                 field.onChange(newValue);
+
+                                const d = new Date(newValue).toJSON().slice(0, 19).replace('T', ' ')
+                                formik.handleChange(d)
+                                console.log(d);
                             }}
                             renderInput={(params) => (
                                 <TextField {...params} value={formik.values.birthDate}

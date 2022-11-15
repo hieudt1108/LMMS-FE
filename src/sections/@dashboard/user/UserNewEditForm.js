@@ -28,7 +28,7 @@ import FormProvider, {
     RHFUploadAvatar
 } from '../../../components/hook-form';
 import {DatePicker} from "@mui/x-date-pickers";
-import {createUserAuth, getALlRoles} from "../../../dataProvider/agent";
+import {createUserAuth, getALlRoles, getUserById, updateUser} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 const GENDER_OPTION = [
@@ -43,7 +43,6 @@ UserNewEditForm.propTypes = {
 
 export default function UserNewEditForm({ isEdit = false, currentUser }) {
   const { push } = useRouter();
-
   const { enqueueSnackbar } = useSnackbar();
 
     const validationSchema = Yup.object().shape({
@@ -122,9 +121,9 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
         }
     }
 
+
     const submitHandler = async (values, actions) => {
-        const { userName, password, email, firstName, lastName, gender, birthDate, address, phone, isTeacher, rolesID } = values
-        console.log('birthdate',birthDate)
+        const { userName, password, email, firstName, lastName, gender, birthDate, address, phone, isTeacher, rolesID, enable } = values
         const usersData = {
             userName: userName,
             password: password,
@@ -138,9 +137,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
             isTeacher: isTeacher,
             rolesID: initialValues.rolesID,
         };
-
         const res = await createUserAuth(usersData)
-        console.log('data create',res)
         if (res.status < 400) {
             actions.resetForm();
             reset();
@@ -166,10 +163,15 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
+                {!isEdit && (
                 <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
                     Tài khoản
                 </Typography>
+                )}
+                {!isEdit && (
                 <div></div>
+                )}
+              {!isEdit && (
               <RHFTextField
                   name="userName"
                   label="Tên người dùng"
@@ -181,6 +183,8 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                   error={formik.touched.userName && Boolean(formik.errors.userName)}
                   helperText={formik.touched.userName && formik.errors.userName}
               />
+              )}
+                {!isEdit && (
                 <RHFTextField
                   name="password"
                   label="Mật khẩu"
@@ -191,11 +195,15 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                   }}
                   error={formik.touched.password && Boolean(formik.errors.password)}
                   helperText={formik.touched.password && formik.errors.password}
-                />
+                />)}
+
                 <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
                     Cài đặt tài khoản
                 </Typography>
+                {!isEdit && (
                 <div></div>
+                )}
+                {!isEdit && (
                 <RHFAutocomplete
                     name="rolesID"
                     multiple
@@ -213,8 +221,11 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                     }
                     renderInput={(params) => <TextField label="Vai trò" {...params} />}
                 />
-                <div></div>
+                )}
                 {isEdit && (
+                    <div></div>
+                )}
+
                 <FormControlLabel
                     labelPlacement="start"
                     control={
@@ -225,7 +236,8 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                                 <Switch
                                     {...field}
                                     checked={field.value !== 'active'}
-                                    onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
+                                    value={formik.values.gender}
+                                    onChange={(event) => {field.onChange(event.target.checked ? 'banned' : 'active')}}
                                 />
                             )}
                         />
@@ -233,18 +245,20 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                     label={
                         <>
                             <Typography variant="subtitle2" sx={{ mb: 0.5,ml:2 }}>
-                                Banned
+                                Vô hiệu hóa
                             </Typography>
                             <Typography variant="body2" sx={{ ml:2,color: 'text.secondary' }}>
-                                Apply disable account
+                                Áp dụng vô hiệu hóa người dùng
                             </Typography>
                         </>
                     }
                     sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
                 />
+
+
+                {isEdit && (
+                    <div></div>
                 )}
-
-
                 <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
                     Thông tin cá nhân
                 </Typography>

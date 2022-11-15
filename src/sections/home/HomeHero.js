@@ -94,7 +94,7 @@ export default function HomeHero() {
       <StyledRoot>
         <Container component={MotionContainer} sx={{ height: 1 }}>
           <Grid container spacing={10} sx={{ height: 1 }}>
-            <Grid item xs={12} md={6} sx={{ height: 1,ml:-20,mt:10 }}>
+            <Grid item xs={12} md={6} sx={{ height: 1,ml:-10,mt:10 }}>
               <Description />
             </Grid>
             <Grid item xs={12} md={6} sx={{ height: 1 }}>

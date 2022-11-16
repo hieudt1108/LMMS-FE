@@ -18,13 +18,13 @@ export default function BlogPostsSort({ sortBy, sortOptions, onSort }) {
       value={sortBy}
       onChange={onSort}
       SelectProps={{
-        sx: { typography: 'body2' },
+        sx: { typography: 'body2', minWidth: '150px' },
       }}
     >
       {sortOptions.map((option) => (
         <MenuItem
-          key={option.value}
-          value={option.value}
+          key={option.id}
+          value={option.id}
           sx={{
             mx: 1,
             my: 0.5,
@@ -35,7 +35,7 @@ export default function BlogPostsSort({ sortBy, sortOptions, onSort }) {
             '&:last-of-type': { mb: 0 },
           }}
         >
-          {option.label}
+          {option.name}
         </MenuItem>
       ))}
     </TextField>

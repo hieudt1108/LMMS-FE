@@ -8,7 +8,7 @@ import { Box, Link } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-const Logo = forwardRef(({ disabledLink = false, height = 120,width = 120, sx, ...other }, ref) => {
+const Logo = forwardRef(({ disabledLink = false, height = 120, width = 120, sx, ...other }, ref) => {
   const theme = useTheme();
 
   const PRIMARY_LIGHT = theme.palette.primary.light;
@@ -17,12 +17,11 @@ const Logo = forwardRef(({ disabledLink = false, height = 120,width = 120, sx, .
 
   const PRIMARY_DARK = theme.palette.primary.dark;
 
-
-  const logo =(
+  const logo = (
     <Box
       component="img"
       src="/logo/lmms-logo.svg"
-      sx={{ width: width, height: height, cursor: 'pointer', ...sx }}
+      sx={{ width: 100, height: 100, cursor: 'pointer', ...sx, margin: '0 auto' }}
     />
   );
 

@@ -37,7 +37,7 @@ const clearLocalStorage = () => {
 };
 
 // GET API AREA ============================>
-function getApi(url, params) {
+async function getApi(url, params) {
   // delete all params fail
   const paramObj = {};
   if (params && Object.keys(params).length)
@@ -48,15 +48,17 @@ function getApi(url, params) {
     });
 
   const token = getLocalStorage('access_token');
-  return instance
-    .get(url, {
+  try {
+    const res = await instance.get(url, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no auth',
       },
       params: paramObj,
-    })
-    .then((res) => res)
-    .catch((err) => err);
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
 }
 
 // CLASS
@@ -99,9 +101,9 @@ function getAllProgram(params) {
   return getApi('/Program/getAll', params);
 }
 
-// DDOCUMENT
-function getAllDocument() {
-  return getApi('/Document/getAllDocumentsPublic?pageIndex=1&pageSize=50');
+// DOCUMENT
+function getAllDocument(params) {
+  return getApi('/Document/getAllDocumentsPublic', params);
 }
 
 function getAllTypeDocument() {
@@ -119,17 +121,19 @@ function getALlRoles(params) {
 }
 
 // POST API AREA ============================>
-function postApi(url, payload, file) {
+async function postApi(url, payload, file) {
   const token = getLocalStorage('access_token');
-  return instance
-    .post(`/${url}`, payload, {
+  try {
+    const res = await instance.post(`/${url}`, payload, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no-author',
         'Content-Type': file ? 'multipart/form-data' : 'application/json; charset=utf-8',
       },
-    })
-    .then((res) => res)
-    .catch((err) => err);
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
 }
 
 // LOGIN
@@ -186,17 +190,19 @@ const postDocument = (payload) => {
 };
 
 // DELETE API AREA ============================>
-function deleteApi(url) {
+async function deleteApi(url) {
   const token = getLocalStorage('access_token');
 
-  return instance
-    .delete(`/${url}`, {
+  try {
+    const res = await instance.delete(`/${url}`, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no-author',
       },
-    })
-    .then((res) => res)
-    .catch((err) => err);
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
 }
 
 // PROGRAM
@@ -217,16 +223,18 @@ const deleteGrade = (id) => {
   return deleteApi(`Grade/${id}`);
 };
 // PUT API AREA ============================>
-function putApi(url, payload) {
+async function putApi(url, payload) {
   const token = getLocalStorage('access_token');
-  return instance
-    .put(`/${url}`, payload, {
+  try {
+    const res = await instance.put(`/${url}`, payload, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no-author',
       },
-    })
-    .then((res) => res)
-    .catch((err) => err);
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
 }
 
 // PROGRAM

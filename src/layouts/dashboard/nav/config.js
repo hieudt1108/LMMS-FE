@@ -41,11 +41,11 @@ const navConfig = [
   {
     subheader: 'Chung',
     items: [
-      { title: 'app--Template', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
-      { title: 'ecommerce--Template', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
-      { title: 'analytics--Template', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
-      { title: 'banking--Template', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
-      { title: 'booking--Template', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
+      { title: 'Trang Chủ', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
+      // { title: 'ecommerce--Template', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
+      // { title: 'analytics--Template', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
+      // { title: 'banking--Template', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
+      // { title: 'booking--Template', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
       { title: 'Học liệu', path: PATH_DASHBOARD.general.file, icon: ICONS.file },
     ],
   },

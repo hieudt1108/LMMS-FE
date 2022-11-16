@@ -45,42 +45,42 @@ export default function BlogPostPage() {
 
   const [error, setError] = useState(null);
 
-  const getPost = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/blog/post', {
-        params: { title },
-      });
+  // const getPost = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get('/api/blog/post', {
+  //       params: { title },
+  //     });
 
-      setPost(response.data.post);
-      setLoadingPost(false);
-    } catch (error) {
-      console.error(error);
-      setLoadingPost(false);
-      setError(error.message);
-    }
-  }, [title]);
+  //     setPost(response.data.post);
+  //     setLoadingPost(false);
+  //   } catch (error) {
+  //     console.error(error);
+  //     setLoadingPost(false);
+  //     setError(error.message);
+  //   }
+  // }, [title]);
 
-  const getRecentPosts = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/blog/posts/recent', {
-        params: { title },
-      });
+  // const getRecentPosts = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get('/api/blog/posts/recent', {
+  //       params: { title },
+  //     });
 
-      setRecentPosts(response.data.recentPosts);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [title]);
+  //     setRecentPosts(response.data.recentPosts);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }, [title]);
 
-  useEffect(() => {
-    getRecentPosts();
-  }, [getRecentPosts]);
+  // useEffect(() => {
+  //   getRecentPosts();
+  // }, [getRecentPosts]);
 
-  useEffect(() => {
-    if (title) {
-      getPost();
-    }
-  }, [getPost, title]);
+  // useEffect(() => {
+  //   if (title) {
+  //     getPost();
+  //   }
+  // }, [getPost, title]);
 
   return (
     <>

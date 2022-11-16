@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import {Box, Button, AppBar, Toolbar, Container, Link, Typography} from '@mui/material';
+import { Box, Button, AppBar, Toolbar, Container, Link, Typography } from '@mui/material';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 import useResponsive from '../../hooks/useResponsive';
@@ -49,30 +49,22 @@ export default function Header() {
           }),
         }}
       >
-        <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',ml:1,mt:4 }}>
+        <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', ml: 1, mt: 4 }}>
           <Logo />
 
-            <Typography
-                variant='h7'
-                color='green'
-                noWrap
-                style={{ color: 'green' }}
-                sx={{ flexGrow: 2, mt: 3 }}
-                alignSelf='center'
-            >
-                TRƯỜNG TIỂU HỌC VÀ TRUNG HỌC CƠ SỞ
-                <Typography
-                    variant='h6'
-                    color='green'
-                    noWrap
-                    style={{ color: 'green' }}
-                    sx={{ flexGrow: 1, ml: 7 }}
-                >
-                    VICTORIA THĂNG LONG
-                </Typography>
+          <Typography
+            variant="h7"
+            color="green"
+            noWrap
+            style={{ color: 'green' }}
+            sx={{ flexGrow: 2, mt: 3 }}
+            alignSelf="center"
+          >
+            TRƯỜNG TIỂU HỌC VÀ TRUNG HỌC CƠ SỞ
+            <Typography variant="h6" noWrap style={{ color: 'red' }} sx={{ flexGrow: 1, ml: 7 }}>
+              VICTORIA THĂNG LONG
             </Typography>
-
-
+          </Typography>
         </Container>
       </Toolbar>
 

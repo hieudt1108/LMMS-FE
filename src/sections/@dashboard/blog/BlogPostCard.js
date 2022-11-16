@@ -17,7 +17,7 @@ import Image from '../../../components/image';
 import Iconify from '../../../components/iconify';
 import TextMaxLine from '../../../components/text-max-line';
 import SvgColor from '../../../components/svg-color';
-
+// import second from '../../../../public/assets/cover_8.jpg'
 // ----------------------------------------------------------------------
 
 const StyledOverlay = styled('div')(({ theme }) => ({
@@ -33,38 +33,38 @@ const StyledOverlay = styled('div')(({ theme }) => ({
 
 BlogPostCard.propTypes = {
   index: PropTypes.number,
-  post: PropTypes.object,
+  document: PropTypes.object,
 };
 
-export default function BlogPostCard({ post, index }) {
-  const isDesktop = useResponsive('up', 'md');
+export default function BlogPostCard({ document }) {
+  // const isDesktop = useResponsive('up', 'md');
 
-  const { cover, title, view, comment, share, author, createdAt } = post;
+  const { code, name, typeFile, id } = document;
 
-  const latestPost = index === 0 || index === 1 || index === 2;
+  // const latestPost = index === 0 || index === 1 || index === 2;
 
-  if (isDesktop && latestPost) {
-    return (
-      <Card>
-        <Avatar
-          alt={author.name}
-          src={author.avatarUrl}
-          sx={{
-            top: 24,
-            left: 24,
-            zIndex: 9,
-            position: 'absolute',
-          }}
-        />
+  // if (isDesktop && latestPost) {
+  //   return (
+  //     <Card>
+  //       <Avatar
+  //         alt={author.name}
+  //         src={author.avatarUrl}
+  //         sx={{
+  //           top: 24,
+  //           left: 24,
+  //           zIndex: 9,
+  //           position: 'absolute',
+  //         }}
+  //       />
 
-        <PostContent title={title} view={view} comment={comment} share={share} createdAt={createdAt} index={index} />
+  //       <PostContent title={title} view={view} comment={comment} share={share} createdAt={createdAt} index={index} />
 
-        <StyledOverlay />
+  //       <StyledOverlay />
 
-        <Image alt="cover" src={cover} sx={{ height: 360 }} />
-      </Card>
-    );
-  }
+  //       <Image alt="cover" src={cover} sx={{ height: 360 }} />
+  //     </Card>
+  //   );
+  // }
 
   return (
     <Card>
@@ -81,7 +81,7 @@ export default function BlogPostCard({ post, index }) {
           }}
         />
 
-        <Avatar
+        {/* <Avatar
           alt={author.name}
           src={author.avatarUrl}
           sx={{
@@ -92,12 +92,12 @@ export default function BlogPostCard({ post, index }) {
             bottom: -16,
             position: 'absolute',
           }}
-        />
+        /> */}
 
-        <Image alt="cover" src={cover} ratio="4/3" />
+        <Image alt="cover" src="https://api-dev-minimal-v4.vercel.app/assets/images/covers/cover_8.jpg" ratio="4/3" />
       </Box>
 
-      <PostContent title={title} view={view} comment={comment} share={share} createdAt={createdAt} />
+      <PostContent code={code} name={name} typeFile={typeFile} id={id} />
     </Card>
   );
 }
@@ -105,41 +105,36 @@ export default function BlogPostCard({ post, index }) {
 // ----------------------------------------------------------------------
 
 PostContent.propTypes = {
-  view: PropTypes.number,
-  index: PropTypes.number,
-  share: PropTypes.number,
-  title: PropTypes.string,
-  comment: PropTypes.number,
-  createdAt: PropTypes.string,
+  code: PropTypes.string,
+  name: PropTypes.string,
+  typeFile: PropTypes.string,
+  id: PropTypes.number,
 };
 
-export function PostContent({ title, view, comment, share, createdAt, index }) {
-  const isDesktop = useResponsive('up', 'md');
+export function PostContent({ code, name, typeFile, id }) {
+  // const isDesktop = useResponsive('up', 'md');
 
-  const linkTo = PATH_DASHBOARD.blog.view(paramCase(title));
+  const linkTo = PATH_DASHBOARD.blog.view(id);
 
-  const latestPostLarge = index === 0;
+  // const latestPostLarge = index === 0;
 
-  const latestPostSmall = index === 1 || index === 2;
+  // const latestPostSmall = index === 1 || index === 2;
 
-  const POST_INFO = [
-    { number: comment, icon: 'eva:message-circle-fill' },
-    { number: view, icon: 'eva:eye-fill' },
-    { number: share, icon: 'eva:share-fill' },
-  ];
+  // const POST_INFO = [
+  //   { number: comment, icon: 'eva:message-circle-fill' },
+  //   { number: view, icon: 'eva:eye-fill' },
+  //   { number: share, icon: 'eva:share-fill' },
+  // ];
 
   return (
     <CardContent
       sx={{
         pt: 4.5,
         width: 1,
-        ...((latestPostLarge || latestPostSmall) && {
-          pt: 0,
-          zIndex: 9,
-          bottom: 0,
-          position: 'absolute',
-          color: 'common.white',
-        }),
+        zIndex: 9,
+        bottom: 0,
+        position: 'absolute',
+        color: 'common.white',
       }}
     >
       <Typography
@@ -148,32 +143,40 @@ export function PostContent({ title, view, comment, share, createdAt, index }) {
         component="div"
         sx={{
           color: 'text.disabled',
-          ...((latestPostLarge || latestPostSmall) && {
-            opacity: 0.64,
-            color: 'common.white',
-          }),
+
+          opacity: 1.2,
+          color: 'common.white',
         }}
       >
-        {fDate(createdAt)}
+        t.manh - {code}
       </Typography>
 
       <NextLink href={linkTo} passHref>
-        <TextMaxLine asLink variant={isDesktop && latestPostLarge ? 'h5' : 'subtitle2'} line={2} persistent>
-          {title}
+        <TextMaxLine asLink variant="h5" line={2} persistent>
+          {name}
         </TextMaxLine>
       </NextLink>
+      <Typography
+        gutterBottom
+        variant="caption"
+        component="div"
+        sx={{
+          color: 'common.white',
+        }}
+      >
+        TypeFile: {typeFile}
+      </Typography>
 
-      <Stack
+      {/* <Stack
         flexWrap="wrap"
         direction="row"
         justifyContent="flex-end"
         sx={{
           mt: 3,
           color: 'text.disabled',
-          ...((latestPostLarge || latestPostSmall) && {
-            opacity: 0.64,
-            color: 'common.white',
-          }),
+
+          opacity: 0.64,
+          color: 'common.white',
         }}
       >
         {POST_INFO.map((info, index) => (
@@ -187,7 +190,7 @@ export function PostContent({ title, view, comment, share, createdAt, index }) {
             {fShortenNumber(info.number)}
           </Stack>
         ))}
-      </Stack>
+      </Stack> */}
     </CardContent>
   );
 }

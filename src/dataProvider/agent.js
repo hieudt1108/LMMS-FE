@@ -68,7 +68,7 @@ function getAllClass(params) {
 function getClassById(id) {
   return getApi(`/Class/getOne/${id}`);
 }
-
+// SUBJECT
 function getAllSubjectInClass(params) {
   return getApi('/Subject/getAll', params);
 }
@@ -105,9 +105,9 @@ function getAllProgram(params) {
 function getAllDocument(params) {
   return getApi('/Document/getAllDocumentsPublic', params);
 }
-
-function getAllTypeDocument() {
-  return getApi('/TypeDocument/getAll?pageIndex=1&pageSize=1000');
+// TYPE DOCUMENT
+function getAllTypeDocument(params) {
+  return getApi('/TypeDocument/getAll', params);
 }
 
 // SLOT
@@ -119,7 +119,10 @@ function getALlSlot() {
 function getALlRoles(params) {
   return getApi('/Role/getAll', params);
 }
-
+// Permission
+function getAllPermission(params) {
+  return getApi('/Permission/getAll', params);
+}
 // POST API AREA ============================>
 async function postApi(url, payload, file) {
   const token = getLocalStorage('access_token');
@@ -304,4 +307,5 @@ export {
   getAllTypeDocument,
   postDocument,
   postLevel,
+  getAllPermission,
 };

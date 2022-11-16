@@ -29,7 +29,7 @@ export default function BlogNewPostPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new post"
+          heading="Create a new document"
           links={[
             {
               name: 'Dashboard',

@@ -59,7 +59,6 @@ export default function BlogPostsPage() {
 
   async function fetchAllDocument() {
     const res = await getAllDocument({ pageIndex: 1, pageSize: 100 });
-    console.log(documents);
     if (res.status < 400) {
       setDocuments(res.data.data);
     } else {
@@ -106,7 +105,7 @@ export default function BlogPostsPage() {
           action={
             <NextLink href={PATH_DASHBOARD.blog.new} passHref>
               <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                New Post
+                New Document
               </Button>
             </NextLink>
           }

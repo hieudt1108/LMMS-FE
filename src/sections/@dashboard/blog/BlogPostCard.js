@@ -156,7 +156,7 @@ export function PostContent({ code, name, typeFile, id }) {
           {name}
         </TextMaxLine>
       </NextLink>
-      <Typography
+      {/* <Typography
         gutterBottom
         variant="caption"
         component="div"
@@ -165,7 +165,7 @@ export function PostContent({ code, name, typeFile, id }) {
         }}
       >
         TypeFile: {typeFile}
-      </Typography>
+      </Typography> */}
 
       {/* <Stack
         flexWrap="wrap"

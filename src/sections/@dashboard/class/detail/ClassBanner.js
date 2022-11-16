@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 // utils
-import { bgGradient } from '../../../utils/cssStyles';
-import { fShortenNumber } from '../../../utils/formatNumber';
+import { bgGradient } from '../../../../utils/cssStyles';
 // components
-import Iconify from '../../../components/iconify';
+import Iconify from '../../../../components/iconify';
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from 'src/routes/paths';

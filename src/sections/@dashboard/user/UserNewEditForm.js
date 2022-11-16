@@ -19,8 +19,6 @@ import { countries } from '../../../assets/data';
 // components
 import Label from '../../../components/label';
 import { useSnackbar } from '../../../components/snackbar';
-import Autocomplete from '@mui/material/Autocomplete';
-
 import FormProvider, {
   RHFAutocomplete,
   RHFRadioGroup,
@@ -30,7 +28,7 @@ import FormProvider, {
   RHFUploadAvatar,
 } from '../../../components/hook-form';
 import { DatePicker } from '@mui/x-date-pickers';
-import { createUserAuth, getALlRoles } from '../../../dataProvider/agent';
+import { createUserAuth, getALlRoles, getUserById, updateUser } from '../../../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 const GENDER_OPTION = [
@@ -45,7 +43,6 @@ UserNewEditForm.propTypes = {
 
 export default function UserNewEditForm({ isEdit = false, currentUser }) {
   const { push } = useRouter();
-
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
@@ -125,8 +122,20 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
   }
 
   const submitHandler = async (values, actions) => {
-    const { userName, password, email, firstName, lastName, gender, birthDate, address, phone, isTeacher, rolesID } =
-      values;
+    const {
+      userName,
+      password,
+      email,
+      firstName,
+      lastName,
+      gender,
+      birthDate,
+      address,
+      phone,
+      isTeacher,
+      rolesID,
+      enable,
+    } = values;
     const usersData = {
       userName: userName,
       password: password,
@@ -140,9 +149,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
       isTeacher: isTeacher,
       rolesID: initialValues.rolesID,
     };
-
     const res = await createUserAuth(usersData);
-
     if (res.status < 400) {
       actions.resetForm();
       reset();
@@ -157,8 +164,6 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
     validationSchema: validationSchema,
     onSubmit: submitHandler,
   });
-  console.log(initialValues);
-  console.log(userRole);
 
   return (
     <FormProvider methods={methods} onSubmit={formik.handleSubmit}>
@@ -174,99 +179,92 @@ export default function UserNewEditForm({ isEdit = false, currentUser }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
-                Tài khoản
-              </Typography>
-              <div></div>
-              <RHFTextField
-                name="userName"
-                label="Tên người dùng"
-                id="userName"
-                value={formik.values.userName}
-                onChange={(e) => {
-                  formik.handleChange(e);
-                }}
-                error={formik.touched.userName && Boolean(formik.errors.userName)}
-                helperText={formik.touched.userName && formik.errors.userName}
-              />
-              <RHFTextField
-                name="password"
-                label="Mật khẩu"
-                id="password"
-                value={formik.values.password}
-                onChange={(e) => {
-                  formik.handleChange(e);
-                }}
-                error={formik.touched.password && Boolean(formik.errors.password)}
-                helperText={formik.touched.password && formik.errors.password}
-              />
-              <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
-                Cài đặt tài khoản
-              </Typography>
-              <div></div>
-              <RHFAutocomplete
-                name="rolesID"
-                multiple
-                // freeSolo
-                onChange={(event, newValue) => {
-                  console.log(newValue), setValue('rolesID', newValue);
-                }}
-                options={userRole.map((option) => option.name)}
-                renderTags={(value, getTagProps) =>
-                  value.map((option, index) => (
-                    <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                  ))
-                }
-                renderInput={(params) => <TextField label="Vai trò" {...params} />}
-              />
-              {/* <Autocomplete
-                multiple
-                limitTags={2}
-                id="multiple-limit-tags"
-                options={userRole.map((option) => option.name)}
-                onChange={(event, newValue) => {
-                  console.log(newValue), setValue('rolesID', newValue);
-                }}
-                getOptionLabel={(option) => option.name}
-                // onChange={(e, value) => {
-                //   console.log(value);
-                //   setValue('tags', value);
-                // }}
-                renderInput={(params) => <TextField {...params} label="Thêm vai trò" placeholder="Role" />}
-                sx={{ width: '500px' }}
-              /> */}
-              <div></div>
-
-              {isEdit && (
-                <FormControlLabel
-                  labelPlacement="start"
-                  control={
-                    <Controller
-                      name="status"
-                      control={control}
-                      render={({ field }) => (
-                        <Switch
-                          {...field}
-                          checked={field.value !== 'active'}
-                          onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
-                        />
-                      )}
-                    />
-                  }
-                  label={
-                    <>
-                      <Typography variant="subtitle2" sx={{ mb: 0.5, ml: 2 }}>
-                        Banned
-                      </Typography>
-                      <Typography variant="body2" sx={{ ml: 2, color: 'text.secondary' }}>
-                        Apply disable account
-                      </Typography>
-                    </>
-                  }
-                  sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+              {!isEdit && (
+                <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                  Tài khoản
+                </Typography>
+              )}
+              {!isEdit && <div></div>}
+              {!isEdit && (
+                <RHFTextField
+                  name="userName"
+                  label="Tên người dùng"
+                  id="userName"
+                  value={formik.values.userName}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                  }}
+                  error={formik.touched.userName && Boolean(formik.errors.userName)}
+                  helperText={formik.touched.userName && formik.errors.userName}
+                />
+              )}
+              {!isEdit && (
+                <RHFTextField
+                  name="password"
+                  label="Mật khẩu"
+                  id="password"
+                  value={formik.values.password}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                  }}
+                  error={formik.touched.password && Boolean(formik.errors.password)}
+                  helperText={formik.touched.password && formik.errors.password}
                 />
               )}
 
+              <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                Cài đặt tài khoản
+              </Typography>
+              {!isEdit && <div></div>}
+              {!isEdit && (
+                <RHFAutocomplete
+                  name="rolesID"
+                  multiple
+                  freeSolo
+                  onChange={(event, newValue) => setValue('rolesID', newValue)}
+                  options={userRole.map((option) => option.name)}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
+                    ))
+                  }
+                  renderInput={(params) => <TextField label="Vai trò" {...params} />}
+                />
+              )}
+              {isEdit && <div></div>}
+
+              <FormControlLabel
+                labelPlacement="start"
+                control={
+                  <Controller
+                    name="status"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        {...field}
+                        checked={field.value !== 'active'}
+                        value={formik.values.gender}
+                        onChange={(event) => {
+                          field.onChange(event.target.checked ? 'banned' : 'active');
+                        }}
+                      />
+                    )}
+                  />
+                }
+                label={
+                  <>
+                    <Typography variant="subtitle2" sx={{ mb: 0.5, ml: 2 }}>
+                      Vô hiệu hóa
+                    </Typography>
+                    <Typography variant="body2" sx={{ ml: 2, color: 'text.secondary' }}>
+                      Áp dụng vô hiệu hóa người dùng
+                    </Typography>
+                  </>
+                }
+                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+              />
+
+              {isEdit && <div></div>}
               <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
                 Thông tin cá nhân
               </Typography>

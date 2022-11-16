@@ -205,7 +205,7 @@ export default function UserListPage() {
   };
 
   const handleEditRow = (id) => {
-    push(PATH_DASHBOARD.user.edit(paramCase(id)));
+    push(PATH_DASHBOARD.user.edit(id));
   };
 
   const handleResetFilter = () => {
@@ -310,7 +310,7 @@ export default function UserListPage() {
                       selected={selected.includes(user.id)}
                       onSelectRow={() => onSelectRow(user.id)}
                       onDeleteRow={() => handleDeleteRow(user.id)}
-                      onEditRow={() => handleEditRow(user.name)}
+                      onEditRow={() => handleEditRow(user.id)}
                     />
                   ))}
 

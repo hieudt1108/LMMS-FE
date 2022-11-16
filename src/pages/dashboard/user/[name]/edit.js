@@ -14,7 +14,8 @@ import DashboardLayout from '../../../../layouts/dashboard';
 import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
-import UserNewEditForm from '../../../../sections/@dashboard/user/UserNewEditForm';
+import UserEditForm from '../../../../sections/@dashboard/user/UserEditForm';
+import {lastName} from "../../../../_mock/assets";
 
 // ----------------------------------------------------------------------
 
@@ -24,13 +25,11 @@ UserEditPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function UserEditPage() {
   const { themeStretch } = useSettingsContext();
-
   const {
     query: { name },
   } = useRouter();
 
-  const currentUser = _userList.find((user) => paramCase(user.name) === name);
-
+  const currentUser = _userList.find((user) => user.id === name);
   return (
     <>
       <Head>
@@ -39,21 +38,23 @@ export default function UserEditPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Edit user"
+          heading="Cập nhật người dùng"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'User',
+              name: 'Danh sách',
               href: PATH_DASHBOARD.user.list,
             },
-            { name: currentUser?.name },
+            {
+              name: currentUser?.id,
+            },
           ]}
         />
 
-        <UserNewEditForm isEdit currentUser={currentUser} />
+        <UserEditForm isEdit currentUser={currentUser} />
       </Container>
     </>
   );

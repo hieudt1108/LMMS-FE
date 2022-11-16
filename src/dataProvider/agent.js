@@ -26,7 +26,10 @@ const setLocalStorage = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 const getLocalStorage = (key) => {
-  return JSON.parse(localStorage.getItem(key));
+  if (typeof window !== 'undefined') {
+    return JSON.parse(localStorage.getItem(key));
+  }
+  return {};
 };
 
 const clearLocalStorage = () => {
@@ -88,6 +91,10 @@ function getLevelById(id) {
 // USERS
 function getAllUsers(params) {
   return getApi('/User/getAll', params);
+}
+// USERS
+function getUserById(id) {
+  return getApi(`/User/getOne/${id}`);
 }
 // PROGRAM
 function getAllProgram(params) {
@@ -244,6 +251,11 @@ const updateLevel = (id, payload) => {
 const updateGrade = (id, payload) => {
   return putApi(`Grade/${id}`, payload);
 };
+
+// USER
+const updateUser = (id, payload) => {
+  return putApi(`User/${id}`, payload);
+};
 //export api here
 
 function addParameter(url, params) {
@@ -270,7 +282,9 @@ export {
   deleteGrade,
   updateGrade,
   getAllUsers,
+  getUserById,
   deleteUser,
+  updateUser,
   createUserAuth,
   getGradeById,
   postGrade,

@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import { Card, Typography, Stack, Divider } from '@mui/material';
 // hooks
-import useResponsive from '../../../hooks/useResponsive';
+import useResponsive from '../../../../hooks/useResponsive';
 // utils
-import { fNumber } from '../../../utils/formatNumber';
+import { fNumber } from '../../../../utils/formatNumber';
 // components
-import Chart, { useChart } from '../../../components/chart';
+import Chart, { useChart } from '../../../../components/chart';
 
 // ----------------------------------------------------------------------
 

@@ -45,7 +45,7 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/class'),
     detail: (class_id) => path(ROOTS_DASHBOARD, `/class/${class_id}`),
     new: path(ROOTS_DASHBOARD, '/class/new'),
-    edit: (name) => path(ROOTS_DASHBOARD, `/class/${name}/edit`),
+    edit: (class_id) => path(ROOTS_DASHBOARD, `/class/${class_id}/edit`),
     subject: {
       detail: (class_id, subject_id) => path(ROOTS_DASHBOARD, `/class/${class_id}/subject/${subject_id}`),
     },

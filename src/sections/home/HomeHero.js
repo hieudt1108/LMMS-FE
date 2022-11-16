@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 // @mui
 import { styled, alpha, useTheme } from '@mui/material/styles';
-import {Button, Box, Link, Container, Typography, Stack, Grid, Paper, AppBar, Toolbar} from '@mui/material';
+import { Button, Box, Link, Container, Typography, Stack, Grid, Paper, AppBar, Toolbar } from '@mui/material';
 // routes
 import { PATH_DASHBOARD, PATH_FIGMA_PREVIEW, PATH_FREE_VERSION } from '../../routes/paths';
 // hooks
@@ -94,11 +94,11 @@ export default function HomeHero() {
       <StyledRoot>
         <Container component={MotionContainer} sx={{ height: 1 }}>
           <Grid container spacing={10} sx={{ height: 1 }}>
-            <Grid item xs={12} md={6} sx={{ height: 1,ml:-20,mt:10 }}>
+            <Grid item xs={12} md={6} sx={{ height: 1, ml: -20, mt: 10 }}>
               <Description />
             </Grid>
             <Grid item xs={12} md={6} sx={{ height: 1 }}>
-              <Content/>
+              <Content />
             </Grid>
           </Grid>
         </Container>
@@ -108,7 +108,6 @@ export default function HomeHero() {
 }
 
 // ----------------------------------------------------------------------
-
 
 function Description() {
   return (
@@ -121,7 +120,7 @@ function Description() {
 
       <m.div variants={varFade().in}>
         <StyledGradientText
-          sx = {{pb:1.8,ml:2.5,}}
+          sx={{ pb: 1.8, ml: 2.5 }}
           animate={{ backgroundPosition: '200% center' }}
           transition={{
             repeatType: 'reverse',
@@ -133,7 +132,6 @@ function Description() {
           Học Liệu
         </StyledGradientText>
       </m.div>
-
 
       <m.div variants={varFade().in}>
         <Stack spacing={1.5} direction={{ xs: 'column-reverse', sm: 'row' }} sx={{ my: 5 }}>

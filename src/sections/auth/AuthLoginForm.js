@@ -6,7 +6,7 @@ import NextLink from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import {Link, Stack, Alert, IconButton, InputAdornment, TextField, MenuItem} from '@mui/material';
+import { Link, Stack, Alert, IconButton, InputAdornment, TextField, MenuItem } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
@@ -14,13 +14,10 @@ import { PATH_AUTH } from '../../routes/paths';
 import { useAuthContext } from '../../auth/useAuthContext';
 // components
 import Iconify from '../../components/iconify';
-import FormProvider, {RHFSelect, RHFTextField} from '../../components/hook-form';
-import {BlogPostsSort} from "../@dashboard/blog";
+import FormProvider, { RHFSelect, RHFTextField } from '../../components/hook-form';
+import { BlogPostsSort } from '../@dashboard/blog';
 
 // ----------------------------------------------------------------------
-
-
-
 
 export default function AuthLoginForm() {
   const { login } = useAuthContext();
@@ -31,8 +28,6 @@ export default function AuthLoginForm() {
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
-
-
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
@@ -60,14 +55,10 @@ export default function AuthLoginForm() {
     }
   };
 
-
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
-
-
-
 
         <RHFTextField name="email" label="Tên đăng nhập" />
 

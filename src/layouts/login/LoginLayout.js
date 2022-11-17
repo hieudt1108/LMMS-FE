@@ -28,7 +28,7 @@ export default function LoginLayout({ children, illustration, title }) {
       />
 
       <StyledSection>
-        <Typography variant="h3" sx={{ mb: 10, maxWidth: 480, textAlign: 'center' }}>
+        <Typography variant="h3" sx={{ mb: 10, maxWidth: 450, textAlign: 'center' }}>
           {title || 'Chào mừng quay trở lại'}
         </Typography>
 

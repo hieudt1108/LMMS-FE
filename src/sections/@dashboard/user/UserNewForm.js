@@ -36,43 +36,37 @@ const GENDER_OPTION = [
     {label: 'Nữ', value: '1'},
 ];
 
-const TAGS_OPTION = [
-    {label: 'The Godfather', id: 1},
-    {label: 'Pulp Fiction', id: 2},
-    {label: 'Toy Story 3', id: 2010},
-    {label: 'Logan', id: 2017},
-    {label: 'Full Metal Jacket', id: 1987},
-    {label: 'Dangal', id: 2016},
-    {label: 'The Sting', id: 1973},
-    {label: '2001: A Space Odyssey', id: 1968},
-    {label: "Singin' in the Rain", id: 1952},
-    {label: 'Toy Story', id: 1995},
-    {label: 'Bicycle Thieves', id: 1948},
-    {label: 'The Kid', id: 1921},
-    {label: 'Inglourious Basterds', id: 2009},
-    {label: 'Snatch', id: 2000},
-    {label: '3 Idiots', id: 2009},
-];
-
-UserNewEditForm.propTypes = {
+UserNewForm.propTypes = {
     isEdit: PropTypes.bool,
     currentUser: PropTypes.object,
 };
 
-export default function UserNewEditForm({isEdit = false, currentUser}) {
+export default function UserNewForm({isEdit = false, currentUser}) {
     const {push} = useRouter();
     const {enqueueSnackbar} = useSnackbar();
 
-    const validationSchema = Yup.object().shape({
-        userName: Yup.string().trim().required('Tên đăng nhập không được trống'),
-        password: Yup.string().trim().required('Mật khẩu không được trống'),
-        firstName: Yup.string().trim().required('Không được để trống'),
-        lastName: Yup.string().trim().required('Không được để trống'),
-        email: Yup.string().notRequired(),
-        phone: Yup.string().notRequired(),
-        address: Yup.mixed().notRequired(),
-        rolesID: Yup.array().min(1, 'Hãy chọn vai trò')
-    })
+    const validationSchema = (() => {
+        if (!isEdit) {
+            return  Yup.object().shape({
+                userName: Yup.string().trim().required('Tên đăng nhập không được trống'),
+                password: Yup.string().trim().required('Mật khẩu không được trống'),
+                rolesID: Yup.array().min(1, 'Hãy chọn vai trò'),
+                firstName: Yup.string().trim().required('Không được để trống'),
+                lastName: Yup.string().trim().required('Không được để trống'),
+                email: Yup.string().notRequired(),
+                phone: Yup.string().notRequired(),
+                address: Yup.mixed().notRequired(),
+            })
+        } else {
+            return  Yup.object().shape({
+                firstName: Yup.string().trim().required('Không được để trống'),
+                lastName: Yup.string().trim().required('Không được để trống'),
+                email: Yup.string().notRequired(),
+                phone: Yup.string().notRequired(),
+                address: Yup.mixed().notRequired(),
+            })
+        }
+    })();
 
     const defaultValues = useMemo(
         () => ({
@@ -81,12 +75,13 @@ export default function UserNewEditForm({isEdit = false, currentUser}) {
             firstName: currentUser?.firstName || '',
             lastName: currentUser?.lastName || '',
             email: currentUser?.email || '',
-            gender: 0,
+            gender: currentUser?.gender || 0,
             phone: currentUser?.phone || '',
             address: currentUser?.address || '',
             rolesID: currentUser?.rolesID || [],
             tagsId: [],
-            birthDate: new Date()
+            birthDate: new Date(),
+            enable: currentUser?.enable || 0,
         }),
         [currentUser]
     );
@@ -139,10 +134,35 @@ export default function UserNewEditForm({isEdit = false, currentUser}) {
     }
 
     const onSubmit = async (data) => {
-        try {
-            const dataCreate = {
-                userName: data.userName,
-                password: data.password,
+        console.log(isEdit)
+        if(!isEdit){
+            try {
+                const dataCreate = {
+                    userName: data.userName,
+                    password: data.password,
+                    email: data.email,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    gender: data.gender,
+                    birthDate: data.birthDate,
+                    address: data.address,
+                    phone: data.phone,
+                    isTeacher: data.isTeacher,
+                    rolesID: data.tagsId,
+                }
+                const res = await createUserAuth(dataCreate)
+                if (res.status < 400) {
+                    reset();
+                    enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+                    push(PATH_DASHBOARD.user.list);
+                } else {
+                    enqueueSnackbar('Create Fail');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }else{
+            const res = await updateUser(currentUser.id,{
                 email: data.email,
                 firstName: data.firstName,
                 lastName: data.lastName,
@@ -150,21 +170,17 @@ export default function UserNewEditForm({isEdit = false, currentUser}) {
                 birthDate: data.birthDate,
                 address: data.address,
                 phone: data.phone,
-                isTeacher: data.isTeacher,
-                rolesID: data.tagsId,
-            }
-            const res = await createUserAuth(dataCreate)
+                enable : data.enable
+            })
             if (res.status < 400) {
                 reset();
                 enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
                 push(PATH_DASHBOARD.user.list);
             } else {
-                enqueueSnackbar('Create Fail');
+                enqueueSnackbar('Update Fail');
             }
-
-        } catch (error) {
-            console.error(error);
         }
+
     };
 
 
@@ -210,6 +226,39 @@ export default function UserNewEditForm({isEdit = false, currentUser}) {
                             {!isEdit && (
                                 <div></div>
                             )}
+                            {isEdit && (
+                                <div></div>
+                            )}
+                            {isEdit && (
+                                <FormControlLabel
+                                    labelPlacement="start"
+                                    control={
+                                        <Controller
+                                            name="enable"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Switch
+                                                    {...field}
+                                                    checked={field.value !== 'active'}
+                                                    onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
+                                                />
+                                            )}
+                                        />
+                                    }
+                                    label={
+                                        <>
+                                            <Typography variant="subtitle2" sx={{ mb: 0.5,ml:1 }}>
+                                                Vô hiệu hóa
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ color: 'text.secondary',ml:1 }}>
+                                                Xác nhận vô hiệu hóa người dùng
+                                            </Typography>
+                                        </>
+                                    }
+                                    sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+                                />
+                            )}
+
                             {!isEdit && (
                                 <RHFAutocomplete
                                     name="rolesID"

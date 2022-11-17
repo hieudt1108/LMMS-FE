@@ -5,7 +5,9 @@ import { randomInArray } from '../utils';
 
 export const _subjects = [...Array(5)].map((_, index) => ({
   id: _mock.id(index),
-  name: _mock.name.fullName(index),
+  code: String,
+  name: String,
+  description: String,
   avatar: _mock.image.avatar(index),
   checkIn: _mock.time(index),
   checkOut: _mock.time(index),

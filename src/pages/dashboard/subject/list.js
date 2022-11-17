@@ -21,7 +21,7 @@ import {
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // _mock_
-import { _subjectList } from '../../../_mock/arrays';
+import { _subjects } from '../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
@@ -89,7 +89,7 @@ export default function SubjectListPage() {
 
   const { push } = useRouter();
 
-  const [tableData, setTableData] = useState(_subjectList);
+  const [tableData, setTableData] = useState(_subjects);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -171,7 +171,7 @@ export default function SubjectListPage() {
   };
 
   const handleEditRow = (id) => {
-    push(PATH_DASHBOARD.subject.edit(paramCase(id)));
+    push(PATH_DASHBOARD.subject.edit(id));
   };
 
   const handleResetFilter = () => {
@@ -270,7 +270,7 @@ export default function SubjectListPage() {
                       selected={selected.includes(subject.id)}
                       onSelectRow={() => onSelectRow(subject.id)}
                       onDeleteRow={() => handleDeleteRow(subject.id)}
-                      onEditRow={() => handleEditRow(subject.name)}
+                      onEditRow={() => handleEditRow(subject.id)}
                     />
                   ))}
 

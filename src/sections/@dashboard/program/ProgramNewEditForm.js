@@ -20,7 +20,7 @@ import Label from '../../../components/label';
 import { useSnackbar } from '../../../components/snackbar';
 import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
 import Iconify from "../../../components/iconify";
-import {createProgram, createUserAuth} from "../../../dataProvider/agent";
+import {createProgram, createUserAuth, updateProgram} from "../../../dataProvider/agent";
 import {useFormik} from "formik";
 
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@ export default function ProgramNewEditForm({ isEdit = false, currentProgram }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().required('Tên chương trin không được trống'),
+    name: Yup.string().trim().required('Tên chương trình không được trống'),
     description: Yup.string().notRequired(),
   })
 
@@ -73,17 +73,35 @@ export default function ProgramNewEditForm({ isEdit = false, currentProgram }) {
   }, [isEdit, currentProgram]);
 
   const onSubmit = async (data) => {
-    try {
-      const res = await createProgram(data)
-      if (res.status < 400) {
-        reset();
-        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-        push(PATH_DASHBOARD.program.list);
-      } else {
+    if(!isEdit) {
+      try {
+        const res = await createProgram(data)
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Create success!');
+          push(PATH_DASHBOARD.program.list);
+        } else {
+          enqueueSnackbar('Create Fail');
+        }
+      } catch (error) {
         enqueueSnackbar('Create Fail');
       }
-    } catch (error) {
-      enqueueSnackbar('Create Fail');
+    }else {
+      try {
+        const res = await updateProgram(currentProgram.id,{
+          name: data.name,
+          description: data.description
+        })
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Update success!');
+          push(PATH_DASHBOARD.program.list);
+        } else {
+          enqueueSnackbar('Update Fail');
+        }
+      } catch (error) {
+        enqueueSnackbar('Update Fail');
+      }
     }
   };
 
@@ -113,7 +131,9 @@ export default function ProgramNewEditForm({ isEdit = false, currentProgram }) {
                 <Button
                     size="small"
                     color="error"
-                    onClick={ e => formik.resetForm()}
+                    onClick={() => {
+                      reset(defaultValues);
+                    }}
                     startIcon={<Iconify icon="eva:trash-2-outline" />}
                 >
                   Clear

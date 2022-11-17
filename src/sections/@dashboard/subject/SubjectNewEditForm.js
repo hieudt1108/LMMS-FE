@@ -1,31 +1,22 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo} from 'react';
 // next
 import {useRouter} from 'next/router';
 // form
-import {Controller, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 // @mui
 import {LoadingButton} from '@mui/lab';
-import {Box, Button, Card, Chip, Divider, Grid, MenuItem, Stack, Switch, TextField, Typography} from '@mui/material';
+import {Box, Card, Grid, Stack, Typography} from '@mui/material';
 // utils
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // assets
 // components
 import {useSnackbar} from '../../../components/snackbar';
-import FormProvider, {
-    RHFAutocomplete, RHFEditor,
-    RHFRadioGroup,
-    RHFSelect,
-    RHFTextField,
-    RHFUploadAvatar
-} from '../../../components/hook-form';
-import Iconify from "../../../components/iconify";
-import {createSubject, getAllLevel, getALlRoles} from "../../../dataProvider/agent";
-import {DatePicker} from "@mui/x-date-pickers";
-import Label from "../../../components/label";
+import FormProvider, {RHFTextField, RHFUploadAvatar} from '../../../components/hook-form';
+import {createSubject, updateSubject} from "../../../dataProvider/agent";
 import {fData} from "../../../utils/formatNumber";
 
 // ----------------------------------------------------------------------
@@ -84,19 +75,38 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
 
 
     const onSubmit = async (data) => {
-        try {
-            const res = await createSubject(data)
-            console.log(data)
-            if (res.status < 400) {
-                reset();
-                enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-                push(PATH_DASHBOARD.subject.list);
-            } else {
+        if(!isEdit){
+            try {
+                const res = await createSubject(data)
+                if (res.status < 400) {
+                    reset();
+                    enqueueSnackbar( 'Create success!');
+                    push(PATH_DASHBOARD.subject.list);
+                } else {
+                    enqueueSnackbar('Create Fail');
+                }
+            } catch (error) {
                 enqueueSnackbar('Create Fail');
             }
-        } catch (error) {
-            enqueueSnackbar('Create Fail');
+        }else{
+            try {
+                const res = await updateSubject(currentSubject.id,{
+                    code: data.code,
+                    name: data.name,
+                    description: data.description
+                })
+                if (res.status < 400) {
+                    reset();
+                    enqueueSnackbar('Update success!');
+                    push(PATH_DASHBOARD.subject.list);
+                } else {
+                    enqueueSnackbar('Update Fail');
+                }
+            } catch (error) {
+                enqueueSnackbar('Update Fail');
+            }
         }
+
     };
 
     const handleDrop = useCallback(

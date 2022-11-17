@@ -265,6 +265,11 @@ const updateGrade = (id, payload) => {
   return putApi(`Grade/${id}`, payload);
 };
 
+// SUBJECT
+const updateSubject = (id, payload) => {
+  return putApi(`Subject/${id}`, payload);
+};
+
 // USER
 const updateUser = (id, payload) => {
   return putApi(`User/${id}`, payload);
@@ -289,6 +294,7 @@ export {
   getClassById,
   getAllSubject,
   createSubject,
+  updateSubject,
   deleteSubject,
   postClass,
   getAllGrade,

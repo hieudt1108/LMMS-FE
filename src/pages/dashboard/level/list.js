@@ -170,7 +170,7 @@ export default function LevelListPage() {
   };
 
   const handleEditRow = (id) => {
-    push(PATH_DASHBOARD.level.edit(paramCase(id)));
+    push(PATH_DASHBOARD.level.edit(id));
   };
 
   const handleResetFilter = () => {
@@ -269,7 +269,7 @@ export default function LevelListPage() {
                       selected={selected.includes(level.id)}
                       onSelectRow={() => onSelectRow(level.id)}
                       onDeleteRow={() => handleDeleteRow(level.id)}
-                      onEditRow={() => handleEditRow(level.name)}
+                      onEditRow={() => handleEditRow(level.id)}
                     />
                   ))}
 

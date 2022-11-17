@@ -17,7 +17,7 @@ import {PATH_DASHBOARD} from '../../../routes/paths';
 import {useSnackbar} from '../../../components/snackbar';
 import FormProvider, {RHFAutocomplete, RHFRadioGroup, RHFSelect, RHFTextField} from '../../../components/hook-form';
 import Iconify from "../../../components/iconify";
-import {createGrade, getAllLevel, getALlRoles} from "../../../dataProvider/agent";
+import {createGrade, getAllLevel, getALlRoles, updateGrade} from "../../../dataProvider/agent";
 import {DatePicker} from "@mui/x-date-pickers";
 
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
       () => ({
         name: currentGrade?.name || '',
         description: currentGrade?.description || '',
-        levelId: currentGrade?.levelId || ''
+        levelId: currentGrade?.levelId || 0
       }),
       [currentGrade]
   );
@@ -96,19 +96,38 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
   }
 
   const onSubmit = async (data) => {
-    try {
-      const res = await createGrade(data)
-      console.log(data)
-      if (res.status < 400) {
-        reset();
-        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-        push(PATH_DASHBOARD.grade.list);
-      } else {
-        enqueueSnackbar('Create Fail');
+      if(!isEdit){
+          try {
+              const res = await createGrade(data)
+              if (res.status < 400) {
+                  reset();
+                  enqueueSnackbar( 'Create success!' );
+                  push(PATH_DASHBOARD.grade.list);
+              } else {
+                  enqueueSnackbar('Create Fail');
+              }
+          } catch (error) {
+              enqueueSnackbar('Create Fail');
+          }
+      }else{
+          try {
+              const res = await updateGrade(currentGrade.id,{
+                  levelId : data.levelId,
+                  name: data.name,
+                  description: data.description
+              })
+              console.log(data)
+              if (res.status < 400) {
+                  reset();
+                  enqueueSnackbar( 'Update success!');
+                  push(PATH_DASHBOARD.grade.list);
+              } else {
+                  enqueueSnackbar('Update Fail');
+              }
+          } catch (error) {
+              enqueueSnackbar('Update Fail');
+          }
       }
-    } catch (error) {
-      enqueueSnackbar('Create Fail');
-    }
   };
 
 
@@ -126,7 +145,6 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
                     sm: 'repeat(2, 1fr)',
                   }}
               >
-
                     <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
                       Thông tin khối học
                     </Typography>

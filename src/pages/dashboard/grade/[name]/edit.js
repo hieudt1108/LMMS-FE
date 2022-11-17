@@ -29,7 +29,7 @@ export default function GradeEditPage() {
     query: { name },
   } = useRouter();
 
-  const currentGrade = _gradeList.find((grade) => paramCase(grade.name) === name);
+  const currentGrade = _gradeList.find((grade) => grade.id === name);
 
   return (
     <>
@@ -39,17 +39,17 @@ export default function GradeEditPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Edit grade"
+          heading="Cập nhật khối học"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Grade',
+              name: 'Danh sách khối học',
               href: PATH_DASHBOARD.grade.list,
             },
-            { name: currentGrade?.name },
+            { name: `Cập nhật ${currentGrade?.id}` },
           ]}
         />
 

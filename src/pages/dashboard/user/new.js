@@ -10,7 +10,8 @@ import DashboardLayout from '../../../layouts/dashboard';
 import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 // sections
-import UserNewEditForm from '../../../sections/@dashboard/user/UserNewEditForm';
+import UserNewEditForm from '../../../sections/@dashboard/user/UserNewForm';
+import UserNewForm from "../../../sections/@dashboard/user/UserNewForm";
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +43,7 @@ export default function UserCreatePage() {
             { name: 'Tạo mới' },
           ]}
         />
-        <UserNewEditForm />
+        <UserNewForm />
       </Container>
     </>
   );

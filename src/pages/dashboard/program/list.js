@@ -169,7 +169,7 @@ export default function ProgramListPage() {
   };
 
   const handleEditRow = (id) => {
-    push(PATH_DASHBOARD.program.edit(paramCase(id)));
+    push(PATH_DASHBOARD.program.edit(id));
   };
 
   const handleResetFilter = () => {
@@ -270,7 +270,7 @@ export default function ProgramListPage() {
                       selected={selected.includes(program.id)}
                       onSelectRow={() => onSelectRow(program.id)}
                       onDeleteRow={() => handleDeleteRow(program.id)}
-                      onEditRow={() => handleEditRow(program.name)}
+                      onEditRow={() => handleEditRow(program.id)}
                     />
                   ))}
 

@@ -17,7 +17,7 @@ import {PATH_DASHBOARD} from '../../../routes/paths';
 import {useSnackbar} from '../../../components/snackbar';
 import FormProvider, {RHFTextField} from '../../../components/hook-form';
 import Iconify from "../../../components/iconify";
-import {createLevel} from "../../../dataProvider/agent";
+import {createLevel, updateLevel} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -69,18 +69,37 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
   }, [isEdit, currentLevel]);
 
   const onSubmit = async (data) => {
-    try {
-      const res = await createLevel(data)
-      if (res.status < 400) {
-        reset();
-        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-        push(PATH_DASHBOARD.level.list);
-      } else {
+    if(!isEdit){
+      try {
+        const res = await createLevel(data)
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Create success!');
+          push(PATH_DASHBOARD.level.list);
+        } else {
+          enqueueSnackbar('Create Fail');
+        }
+      } catch (error) {
         enqueueSnackbar('Create Fail');
       }
-    } catch (error) {
-      enqueueSnackbar('Create Fail');
+    }else{
+      try {
+        const res = await updateLevel(currentLevel.id,{
+          name: data.name,
+          description: data.description
+        })
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Update success!');
+          push(PATH_DASHBOARD.level.list);
+        } else {
+          enqueueSnackbar('Update Fail');
+        }
+      } catch (error) {
+        enqueueSnackbar('Update Fail');
+      }
     }
+
   };
 
 

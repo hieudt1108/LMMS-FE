@@ -170,7 +170,7 @@ export default function GradeListPage() {
   };
 
   const handleEditRow = (id) => {
-    push(PATH_DASHBOARD.grade.edit(paramCase(id)));
+    push(PATH_DASHBOARD.grade.edit(id));
   };
 
   const handleResetFilter = () => {
@@ -269,7 +269,7 @@ export default function GradeListPage() {
                       selected={selected.includes(grade.id)}
                       onSelectRow={() => onSelectRow(grade.id)}
                       onDeleteRow={() => handleDeleteRow(grade.id)}
-                      onEditRow={() => handleEditRow(grade.name)}
+                      onEditRow={() => handleEditRow(grade.id)}
                     />
                   ))}
 

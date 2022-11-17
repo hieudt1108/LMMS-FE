@@ -7,7 +7,7 @@ import { Container } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // _mock_
-import { _subjectList } from '../../../../_mock/arrays';
+import { _subjects } from '../../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // components
@@ -29,30 +29,28 @@ export default function SubjectEditPage() {
     query: { name },
   } = useRouter();
 
-  const currentSubject = _subjectList.find((subject) => paramCase(subject.name) === name);
+  const currentSubject = _subjects.find((subject) => subject.id === name);
 
   return (
     <>
       <Head>
         <title> Subject: Edit subject | Minimal UI</title>
       </Head>
-
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Edit subject"
+          heading="Cập nhật môn học"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Subject',
+              name: 'Danh sách môn học',
               href: PATH_DASHBOARD.subject.list,
             },
-            { name: currentSubject?.name },
+            { name: `Cập nhật ${currentSubject?.id}` },
           ]}
         />
-
         <SubjectNewEditForm isEdit currentSubject={currentSubject} />
       </Container>
     </>

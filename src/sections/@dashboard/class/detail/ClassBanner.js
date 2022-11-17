@@ -35,6 +35,8 @@ export default function ClassBanner({
       sx={{
         py: 5,
         boxShadow: 0,
+        cursor : 'pointer',
+        ':hover': {boxShadow: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',transition:'transform 150ms', transform: 'translateY(-10px)'},
         textAlign: 'center',
         color: (theme) => theme.palette[color].darker,
         bgcolor: (theme) => theme.palette[color].lighter,

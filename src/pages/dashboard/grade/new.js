@@ -24,22 +24,22 @@ export default function GradeCreatePage() {
   return (
     <>
       <Head>
-        <title> Grade: Create a new grade | Minimal UI</title>
+        <title>Hệ thống quản lý học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new grade"
+          heading="Tạo khối học"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Grade',
+              name: 'Danh sách khối học',
               href: PATH_DASHBOARD.grade.list,
             },
-            { name: 'New grade' },
+            { name: 'Tạo mới' },
           ]}
         />
         <GradeNewEditForm />

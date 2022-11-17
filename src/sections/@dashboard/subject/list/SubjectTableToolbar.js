@@ -6,14 +6,14 @@ import Iconify from '../../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
-LevelTableToolbar.propTypes = {
+SubjectTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   onResetFilter: PropTypes.func,
 };
 
-export default function LevelTableToolbar({
+export default function SubjectTableToolbar({
   isFiltered,
   filterName,
   onFilterName,
@@ -33,7 +33,7 @@ export default function LevelTableToolbar({
         fullWidth
         value={filterName}
         onChange={onFilterName}
-        placeholder="Tìm kiếm cấp học..."
+        placeholder="Tìm kiếm môn học..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

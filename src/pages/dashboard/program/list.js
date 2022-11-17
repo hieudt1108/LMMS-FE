@@ -82,7 +82,7 @@ export default function ProgramListPage() {
     onChangeRowsPerPage,
   } = useTable();
 
-  const enqueueSnackbar = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { themeStretch } = useSettingsContext();
 
@@ -208,7 +208,7 @@ export default function ProgramListPage() {
           action={
             <NextLink href={PATH_DASHBOARD.program.new} passHref>
               <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                Thêm nguời dùng
+                Thêm chương trình học
               </Button>
             </NextLink>
           }

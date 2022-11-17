@@ -24,22 +24,22 @@ export default function LevelCreatePage() {
   return (
     <>
       <Head>
-        <title> Level: Create a new level | Minimal UI</title>
+        <title>Hệ thống quản lý học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new level"
+          heading="Tạo cấp học"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Level',
+              name: 'Danh sách cấp học',
               href: PATH_DASHBOARD.level.list,
             },
-            { name: 'New level' },
+            { name: 'Tạo mới' },
           ]}
         />
         <LevelNewEditForm />

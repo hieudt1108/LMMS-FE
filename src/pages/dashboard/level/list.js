@@ -82,7 +82,7 @@ export default function LevelListPage() {
     onChangeRowsPerPage,
   } = useTable();
 
-  const enqueueSnackbar = useSnackbar();
+  const {enqueueSnackbar} = useSnackbar();
 
   const { themeStretch } = useSettingsContext();
 

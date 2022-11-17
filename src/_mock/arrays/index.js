@@ -3,6 +3,7 @@ export * from './_user';
 export * from './_program';
 export * from './_grade';
 export * from './_level';
+export * from './_subject';
 export * from './_files';
 export * from './_plans';
 export * from './_others';

@@ -69,7 +69,7 @@ function getClassById(id) {
   return getApi(`/Class/getOne/${id}`);
 }
 // SUBJECT
-function getAllSubjectInClass(params) {
+function getAllSubject(params) {
   return getApi('/Subject/getAll', params);
 }
 
@@ -178,6 +178,11 @@ const createGrade = (payload) => {
   return postApi('Grade', payload);
 };
 
+// Subject
+const createSubject = (payload) => {
+  return postApi('Subject', payload);
+};
+
 // User Auth
 const createUserAuth = (payload) => {
   return postApi('Auth/registerSingleUser', payload);
@@ -224,6 +229,11 @@ const deleteLevel = (id) => {
 // GRADE
 const deleteGrade = (id) => {
   return deleteApi(`Grade/${id}`);
+};
+
+// SUBJECT
+const deleteSubject = (id) => {
+  return deleteApi(`Subject/${id}`);
 };
 // PUT API AREA ============================>
 async function putApi(url, payload) {
@@ -277,7 +287,9 @@ export {
   loginAuth,
   getAllClass,
   getClassById,
-  getAllSubjectInClass,
+  getAllSubject,
+  createSubject,
+  deleteSubject,
   postClass,
   getAllGrade,
   getALlRoles,

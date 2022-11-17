@@ -1,24 +1,24 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import {useEffect, useMemo, useState} from 'react';
 // next
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // form
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {Controller, useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 // @mui
-import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import {LoadingButton} from '@mui/lab';
+import {Box, Button, Card, Chip, Divider, Grid, MenuItem, Stack, TextField, Typography} from '@mui/material';
 // utils
-import { fData } from '../../../utils/formatNumber';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import {PATH_DASHBOARD} from '../../../routes/paths';
 // assets
-import { countries } from '../../../assets/data';
 // components
-import Label from '../../../components/label';
-import { useSnackbar } from '../../../components/snackbar';
-import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
+import {useSnackbar} from '../../../components/snackbar';
+import FormProvider, {RHFAutocomplete, RHFRadioGroup, RHFSelect, RHFTextField} from '../../../components/hook-form';
+import Iconify from "../../../components/iconify";
+import {createGrade, getAllLevel, getALlRoles} from "../../../dataProvider/agent";
+import {DatePicker} from "@mui/x-date-pickers";
 
 // ----------------------------------------------------------------------
 
@@ -32,30 +32,23 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const NewGradeSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email(),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role Number is required'),
-    avatarUrl: Yup.mixed().test('required', 'Avatar is required', (value) => value !== ''),
-  });
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().trim().required('Tên cấp học không được trống'),
+    description: Yup.string().notRequired(),
+    levelId:  Yup.string().trim().required('Phải chọn trạng thái'),
+  })
 
   const defaultValues = useMemo(
-    () => ({
-      name: currentGrade?.name || '',
-      description: currentGrade?.email || '',
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentGrade]
+      () => ({
+        name: currentGrade?.name || '',
+        description: currentGrade?.description || '',
+        levelId: currentGrade?.levelId || ''
+      }),
+      [currentGrade]
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewGradeSchema),
+    resolver: yupResolver(validationSchema),
     defaultValues,
   });
 
@@ -68,7 +61,6 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   useEffect(() => {
     if (isEdit && currentGrade) {
@@ -77,160 +69,125 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
     if (!isEdit) {
       reset(defaultValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentGrade]);
 
-  const onSubmit = async () => {
+  const [levels, setLevels] = useState([]);
+
+
+  useEffect(() => {
+    fetchLevels();
+  }, []);
+
+
+  async function fetchLevels() {
+    const res = await getAllLevel({pageIndex: 1, pageSize: 100});
+    if (res.status < 400) {
+      const transformData = res.data.data.map((tag) => {
+        return {
+          label: tag.name,
+          id: tag.id,
+        };
+      });
+      console.log(transformData)
+      setLevels(transformData);
+    } else {
+      console.log('error fetch api');
+    }
+  }
+
+  const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      push(PATH_DASHBOARD.grade.list);
+      const res = await createGrade(data)
+      console.log(data)
+      if (res.status < 400) {
+        reset();
+        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+        push(PATH_DASHBOARD.grade.list);
+      } else {
+        enqueueSnackbar('Create Fail');
+      }
     } catch (error) {
-      console.error(error);
+      enqueueSnackbar('Create Fail');
     }
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('avatarUrl', newFile);
-      }
-    },
-    [setValue]
-  );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-            {isEdit && (
-              <Label
-                color={values.status === 'active' ? 'success' : 'error'}
-                sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Card sx={{p: 3}}>
+              <Box
+                  rowGap={3}
+                  columnGap={2}
+                  display="grid"
+                  gridTemplateColumns={{
+                    xs: 'repeat(1, 1fr)',
+                    sm: 'repeat(2, 1fr)',
+                  }}
               >
-                {values.status}
-              </Label>
-            )}
 
-            <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="avatarUrl"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 2,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
-            </Box>
-
-            {isEdit && (
-              <FormControlLabel
-                labelPlacement="start"
-                control={
-                  <Controller
-                    name="status"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        {...field}
-                        checked={field.value !== 'active'}
-                        onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
-                      />
-                    )}
-                  />
-                }
-                label={
-                  <>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Banned
+                    <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                      Thông tin khối học
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Apply disable account
+                     <div></div>
+                    <RHFTextField
+                        name="name"
+                        label="Tên khối học"
+                        id="name"
+                    />
+                    <RHFTextField
+                        name="description"
+                        label="Mô tả"
+                        id="description"
+
+                    />
+                    <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                      Cài đặt khối học
                     </Typography>
-                  </>
-                }
-                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
-              />
-            )}
+                    <div></div>
+                    <RHFSelect
+                        name="levelId"
+                        label="Thuộc cấp học"
+                        InputLabelProps={{ shrink: true }}
+                        SelectProps={{
+                          native: false,
+                          MenuProps: {
+                            PaperProps: {
+                              sx: { maxHeight: 220 },
+                            },
+                          },
+                          sx: { textTransform: 'capitalize' },
+                        }}
+                    >
+                      {levels.map((option) => (
+                          <MenuItem
+                              key={option.id}
+                              value={option.id}
+                              sx={{
+                                mx: 1,
+                                my: 0.5,
+                                borderRadius: 0.75,
+                                typography: 'body2',
+                                textTransform: 'capitalize',
+                                '&:first-of-type': { mt: 0 },
+                                '&:last-of-type': { mb: 0 },
+                              }}
+                          >
+                            {option.label}
+                          </MenuItem>
+                      ))}
+                    </RHFSelect>
 
-            <RHFSwitch
-              name="isVerified"
-              labelPlacement="start"
-              label={
-                <>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Email Verified
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Disabling this will automatically send the grade a verification email
-                  </Typography>
-                </>
-              }
-              sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-            />
-          </Card>
+              </Box>
+              <Stack alignItems="flex-end" sx={{mt: 3}}>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                    {!isEdit ? 'Tạo mới' : 'Cập nhật'}
+                </LoadingButton>
+              </Stack>
+            </Card>
+          </Grid>
         </Grid>
-
-        <Grid item xs={12} md={8}>
-          <Card sx={{ p: 3 }}>
-            <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
-            >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
-
-              <RHFSelect name="country" label="Country" placeholder="Country">
-                <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFSelect>
-
-              <RHFTextField name="state" label="State/Region" />
-              <RHFTextField name="city" label="City" />
-              <RHFTextField name="address" label="Address" />
-              <RHFTextField name="zipCode" label="Zip/Code" />
-              <RHFTextField name="company" label="Company" />
-              <RHFTextField name="role" label="Role" />
-            </Box>
-
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Create Grade' : 'Save Changes'}
-              </LoadingButton>
-            </Stack>
-          </Card>
-        </Grid>
-      </Grid>
-    </FormProvider>
+      </FormProvider>
   );
 }

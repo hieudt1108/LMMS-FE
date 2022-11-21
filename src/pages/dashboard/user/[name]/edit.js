@@ -1,21 +1,19 @@
-import { paramCase } from 'change-case';
 // next
 import Head from 'next/head';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // @mui
-import { Container } from '@mui/material';
+import {Container} from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import {PATH_DASHBOARD} from '../../../../routes/paths';
 // _mock_
-import { _userList } from '../../../../_mock/arrays';
+import {_userList} from '../../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // components
-import { useSettingsContext } from '../../../../components/settings';
+import {useSettingsContext} from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
-import UserEditForm from '../../../../sections/@dashboard/user/UserEditForm';
-import {lastName} from "../../../../_mock/assets";
+import UserNewForm from "../../../../sections/@dashboard/user/UserNewForm";
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +52,7 @@ export default function UserEditPage() {
           ]}
         />
 
-        <UserEditForm isEdit currentUser={currentUser} />
+        <UserNewForm isEdit currentUser={currentUser} />
       </Container>
     </>
   );

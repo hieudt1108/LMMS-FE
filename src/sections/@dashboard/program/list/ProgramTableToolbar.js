@@ -33,7 +33,7 @@ export default function ProgramTableToolbar({
         fullWidth
         value={filterName}
         onChange={onFilterName}
-        placeholder="Search..."
+        placeholder="Tìm kiếm chương trình học  ..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

@@ -21,7 +21,7 @@ import {
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // _mock_
-import { _gradeList } from '../../../_mock/arrays';
+import { _subjects } from '../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
@@ -41,8 +41,8 @@ import {
   TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import { GradeTableToolbar, GradeTableRow } from '../../../sections/@dashboard/grade/list';
-import {deleteGrade, deleteLevel, getAllGrade} from "../../../dataProvider/agent";
+import { SubjectTableToolbar, SubjectTableRow } from '../../../sections/@dashboard/subject/list';
+import {deleteSubject, deleteLevel, getAllSubject} from "../../../dataProvider/agent";
 import {useSnackbar} from "../../../components/snackbar";
 
 // ----------------------------------------------------------------------
@@ -51,18 +51,19 @@ import {useSnackbar} from "../../../components/snackbar";
 
 const TABLE_HEAD = [
   { id: 'id', label: 'ID', align: 'left' },
-  { id: 'name', label: 'Tên khối học', align: 'left' },
+  { id: 'code', label: 'Mã môn học', align: 'left' },
+  { id: 'name', label: 'Tên môn học', align: 'left' },
   { id: 'description', label: 'Mô tả', align: 'left' },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
 
-GradeListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+SubjectListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function GradeListPage() {
+export default function SubjectListPage() {
   const {
     dense,
     page,
@@ -88,16 +89,16 @@ export default function GradeListPage() {
 
   const { push } = useRouter();
 
-  const [tableData, setTableData] = useState(_gradeList);
+  const [tableData, setTableData] = useState(_subjects);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterName, setFilterName] = useState('');
 
-  const [listGrades, setListGrades] = useState([]);
+  const [listSubjects, setListSubjects] = useState([]);
 
   const dataFiltered = applyFilter({
-    inputData: listGrades,
+    inputData: listSubjects,
     comparator: getComparator(order, orderBy),
     filterName,
   });
@@ -131,13 +132,13 @@ export default function GradeListPage() {
 
 
   const handleDeleteRow = async (id) => {
-    const response = await deleteGrade(id)
+    const response = await deleteSubject(id)
     if(response.status < 400){
       setSelected([]);
-      await fetchGrades();
-      enqueueSnackbar('Xóa khối học thành công');
+      await fetchSubjects();
+      enqueueSnackbar('Xóa môn học thành công');
     }else{
-      enqueueSnackbar('Xóa khối học thất bại');
+      enqueueSnackbar('Xóa môn học thất bại');
     }
 
     if (page > 0) {
@@ -148,10 +149,10 @@ export default function GradeListPage() {
   };
 
   const handleDeleteRows = async (selected) => {
-    const response = await deleteGrade(selected)
+    const response = await deleteSubject(selected)
     if(response.status < 400){
       setSelected([]);
-      await fetchGrades();
+      await fetchSubjects();
       enqueueSnackbar('Xóa khối học thành công');
     }else{
       enqueueSnackbar('Xóa khối học thất bại');
@@ -170,7 +171,7 @@ export default function GradeListPage() {
   };
 
   const handleEditRow = (id) => {
-    push(PATH_DASHBOARD.grade.edit(id));
+    push(PATH_DASHBOARD.subject.edit(id));
   };
 
   const handleResetFilter = () => {
@@ -178,13 +179,13 @@ export default function GradeListPage() {
   };
 
   useEffect(() => {
-    fetchGrades();
+    fetchSubjects();
   }, []);
 
-  async function fetchGrades() {
-    const res = await getAllGrade({pageIndex : 1,pageSize: 100});
+  async function fetchSubjects() {
+    const res = await getAllSubject({pageIndex : 1,pageSize: 100});
     if (res.status < 400) {
-      setListGrades(res.data.data);
+      setListSubjects(res.data.data);
     } else {
       console.log('error');
     }
@@ -193,21 +194,21 @@ export default function GradeListPage() {
   return (
     <>
       <Head>
-        <title> Grade: List | Minimal UI</title>
+        <title> Subject: List | Minimal UI</title>
       </Head>
 
       <Container maxWidth={1000}>
         <CustomBreadcrumbs
-          heading="Danh sách khối học"
+          heading="Danh sách môn học"
           links={[
             { name: 'Trang chủ', href: PATH_DASHBOARD.root },
-            { name: 'Khối học', href: PATH_DASHBOARD.grade.root },
+            { name: 'Môn học', href: PATH_DASHBOARD.subject.root },
             { name: 'Danh sách' },
           ]}
           action={
-            <NextLink href={PATH_DASHBOARD.grade.new} passHref>
+            <NextLink href={PATH_DASHBOARD.subject.new} passHref>
               <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                Thêm khối học
+                Thêm môn học
               </Button>
             </NextLink>
           }
@@ -217,7 +218,7 @@ export default function GradeListPage() {
 
           <Divider />
 
-          <GradeTableToolbar
+          <SubjectTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             onFilterName={handleFilterName}
@@ -262,14 +263,14 @@ export default function GradeListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((grade) => (
-                    <GradeTableRow
-                      key={grade.id}
-                      row={grade}
-                      selected={selected.includes(grade.id)}
-                      onSelectRow={() => onSelectRow(grade.id)}
-                      onDeleteRow={() => handleDeleteRow(grade.id)}
-                      onEditRow={() => handleEditRow(grade.id)}
+                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((subject) => (
+                    <SubjectTableRow
+                      key={subject.id}
+                      row={subject}
+                      selected={selected.includes(subject.id)}
+                      onSelectRow={() => onSelectRow(subject.id)}
+                      onDeleteRow={() => handleDeleteRow(subject.id)}
+                      onEditRow={() => handleEditRow(subject.id)}
                     />
                   ))}
 
@@ -334,7 +335,7 @@ function applyFilter({ inputData, comparator, filterName}) {
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
-    inputData = inputData.filter((grade) => grade.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
+    inputData = inputData.filter((subject) => subject.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
   }
 
 

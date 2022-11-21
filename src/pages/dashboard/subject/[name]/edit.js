@@ -7,53 +7,51 @@ import { Container } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // _mock_
-import { _gradeList } from '../../../../_mock/arrays';
+import { _subjects } from '../../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
-import GradeNewEditForm from '../../../../sections/@dashboard/grade/GradeNewEditForm';
+import SubjectNewEditForm from '../../../../sections/@dashboard/subject/SubjectNewEditForm';
 
 // ----------------------------------------------------------------------
 
-GradeEditPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+SubjectEditPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function GradeEditPage() {
+export default function SubjectEditPage() {
   const { themeStretch } = useSettingsContext();
 
   const {
     query: { name },
   } = useRouter();
 
-  const currentGrade = _gradeList.find((grade) => grade.id === name);
+  const currentSubject = _subjects.find((subject) => subject.id === name);
 
   return (
     <>
       <Head>
-        <title> Grade: Edit grade | Minimal UI</title>
+        <title> Subject: Edit subject | Minimal UI</title>
       </Head>
-
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Cập nhật khối học"
+          heading="Cập nhật môn học"
           links={[
             {
               name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Danh sách khối học',
-              href: PATH_DASHBOARD.grade.list,
+              name: 'Danh sách môn học',
+              href: PATH_DASHBOARD.subject.list,
             },
-            { name: `Cập nhật ${currentGrade?.id}` },
+            { name: `Cập nhật ${currentSubject?.id}` },
           ]}
         />
-
-        <GradeNewEditForm isEdit currentGrade={currentGrade} />
+        <SubjectNewEditForm isEdit currentSubject={currentSubject} />
       </Container>
     </>
   );

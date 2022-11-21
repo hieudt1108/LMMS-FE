@@ -123,14 +123,14 @@ export const _userInvoices = [...Array(10)].map((_, index) => ({
 
 export const _userList = [...Array(24)].map((_, index) => ({
   id: _mock.id(index),
-  firstName: '',
-  lastName: '',
-  email: '',
+  firstName: String,
+  lastName: String,
+  email: String,
   gender:  _mock.boolean(index),
   enable: _mock.boolean(index),
-  phone: '',
+  phone: String,
   birthDate: any,
-  address: '',
+  address: String,
   status: randomInArray(['active', 'banned']),
   roles: any,
 }));

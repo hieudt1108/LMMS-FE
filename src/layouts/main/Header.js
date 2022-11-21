@@ -61,7 +61,7 @@ export default function Header() {
             alignSelf="center"
           >
             TRƯỜNG TIỂU HỌC VÀ TRUNG HỌC CƠ SỞ
-            <Typography variant="h6" noWrap style={{ color: 'red' }} sx={{ flexGrow: 1, ml: 7 }}>
+            <Typography variant="h6" noWrap sx={{ flexGrow: 1, ml: 7 }}>
               VICTORIA THĂNG LONG
             </Typography>
           </Typography>

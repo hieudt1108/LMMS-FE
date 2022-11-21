@@ -95,6 +95,12 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/level/list'),
     edit: (name) => path(ROOTS_DASHBOARD, `/level/${name}/edit`),
   },
+  subject: {
+    root: path(ROOTS_DASHBOARD, '/subject'),
+    new: path(ROOTS_DASHBOARD, '/subject/new'),
+    list: path(ROOTS_DASHBOARD, '/subject/list'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/subject/${name}/edit`),
+  },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),
     shop: path(ROOTS_DASHBOARD, '/e-commerce/shop'),

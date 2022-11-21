@@ -85,7 +85,11 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <CustomAvatar src={'/img/avatar_13.jpg'} alt={user?.displayName} name={user?.displayName} />
+        <CustomAvatar
+          src={`http://lmms.site:7070/assets/images/avatars/avatar_${user.gender * 10 + (user.id % 10) + 1 + 1}.jpg`}
+          alt={user?.displayName}
+          name={user?.displayName}
+        />
       </IconButtonAnimate>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>

@@ -3,8 +3,8 @@ import { createContext, useEffect, useReducer, useCallback } from 'react';
 // utils
 import axios from '../utils/axios';
 //
-import { isValidToken, setSession } from './utils';
-import { clearLocalStorage, loginAuth, setLocalStorage } from '../dataProvider/agent';
+import { isValidToken, jwtDecode, setSession } from './utils';
+import { clearLocalStorage, loginAuth, setLocalStorage, getUserById } from '../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -112,7 +112,10 @@ export function AuthProvider({ children }) {
   // LOGIN
   const login = async (username, password) => {
     const response = await loginAuth({ username, password });
-    const { accessToken, user } = response.data;
+    const { accessToken, role } = response.data;
+    const decoded = jwtDecode(accessToken);
+    const responseUser = await getUserById(decoded.nameid);
+
     clearLocalStorage();
     setLocalStorage('access_token', accessToken);
     setLocalStorage('user_info', response.config.data);
@@ -120,7 +123,12 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'LOGIN',
       payload: {
-        user,
+        user: {
+          ...responseUser.data.data,
+          password,
+          role,
+          accessToken,
+        },
       },
     });
   };

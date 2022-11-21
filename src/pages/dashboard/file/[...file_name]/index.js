@@ -5,27 +5,21 @@ import Head from 'next/head';
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Box, Stack, Typography } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // hooks
-import useResponsive from '../../hooks/useResponsive';
+import useResponsive from '../../../../hooks/useResponsive';
 // _mock
-import { _folders, _files } from '../../_mock/arrays';
+import { _folders, _files } from '../../../../_mock/arrays';
 // layouts
-import DashboardLayout from '../../layouts/dashboard';
+import DashboardLayout from '../../../../layouts/dashboard';
 // components
-import Iconify from '../../components/iconify';
-import Scrollbar from '../../components/scrollbar';
-import { UploadBox } from '../../components/upload';
-import { useSettingsContext } from '../../components/settings';
+import Iconify from '../../../../components/iconify';
+import Scrollbar from '../../../../components/scrollbar';
+import { UploadBox } from '../../../../components/upload';
+import { useSettingsContext } from '../../../../components/settings';
 // sections
-import {
-  FileGeneralWidget,
-  FileGeneralUpgrade,
-  FileGeneralRecentCard,
-  FileGeneralDataActivity,
-  FileGeneralStorageOverview,
-} from '../../sections/@dashboard/general/file';
-import { FilePanel, FileFolderCard, FileNewFolderDialog } from '../../sections/@dashboard/file';
+import { FileGeneralRecentCard, FileGeneralStorageOverview } from '../../../../sections/@dashboard/general/file';
+import { FilePanel, FileFolderCard, FileNewFolderDialog } from '../../../../sections/@dashboard/file';
 
 // ----------------------------------------------------------------------
 
@@ -146,61 +140,7 @@ export default function GeneralFilePage() {
             </Grid>
           )}
 
-          <Grid item xs={12} sm={6} md={4}>
-            <FileGeneralWidget title="Dropbox" value={GB / 10} total={GB} icon="/assets/icons/apps/ic_dropbox.svg" />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={4}>
-            <FileGeneralWidget title="Drive" value={GB / 5} total={GB} icon="/assets/icons/apps/ic_drive.svg" />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={4}>
-            <FileGeneralWidget title="OneDrive" value={GB / 2} total={GB} icon="/assets/icons/apps/ic_onedrive.svg" />
-          </Grid>
-
           <Grid item xs={12} md={6} lg={8}>
-            <FileGeneralDataActivity
-              title="Data Activity"
-              chart={{
-                labels: TIME_LABELS,
-                colors: [
-                  theme.palette.primary.main,
-                  theme.palette.error.main,
-                  theme.palette.warning.main,
-                  theme.palette.text.disabled,
-                ],
-                series: [
-                  {
-                    type: 'Week',
-                    data: [
-                      { name: 'Images', data: [20, 34, 48, 65, 37, 48] },
-                      { name: 'Media', data: [10, 34, 13, 26, 27, 28] },
-                      { name: 'Documents', data: [10, 14, 13, 16, 17, 18] },
-                      { name: 'Other', data: [5, 12, 6, 7, 8, 9] },
-                    ],
-                  },
-                  {
-                    type: 'Month',
-                    data: [
-                      { name: 'Images', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
-                      { name: 'Media', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
-                      { name: 'Documents', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
-                      { name: 'Other', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
-                    ],
-                  },
-                  {
-                    type: 'Year',
-                    data: [
-                      { name: 'Images', data: [10, 34, 13, 56, 77] },
-                      { name: 'Media', data: [10, 34, 13, 56, 77] },
-                      { name: 'Documents', data: [10, 34, 13, 56, 77] },
-                      { name: 'Other', data: [10, 34, 13, 56, 77] },
-                    ],
-                  },
-                ],
-              }}
-            />
-
             <div>
               <FilePanel
                 title="Folders"
@@ -208,7 +148,6 @@ export default function GeneralFilePage() {
                 onOpen={handleOpenNewFolder}
                 sx={{ mt: 5 }}
               />
-
               <Scrollbar>
                 <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
                   {_folders.map((folder) => (
@@ -261,7 +200,7 @@ export default function GeneralFilePage() {
 
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>{renderStorageOverview}</Box>
 
-            <FileGeneralUpgrade sx={{ mt: 3 }} />
+            {/* <FileGeneralUpgrade sx={{ mt: 3 }} /> */}
           </Grid>
         </Grid>
       </Container>

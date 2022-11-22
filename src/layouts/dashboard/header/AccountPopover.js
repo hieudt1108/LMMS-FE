@@ -86,7 +86,9 @@ export default function AccountPopover() {
         }}
       >
         <CustomAvatar
-          src={`http://lmms.site:7070/assets/images/avatars/avatar_${user.gender * 10 + (user.id % 10) + 1 + 1}.jpg`}
+          src={`http://lmms.site:7070/assets/images/avatars/avatar_${
+            user ? user.gender * 10 + (user.id % 10) + 1 + 1 : 1
+          }.jpg`}
           alt={user?.displayName}
           name={user?.displayName}
         />

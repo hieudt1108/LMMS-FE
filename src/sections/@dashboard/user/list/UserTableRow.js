@@ -63,11 +63,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar
-              src={`http://lmms.site:7070/assets/images/avatars/avatar_${
-                user.gender * 10 + (user.id % 10) + 1 + 1
-              }.jpg`}
-            />
+            <Avatar src={`http://lmms.site:7070/assets/images/avatars/avatar_${gender * 10 + (id % 10) + 1 + 1}.jpg`} />
 
             <Typography variant="subtitle2" noWrap>
               {`${lastName} ${firstName}`}

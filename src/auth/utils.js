@@ -1,4 +1,5 @@
 // routes
+import { setLocalStorage } from 'src/dataProvider/agent';
 import { PATH_AUTH } from '../routes/paths';
 // utils
 import axios from '../utils/axios';
@@ -50,7 +51,7 @@ export const tokenExpired = (exp) => {
   expiredTimer = setTimeout(() => {
     alert('Token expired');
 
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('access_token');
 
     window.location.href = PATH_AUTH.login;
   }, timeLeft);
@@ -58,9 +59,9 @@ export const tokenExpired = (exp) => {
 
 // ----------------------------------------------------------------------
 
-export const setSession = (accessToken) => {
+export const setupLocalStorage = (accessToken) => {
   if (accessToken) {
-    localStorage.setItem('accessToken', accessToken);
+    setLocalStorage('access_token', accessToken);
 
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
@@ -68,7 +69,7 @@ export const setSession = (accessToken) => {
     const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
     tokenExpired(exp);
   } else {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('access_token');
 
     delete axios.defaults.headers.common.Authorization;
   }

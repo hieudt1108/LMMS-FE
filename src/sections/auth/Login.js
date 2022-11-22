@@ -22,7 +22,6 @@ export default function Login() {
       <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
         <Typography variant="h4">Đăng nhập vào hệ thống</Typography>
 
-
         <Tooltip title={method} placement="left">
           <Box
             component="img"
@@ -34,7 +33,6 @@ export default function Login() {
       </Stack>
 
       <AuthLoginForm />
-
     </LoginLayout>
   );
 }

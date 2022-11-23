@@ -3,15 +3,15 @@ import Head from 'next/head';
 // @mui
 import { Container } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // layouts
-import DashboardLayout from '../../../layouts/dashboard';
+import DashboardLayout from '../../../../layouts/dashboard';
 // components
-import { useSettingsContext } from '../../../components/settings';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import { useSettingsContext } from '../../../../components/settings';
+import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
-import GradeNewEditForm from '../../../sections/@dashboard/grade/GradeNewEditForm';
-import ProgramNewEditForm from "../../../sections/@dashboard/program/ProgramNewEditForm";
+import GradeNewEditForm from '../../../../sections/@dashboard/grade/GradeNewEditForm';
+import ProgramNewEditForm from "../../../../sections/@dashboard/program/ProgramNewEditForm";
 
 // ----------------------------------------------------------------------
 

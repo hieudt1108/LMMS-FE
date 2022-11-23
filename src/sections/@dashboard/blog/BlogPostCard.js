@@ -145,7 +145,6 @@ export function PostContent({ code, name, typeFile, id }) {
           color: 'text.disabled',
 
           opacity: 1.2,
-          color: 'common.white',
         }}
       >
         t.manh - {code}

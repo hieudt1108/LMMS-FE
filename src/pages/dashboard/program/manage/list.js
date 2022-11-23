@@ -19,17 +19,17 @@ import {
   TableContainer,
 } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // _mock_
-import { _programList } from '../../../_mock/arrays';
+import { _programList } from '../../../../_mock/arrays';
 // layouts
-import DashboardLayout from '../../../layouts/dashboard';
+import DashboardLayout from '../../../../layouts/dashboard';
 // components
-import Iconify from '../../../components/iconify';
-import Scrollbar from '../../../components/scrollbar';
-import ConfirmDialog from '../../../components/confirm-dialog';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import { useSettingsContext } from '../../../components/settings';
+import Iconify from '../../../../components/iconify';
+import Scrollbar from '../../../../components/scrollbar';
+import ConfirmDialog from '../../../../components/confirm-dialog';
+import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
+import { useSettingsContext } from '../../../../components/settings';
 import {
   useTable,
   getComparator,
@@ -39,11 +39,11 @@ import {
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
-} from '../../../components/table';
+} from '../../../../components/table';
 // sections
-import { ProgramTableToolbar, ProgramTableRow } from '../../../sections/@dashboard/program/list';
-import {deleteProgram, deleteUser, getAllProgram} from "../../../dataProvider/agent";
-import {useSnackbar} from "../../../components/snackbar";
+import { ProgramTableToolbar, ProgramTableRow } from '../../../../sections/@dashboard/program/list';
+import {deleteProgram, deleteUser, getAllProgram} from "../../../../dataProvider/agent";
+import {useSnackbar} from "../../../../components/snackbar";
 
 // ----------------------------------------------------------------------
 

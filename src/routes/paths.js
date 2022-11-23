@@ -78,9 +78,10 @@ export const PATH_DASHBOARD = {
     demoEdit: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
   },
   program: {
-    root: path(ROOTS_DASHBOARD, '/program'),
-    new: path(ROOTS_DASHBOARD, '/program/new'),
-    list: path(ROOTS_DASHBOARD, '/program/list'),
+    choose: path(ROOTS_DASHBOARD, '/program'),
+    root: path(ROOTS_DASHBOARD, '/program/manage'),
+    new: path(ROOTS_DASHBOARD, '/program/manage/new'),
+    list: path(ROOTS_DASHBOARD, '/program/manage/list'),
     edit: (name) => path(ROOTS_DASHBOARD, `/program/${name}/edit`),
   },
   grade: {

@@ -28,7 +28,7 @@ import FormProvider, {
     RHFUploadAvatar
 } from '../../../components/hook-form';
 import {DatePicker} from "@mui/x-date-pickers";
-import {createUserAuth, getALlRoles, getUserById, updateUser} from "../../../dataProvider/agent";
+import {createUserAuth, getALlRoles, getAllSubject, getUserById, updateUser} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 const GENDER_OPTION = [
@@ -47,10 +47,10 @@ export default function UserNewForm({isEdit = false, currentUser}) {
 
     const validationSchema = (() => {
         if (!isEdit) {
-            return  Yup.object().shape({
+            return Yup.object().shape({
                 userName: Yup.string().trim().required('Tên đăng nhập không được trống'),
                 password: Yup.string().trim().required('Mật khẩu không được trống'),
-                rolesID: Yup.array().min(1, 'Hãy chọn vai trò'),
+                roleID: Yup.array().min(1, 'Hãy chọn vai trò'),
                 firstName: Yup.string().trim().required('Không được để trống'),
                 lastName: Yup.string().trim().required('Không được để trống'),
                 email: Yup.string().notRequired(),
@@ -58,7 +58,7 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                 address: Yup.mixed().notRequired(),
             })
         } else {
-            return  Yup.object().shape({
+            return Yup.object().shape({
                 firstName: Yup.string().trim().required('Không được để trống'),
                 lastName: Yup.string().trim().required('Không được để trống'),
                 email: Yup.string().notRequired(),
@@ -78,8 +78,9 @@ export default function UserNewForm({isEdit = false, currentUser}) {
             gender: currentUser?.gender || 0,
             phone: currentUser?.phone || '',
             address: currentUser?.address || '',
-            rolesID: currentUser?.rolesID || [],
-            tagsId: [],
+            isTeacher: currentUser?.isTeacher || 0,
+            tagsId: '',
+            suId: [0],
             birthDate: new Date(),
             enable: currentUser?.enable || 0,
         }),
@@ -97,7 +98,7 @@ export default function UserNewForm({isEdit = false, currentUser}) {
         control,
         setValue,
         handleSubmit,
-        formState: {isSubmitting, errors },
+        formState: {isSubmitting, errors},
     } = methods;
 
     useEffect(() => {
@@ -110,10 +111,12 @@ export default function UserNewForm({isEdit = false, currentUser}) {
     }, [isEdit, currentUser]);
 
     const [userRole, setUserRole] = useState([]);
-
-
+    const [userSubjects, setUserSubjects] = useState([]);
+    const [role, setRole] = useState([]);
+    console.log('role',role);
     useEffect(() => {
         fetchRoles();
+        fetchSubject();
     }, []);
 
 
@@ -133,9 +136,25 @@ export default function UserNewForm({isEdit = false, currentUser}) {
         }
     }
 
+    async function fetchSubject() {
+        const res = await getAllSubject({pageIndex: 1, pageSize: 100});
+        if (res.status < 400) {
+            const transformDataSubject = res.data.data.map((su) => {
+                return {
+                    label: su.name,
+                    id: su.id,
+                };
+            });
+
+            setUserSubjects(transformDataSubject);
+        } else {
+            console.log('error fetch api');
+        }
+    }
+
     const onSubmit = async (data) => {
         console.log(isEdit)
-        if(!isEdit){
+        if (!isEdit) {
             try {
                 const dataCreate = {
                     userName: data.userName,
@@ -148,8 +167,9 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                     address: data.address,
                     phone: data.phone,
                     isTeacher: data.isTeacher,
-                    rolesID: data.tagsId,
+                    roles: [{roleId: data.tagsId,subjectId: data.suId}],
                 }
+                console.log(dataCreate)
                 const res = await createUserAuth(dataCreate)
                 if (res.status < 400) {
                     reset();
@@ -161,8 +181,8 @@ export default function UserNewForm({isEdit = false, currentUser}) {
             } catch (error) {
                 console.error(error);
             }
-        }else{
-            const res = await updateUser(currentUser.id,{
+        } else {
+            const res = await updateUser(currentUser.id, {
                 email: data.email,
                 firstName: data.firstName,
                 lastName: data.lastName,
@@ -170,7 +190,7 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                 birthDate: data.birthDate,
                 address: data.address,
                 phone: data.phone,
-                enable : data.enable
+                enable: data.enable
             })
             if (res.status < 400) {
                 reset();
@@ -180,10 +200,7 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                 enqueueSnackbar('Update Fail');
             }
         }
-
     };
-
-
     return (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
@@ -236,7 +253,7 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                                         <Controller
                                             name="enable"
                                             control={control}
-                                            render={({ field }) => (
+                                            render={({field}) => (
                                                 <Switch
                                                     {...field}
                                                     checked={field.value !== 'active'}
@@ -247,26 +264,28 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                                     }
                                     label={
                                         <>
-                                            <Typography variant="subtitle2" sx={{ mb: 0.5,ml:1 }}>
+                                            <Typography variant="subtitle2" sx={{mb: 0.5, ml: 1}}>
                                                 Vô hiệu hóa
                                             </Typography>
-                                            <Typography variant="body2" sx={{ color: 'text.secondary',ml:1 }}>
+                                            <Typography variant="body2" sx={{color: 'text.secondary', ml: 1}}>
                                                 Xác nhận vô hiệu hóa người dùng
                                             </Typography>
                                         </>
                                     }
-                                    sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+                                    sx={{mx: 0, mb: 3, width: 1, justifyContent: 'space-between'}}
                                 />
                             )}
 
                             {!isEdit && (
                                 <RHFAutocomplete
-                                    name="rolesID"
+                                    name="roleID"
                                     multiple
                                     onChange={(event, newValue) => {
-                                        setValue('rolesID', newValue);
+                                        setValue('roleID', newValue);
                                         const tagsId = newValue.map((tag) => tag.id);
+                                        console.log(tagsId)
                                         setValue('tagsId', tagsId);
+                                        setRole(tagsId);
                                     }}
 
                                     options={userRole}
@@ -284,8 +303,31 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                                     }
                                 />
                             )}
+                            <RHFAutocomplete
+                                name="subjectId"
+                                multiple
+                                onChange={(event, newValue) => {
+                                    setValue('subjectId', newValue);
+                                    const suId = newValue.map((su) => su.id);
+                                    setValue('suId', suId);
+                                }}
 
-                            <div></div>
+                                options={userSubjects}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Chip {
+                                                  ...getTagProps({index})}
+                                              key={index} size="small"
+                                              label={option.label}
+                                        />
+                                    ))
+                                }
+                                renderInput={(params) =>
+                                    <TextField label="Môn dạy" {...params} />
+                                }
+                            />
+
+
                             <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
                                 Thông tin cá nhân
                             </Typography>

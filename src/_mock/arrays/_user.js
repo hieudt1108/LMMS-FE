@@ -132,6 +132,7 @@ export const _userList = [...Array(24)].map((_, index) => ({
   birthDate: any,
   address: String,
   status: randomInArray(['active', 'banned']),
+  isTeacher: _mock.boolean(index),
   roles: any,
 }));
 

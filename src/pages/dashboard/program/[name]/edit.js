@@ -29,7 +29,7 @@ export default function ProgramEditPage() {
     query: { name },
   } = useRouter();
 
-  const currentProgram = _programList.find((program) => paramCase(program.name) === name);
+  const currentProgram = _programList.find((program) => program.id === name);
 
   return (
     <>
@@ -39,17 +39,17 @@ export default function ProgramEditPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Edit program"
+          heading="Cập nhật chương trình học"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Program',
+              name: 'Danh sách chương trình học',
               href: PATH_DASHBOARD.program.list,
             },
-            { name: currentProgram?.name },
+            { name: `Cập nhật ${currentProgram?.id}`},
           ]}
         />
 

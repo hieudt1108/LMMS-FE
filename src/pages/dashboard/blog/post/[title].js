@@ -84,9 +84,9 @@ export default function BlogPostPage() {
 
   return (
     <>
-      <Head>
+      {/* <Head>
         <title>{`Blog: ${post?.title || ''} | Minimal UI`}</title>
-      </Head>
+      </Head> */}
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs

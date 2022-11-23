@@ -89,6 +89,12 @@ const navConfig = [
         icon: ICONS.label,
       },
 
+      {
+        title: 'Môn học',
+        path: PATH_DASHBOARD.subject.list,
+        icon: ICONS.booking,
+      },
+
       // BLOG
       {
         title: 'Tài liệu',

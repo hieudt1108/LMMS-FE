@@ -10,7 +10,8 @@ import Label from '../../../../components/label';
 import Image from '../../../../components/image';
 import Iconify from '../../../../components/iconify';
 import Carousel, { CarouselArrows } from '../../../../components/carousel';
-
+import { useRouter } from 'next/router';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // ----------------------------------------------------------------------
 
 ClassNewestBooking.propTypes = {
@@ -103,10 +104,13 @@ BookingItem.propTypes = {
 function BookingItem({ item }) {
   const { id, avatar, name, roomNumber, bookdAt, person, cover, roomType } = item;
 
-  const handleOnClickSubject = useCallback(() => {
-    console.log('handleOnClickSubject', id);
-    router.push(PATH_DASHBOARD.class.subject.detail(class_id, id));
-  }, []);
+  const {
+    query: { class_id },
+  } = useRouter();
+  const { push } = useRouter();
+  const handleOnClickSubject = () => {
+    push(PATH_DASHBOARD.class.subject(class_id, id));
+  };
 
   return (
     <Paper onClick={handleOnClickSubject} sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
@@ -136,21 +140,8 @@ function BookingItem({ item }) {
         </Stack>
       </Stack>
 
-      <Box sx={{ p: 1, position: 'relative' }}>
-        <Label
-          variant="filled"
-          color={(roomType === 'king' && 'error') || (roomType === 'double' && 'info') || 'warning'}
-          sx={{
-            right: 16,
-            zIndex: 9,
-            bottom: 16,
-            position: 'absolute',
-          }}
-        >
-          {roomType}
-        </Label>
-
-        <Image alt="cover" src={cover} ratio="1/1" sx={{ borderRadius: 1.5 }} />
+      <Box sx={{ p: 1, cursor: 'pointer' }}>
+        <Image alt="cover" src={cover} sx={{ borderRadius: 1 }} />
       </Box>
     </Paper>
   );

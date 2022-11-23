@@ -1,22 +1,22 @@
 // next
 import React, { useCallback, useEffect } from 'react';
 import { useSettingsContext } from '../../../components/settings';
-import { useTheme, alpha } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 import {
-  Grid,
-  Container,
-  Typography,
   Alert,
   Button,
+  Container,
+  FormControl,
+  Grid,
+  InputAdornment,
+  InputBase,
+  InputLabel,
+  MenuItem,
   Pagination,
+  Select,
   Stack,
   styled,
-  InputBase,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  TextField,
 } from '@mui/material';
 import { ClassBanner } from '../../../sections/@dashboard/class';
 import DashboardLayout from '../../../layouts/dashboard';
@@ -26,8 +26,7 @@ import { SeoIllustration } from 'src/assets/illustrations';
 import { _appFeatured } from 'src/_mock/arrays';
 import Iconify from 'src/components/iconify';
 import Head from 'next/head';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getClassesRedux } from 'src/redux/slices/class';
 import { getProgramsRedux } from 'src/redux/slices/program';
 import { getGradesRedux } from 'src/redux/slices/grade';
@@ -109,6 +108,12 @@ export default function Classes() {
       pageIndex: pageIndex,
     });
     setPagingClass({ ...pagingClass, pageIndex: pageIndex });
+    dispatch(
+      getClassesRedux({
+        ...pagingClass,
+        pageIndex: pageIndex,
+      })
+    );
   }, []);
 
   const { themeStretch } = useSettingsContext();
@@ -119,10 +124,10 @@ export default function Classes() {
       </Head>
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={12}>
             <AppWelcome
               title={`Lớp học của bạn!`}
-              description="Tiên học lễ.Hậu học văn"
+              description="Tiên học lễ, hậu học văn"
               img={
                 <SeoIllustration
                   sx={{
@@ -132,27 +137,30 @@ export default function Classes() {
                   }}
                 />
               }
-              action={<Button variant="contained">Go Now</Button>}
+              action={<Button variant="contained">Thêm lớp</Button>}
             />
           </Grid>
 
-          <Grid item xs={12} md={4}>
+          {/* <Grid item xs={12} md={4}>
             <AppFeatured list={_appFeatured} />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12}>
             <Stack direction="row">
-              <Search>
-                <SearchIconWrapper>
-                  <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  onChange={handleSearchChange}
-                  placeholder="Tìm kiếm người dùng"
-                  inputProps={{ 'aria-label': 'search' }}
-                />
-              </Search>
-
+              <TextField
+                size="small"
+                sx={{ mr: 1 }}
+                autoHighlight
+                onChange={handleSearchChange}
+                placeholder="Search..."
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
               <FormControl sx={{ minWidth: 120 }} size="small">
                 <InputLabel id="demo-simple-select-helper-label">Khối</InputLabel>
                 <Select id="demo-simple-select-helper" value={grade} label="Khối" onChange={handleGradeChange}>
@@ -216,44 +224,44 @@ export default function Classes() {
 //   return { data: response };
 // };
 
-let Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: 'none',
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(1),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: 0,
-    width: 'auto',
-  },
-}));
+// let Search = styled('div')(({ theme }) => ({
+//   position: 'relative',
+//   borderRadius: 'none',
+//   backgroundColor: alpha(theme.palette.common.white, 0.15),
+//   '&:hover': {
+//     backgroundColor: alpha(theme.palette.common.white, 0.25),
+//   },
+//   marginRight: theme.spacing(1),
+//   marginLeft: 0,
+//   width: '100%',
+//   [theme.breakpoints.up('sm')]: {
+//     marginLeft: 0,
+//     width: 'auto',
+//   },
+// }));
 
-let SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
+// let SearchIconWrapper = styled('div')(({ theme }) => ({
+//   padding: theme.spacing(0, 2),
+//   height: '100%',
+//   position: 'absolute',
+//   pointerEvents: 'none',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+// }));
 
-let StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  border: '1px solid #3F435C',
-  borderRadius: '12px',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 0.6, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '30ch',
-    },
-  },
-}));
+// let StyledInputBase = styled(InputBase)(({ theme }) => ({
+//   color: 'inherit',
+//   border: '1px solid #3F435C',
+//   borderRadius: '12px',
+//   '& .MuiInputBase-input': {
+//     padding: theme.spacing(1, 1, 0.6, 0),
+//     // vertical padding + font size from searchIcon
+//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+//     transition: theme.transitions.create('width'),
+//     width: '100%',
+//     [theme.breakpoints.up('md')]: {
+//       width: '30ch',
+//     },
+//   },
+// }));

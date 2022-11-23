@@ -36,7 +36,6 @@ export default function ClassDetail() {
   const {
     query: { class_id },
   } = useRouter();
-  console.log('ClassDetail', class_id);
 
   const { themeStretch } = useSettingsContext();
 
@@ -100,7 +99,7 @@ export default function ClassDetail() {
           <Grid item xs={12}>
             <ClassNewestBooking title="Môn học" subheader="12 môn học" list={_subjectNew} />
           </Grid>
-
+          {/* 
           <Grid item xs={12}>
             <CLassDetails
               title="Thông tin giáo viên"
@@ -114,7 +113,7 @@ export default function ClassDetail() {
                 { id: '' },
               ]}
             />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12}>
             <CLassDetails

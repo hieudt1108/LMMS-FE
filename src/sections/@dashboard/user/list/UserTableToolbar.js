@@ -38,7 +38,7 @@ export default function UserTableToolbar({
       <TextField
         fullWidth
         select
-        label="Role"
+        label="Vai trò"
         value={filterRole}
         onChange={onFilterRole}
         SelectProps={{
@@ -78,7 +78,7 @@ export default function UserTableToolbar({
         fullWidth
         value={filterName}
         onChange={onFilterName}
-        placeholder="Search..."
+        placeholder="Tìm kiếm người dùng..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

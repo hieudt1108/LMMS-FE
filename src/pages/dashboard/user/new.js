@@ -10,7 +10,8 @@ import DashboardLayout from '../../../layouts/dashboard';
 import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 // sections
-import UserNewEditForm from '../../../sections/@dashboard/user/UserNewEditForm';
+import UserNewEditForm from '../../../sections/@dashboard/user/UserNewForm';
+import UserNewForm from "../../../sections/@dashboard/user/UserNewForm";
 
 // ----------------------------------------------------------------------
 
@@ -24,25 +25,25 @@ export default function UserCreatePage() {
   return (
     <>
       <Head>
-        <title> User: Create a new user | Minimal UI</title>
+        <title>Hệ thống quản lý học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new user"
+          heading="Tạo người dùng"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'User',
+              name: 'Danh sách người dùng',
               href: PATH_DASHBOARD.user.list,
             },
-            { name: 'New user' },
+            { name: 'Tạo mới' },
           ]}
         />
-        <UserNewEditForm />
+        <UserNewForm />
       </Container>
     </>
   );

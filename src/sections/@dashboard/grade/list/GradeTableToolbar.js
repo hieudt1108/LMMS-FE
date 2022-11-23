@@ -33,7 +33,7 @@ export default function GradeTableToolbar({
         fullWidth
         value={filterName}
         onChange={onFilterName}
-        placeholder="Search..."
+        placeholder="Tìm kiếm khối học..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

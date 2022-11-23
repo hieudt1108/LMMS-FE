@@ -29,7 +29,7 @@ export default function LevelEditPage() {
     query: { name },
   } = useRouter();
 
-  const currentLevel = _levelList.find((level) => paramCase(level.name) === name);
+  const currentLevel = _levelList.find((level) => level.id === name);
 
   return (
     <>
@@ -39,17 +39,17 @@ export default function LevelEditPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Edit level"
+          heading="Cập nhật cấp học"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Level',
+              name: 'Danh sách cấp học',
               href: PATH_DASHBOARD.level.list,
             },
-            { name: currentLevel?.name },
+            { name: `Cập nhật ${currentLevel?.id}`},
           ]}
         />
 

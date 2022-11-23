@@ -41,14 +41,13 @@ export const PATH_DASHBOARD = {
   fileManager: path(ROOTS_DASHBOARD, '/files-manager'),
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   blank: path(ROOTS_DASHBOARD, '/blank'),
+
   class: {
     root: path(ROOTS_DASHBOARD, '/class'),
     detail: (class_id) => path(ROOTS_DASHBOARD, `/class/${class_id}`),
     new: path(ROOTS_DASHBOARD, '/class/new'),
     edit: (class_id) => path(ROOTS_DASHBOARD, `/class/${class_id}/edit`),
-    subject: {
-      detail: (class_id, subject_id) => path(ROOTS_DASHBOARD, `/class/${class_id}/subject/${subject_id}`),
-    },
+    subject: (class_id, subject_id) => path(ROOTS_DASHBOARD, `/class/${class_id}/${subject_id}`),
   },
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
@@ -94,6 +93,12 @@ export const PATH_DASHBOARD = {
     new: path(ROOTS_DASHBOARD, '/level/new'),
     list: path(ROOTS_DASHBOARD, '/level/list'),
     edit: (name) => path(ROOTS_DASHBOARD, `/level/${name}/edit`),
+  },
+  subject: {
+    root: path(ROOTS_DASHBOARD, '/subject'),
+    new: path(ROOTS_DASHBOARD, '/subject/new'),
+    list: path(ROOTS_DASHBOARD, '/subject/list'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/subject/${name}/edit`),
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),

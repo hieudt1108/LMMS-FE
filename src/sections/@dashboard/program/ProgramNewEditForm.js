@@ -8,7 +8,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import {Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, Divider, Button} from '@mui/material';
 // utils
 import { fData } from '../../../utils/formatNumber';
 // routes
@@ -19,6 +19,9 @@ import { countries } from '../../../assets/data';
 import Label from '../../../components/label';
 import { useSnackbar } from '../../../components/snackbar';
 import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
+import Iconify from "../../../components/iconify";
+import {createProgram, createUserAuth, updateProgram} from "../../../dataProvider/agent";
+import {useFormik} from "formik";
 
 // ----------------------------------------------------------------------
 
@@ -32,30 +35,21 @@ export default function ProgramNewEditForm({ isEdit = false, currentProgram }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const NewProgramSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email(),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role Number is required'),
-    avatarUrl: Yup.mixed().test('required', 'Avatar is required', (value) => value !== ''),
-  });
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().trim().required('Tên chương trình không được trống'),
+    description: Yup.string().notRequired(),
+  })
 
   const defaultValues = useMemo(
     () => ({
       name: currentProgram?.name || '',
-      description: currentProgram?.email || '',
+      description: currentProgram?.description || '',
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentProgram]
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewProgramSchema),
+    resolver: yupResolver(validationSchema),
     defaultValues,
   });
 
@@ -68,7 +62,6 @@ export default function ProgramNewEditForm({ isEdit = false, currentProgram }) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   useEffect(() => {
     if (isEdit && currentProgram) {
@@ -77,155 +70,81 @@ export default function ProgramNewEditForm({ isEdit = false, currentProgram }) {
     if (!isEdit) {
       reset(defaultValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentProgram]);
 
-  const onSubmit = async () => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      push(PATH_DASHBOARD.program.list);
-    } catch (error) {
-      console.error(error);
+  const onSubmit = async (data) => {
+    if(!isEdit) {
+      try {
+        const res = await createProgram(data)
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Create success!');
+          push(PATH_DASHBOARD.program.list);
+        } else {
+          enqueueSnackbar('Create Fail');
+        }
+      } catch (error) {
+        enqueueSnackbar('Create Fail');
+      }
+    }else {
+      try {
+        const res = await updateProgram(currentProgram.id,{
+          name: data.name,
+          description: data.description
+        })
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Update success!');
+          push(PATH_DASHBOARD.program.list);
+        } else {
+          enqueueSnackbar('Update Fail');
+        }
+      } catch (error) {
+        enqueueSnackbar('Update Fail');
+      }
     }
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('avatarUrl', newFile);
-      }
-    },
-    [setValue]
-  );
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-            {isEdit && (
-              <Label
-                color={values.status === 'active' ? 'success' : 'error'}
-                sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
-              >
-                {values.status}
-              </Label>
-            )}
-
-            <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="avatarUrl"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 2,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
-            </Box>
-
-            {isEdit && (
-              <FormControlLabel
-                labelPlacement="start"
-                control={
-                  <Controller
-                    name="status"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        {...field}
-                        checked={field.value !== 'active'}
-                        onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
-                      />
-                    )}
-                  />
-                }
-                label={
-                  <>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Banned
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Apply disable account
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
-              />
-            )}
-
-            <RHFSwitch
-              name="isVerified"
-              labelPlacement="start"
-              label={
-                <>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Email Verified
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Disabling this will automatically send the program a verification email
-                  </Typography>
-                </>
-              }
-              sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-            />
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} >
           <Card sx={{ p: 3 }}>
-            <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
-            >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
-
-              <RHFSelect name="country" label="Country" placeholder="Country">
-                <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFSelect>
-
-              <RHFTextField name="state" label="State/Region" />
-              <RHFTextField name="city" label="City" />
-              <RHFTextField name="address" label="Address" />
-              <RHFTextField name="zipCode" label="Zip/Code" />
-              <RHFTextField name="company" label="Company" />
-              <RHFTextField name="role" label="Role" />
-            </Box>
+            <Typography variant="h6" sx={{ color: 'text.disabled', mb: 3 }}>
+              Chi tiết:
+            </Typography>
+            <Stack divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
+              <Stack alignItems="flex-end" spacing={1.5}>
+                <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
+                    <RHFTextField
+                        name="name"
+                        label="Tên chương trình"
+                        id="name"
+                    />
+                    <RHFTextField
+                        name="description"
+                        label="Mô tả"
+                        id="description"
+                    />
+                </Stack>
+                <Button
+                    size="small"
+                    color="error"
+                    onClick={() => {
+                      reset(defaultValues);
+                    }}
+                    startIcon={<Iconify icon="eva:trash-2-outline" />}
+                >
+                  Clear
+                </Button>
+              </Stack>
+            </Stack>
+            <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Create Program' : 'Save Changes'}
+                {!isEdit ? 'Tạo mới' : 'Cập nhật'}
               </LoadingButton>
             </Stack>
           </Card>

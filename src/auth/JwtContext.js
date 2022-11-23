@@ -3,8 +3,8 @@ import { createContext, useEffect, useReducer, useCallback } from 'react';
 // utils
 import axios from '../utils/axios';
 //
-import { isValidToken, setSession } from './utils';
-import { clearLocalStorage, loginAuth, setLocalStorage } from '../dataProvider/agent';
+import { isValidToken, jwtDecode, setupLocalStorage } from './utils';
+import { clearLocalStorage, loginAuth, getUserById, getLocalStorage } from '../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -68,20 +68,17 @@ export function AuthProvider({ children }) {
 
   const initialize = useCallback(async () => {
     try {
-      const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
+      const accessToken = typeof window !== 'undefined' ? getLocalStorage('access_token') : '';
 
       if (accessToken && isValidToken(accessToken)) {
-        setSession(accessToken);
-
-        const response = await axios.get('/api/account/my-account');
-
-        const { user } = response.data;
+        setupLocalStorage(accessToken);
+        const responseUser = await getUserById(jwtDecode(accessToken).nameid);
 
         dispatch({
           type: 'INITIAL',
           payload: {
             isAuthenticated: true,
-            user,
+            user: { ...responseUser.data.data },
           },
         });
       } else {
@@ -111,18 +108,29 @@ export function AuthProvider({ children }) {
 
   // LOGIN
   const login = async (username, password) => {
-    const response = await loginAuth({ username, password });
-    const { accessToken, user } = response.data;
-    clearLocalStorage();
-    setLocalStorage('access_token', accessToken);
-    setLocalStorage('user_info', response.config.data);
-    setLocalStorage('isAuthenticated', true);
-    dispatch({
-      type: 'LOGIN',
-      payload: {
-        user,
-      },
-    });
+    try {
+      const response = await loginAuth({ username, password });
+      if (!response.status || response.status !== 200) {
+        throw new Error('Tên đăng nhập hoặc mật khẩu sai !');
+      }
+      const { accessToken } = response.data;
+      clearLocalStorage();
+      setupLocalStorage(accessToken);
+
+      const decoded = jwtDecode(accessToken);
+      const responseUser = await getUserById(decoded.nameid);
+      dispatch({
+        type: 'LOGIN',
+        payload: {
+          user: {
+            ...responseUser.data.data,
+          },
+        },
+      });
+    } catch (error) {
+      console.log('login Error', error);
+      throw new Error('Có gì đó sai sai!!!');
+    }
   };
 
   // REGISTER
@@ -135,7 +143,7 @@ export function AuthProvider({ children }) {
     });
     const { accessToken, user } = response.data;
 
-    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('access_token', accessToken);
 
     dispatch({
       type: 'REGISTER',
@@ -147,7 +155,7 @@ export function AuthProvider({ children }) {
 
   // LOGOUT
   const logout = async () => {
-    setSession(null);
+    setupLocalStorage(null);
     dispatch({
       type: 'LOGOUT',
     });

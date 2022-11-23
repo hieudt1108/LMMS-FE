@@ -16,6 +16,8 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 import FileShareDialog from '../portal/FileShareDialog';
 import FileDetailsDrawer from '../portal/FileDetailsDrawer';
 import FileNewFolderDialog from '../portal/FileNewFolderDialog';
+import { useRouter } from 'next/router';
+import { PATH_DASHBOARD } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +30,11 @@ FileFolderCard.propTypes = {
 };
 
 export default function FileFolderCard({ folder, selected, onSelect, onDelete, sx, ...other }) {
+  const router = useRouter();
+  const {
+    query: { pid },
+  } = useRouter();
+  console.log('FileFolderCard', pid);
   const { enqueueSnackbar } = useSnackbar();
 
   const { copy } = useCopyToClipboard();
@@ -63,7 +70,12 @@ export default function FileFolderCard({ folder, selected, onSelect, onDelete, s
   };
 
   const handleShowCheckbox = () => {
-    setShowCheckbox(true);
+    // console.log('handleShowCheckbox');
+    // setShowCheckbox(true);
+    // router.push({
+    //   pathname: `${PATH_DASHBOARD.general.file}/[pid]`,
+    //   query: { pid: '/project/work' },
+    // });
   };
 
   const handleHideCheckbox = () => {

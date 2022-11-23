@@ -23,14 +23,16 @@ export default function AuthLoginForm() {
   const { login } = useAuthContext();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [data, setData] = useState({});
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required'),
+    name: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
   });
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
+    defaultValues: { name: '', password: '' },
   });
 
   const {
@@ -42,7 +44,7 @@ export default function AuthLoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      await login(data.email, data.password);
+      await login(data.name, data.password);
     } catch (error) {
       console.error(error);
 
@@ -60,7 +62,7 @@ export default function AuthLoginForm() {
       <Stack spacing={3}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
-        <RHFTextField name="email" label="Tên đăng nhập" />
+        <RHFTextField name="name" label="Tên đăng nhập" />
 
         <RHFTextField
           name="password"

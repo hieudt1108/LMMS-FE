@@ -129,7 +129,7 @@ export default function GeneralFilePage() {
   return (
     <>
       <Head>
-        <title> General: File | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

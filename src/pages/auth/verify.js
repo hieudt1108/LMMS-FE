@@ -24,7 +24,7 @@ export default function VerifyCodePage() {
   return (
     <>
       <Head>
-        <title> Verify Code | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <EmailInboxIcon sx={{ mb: 5, height: 96 }} />

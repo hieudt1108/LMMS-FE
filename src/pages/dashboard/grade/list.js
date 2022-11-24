@@ -193,7 +193,7 @@ export default function GradeListPage() {
   return (
     <>
       <Head>
-        <title> Grade: List | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={1000}>

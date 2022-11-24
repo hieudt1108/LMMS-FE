@@ -69,7 +69,7 @@ export default function UserAccountPage() {
   return (
     <>
       <Head>
-        <title> User: Account Settings | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

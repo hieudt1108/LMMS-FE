@@ -31,7 +31,7 @@ export default function UserEditPage() {
   return (
     <>
       <Head>
-        <title> User: Edit user | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

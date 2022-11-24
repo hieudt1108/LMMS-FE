@@ -21,7 +21,7 @@ const Logo = forwardRef(({ disabledLink = false, height = 120, width = 120, sx, 
     <Box
       component="img"
       src="/logo/lmms-logo.svg"
-      sx={{ width: 100, height: 100, cursor: 'pointer', ...sx, margin: '0 auto' }}
+      sx={{ width: width, height: height, cursor: 'pointer', ...sx, margin: '0 auto' }}
     />
   );
 

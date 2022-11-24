@@ -194,7 +194,7 @@ export default function SubjectListPage() {
   return (
     <>
       <Head>
-        <title> Subject: List | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={1000}>

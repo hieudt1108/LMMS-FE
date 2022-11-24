@@ -26,7 +26,7 @@ export default function UserCardsPage() {
   return (
     <>
       <Head>
-        <title> User: Cards | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

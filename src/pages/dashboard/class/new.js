@@ -24,7 +24,7 @@ export default function ClassCreatePage() {
   return (
     <>
       <Head>
-        <title> Class: Create a new Class | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

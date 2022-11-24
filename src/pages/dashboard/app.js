@@ -43,7 +43,7 @@ export default function GeneralAppPage() {
   return (
     <>
       <Head>
-        <title> General: App | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

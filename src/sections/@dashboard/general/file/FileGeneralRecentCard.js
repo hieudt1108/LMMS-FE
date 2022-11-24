@@ -17,6 +17,7 @@ import FileThumbnail from '../../../../components/file-thumbnail';
 import {FileShareDialog, FileDetailsDrawer} from '../../file';
 import {PATH_DASHBOARD} from "../../../../routes/paths";
 import BlogNewPostPreview from "../../blog/BlogNewPostPreview";
+import FilePreview from "../../blog/FilePreview";
 
 // ----------------------------------------------------------------------
 
@@ -90,6 +91,7 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
     const handleClosePreview = () => {
         setOpenPreview(false);
     };
+
     return (
         <>
             <Stack
@@ -254,6 +256,10 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
                     handleCloseShare();
                     setInviteEmail('');
                 }}
+            />
+            <FilePreview
+                open={openPreview}
+                onClose={handleClosePreview}
             />
         </>
     );

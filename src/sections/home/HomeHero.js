@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 // @mui
 import { styled, alpha, useTheme } from '@mui/material/styles';
-import { Button, Box, Link, Container, Typography, Stack, Grid, Paper, AppBar, Toolbar } from '@mui/material';
+import { Button, Box, Link, Container, Typography, Stack, Grid } from '@mui/material';
 // routes
-import { PATH_DASHBOARD, PATH_FIGMA_PREVIEW, PATH_FREE_VERSION } from '../../routes/paths';
+import {PATH_AUTH, PATH_DASHBOARD, PATH_FIGMA_PREVIEW, PATH_FREE_VERSION} from '../../routes/paths';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // utils
@@ -48,7 +48,7 @@ const StyledDescription = styled('div')(({ theme }) => ({
 
 const StyledGradientText = styled(m.h1)(({ theme }) => ({
   ...textGradient(
-    `300deg, ${theme.palette.primary.main} 0%, ${theme.palette.warning.main} 25%, ${theme.palette.primary.main} 50%, ${theme.palette.warning.main} 75%, ${theme.palette.primary.main} 100%`
+      `300deg, ${theme.palette.primary.main} 0%, ${theme.palette.warning.main} 25%, ${theme.palette.primary.main} 50%, ${theme.palette.warning.main} 75%, ${theme.palette.primary.main} 100%`
   ),
   backgroundSize: '400%',
   fontFamily: "'Barlow', sans-serif",
@@ -88,22 +88,33 @@ const StyledEllipseBottom = styled('div')(({ theme }) => ({
   backgroundColor: alpha(theme.palette.primary.darker, 0.08),
 }));
 
+// ----------------------------------------------------------------------
+
 export default function HomeHero() {
+  const isDesktop = useResponsive('up', 'md');
+
   return (
-    <>
-      <StyledRoot>
-        <Container component={MotionContainer} sx={{ height: 1 }}>
-          <Grid container spacing={10} sx={{ height: 1 }}>
-            <Grid item xs={12} md={6} sx={{ height: 1, ml: -10, mt: 10 }}>
-              <Description />
+      <>
+        <StyledRoot>
+          <Container component={MotionContainer} sx={{ height: 1 }}>
+            <Grid container spacing={10} sx={{ height: 1 }}>
+              <Grid item xs={12} md={6} sx={{ height: 1 }}>
+                <Description />
+              </Grid>
+
+              {isDesktop && (
+                  <Grid item xs={12} md={6}>
+                    <Content />
+                  </Grid>
+              )}
             </Grid>
-            <Grid item xs={12} md={6} sx={{ height: 1 }}>
-              <Content />
-            </Grid>
-          </Grid>
-        </Container>
-      </StyledRoot>
-    </>
+          </Container>
+
+          <StyledEllipseTop />
+
+          <StyledEllipseBottom />
+        </StyledRoot>
+      </>
   );
 }
 
@@ -111,52 +122,52 @@ export default function HomeHero() {
 
 function Description() {
   return (
-    <StyledDescription>
-      <m.div variants={varFade().in}>
-        <Typography variant="h2" sx={{ textAlign: 'center' }}>
-          Hệ thống quản lý
-        </Typography>
-      </m.div>
+      <StyledDescription>
+        <m.div variants={varFade().in}>
+            <Typography variant="h2" sx={{ textAlign: 'center' }}>
+                Hệ thống quản lý
+            </Typography>
+        </m.div>
 
-      <m.div variants={varFade().in}>
-        <StyledGradientText
-          sx={{ pb: 1.8, ml: 2.5 }}
-          animate={{ backgroundPosition: '200% center' }}
-          transition={{
-            repeatType: 'reverse',
-            ease: 'linear',
-            duration: 20,
-            repeat: Infinity,
-          }}
-        >
-          Học Liệu
-        </StyledGradientText>
-      </m.div>
+        <m.div variants={varFade().in}>
+          <StyledGradientText
+              sx={{ pb: 1.8, ml: 2.5 }}
+              animate={{ backgroundPosition: '200% center' }}
+              transition={{
+                repeatType: 'reverse',
+                ease: 'linear',
+                duration: 20,
+                repeat: Infinity,
+              }}
+          >
+              Học Liệu
+          </StyledGradientText>
+        </m.div>
 
-      <m.div variants={varFade().in}>
-        <Stack spacing={1.5} direction={{ xs: 'column-reverse', sm: 'row' }} sx={{ my: 5 }}>
-          <Stack alignItems="center" spacing={2}>
-            <NextLink href={PATH_DASHBOARD.root} passHref>
-              <Button
-                color="inherit"
-                size="large"
-                variant="contained"
-                startIcon={<Iconify icon="eva:flash-fill" width={24} />}
-                sx={{
-                  bgcolor: 'text.primary',
-                  color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
-                  '&:hover': {
-                    bgcolor: 'text.primary',
-                  },
-                }}
-              >
-                Đăng nhập ngay
-              </Button>
-            </NextLink>
+        <m.div variants={varFade().in}>
+          <Stack spacing={1.5} direction={{ xs: 'column-reverse', sm: 'row' }} sx={{ my: 5 }}>
+            <Stack alignItems="center" spacing={2}>
+              <NextLink href={PATH_AUTH.login} passHref>
+                <Button
+                    color="inherit"
+                    size="large"
+                    variant="contained"
+                    startIcon={<Iconify icon="eva:flash-fill" width={24} />}
+                    sx={{
+                      bgcolor: 'text.primary',
+                      color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
+                      '&:hover': {
+                        bgcolor: 'text.primary',
+                      },
+                    }}
+                >
+                    Đăng nhập ngay
+                </Button>
+              </NextLink>
+            </Stack>
           </Stack>
-        </Stack>
-      </m.div>
-    </StyledDescription>
+        </m.div>
+      </StyledDescription>
   );
 }
 
@@ -175,49 +186,49 @@ function Content() {
   };
 
   return (
-    <Stack
-      direction="row"
-      alignItems="flex-start"
-      sx={{
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        mt: `${HEADER.H_MAIN_DESKTOP}px`,
-      }}
-    >
-      <Stack component={m.div} variants={varFade().in} sx={{ width: 344, position: 'relative' }}>
-        <Box
-          component={m.img}
-          animate={{ y: ['0%', '100%'] }}
-          transition={transition}
-          src={`/assets/images/home/hero_dark_1.png`}
-          sx={{ position: 'absolute' }}
-        />
-        <Box
-          component={m.img}
-          animate={{ y: ['-100%', '0%'] }}
-          transition={transition}
-          src={`/assets/images/home/hero_dark_2.png`}
-          sx={{ position: 'absolute' }}
-        />
-      </Stack>
+      <Stack
+          direction="row"
+          alignItems="flex-start"
+          sx={{
+            height: 1,
+            overflow: 'hidden',
+            position: 'absolute',
+            mt: `${HEADER.H_MAIN_DESKTOP}px`,
+          }}
+      >
+          <Stack component={m.div} variants={varFade().in} sx={{ width: 344, position: 'relative' }}>
+              <Box
+                  component={m.img}
+                  animate={{ y: ['0%', '100%'] }}
+                  transition={transition}
+                  src={`/assets/images/home/hero_dark_1.png`}
+                  sx={{ position: 'absolute' }}
+              />
+              <Box
+                  component={m.img}
+                  animate={{ y: ['-100%', '0%'] }}
+                  transition={transition}
+                  src={`/assets/images/home/hero_dark_2.png`}
+                  sx={{ position: 'absolute' }}
+              />
+          </Stack>
 
-      <Stack component={m.div} variants={varFade().in} sx={{ width: 530, position: 'relative', ml: -2 }}>
-        <Box
-          component={m.img}
-          animate={{ y: ['100%', '0%'] }}
-          transition={transition}
-          src={`/assets/images/home/hero_dark_1.png`}
-          sx={{ position: 'absolute' }}
-        />
-        <Box
-          component={m.img}
-          animate={{ y: ['0%', '-100%'] }}
-          transition={transition}
-          src={`/assets/images/home/hero_dark_2.png`}
-          sx={{ position: 'absolute' }}
-        />
+          <Stack component={m.div} variants={varFade().in} sx={{ width: 530, position: 'relative', ml: -2 }}>
+              <Box
+                  component={m.img}
+                  animate={{ y: ['100%', '0%'] }}
+                  transition={transition}
+                  src={`/assets/images/home/hero_dark_1.png`}
+                  sx={{ position: 'absolute' }}
+              />
+              <Box
+                  component={m.img}
+                  animate={{ y: ['0%', '-100%'] }}
+                  transition={transition}
+                  src={`/assets/images/home/hero_dark_2.png`}
+                  sx={{ position: 'absolute' }}
+              />
+          </Stack>
       </Stack>
-    </Stack>
   );
 }

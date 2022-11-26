@@ -48,13 +48,8 @@ import error from "eslint-plugin-react/lib/util/error";
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['all', 'active', 'banned'];
+const STATUS_OPTIONS = ['tất cả', 'có hiệu lực', 'không hiệu lực'];
 
-const ROLE_OPTIONS = [
-    'all',
-    'admin',
-    'hocsinh',
-];
 
 const TABLE_HEAD = [
     {id: 'id', label: 'ID', align: 'left'},
@@ -111,7 +106,7 @@ export default function UserListPage() {
 
     const [userRole, setUserRole] = useState([]);
 
-    const [filterStatus, setFilterStatus] = useState('all');
+    const [filterStatus, setFilterStatus] = useState('tất cả');
 
     const [listUsers, setListUsers] = useState([]);
 
@@ -127,7 +122,7 @@ export default function UserListPage() {
 
     const denseHeight = dense ? 52 : 72;
 
-    const isFiltered = filterName !== '' || filterRole !== 'all' || filterStatus !== 'all';
+    const isFiltered = filterName !== '';
 
     const isNotFound =
         (!dataFiltered.length && !!filterName) ||
@@ -349,6 +344,7 @@ export default function UserListPage() {
                     </TableContainer>
 
                     <TablePaginationCustom
+                        labelRowsPerPage='Hàng trên mỗi trang'
                         count={dataFiltered.length}
                         page={page}
                         rowsPerPage={rowsPerPage}
@@ -367,7 +363,7 @@ export default function UserListPage() {
                 title="Xóa"
                 content={
                     <>
-                        Are you sure want to delete <strong> {selected.length} </strong> items?
+                        Bạn có chắc chắn muốn xóa người dùng này?
                     </>
                 }
                 action={
@@ -379,7 +375,7 @@ export default function UserListPage() {
                             handleCloseConfirm();
                         }}
                     >
-                        Delete
+                        Xóa
                     </Button>
                 }
             />
@@ -404,8 +400,12 @@ function applyFilter({inputData, comparator, filterName, filterStatus, filterRol
         inputData = inputData.filter((user) => user.lastName.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
     }
 
-    if (filterStatus !== 'all') {
-        inputData = inputData.filter((user) => user.enable === filterStatus);
+    if (filterStatus === 'có hiệu lực') {
+        inputData = inputData.filter((user) => user.enable === 0);
+    }
+
+    if (filterStatus === 'không hiệu lực') {
+        inputData = inputData.filter((user) => user.enable === 1);
     }
 
     if (filterRole !== 'all') {

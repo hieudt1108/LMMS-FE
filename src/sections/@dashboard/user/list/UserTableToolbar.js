@@ -51,10 +51,25 @@ export default function UserTableToolbar({
           },
         }}
         sx={{
-          maxWidth: { sm: 240 },
+          maxWidth: 240,
           textTransform: 'capitalize',
         }}
       >
+        <MenuItem
+            key='all'
+            value='all'
+            sx={{
+              mx: 1,
+              my: 0.5,
+              borderRadius: 0.75,
+              typography: 'body2',
+              textTransform: 'capitalize',
+              '&:first-of-type': { mt: 0 },
+              '&:last-of-type': { mb: 0 },
+            }}
+        >
+          Tất cả
+        </MenuItem>
         {optionsRole.map((option) => (
           <MenuItem
             key={option}
@@ -95,7 +110,7 @@ export default function UserTableToolbar({
           onClick={onResetFilter}
           startIcon={<Iconify icon="eva:trash-2-outline" />}
         >
-          Clear
+          Xóa
         </Button>
       )}
     </Stack>

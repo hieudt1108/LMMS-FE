@@ -10,20 +10,20 @@ import { MotionViewport, varFade } from '../../components/animate';
 
 const CARDS = [
   {
+    icon: ' /assets/icons/home/ic_development.svg',
+    title: 'Các cấp quản lý',
+    description: 'Hoạt động dạy và học của giáo viên, học sinh theo từng khối lớp\n Báo cáo, thống kê, đánh giá hiệu quả hoạt động dạy và học.',
+  },
+  {
     icon: ' /assets/icons/home/ic_make_brand.svg',
-    title: 'Branding',
-    description: 'Consistent design makes it easy to brand your own.',
+    title: 'Giáo viên',
+    description: 'Hệ thống quản lí dạy và học tích hợp với hệ sinh thái học liệu số mang lại tiện ích đầy đủ, đồng bộ, chuẩn mực, dễ dùng.',
   },
   {
     icon: ' /assets/icons/home/ic_design.svg',
-    title: 'UI & UX Design',
+    title: 'Học sinh',
     description:
-      'The kit is built on the principles of the atomic design system. It helps you to create projects fastest and easily customized packages for your projects.',
-  },
-  {
-    icon: ' /assets/icons/home/ic_development.svg',
-    title: 'Development',
-    description: 'Easy to customize and extend, saving you time and money.',
+      'Lấp nhanh lỗ hổng kiến thức; Tự tin làm chủ kiến thức, kĩ năng; Rút ngắn được thời gian học tập.',
   },
 ];
 
@@ -56,21 +56,17 @@ export default function HomeMinimal() {
             mb: { xs: 5, md: 10 },
           }}
         >
-          <m.div variants={varFade().inUp}>
-            <Typography component="div" variant="overline" sx={{ color: 'text.disabled' }}>
-              Minimal UI
-            </Typography>
-          </m.div>
+
 
           <m.div variants={varFade().inDown}>
             <Typography variant="h2">
-              What minimal <br /> helps you?
+              THIẾT THỰC VÀ HIỆU QUẢ
             </Typography>
           </m.div>
         </Stack>
 
         <Box
-          gap={{ xs: 3, lg: 10 }}
+          gap={{ xs: 4, lg: 12 }}
           display="grid"
           alignItems="center"
           gridTemplateColumns={{

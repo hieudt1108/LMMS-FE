@@ -96,7 +96,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         </TableCell>
 
         <TableCell align="left">
-          {enable ? <Chip label="Disabled" /> : <Chip color="primary" label="Active" />}
+          {enable ? <Chip label="Không hiệu lực" /> : <Chip color="primary" label="Có hiệu lực" />}
         </TableCell>
 
         <TableCell align="right">

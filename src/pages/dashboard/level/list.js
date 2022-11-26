@@ -49,7 +49,6 @@ import {useSnackbar} from "../../../components/snackbar";
 
 
 const TABLE_HEAD = [
-    {id: 'id', label: 'ID', align: 'left'},
     {id: 'name', label: 'Tên cấp học', align: 'left'},
     {id: 'description', label: 'Mô tả', align: 'left'},
     {id: ''},
@@ -162,7 +161,7 @@ export default function LevelListPage() {
             } else if (selected.length === dataFiltered.length) {
                 setPage(0);
             } else if (selected.length > dataInPage.length) {
-                const newPage = Math.ceil((tableData.length - selected.length) / rowsPerPage) - 1;
+                const newPage = Math.ceil((listLevels.length - selected.length) / rowsPerPage) - 1;
                 setPage(newPage);
             }
         }
@@ -195,7 +194,7 @@ export default function LevelListPage() {
                 <title> Hệ thống quản lý Học liệu</title>
             </Head>
 
-            <Container maxWidth={1000}>
+            <Container maxWidth={'xl'}>
                 <CustomBreadcrumbs
                     heading="Danh sách cấp học"
                     links={[
@@ -227,11 +226,11 @@ export default function LevelListPage() {
                         <TableSelectedAction
                             dense={dense}
                             numSelected={selected.length}
-                            rowCount={tableData.length}
+                            rowCount={listLevels.length}
                             onSelectAllRows={(checked) =>
                                 onSelectAllRows(
                                     checked,
-                                    tableData.map((row) => row.id)
+                                    listLevels.map((row) => row.id)
                                 )
                             }
                             action={
@@ -249,13 +248,13 @@ export default function LevelListPage() {
                                     order={order}
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
-                                    rowCount={tableData.length}
+                                    rowCount={listLevels.length}
                                     numSelected={selected.length}
                                     onSort={onSort}
                                     onSelectAllRows={(checked) =>
                                         onSelectAllRows(
                                             checked,
-                                            tableData.map((row) => row.id)
+                                            listLevels.map((row) => row.id)
                                         )
                                     }
                                 />
@@ -273,7 +272,7 @@ export default function LevelListPage() {
                                     ))}
 
                                     <TableEmptyRows height={denseHeight}
-                                                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}/>
+                                                    emptyRows={emptyRows(page, rowsPerPage, listLevels.length)}/>
 
                                     <TableNoData isNotFound={isNotFound}/>
                                 </TableBody>

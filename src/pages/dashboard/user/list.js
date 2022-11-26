@@ -45,14 +45,14 @@ import {UserTableToolbar, UserTableRow} from '../../../sections/@dashboard/user/
 import {deleteUser, getALlRoles, getAllUsers} from '../../../dataProvider/agent';
 import {useSnackbar} from "../../../components/snackbar";
 import error from "eslint-plugin-react/lib/util/error";
+import Label from "../../../components/label";
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['tất cả', 'có hiệu lực', 'không hiệu lực'];
+
 
 
 const TABLE_HEAD = [
-    {id: 'id', label: 'ID', align: 'left'},
     {id: 'name', label: 'Tên', align: 'left'},
     {id: 'email', label: 'Email', align: 'left'},
     {id: 'gender', label: 'Giới tính', align: 'left'},
@@ -106,7 +106,7 @@ export default function UserListPage() {
 
     const [userRole, setUserRole] = useState([]);
 
-    const [filterStatus, setFilterStatus] = useState('tất cả');
+    const [filterStatus, setFilterStatus] = useState(-1);
 
     const [listUsers, setListUsers] = useState([]);
 
@@ -123,6 +123,13 @@ export default function UserListPage() {
     const denseHeight = dense ? 52 : 72;
 
     const isFiltered = filterName !== '';
+    const getLengthByStatus = (status) => listUsers.filter((user) => user.enable === status).length;
+
+    const STATUS_OPTIONS = [
+        { label: 'tất cả', id: -1, color: 'info', count: listUsers.length },
+        { label: 'hiệu lực', id: 0, color: 'success', count: getLengthByStatus(0) },
+        { label: 'không hiệu lực', id: 1, color: 'error', count: getLengthByStatus(1) },
+    ];
 
     const isNotFound =
         (!dataFiltered.length && !!filterName) ||
@@ -135,6 +142,7 @@ export default function UserListPage() {
 
     async function fetchUsers() {
         const res = await getAllUsers({pageIndex: 1, pageSize: 100});
+        console.log(res.data.data)
         if (res.status < 400) {
             setListUsers(res.data.data);
         } else {
@@ -196,7 +204,7 @@ export default function UserListPage() {
             } else if (selected.length === dataFiltered.length) {
                 setPage(0);
             } else if (selected.length > dataInPage.length) {
-                const newPage = Math.ceil((tableData.length - selected.length) / rowsPerPage) - 1;
+                const newPage = Math.ceil((listUsers.length - selected.length) / rowsPerPage) - 1;
                 setPage(newPage);
             }
         }
@@ -209,9 +217,8 @@ export default function UserListPage() {
     const handleResetFilter = () => {
         setFilterName('');
         setFilterRole('all');
-        setFilterStatus('all');
+        setFilterStatus('tất cả');
     };
-
 
 
     useEffect(() => {
@@ -242,7 +249,9 @@ export default function UserListPage() {
                 <title> Hệ thống quản lý Học liệu</title>
             </Head>
 
-            <Container maxWidth={1000}>
+            <Container
+                maxWidth={'xl'}
+            >
                 <CustomBreadcrumbs
                     heading="Danh sách người dùng"
                     links={[
@@ -269,7 +278,16 @@ export default function UserListPage() {
                         }}
                     >
                         {STATUS_OPTIONS.map((tab) => (
-                            <Tab key={tab} label={tab} value={tab}/>
+                            <Tab
+                                key={tab.id}
+                                label={tab.label}
+                                value={tab.id}
+                                icon={
+                                    <Label color={tab.color} sx={{ mr: 1 }}>
+                                        {tab.count}
+                                    </Label>
+                                }
+                            />
                         ))}
                     </Tabs>
 
@@ -279,7 +297,7 @@ export default function UserListPage() {
                         isFiltered={isFiltered}
                         filterName={filterName}
                         filterRole={filterRole}
-                        optionsRole={userRole.map((tag) => tag.label)}
+                        optionsRole={userRole}
                         onFilterName={handleFilterName}
                         onFilterRole={handleFilterRole}
                         onResetFilter={handleResetFilter}
@@ -289,11 +307,11 @@ export default function UserListPage() {
                         <TableSelectedAction
                             dense={dense}
                             numSelected={selected.length}
-                            rowCount={tableData.length}
+                            rowCount={listUsers.length}
                             onSelectAllRows={(checked) =>
                                 onSelectAllRows(
                                     checked,
-                                    tableData.map((row) => row.id)
+                                    listUsers.map((row) => row.id)
                                 )
                             }
                             action={
@@ -311,13 +329,13 @@ export default function UserListPage() {
                                     order={order}
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
-                                    rowCount={tableData.length}
+                                    rowCount={listUsers.length}
                                     numSelected={selected.length}
                                     onSort={onSort}
                                     onSelectAllRows={(checked) =>
                                         onSelectAllRows(
                                             checked,
-                                            tableData.map((row) => row.id)
+                                            listUsers.map((row) => row.id)
                                         )
                                     }
                                 />
@@ -335,7 +353,7 @@ export default function UserListPage() {
                                     ))}
 
                                     <TableEmptyRows height={denseHeight}
-                                                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}/>
+                                                    emptyRows={emptyRows(page, rowsPerPage, listUsers.length)}/>
 
                                     <TableNoData isNotFound={isNotFound}/>
                                 </TableBody>
@@ -400,11 +418,11 @@ function applyFilter({inputData, comparator, filterName, filterStatus, filterRol
         inputData = inputData.filter((user) => user.lastName.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
     }
 
-    if (filterStatus === 'có hiệu lực') {
+    if (filterStatus === 0) {
         inputData = inputData.filter((user) => user.enable === 0);
     }
 
-    if (filterStatus === 'không hiệu lực') {
+    if (filterStatus === 1) {
         inputData = inputData.filter((user) => user.enable === 1);
     }
 

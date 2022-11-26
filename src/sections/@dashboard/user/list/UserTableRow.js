@@ -59,7 +59,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell align="left">{id}</TableCell>
+
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>

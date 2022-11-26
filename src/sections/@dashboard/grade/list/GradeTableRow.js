@@ -63,13 +63,6 @@ export default function GradeTableRow({ row, selected, onEditRow, onSelectRow, o
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography variant="subtitle2" noWrap>
-              {id}
-            </Typography>
-          </Stack>
-        </TableCell>
 
         <TableCell align="left">{name}</TableCell>
 

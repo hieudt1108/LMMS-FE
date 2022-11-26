@@ -42,14 +42,14 @@ import {
 } from '../../../components/table';
 // sections
 import {GradeTableToolbar, GradeTableRow} from '../../../sections/@dashboard/grade/list';
-import {deleteGrade, deleteLevel, getAllGrade} from "../../../dataProvider/agent";
+import {deleteGrade, deleteLevel, getAllGrade, getAllLevel} from "../../../dataProvider/agent";
 import {useSnackbar} from "../../../components/snackbar";
+import Label from "../../../components/label";
 
 // ----------------------------------------------------------------------
 
 
 const TABLE_HEAD = [
-    {id: 'id', label: 'ID', align: 'left'},
     {id: 'name', label: 'Tên khối học', align: 'left'},
     {id: 'description', label: 'Mô tả', align: 'left'},
     {id: ''},
@@ -93,12 +93,17 @@ export default function GradeListPage() {
 
     const [filterName, setFilterName] = useState('');
 
+    const [filterLevel, setFilterLevel] = useState('all');
+
     const [listGrades, setListGrades] = useState([]);
+
+    const [listLevels, setListLevels] = useState([]);
 
     const dataFiltered = applyFilter({
         inputData: listGrades,
         comparator: getComparator(order, orderBy),
         filterName,
+        filterLevel,
     });
 
     const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -107,8 +112,10 @@ export default function GradeListPage() {
 
     const isFiltered = filterName !== '';
 
+
     const isNotFound =
-        (!dataFiltered.length && !!filterName);
+        (!dataFiltered.length && !!filterName) ||
+        (!dataFiltered.length && !!filterLevel);
 
     const handleOpenConfirm = () => {
         setOpenConfirm(true);
@@ -118,9 +125,9 @@ export default function GradeListPage() {
         setOpenConfirm(false);
     };
 
-    const handleFilterStatus = (event, newValue) => {
+    const handleFilterLevel = (event, newValue) => {
         setPage(0);
-        setFilterStatus(newValue);
+        setFilterLevel(newValue);
     };
 
     const handleFilterName = (event) => {
@@ -162,7 +169,7 @@ export default function GradeListPage() {
             } else if (selected.length === dataFiltered.length) {
                 setPage(0);
             } else if (selected.length > dataInPage.length) {
-                const newPage = Math.ceil((tableData.length - selected.length) / rowsPerPage) - 1;
+                const newPage = Math.ceil((listGrades.length - selected.length) / rowsPerPage) - 1;
                 setPage(newPage);
             }
         }
@@ -174,11 +181,23 @@ export default function GradeListPage() {
 
     const handleResetFilter = () => {
         setFilterName('');
+        setFilterLevel('all');
     };
 
     useEffect(() => {
         fetchGrades();
+        fetchLevels();
     }, []);
+
+    async function fetchLevels() {
+        const res = await getAllLevel({pageIndex: 1, pageSize: 100});
+        console.log(res.data.data);
+        if (res.status < 400) {
+            setListLevels(res.data.data);
+        } else {
+            console.log('error');
+        }
+    }
 
     async function fetchGrades() {
         const res = await getAllGrade({pageIndex: 1, pageSize: 100});
@@ -195,7 +214,7 @@ export default function GradeListPage() {
                 <title> Hệ thống quản lý Học liệu</title>
             </Head>
 
-            <Container maxWidth={1000}>
+            <Container maxWidth={'xl'}>
                 <CustomBreadcrumbs
                     heading="Danh sách khối học"
                     links={[
@@ -213,6 +232,27 @@ export default function GradeListPage() {
                 />
 
                 <Card>
+                    <Tabs
+                        value={filterLevel}
+                        onChange={handleFilterLevel}
+                        sx={{
+                            px: 2,
+                            bgcolor: 'background.neutral',
+                        }}
+                    >
+                        <Tab
+                            key='all'
+                            label='Tất cả'
+                            value='all'
+                        />
+                        {listLevels.map((tab) => (
+                            <Tab
+                                key={tab.id}
+                                label={tab.name}
+                                value={tab.id}
+                            />
+                        ))}
+                    </Tabs>
 
                     <Divider/>
 
@@ -227,11 +267,11 @@ export default function GradeListPage() {
                         <TableSelectedAction
                             dense={dense}
                             numSelected={selected.length}
-                            rowCount={tableData.length}
+                            rowCount={listGrades.length}
                             onSelectAllRows={(checked) =>
                                 onSelectAllRows(
                                     checked,
-                                    tableData.map((row) => row.id)
+                                    listGrades.map((row) => row.id)
                                 )
                             }
                             action={
@@ -249,13 +289,13 @@ export default function GradeListPage() {
                                     order={order}
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
-                                    rowCount={tableData.length}
+                                    rowCount={listGrades.length}
                                     numSelected={selected.length}
                                     onSort={onSort}
                                     onSelectAllRows={(checked) =>
                                         onSelectAllRows(
                                             checked,
-                                            tableData.map((row) => row.id)
+                                            listGrades.map((row) => row.id)
                                         )
                                     }
                                 />
@@ -273,7 +313,7 @@ export default function GradeListPage() {
                                     ))}
 
                                     <TableEmptyRows height={denseHeight}
-                                                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}/>
+                                                    emptyRows={emptyRows(page, rowsPerPage, listGrades.length)}/>
                                     <TableNoData isNotFound={isNotFound}/>
                                 </TableBody>
                             </Table>
@@ -322,7 +362,7 @@ export default function GradeListPage() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({inputData, comparator, filterName}) {
+function applyFilter({inputData, comparator, filterName, filterLevel}) {
     const stabilizedThis = inputData.map((el, index) => [el, index]);
 
     stabilizedThis.sort((a, b) => {
@@ -335,6 +375,10 @@ function applyFilter({inputData, comparator, filterName}) {
 
     if (filterName) {
         inputData = inputData.filter((grade) => grade.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
+    }
+
+    if (filterLevel !== 'all') {
+        inputData = inputData.filter((grade) => grade.levelId === filterLevel);
     }
 
 

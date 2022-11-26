@@ -49,7 +49,6 @@ import {useSnackbar} from "../../../components/snackbar";
 
 
 const TABLE_HEAD = [
-    {id: 'id', label: 'ID', align: 'left'},
     {id: 'code', label: 'Mã môn học', align: 'left'},
     {id: 'name', label: 'Tên môn học', align: 'left'},
     {id: 'description', label: 'Mô tả', align: 'left'},
@@ -163,7 +162,7 @@ export default function SubjectListPage() {
             } else if (selected.length === dataFiltered.length) {
                 setPage(0);
             } else if (selected.length > dataInPage.length) {
-                const newPage = Math.ceil((tableData.length - selected.length) / rowsPerPage) - 1;
+                const newPage = Math.ceil((listSubjects.length - selected.length) / rowsPerPage) - 1;
                 setPage(newPage);
             }
         }
@@ -196,7 +195,7 @@ export default function SubjectListPage() {
                 <title> Hệ thống quản lý Học liệu</title>
             </Head>
 
-            <Container maxWidth={1000}>
+            <Container maxWidth={'xl'}>
                 <CustomBreadcrumbs
                     heading="Danh sách môn học"
                     links={[
@@ -228,11 +227,11 @@ export default function SubjectListPage() {
                         <TableSelectedAction
                             dense={dense}
                             numSelected={selected.length}
-                            rowCount={tableData.length}
+                            rowCount={listSubjects.length}
                             onSelectAllRows={(checked) =>
                                 onSelectAllRows(
                                     checked,
-                                    tableData.map((row) => row.id)
+                                    listSubjects.map((row) => row.id)
                                 )
                             }
                             action={
@@ -250,13 +249,13 @@ export default function SubjectListPage() {
                                     order={order}
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
-                                    rowCount={tableData.length}
+                                    rowCount={listSubjects.length}
                                     numSelected={selected.length}
                                     onSort={onSort}
                                     onSelectAllRows={(checked) =>
                                         onSelectAllRows(
                                             checked,
-                                            tableData.map((row) => row.id)
+                                            listSubjects.map((row) => row.id)
                                         )
                                     }
                                 />
@@ -274,7 +273,7 @@ export default function SubjectListPage() {
                                     ))}
 
                                     <TableEmptyRows height={denseHeight}
-                                                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}/>
+                                                    emptyRows={emptyRows(page, rowsPerPage, listSubjects.length)}/>
 
                                     <TableNoData isNotFound={isNotFound}/>
                                 </TableBody>

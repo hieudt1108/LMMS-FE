@@ -44,7 +44,11 @@ export default function TableHeadCustom({
       <TableRow>
         {onSelectAllRows && (
           <TableCell padding="checkbox">
-
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={(event) => onSelectAllRows(event.target.checked)}
+            />
           </TableCell>
         )}
 

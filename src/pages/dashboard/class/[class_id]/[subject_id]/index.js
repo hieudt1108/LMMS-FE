@@ -22,11 +22,11 @@ export default function index() {
   console.log(class_id, subject_id);
   return (
     <>
-      <Container maxWidth={1000}>
+      <Container maxWidth={'xl'}>
         <CustomBreadcrumbs
           heading="Khung chương trình"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Trang chủ', href: PATH_DASHBOARD.root },
             { name: 'Môn học', href: PATH_DASHBOARD.user.root },
             { name: 'Khung chương trình' },
           ]}

@@ -49,7 +49,6 @@ import {useSnackbar} from "../../../../components/snackbar";
 
 
 const TABLE_HEAD = [
-    {id: 'id', label: 'Mã', align: 'left'},
     {id: 'name', label: 'Tên chương trình', align: 'left'},
     {id: 'description', label: 'Mô tả', align: 'left'},
     {id: ''},
@@ -161,7 +160,7 @@ export default function ProgramListPage() {
             } else if (selected.length === dataFiltered.length) {
                 setPage(0);
             } else if (selected.length > dataInPage.length) {
-                const newPage = Math.ceil((tableData.length - selected.length) / rowsPerPage) - 1;
+                const newPage = Math.ceil((listPrograms.length - selected.length) / rowsPerPage) - 1;
                 setPage(newPage);
             }
         }
@@ -196,7 +195,7 @@ export default function ProgramListPage() {
                 <title> Hệ thống quản lý Học liệu</title>
             </Head>
 
-            <Container maxWidth={1000}>
+            <Container maxWidth={'xl'}>
                 <CustomBreadcrumbs
                     heading="Danh sách chương trình học"
                     links={[
@@ -228,11 +227,11 @@ export default function ProgramListPage() {
                         <TableSelectedAction
                             dense={dense}
                             numSelected={selected.length}
-                            rowCount={tableData.length}
+                            rowCount={listPrograms.length}
                             onSelectAllRows={(checked) =>
                                 onSelectAllRows(
                                     checked,
-                                    tableData.map((row) => row.id)
+                                    listPrograms.map((row) => row.id)
                                 )
                             }
                             action={
@@ -250,13 +249,13 @@ export default function ProgramListPage() {
                                     order={order}
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
-                                    rowCount={tableData.length}
+                                    rowCount={listPrograms.length}
                                     numSelected={selected.length}
                                     onSort={onSort}
                                     onSelectAllRows={(checked) =>
                                         onSelectAllRows(
                                             checked,
-                                            tableData.map((row) => row.id)
+                                            listPrograms.map((row) => row.id)
                                         )
                                     }
                                 />
@@ -274,7 +273,7 @@ export default function ProgramListPage() {
                                     ))}
 
                                     <TableEmptyRows height={denseHeight}
-                                                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}/>
+                                                    emptyRows={emptyRows(page, rowsPerPage, listPrograms.length)}/>
 
                                     <TableNoData isNotFound={isNotFound}/>
                                 </TableBody>

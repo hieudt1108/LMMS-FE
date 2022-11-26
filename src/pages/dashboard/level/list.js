@@ -193,7 +193,7 @@ export default function LevelListPage() {
   return (
     <>
       <Head>
-        <title> Level: List | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={1000}>

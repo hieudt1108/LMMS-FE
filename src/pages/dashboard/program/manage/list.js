@@ -19,17 +19,17 @@ import {
   TableContainer,
 } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // _mock_
-import { _subjects } from '../../../_mock/arrays';
+import { _programList } from '../../../../_mock/arrays';
 // layouts
-import DashboardLayout from '../../../layouts/dashboard';
+import DashboardLayout from '../../../../layouts/dashboard';
 // components
-import Iconify from '../../../components/iconify';
-import Scrollbar from '../../../components/scrollbar';
-import ConfirmDialog from '../../../components/confirm-dialog';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import { useSettingsContext } from '../../../components/settings';
+import Iconify from '../../../../components/iconify';
+import Scrollbar from '../../../../components/scrollbar';
+import ConfirmDialog from '../../../../components/confirm-dialog';
+import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
+import { useSettingsContext } from '../../../../components/settings';
 import {
   useTable,
   getComparator,
@@ -39,31 +39,30 @@ import {
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
-} from '../../../components/table';
+} from '../../../../components/table';
 // sections
-import { SubjectTableToolbar, SubjectTableRow } from '../../../sections/@dashboard/subject/list';
-import {deleteSubject, deleteLevel, getAllSubject} from "../../../dataProvider/agent";
-import {useSnackbar} from "../../../components/snackbar";
+import { ProgramTableToolbar, ProgramTableRow } from '../../../../sections/@dashboard/program/list';
+import {deleteProgram, deleteUser, getAllProgram} from "../../../../dataProvider/agent";
+import {useSnackbar} from "../../../../components/snackbar";
 
 // ----------------------------------------------------------------------
 
 
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'ID', align: 'left' },
-  { id: 'code', label: 'Mã môn học', align: 'left' },
-  { id: 'name', label: 'Tên môn học', align: 'left' },
+  { id: 'id', label: 'Mã', align: 'left' },
+  { id: 'name', label: 'Tên chương trình', align: 'left' },
   { id: 'description', label: 'Mô tả', align: 'left' },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
 
-SubjectListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+ProgramListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function SubjectListPage() {
+export default function ProgramListPage() {
   const {
     dense,
     page,
@@ -83,22 +82,22 @@ export default function SubjectListPage() {
     onChangeRowsPerPage,
   } = useTable();
 
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { themeStretch } = useSettingsContext();
 
   const { push } = useRouter();
 
-  const [tableData, setTableData] = useState(_subjects);
+  const [tableData, setTableData] = useState(_programList);
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterName, setFilterName] = useState('');
 
-  const [listSubjects, setListSubjects] = useState([]);
+  const [listPrograms, setListPrograms] = useState([]);
 
   const dataFiltered = applyFilter({
-    inputData: listSubjects,
+    inputData: listPrograms,
     comparator: getComparator(order, orderBy),
     filterName,
   });
@@ -132,15 +131,14 @@ export default function SubjectListPage() {
 
 
   const handleDeleteRow = async (id) => {
-    const response = await deleteSubject(id)
+    const response = await deleteProgram(id)
     if(response.status < 400){
       setSelected([]);
-      await fetchSubjects();
-      enqueueSnackbar('Xóa môn học thành công');
+      await fetchPrograms();
+      enqueueSnackbar('Xóa chương trình học thành công');
     }else{
-      enqueueSnackbar('Xóa môn học thất bại');
+      enqueueSnackbar('Xóa chương trình học thất bại');
     }
-
     if (page > 0) {
       if (dataInPage.length < 2) {
         setPage(page - 1);
@@ -149,13 +147,13 @@ export default function SubjectListPage() {
   };
 
   const handleDeleteRows = async (selected) => {
-    const response = await deleteSubject(selected)
+    const response = await deleteProgram(selected)
     if(response.status < 400){
       setSelected([]);
-      await fetchSubjects();
-      enqueueSnackbar('Xóa khối học thành công');
+      await fetchPrograms();
+      enqueueSnackbar('Xóa chương trình học thành công');
     }else{
-      enqueueSnackbar('Xóa khối học thất bại');
+      enqueueSnackbar('Xóa chương trình học thất bại');
     }
 
     if (page > 0) {
@@ -171,21 +169,23 @@ export default function SubjectListPage() {
   };
 
   const handleEditRow = (id) => {
-    push(PATH_DASHBOARD.subject.edit(id));
+    push(PATH_DASHBOARD.program.edit(id));
   };
 
   const handleResetFilter = () => {
     setFilterName('');
+    setFilterRole('all');
+    setFilterStatus('all');
   };
 
   useEffect(() => {
-    fetchSubjects();
+    fetchPrograms();
   }, []);
 
-  async function fetchSubjects() {
-    const res = await getAllSubject({pageIndex : 1,pageSize: 100});
+  async function fetchPrograms() {
+    const res = await getAllProgram({pageIndex : 1,pageSize: 100});
     if (res.status < 400) {
-      setListSubjects(res.data.data);
+      setListPrograms(res.data.data);
     } else {
       console.log('error');
     }
@@ -199,16 +199,16 @@ export default function SubjectListPage() {
 
       <Container maxWidth={1000}>
         <CustomBreadcrumbs
-          heading="Danh sách môn học"
+          heading="Danh sách chương trình học"
           links={[
             { name: 'Trang chủ', href: PATH_DASHBOARD.root },
-            { name: 'Môn học', href: PATH_DASHBOARD.subject.root },
+            { name: 'Chương trình học', href: PATH_DASHBOARD.program.root },
             { name: 'Danh sách' },
           ]}
           action={
-            <NextLink href={PATH_DASHBOARD.subject.new} passHref>
+            <NextLink href={PATH_DASHBOARD.program.new} passHref>
               <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                Thêm môn học
+                Thêm chương trình học
               </Button>
             </NextLink>
           }
@@ -218,7 +218,7 @@ export default function SubjectListPage() {
 
           <Divider />
 
-          <SubjectTableToolbar
+          <ProgramTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             onFilterName={handleFilterName}
@@ -263,14 +263,14 @@ export default function SubjectListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((subject) => (
-                    <SubjectTableRow
-                      key={subject.id}
-                      row={subject}
-                      selected={selected.includes(subject.id)}
-                      onSelectRow={() => onSelectRow(subject.id)}
-                      onDeleteRow={() => handleDeleteRow(subject.id)}
-                      onEditRow={() => handleEditRow(subject.id)}
+                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((program) => (
+                    <ProgramTableRow
+                      key={program.id}
+                      row={program}
+                      selected={selected.includes(program.id)}
+                      onSelectRow={() => onSelectRow(program.id)}
+                      onDeleteRow={() => handleDeleteRow(program.id)}
+                      onEditRow={() => handleEditRow(program.id)}
                     />
                   ))}
 
@@ -335,7 +335,7 @@ function applyFilter({ inputData, comparator, filterName}) {
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
-    inputData = inputData.filter((subject) => subject.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
+    inputData = inputData.filter((program) => program.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
   }
 
 

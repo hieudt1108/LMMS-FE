@@ -1,34 +1,23 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 // next
 import { useRouter } from 'next/router';
-import { useFormik } from 'formik';
 // form
-import { useForm, Controller, useFormContext } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, TextField, Chip } from '@mui/material';
+import { Box, Card, Chip, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from '@mui/material';
 // utils
-import { fData } from '../../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // assets
-import { countries } from '../../../assets/data';
 // components
-import Label from '../../../components/label';
 import { useSnackbar } from '../../../components/snackbar';
-import FormProvider, {
-  RHFAutocomplete,
-  RHFRadioGroup,
-  RHFSelect,
-  RHFSwitch,
-  RHFTextField,
-  RHFUploadAvatar,
-} from '../../../components/hook-form';
+import FormProvider, { RHFAutocomplete, RHFRadioGroup, RHFTextField } from '../../../components/hook-form';
 import { DatePicker } from '@mui/x-date-pickers';
-import { createUserAuth, getALlRoles, getUserById, updateUser } from '../../../dataProvider/agent';
+import { createUserAuth, getALlRoles, getAllSubject, updateUser } from '../../../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 const GENDER_OPTION = [
@@ -50,7 +39,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       return Yup.object().shape({
         userName: Yup.string().trim().required('Tên đăng nhập không được trống'),
         password: Yup.string().trim().required('Mật khẩu không được trống'),
-        rolesID: Yup.array().min(1, 'Hãy chọn vai trò'),
+        roleID: Yup.array().min(1, 'Hãy chọn vai trò'),
         firstName: Yup.string().trim().required('Không được để trống'),
         lastName: Yup.string().trim().required('Không được để trống'),
         email: Yup.string().notRequired(),
@@ -78,13 +67,18 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       gender: currentUser?.gender || 0,
       phone: currentUser?.phone || '',
       address: currentUser?.address || '',
-      rolesID: currentUser?.rolesID || [],
+      isTeacher: currentUser?.isTeacher || 0,
+      roleID: currentUser?.roles || [],
       tagsId: [],
+      subjectId: [],
+      suId: [0],
       birthDate: new Date(),
       enable: currentUser?.enable || 0,
     }),
     [currentUser]
   );
+
+  const [open, setOpen] = useState(true);
 
   const methods = useForm({
     resolver: yupResolver(validationSchema),
@@ -96,6 +90,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
     watch,
     control,
     setValue,
+    getValues,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
@@ -110,9 +105,11 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
   }, [isEdit, currentUser]);
 
   const [userRole, setUserRole] = useState([]);
-
+  const [userSubjects, setUserSubjects] = useState([]);
+  const [role, setRole] = useState([]);
   useEffect(() => {
     fetchRoles();
+    fetchSubject();
   }, []);
 
   async function fetchRoles() {
@@ -124,17 +121,45 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
           id: tag.id,
         };
       });
-
       setUserRole(transformData);
     } else {
       console.log('error fetch api');
     }
   }
 
+  async function fetchSubject() {
+    const res = await getAllSubject({ pageIndex: 1, pageSize: 100 });
+    if (res.status < 400) {
+      const transformDataSubject = res.data.data.map((su) => {
+        return {
+          label: su.name,
+          id: su.id,
+        };
+      });
+
+      setUserSubjects(transformDataSubject);
+    } else {
+      console.log('error fetch api');
+    }
+  }
+
   const onSubmit = async (data) => {
-    console.log(isEdit);
     if (!isEdit) {
       try {
+        const roles = [];
+        for (let i = 0; i < data.tagsId.length; i++) {
+          if (data.tagsId[i] === 11) {
+            roles.push({
+              roleId: data.tagsId[i],
+              subjectId: getValues('subjectId').map((item) => item.id),
+            });
+          } else {
+            roles.push({
+              roleId: data.tagsId[i],
+              subjectId: [0],
+            });
+          }
+        }
         const dataCreate = {
           userName: data.userName,
           password: data.password,
@@ -146,7 +171,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
           address: data.address,
           phone: data.phone,
           isTeacher: data.isTeacher,
-          rolesID: data.tagsId,
+          roles: roles,
         };
         const res = await createUserAuth(dataCreate);
         if (res.status < 400) {
@@ -179,7 +204,6 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       }
     }
   };
-
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -240,12 +264,16 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
 
               {!isEdit && (
                 <RHFAutocomplete
-                  name="rolesID"
+                  name="roleID"
                   multiple
                   onChange={(event, newValue) => {
-                    setValue('rolesID', newValue);
+                    setValue('roleID', newValue);
                     const tagsId = newValue.map((tag) => tag.id);
                     setValue('tagsId', tagsId);
+                    setRole(tagsId);
+                    if (!getValues('tagsId').includes(11)) {
+                      setValue('subjectId', []);
+                    }
                   }}
                   options={userRole}
                   renderTags={(value, getTagProps) =>
@@ -256,8 +284,27 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                   renderInput={(params) => <TextField label="Vai trò" {...params} />}
                 />
               )}
+              {isEdit && <div></div>}
+              {!isEdit && (
+                <RHFAutocomplete
+                  name="subjectId"
+                  multiple
+                  onChange={(event, newValue) => {
+                    setValue('subjectId', newValue);
+                    const suId = newValue.map((su) => su.id);
+                    setValue('suId', suId);
+                  }}
+                  disabled={getValues('tagsId').includes(11) ? false : true}
+                  options={userSubjects}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
+                    ))
+                  }
+                  renderInput={(params) => <TextField label="Môn dạy" {...params} />}
+                />
+              )}
 
-              <div></div>
               <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
                 Thông tin cá nhân
               </Typography>

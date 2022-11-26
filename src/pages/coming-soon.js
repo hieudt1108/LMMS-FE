@@ -28,7 +28,7 @@ export default function ComingSoonPage() {
   return (
     <>
       <Head>
-        <title> Coming Soon | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Typography variant="h3" paragraph>

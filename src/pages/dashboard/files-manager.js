@@ -192,7 +192,7 @@ export default function FileManagerPage() {
   return (
     <>
       <Head>
-        <title> File Manager | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

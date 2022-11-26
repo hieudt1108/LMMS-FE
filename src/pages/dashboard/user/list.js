@@ -244,7 +244,7 @@ export default function UserListPage() {
     return (
         <>
             <Head>
-                <title> User: List | Minimal UI</title>
+                <title> Hệ thống quản lý Học liệu</title>
             </Head>
 
             <Container maxWidth={1000}>

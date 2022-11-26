@@ -24,7 +24,7 @@ export default function NewPasswordPage() {
   return (
     <>
       <Head>
-        <title> New Password | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <SentIcon sx={{ mb: 5, height: 96 }} />

@@ -99,21 +99,6 @@ export default function ClassDetail() {
           <Grid item xs={12}>
             <ClassNewestBooking title="Môn học" subheader="12 môn học" list={_subjectNew} />
           </Grid>
-          {/* 
-          <Grid item xs={12}>
-            <CLassDetails
-              title="Thông tin giáo viên"
-              tableData={_subjects}
-              tableLabels={[
-                { id: 'STT', label: 'STT' },
-                { id: 'name', label: 'Họ và tên' },
-                { id: 'email', label: 'E-mail' },
-                { id: 'enable', label: 'Trạng thái' },
-                { id: 'subject', label: 'Môn phụ trách' },
-                { id: '' },
-              ]}
-            />
-          </Grid> */}
 
           <Grid item xs={12}>
             <CLassDetails

@@ -21,7 +21,7 @@ export default function Page500() {
   return (
     <>
       <Head>
-        <title> 500 Internal Server Error | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <MotionContainer>

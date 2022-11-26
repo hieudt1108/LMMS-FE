@@ -34,7 +34,7 @@ export default function GradeEditPage() {
   return (
     <>
       <Head>
-        <title> Grade: Edit grade | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

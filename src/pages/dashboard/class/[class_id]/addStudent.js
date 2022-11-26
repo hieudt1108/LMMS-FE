@@ -1,36 +1,37 @@
-import { paramCase } from 'change-case';
 // next
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 // @mui
 import { Container } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-// _mock_
-import { _programList } from '../../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
-import ProgramNewEditForm from '../../../../sections/@dashboard/program/ProgramNewEditForm';
+// import ClassNewEditForm from '../../../../sections/@dashboard/class/form/ClassNewEditForm';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+// import { getClassRedux } from 'src/redux/slices/class';
 
 // ----------------------------------------------------------------------
 
-ProgramEditPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+addStudent.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function ProgramEditPage() {
+import React from 'react';
+
+export default function addStudent() {
+  const {
+    query: { class_id },
+  } = useRouter();
   const { themeStretch } = useSettingsContext();
 
-  const {
-    query: { name },
-  } = useRouter();
-
-  const currentProgram = _programList.find((program) => program.id === name);
-
+  console.log('class ID: ', class_id);
   return (
     <>
       <Head>
@@ -39,21 +40,21 @@ export default function ProgramEditPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Cập nhật chương trình học"
+          heading="Add new Student to class"
           links={[
             {
-              name: 'Trang chủ',
+              name: 'Dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Danh sách chương trình học',
-              href: PATH_DASHBOARD.program.list,
+              name: 'Class',
+              href: PATH_DASHBOARD.class.detail(class_id),
             },
-            { name: `Cập nhật ${currentProgram?.id}`},
+            {
+              name: 'New Student',
+            },
           ]}
         />
-
-        <ProgramNewEditForm isEdit currentProgram={currentProgram} />
       </Container>
     </>
   );

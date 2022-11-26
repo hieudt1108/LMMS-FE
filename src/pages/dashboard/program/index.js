@@ -1,20 +1,66 @@
-import { useEffect } from 'react';
 // next
-import { useRouter } from 'next/router';
-// routes
+import React, { useEffect, useState } from 'react';
+import { useSettingsContext } from '../../../components/settings';
+import { Box, Container, Grid, Stack } from '@mui/material';
+import DashboardLayout from '../../../layouts/dashboard';
+import Head from 'next/head';
+import { useDispatch } from 'react-redux';
+import ProgramSliderCards from '../../../sections/@dashboard/program/ProgramSliderCards';
+import { getAllProgram } from '../../../dataProvider/agent';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 
-// ----------------------------------------------------------------------
+Program.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default function Index() {
-  const { pathname, push } = useRouter();
+export default function Program() {
+  const dispatch = useDispatch();
+  const { themeStretch } = useSettingsContext();
+  const [listPrograms, setListPrograms] = useState([]);
 
   useEffect(() => {
-    if (pathname === PATH_DASHBOARD.program.root) {
-      push(PATH_DASHBOARD.program.list);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+    fetchPrograms();
+  }, []);
 
-  return null;
+  async function fetchPrograms() {
+    const res = await getAllProgram({ pageIndex: 1, pageSize: 100 });
+    if (res.status < 400) {
+      setListPrograms(res.data.data);
+    } else {
+      console.log('error');
+    }
+  }
+
+  return (
+    <React.Fragment>
+      <Head>
+        <title> Hệ thống quản lý học liệu</title>
+      </Head>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
+        <CustomBreadcrumbs
+          heading="Chương trình học"
+          links={[
+            {
+              name: 'Trang chủ',
+              href: PATH_DASHBOARD.root,
+            },
+            {
+              name: 'Chương trình học',
+              href: PATH_DASHBOARD.program.choose,
+            },
+          ]}
+        />
+        <Grid container spacing={2}>
+          {listPrograms.map((item) => (
+            <Grid item xs={12} md={4} sm={6}>
+              <ProgramSliderCards
+                title={item.name}
+                description={item.description}
+                img="/assets/illustrations/characters/character_11.png"
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </React.Fragment>
+  );
 }

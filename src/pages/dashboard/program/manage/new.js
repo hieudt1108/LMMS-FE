@@ -1,45 +1,36 @@
-import { paramCase } from 'change-case';
 // next
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 // @mui
 import { Container } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-// _mock_
-import { _programList } from '../../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // components
 import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
-import ProgramNewEditForm from '../../../../sections/@dashboard/program/ProgramNewEditForm';
+import GradeNewEditForm from '../../../../sections/@dashboard/grade/GradeNewEditForm';
+import ProgramNewEditForm from "../../../../sections/@dashboard/program/ProgramNewEditForm";
 
 // ----------------------------------------------------------------------
 
-ProgramEditPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+ProgramCreatePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function ProgramEditPage() {
+export default function ProgramCreatePage() {
   const { themeStretch } = useSettingsContext();
-
-  const {
-    query: { name },
-  } = useRouter();
-
-  const currentProgram = _programList.find((program) => program.id === name);
 
   return (
     <>
       <Head>
-        <title> Hệ thống quản lý Học liệu</title>
+        <title>Hệ thống quản lý học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Cập nhật chương trình học"
+          heading="Tạo chương trình học"
           links={[
             {
               name: 'Trang chủ',
@@ -49,11 +40,10 @@ export default function ProgramEditPage() {
               name: 'Danh sách chương trình học',
               href: PATH_DASHBOARD.program.list,
             },
-            { name: `Cập nhật ${currentProgram?.id}`},
+            { name: 'Tạo mới' },
           ]}
         />
-
-        <ProgramNewEditForm isEdit currentProgram={currentProgram} />
+        <ProgramNewEditForm />
       </Container>
     </>
   );

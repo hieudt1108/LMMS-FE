@@ -33,7 +33,7 @@ export default function PermissionDeniedPage() {
   return (
     <>
       <Head>
-        <title> Other Cases: Permission Denied | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

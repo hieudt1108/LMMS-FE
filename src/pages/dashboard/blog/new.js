@@ -24,7 +24,7 @@ export default function BlogNewPostPage() {
   return (
     <>
       <Head>
-        <title> Blog: New Post | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>

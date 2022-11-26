@@ -21,7 +21,7 @@ export default function Page403() {
   return (
     <>
       <Head>
-        <title> 403 Forbidden | Minimal UI</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <MotionContainer>

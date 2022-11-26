@@ -27,6 +27,8 @@ import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 import MenuPopover from '../../../../components/menu-popover';
 import { TableHeadCustom } from '../../../../components/table';
+import { useRouter } from 'next/router';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -38,9 +40,22 @@ CLassDetails.propTypes = {
 };
 
 export default function CLassDetails({ title, subheader, tableLabels, tableData, ...other }) {
+  const {
+    query: { class_id },
+  } = useRouter();
+  const { push } = useRouter();
+  const handleOnClickSubject = () => {
+    push(PATH_DASHBOARD.class.addStudent(class_id));
+  };
+
   return (
     <Card {...other}>
-      <CardHeader title={title} subheader={subheader} sx={{ mb: 3 }} />
+      <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
+        <CardHeader sx={{ display: 'contents' }} title={title} subheader={subheader} />
+        <Button onClick={handleOnClickSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          Add Student
+        </Button>
+      </Box>
 
       <TableContainer sx={{ overflow: 'unset' }}>
         <Scrollbar>

@@ -4,6 +4,8 @@ const instance = axios.create({
   baseURL: 'http://lmms.site:9090/api/',
   timeout: 3000,
 });
+import { PATH_AUTH } from '../routes/paths';
+import { useRouter } from 'next/router';
 
 // INTERCEPTORS CONFIG START
 instance.interceptors.response.use(responseOnSuccessMiddleware, responseOnErrorMiddleware);
@@ -16,6 +18,7 @@ function responseOnErrorMiddleware(error) {
   const { status } = error.response;
   if (status === 401) {
     localStorage.clear();
+    window.location.href = PATH_AUTH.login;
   }
   return error;
 }
@@ -29,7 +32,6 @@ const getLocalStorage = (key) => {
   if (typeof window !== 'undefined') {
     return JSON.parse(localStorage.getItem(key));
   }
-  return {};
 };
 
 const clearLocalStorage = () => {

@@ -41,5 +41,4 @@ export const _subjectNew = [...Array(6)].map((_, index) => ({
   roomType: randomInArray(['double', 'king', 'single']),
   person: '3-5',
   cover: _mock.subject(index),
-  // cover: `/assets/images/subjects/math.jpg`,
 }));

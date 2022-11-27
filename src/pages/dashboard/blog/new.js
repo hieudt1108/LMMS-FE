@@ -29,18 +29,18 @@ export default function BlogNewPostPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new document"
+          heading="Tạo một tài liệu mới"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Blog',
+              name: 'Danh sách tài liệu',
               href: PATH_DASHBOARD.blog.root,
             },
             {
-              name: 'Create',
+              name: 'Tạo tài liệu',
             },
           ]}
         />

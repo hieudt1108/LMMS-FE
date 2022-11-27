@@ -88,18 +88,14 @@ export default function BlogPostsPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Blog"
+          heading="Danh sách tài liệu"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Blog',
-              href: PATH_DASHBOARD.blog.root,
-            },
-            {
-              name: 'Posts',
+              name: 'Danh sách tài liệu',
             },
           ]}
           action={

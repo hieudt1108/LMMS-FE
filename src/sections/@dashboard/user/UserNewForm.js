@@ -330,7 +330,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
-                      label="Date create"
+                      label="Sinh nhật"
                       value={field.value}
                       onChange={(newValue) => {
                         field.onChange(newValue);

@@ -66,7 +66,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
             <Avatar src={`http://lmms.site:7070/assets/images/avatars/avatar_${gender * 10 + (id % 10) + 1 + 1}.jpg`} />
 
             <Typography variant="subtitle2" noWrap>
-              {`${lastName} ${firstName}`}
+              {`${firstName} ${lastName}`}
             </Typography>
           </Stack>
         </TableCell>

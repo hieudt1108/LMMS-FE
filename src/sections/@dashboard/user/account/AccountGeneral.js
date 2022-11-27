@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
 import { useCallback } from 'react';
 // form
-import { useForm } from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Grid, Card, Stack, Typography } from '@mui/material';
+import {Box, Grid, Card, Stack, Typography, TextField} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // auth
 import { useAuthContext } from '../../../../auth/useAuthContext';
@@ -14,9 +14,22 @@ import { fData } from '../../../../utils/formatNumber';
 import { countries } from '../../../../assets/data';
 // components
 import { useSnackbar } from '../../../../components/snackbar';
-import FormProvider, { RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
+import FormProvider, {
+  RHFSwitch,
+  RHFSelect,
+  RHFTextField,
+  RHFUploadAvatar,
+  RHFRadioGroup
+} from '../../../../components/hook-form';
+import {DatePicker} from "@mui/x-date-pickers";
+import {updateUser} from "../../../../dataProvider/agent";
+import {PATH_DASHBOARD} from "../../../../routes/paths";
 
 // ----------------------------------------------------------------------
+const GENDER_OPTION = [
+  { label: 'Nam', value: '0' },
+  { label: 'Nữ', value: '1' },
+];
 
 export default function AccountGeneral() {
   const { enqueueSnackbar } = useSnackbar();
@@ -24,21 +37,18 @@ export default function AccountGeneral() {
   const { user } = useAuthContext();
 
   const UpdateUserSchema = Yup.object().shape({
-    displayName: Yup.string().required('Name is required'),
+    firstName: Yup.string().trim().required('Không được để trống'),
+    lastName: Yup.string().trim().required('Không được để trống'),
   });
 
   const defaultValues = {
-    displayName: user?.displayName || '',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
     email: user?.email || '',
-    photoURL: user?.photoURL || '',
-    phoneNumber: user?.phoneNumber || '',
-    country: user?.country || '',
+    gender: user?.gender || 0,
+    phone: user?.phone || '',
+    birthDate: user?.birthDate || new Date(),
     address: user?.address || '',
-    state: user?.state || '',
-    city: user?.city || '',
-    zipCode: user?.zipCode || '',
-    about: user?.about || '',
-    isPublic: user?.isPublic || false,
   };
 
   const methods = useForm({
@@ -52,61 +62,35 @@ export default function AccountGeneral() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar('Update success!');
+      console.log('id',user.id)
+      console.log('data',data)
+      const res = await updateUser(user.id, {
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        gender: data.gender,
+        birthDate: data.birthDate,
+        address: data.address,
+        phone: data.phone,
+      });
+      if (res.status < 400) {
+        enqueueSnackbar('Cập nhật thành công');
+        window.location.reload();
+      } else {
+        enqueueSnackbar('Cập nhật thất bại');
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('photoURL', newFile);
-      }
-    },
-    [setValue]
-  );
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <RHFUploadAvatar
-              name="photoURL"
-              maxSize={3145728}
-              onDrop={handleDrop}
-              helperText={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 2,
-                    mx: 'auto',
-                    display: 'block',
-                    textAlign: 'center',
-                    color: 'text.secondary',
-                  }}
-                >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
-                </Typography>
-              }
-            />
-
-            <RHFSwitch name="isPublic" labelPlacement="start" label="Public Profile" sx={{ mt: 5 }} />
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12}>
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
@@ -117,35 +101,56 @@ export default function AccountGeneral() {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="displayName" label="Name" />
+              <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                Thông tin cá nhân
+              </Typography>
+              <div></div>
+              <RHFTextField name="firstName" label="Họ" id="firstName" />
+              <RHFTextField name="lastName" label="Tên" id="lastName" />
+              <Stack sx={{ ml: 1.5 }}>
+                <Typography variant="subtitle2" sx={{ color: 'text.secondary', mt: 1 }}>
+                  Giới tính
+                </Typography>
+                <RHFRadioGroup
+                    name="gender"
+                    options={GENDER_OPTION}
+                    sx={{
+                      mt: 0.5,
+                      '& .MuiFormControlLabel-root': { mr: 4 },
+                    }}
+                />
+              </Stack>
+              <Stack sx={{ mt: 2.5 }}>
+                <Controller
+                    name="birthDate"
+                    render={({ field, fieldState: { error } }) => (
+                        <DatePicker
+                            label="Sinh nhật"
+                            value={field.value}
+                            onChange={(newValue) => {
+                              field.onChange(newValue);
+                            }}
+                            renderInput={(params) => (
+                                <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
+                            )}
+                        />
+                    )}
+                />
+              </Stack>
+              <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                Thông tin liên hệ
+              </Typography>
 
-              <RHFTextField name="email" label="Email Address" />
-
-              <RHFTextField name="phoneNumber" label="Phone Number" />
-
-              <RHFTextField name="address" label="Address" />
-
-              <RHFSelect name="country" label="Country" placeholder="Country">
-                <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFSelect>
-
-              <RHFTextField name="state" label="State/Region" />
-
-              <RHFTextField name="city" label="City" />
-
-              <RHFTextField name="zipCode" label="Zip/Code" />
+              <div></div>
+              <RHFTextField name="email" label="Email" id="email" />
+              <RHFTextField name="phone" label="Số điện thoại" id="phone" />
+              <RHFTextField name="address" label="Địa chỉ" id="address" />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <RHFTextField name="about" multiline rows={4} label="About" />
 
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Save Changes
+                Cập nhật
               </LoadingButton>
             </Stack>
           </Card>

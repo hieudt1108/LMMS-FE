@@ -18,15 +18,11 @@ import { IconButtonAnimate } from '../../../components/animate';
 
 const OPTIONS = [
   {
-    label: 'Home',
+    label: 'Trang chủ',
     linkTo: '/',
   },
   {
-    label: 'Profile',
-    linkTo: PATH_DASHBOARD.user.profile,
-  },
-  {
-    label: 'Settings',
+    label: 'Cài đặt',
     linkTo: PATH_DASHBOARD.user.account,
   },
 ];
@@ -89,20 +85,16 @@ export default function AccountPopover() {
           src={`http://lmms.site:7070/assets/images/avatars/avatar_${
             user ? user.gender * 10 + (user.id % 10) + 1 + 1 : 1
           }.jpg`}
-          alt={user?.displayName}
-          name={user?.displayName}
+          alt={`${user?.firstName} ${user?.lastName}`}
+          name={`${user?.firstName} ${user?.lastName}`}
         />
       </IconButtonAnimate>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
-          </Typography>
-
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.email}
-          </Typography>
+            <Typography variant="subtitle2" noWrap>
+              {`${user?.firstName} ${user?.lastName}`}
+            </Typography>
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
@@ -118,7 +110,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
-          Logout
+          Đăng xuất
         </MenuItem>
       </MenuPopover>
     </>

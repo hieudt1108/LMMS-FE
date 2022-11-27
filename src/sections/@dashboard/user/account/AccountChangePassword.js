@@ -52,23 +52,22 @@ export default function AccountChangePassword() {
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <Stack spacing={3} alignItems="flex-end" sx={{ p: 3 }}>
-          <RHFTextField name="oldPassword" type="password" label="Old Password" />
+
+          <Stack component="span" direction="row" alignItems="center">
+            <Iconify icon="eva:info-fill" width={16} sx={{ mr: 0.5 }} /> Mật khẩu phải đủ 6 kí tự trở lên
+          </Stack>
 
           <RHFTextField
             name="newPassword"
             type="password"
-            label="New Password"
-            helperText={
-              <Stack component="span" direction="row" alignItems="center">
-                <Iconify icon="eva:info-fill" width={16} sx={{ mr: 0.5 }} /> Password must be minimum 6+
-              </Stack>
-            }
+            label="Mật khẩu mới"
+
           />
 
-          <RHFTextField name="confirmNewPassword" type="password" label="Confirm New Password" />
+          <RHFTextField name="confirmNewPassword" type="password" label="Xác nhận mật khẩu mới" />
 
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Save Changes
+            Cập nhật
           </LoadingButton>
         </Stack>
       </Card>

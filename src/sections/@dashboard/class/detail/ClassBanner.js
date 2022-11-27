@@ -10,6 +10,7 @@ import { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 import MenuPopover from '../../../../components/menu-popover';
+import { Stack } from '@mui/system';
 // ----------------------------------------------------------------------
 
 ClassBanner.propTypes = {
@@ -56,11 +57,13 @@ export default function ClassBanner({
         ...sx,
       }}
       {...other}
-      onClick={() => handleClassDetails(data.id)}
     >
-      <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-        <Iconify icon="eva:more-vertical-fill" />
-      </IconButton>
+      <Stack direction="row" alignItems="center" sx={{ top: 8, right: 8, position: 'absolute' }}>
+        <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
+      </Stack>
+
       {/* <Iconify
         icon={'ant-design:android-filled'}
         sx={{
@@ -85,18 +88,18 @@ export default function ClassBanner({
         // }}
         >
           <Iconify icon="eva:link-2-fill" />
-          Copy Link
+          Edit
         </MenuItem>
 
-        <MenuItem
-        // onClick={() => {
-        //   handleClosePopover();
-        //   handleOpenShare();
-        // }}
+        {/* <MenuItem
+        onClick={() => {
+          handleClosePopover();
+          handleOpenShare();
+        }}
         >
           <Iconify icon="eva:share-fill" />
           Share
-        </MenuItem>
+        </MenuItem> */}
 
         {/* <MenuItem
           onClick={() => {
@@ -121,7 +124,9 @@ export default function ClassBanner({
           Delete
         </MenuItem> */}
       </MenuPopover>
-      <Typography variant="h3">{data ? data.name : 'Undefined'}</Typography>
+      <Typography onClick={() => handleClassDetails(data.id)} variant="h3">
+        {data ? data.name : 'Undefined'}
+      </Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.64 }}>
         {data ? data.schoolYear : 'Undefined'}
       </Typography>

@@ -96,7 +96,7 @@ export default function UserListPage() {
 
     const {push} = useRouter();
 
-    const [tableData, setTableData] = useState(_userList);
+
 
     const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -109,6 +109,8 @@ export default function UserListPage() {
     const [filterStatus, setFilterStatus] = useState(-1);
 
     const [listUsers, setListUsers] = useState([]);
+
+    const [tableData, setTableData] = useState([]);
 
     const dataFiltered = applyFilter({
         inputData: listUsers,
@@ -123,6 +125,7 @@ export default function UserListPage() {
     const denseHeight = dense ? 52 : 72;
 
     const isFiltered = filterName !== '';
+
     const getLengthByStatus = (status) => listUsers.filter((user) => user.enable === status).length;
 
     const STATUS_OPTIONS = [
@@ -142,7 +145,6 @@ export default function UserListPage() {
 
     async function fetchUsers() {
         const res = await getAllUsers({pageIndex: 1, pageSize: 100});
-        console.log(res.data.data)
         if (res.status < 400) {
             setListUsers(res.data.data);
         } else {
@@ -219,6 +221,8 @@ export default function UserListPage() {
         setFilterRole('all');
         setFilterStatus('tất cả');
     };
+
+
 
 
     useEffect(() => {
@@ -307,7 +311,7 @@ export default function UserListPage() {
                         <TableSelectedAction
                             dense={dense}
                             numSelected={selected.length}
-                            rowCount={listUsers.length}
+                            rowCount={selected.length}
                             onSelectAllRows={(checked) =>
                                 onSelectAllRows(
                                     checked,

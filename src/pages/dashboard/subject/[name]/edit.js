@@ -15,6 +15,8 @@ import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
 import SubjectNewEditForm from '../../../../sections/@dashboard/subject/SubjectNewEditForm';
+import {useEffect, useState} from "react";
+import {getGradeById, getSubjectById} from "../../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +31,21 @@ export default function SubjectEditPage() {
     query: { name },
   } = useRouter();
 
-  const currentSubject = _subjects.find((subject) => subject.id === name);
+    const [subjectData, setSubjectData] = useState([]);
+
+    useEffect(() => {
+        fetchSubject();
+    }, []);
+
+    async function fetchSubject() {
+        const res = await getSubjectById(name);
+        console.log(res.data.data)
+        if (res.status < 400) {
+            setSubjectData(res.data.data);
+        } else {
+            console.log('error');
+        }
+    }
 
   return (
     <>
@@ -48,10 +64,10 @@ export default function SubjectEditPage() {
               name: 'Danh sách môn học',
               href: PATH_DASHBOARD.subject.list,
             },
-            { name: `Cập nhật ${currentSubject?.id}` },
+            { name: 'Cập nhật môn học' },
           ]}
         />
-        <SubjectNewEditForm isEdit currentSubject={currentSubject} />
+        <SubjectNewEditForm isEdit currentSubject={subjectData} />
       </Container>
     </>
   );

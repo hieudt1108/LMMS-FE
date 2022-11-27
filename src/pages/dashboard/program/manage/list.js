@@ -227,7 +227,7 @@ export default function ProgramListPage() {
                         <TableSelectedAction
                             dense={dense}
                             numSelected={selected.length}
-                            rowCount={listPrograms.length}
+                            rowCount={selected.length}
                             onSelectAllRows={(checked) =>
                                 onSelectAllRows(
                                     checked,

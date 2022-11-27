@@ -15,6 +15,8 @@ import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
 import GradeNewEditForm from '../../../../sections/@dashboard/grade/GradeNewEditForm';
+import {useEffect, useState} from "react";
+import {getGradeById, getLevelById} from "../../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +31,21 @@ export default function GradeEditPage() {
     query: { name },
   } = useRouter();
 
-  const currentGrade = _gradeList.find((grade) => grade.id === name);
+    const [gradeData, setGradeData] = useState([]);
+
+    useEffect(() => {
+        fetchGrade();
+    }, []);
+
+    async function fetchGrade() {
+        const res = await getGradeById(name);
+        console.log(res.data.data)
+        if (res.status < 400) {
+            setGradeData(res.data.data);
+        } else {
+            console.log('error');
+        }
+    }
 
   return (
     <>
@@ -49,11 +65,11 @@ export default function GradeEditPage() {
               name: 'Danh sách khối học',
               href: PATH_DASHBOARD.grade.list,
             },
-            { name: `Cập nhật ${currentGrade?.id}` },
+            { name: 'Cập nhật khối học' },
           ]}
         />
 
-        <GradeNewEditForm isEdit currentGrade={currentGrade} />
+        <GradeNewEditForm isEdit currentGrade={gradeData} />
       </Container>
     </>
   );

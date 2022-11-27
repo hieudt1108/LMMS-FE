@@ -73,7 +73,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
 
         <TableCell align="left">{email}</TableCell>
 
-        <TableCell align="left">{gender ? 'Nam' : 'Nữ'}</TableCell>
+        <TableCell align="left">{gender ? 'Nữ' : 'Nam'}</TableCell>
 
         <TableCell align="left">{new Date(birthDate)?.toLocaleDateString().padStart(10, '0')}</TableCell>
         <TableCell align="left">{phone}</TableCell>

@@ -72,7 +72,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       tagsId: [],
       subjectId: [],
       suId: [0],
-      birthDate: new Date(),
+      birthDate: currentUser?.birthDate || new Date(),
       enable: currentUser?.enable || 0,
     }),
     [currentUser]
@@ -242,8 +242,8 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                       render={({ field }) => (
                         <Switch
                           {...field}
-                          checked={field.value !== 'active'}
-                          onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
+                          checked={field.value !== 0}
+                          onChange={(event) => field.onChange(event.target.checked ? 1 : 0)}
                         />
                       )}
                     />

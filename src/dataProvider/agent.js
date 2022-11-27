@@ -75,6 +75,10 @@ function getAllSubject(params) {
   return getApi('/Subject/getAll', params);
 }
 
+function getSubjectById(id) {
+  return getApi(`/Subject/getOne/${id}`);
+}
+
 // GRADE
 function getAllGrade(params) {
   return getApi(`/Grade/getAll`, params);
@@ -94,13 +98,17 @@ function getLevelById(id) {
 function getAllUsers(params) {
   return getApi('/User/getAll', params);
 }
-// USERS
+
 function getUserById(id) {
   return getApi(`/User/getOne/${id}`);
 }
 // PROGRAM
 function getAllProgram(params) {
   return getApi('/Program/getAll', params);
+}
+
+function getProgramById(id) {
+  return getApi(`/Program/getOne/${id}`);
 }
 
 // DOCUMENT
@@ -295,6 +303,7 @@ export {
   getAllClass,
   getClassById,
   getAllSubject,
+  getSubjectById,
   createSubject,
   updateSubject,
   deleteSubject,
@@ -317,6 +326,7 @@ export {
   deleteLevel,
   getLevelById,
   getAllProgram,
+  getProgramById,
   deleteProgram,
   updateProgram,
   createProgram,

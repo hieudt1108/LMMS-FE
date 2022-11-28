@@ -13,7 +13,7 @@ UserTableToolbar.propTypes = {
   onFilterName: PropTypes.func,
   onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
-  optionsRole: PropTypes.arrayOf(PropTypes.string),
+  optionsRole: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default function UserTableToolbar({
@@ -56,37 +56,39 @@ export default function UserTableToolbar({
         }}
       >
         <MenuItem
-            key='all'
-            value='all'
-            sx={{
-              mx: 1,
-              my: 0.5,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-              '&:first-of-type': { mt: 0 },
-              '&:last-of-type': { mb: 0 },
-            }}
+          key="all"
+          value="all"
+          sx={{
+            mx: 1,
+            my: 0.5,
+            borderRadius: 0.75,
+            typography: 'body2',
+            textTransform: 'capitalize',
+            '&:first-of-type': { mt: 0 },
+            '&:last-of-type': { mb: 0 },
+          }}
         >
           Tất cả
         </MenuItem>
-        {optionsRole.map((option) => (
-          <MenuItem
-            key={option.id}
-            value={option.id}
-            sx={{
-              mx: 1,
-              my: 0.5,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-              '&:first-of-type': { mt: 0 },
-              '&:last-of-type': { mb: 0 },
-            }}
-          >
-            {option.label}
-          </MenuItem>
-        ))}
+        {optionsRole.length
+          ? optionsRole.map((option) => (
+              <MenuItem
+                key={option.id}
+                value={option.id}
+                sx={{
+                  mx: 1,
+                  my: 0.5,
+                  borderRadius: 0.75,
+                  typography: 'body2',
+                  textTransform: 'capitalize',
+                  '&:first-of-type': { mt: 0 },
+                  '&:last-of-type': { mb: 0 },
+                }}
+              >
+                {option.label}
+              </MenuItem>
+            ))
+          : ''}
       </TextField>
 
       <TextField

@@ -2,16 +2,16 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 // @mui
 import {
-    Stack,
-    Avatar,
-    Button,
-    Checkbox,
-    TableRow,
-    MenuItem,
-    TableCell,
-    IconButton,
-    Typography,
-    Chip
+  Stack,
+  Avatar,
+  Button,
+  Checkbox,
+  TableRow,
+  MenuItem,
+  TableCell,
+  IconButton,
+  Typography,
+  Chip,
 } from '@mui/material';
 // components
 import Label from '../../../../components/label';
@@ -21,20 +21,16 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 
 // ----------------------------------------------------------------------
 
-
-
 SubjectTableRow.propTypes = {
-  row: PropTypes.array,
+  row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onSelectRow: PropTypes.func,
 };
 
-
 export default function SubjectTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-
-  const { id, code, name , description  } = row;
+  const { id, code, name, description } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -63,14 +59,11 @@ export default function SubjectTableRow({ row, selected, onEditRow, onSelectRow,
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-
         <TableCell align="left">{code}</TableCell>
 
         <TableCell align="left">{name}</TableCell>
 
         <TableCell align="left">{description}</TableCell>
-
-
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

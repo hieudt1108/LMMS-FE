@@ -184,7 +184,7 @@ export default function LevelListPage() {
         if (res.status < 400) {
             setListLevels(res.data.data);
         } else {
-            console.log('error');
+            console.log(res.message);
         }
     }
 

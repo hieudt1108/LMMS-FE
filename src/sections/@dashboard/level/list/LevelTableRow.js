@@ -89,7 +89,7 @@ export default function LevelTableRow({ row, selected, onEditRow, onSelectRow, o
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Sửa
+          Cập nhật
         </MenuItem>
       </MenuPopover>
 

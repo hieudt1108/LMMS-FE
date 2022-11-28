@@ -65,7 +65,7 @@ export default function BlogNewPostForm() {
       setTypeDocs(res_typeDoc.data.data);
       setPermissions(res_permission.data.data);
     } else {
-      console.log('error');
+      console.log(res.message);
     }
   }
   console.log('test: ', typeDocs);

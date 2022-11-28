@@ -191,11 +191,10 @@ export default function GradeListPage() {
 
     async function fetchLevels() {
         const res = await getAllLevel({pageIndex: 1, pageSize: 100});
-        console.log(res.data.data);
         if (res.status < 400) {
             setListLevels(res.data.data);
         } else {
-            console.log('error');
+            console.log(res.message);
         }
     }
 
@@ -204,7 +203,7 @@ export default function GradeListPage() {
         if (res.status < 400) {
             setListGrades(res.data.data);
         } else {
-            console.log('error');
+            console.log(res.message);
         }
     }
 

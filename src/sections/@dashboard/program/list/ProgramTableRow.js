@@ -89,7 +89,7 @@ export default function ProgramTableRow({ data, selected, onEditRow, onSelectRow
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Sửa
+          Cập nhật
         </MenuItem>
       </MenuPopover>
 

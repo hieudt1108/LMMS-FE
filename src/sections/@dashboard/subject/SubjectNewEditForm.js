@@ -97,13 +97,13 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
                 })
                 if (res.status < 400) {
                     reset();
-                    enqueueSnackbar('Update success!');
+                    enqueueSnackbar('Cập nhật môn học thành công!');
                     push(PATH_DASHBOARD.subject.list);
                 } else {
-                    enqueueSnackbar('Update Fail');
+                    enqueueSnackbar('Cập nhật môn học thất bại');
                 }
             } catch (error) {
-                enqueueSnackbar('Update Fail');
+                enqueueSnackbar('Cập nhật môn học thất bại');
             }
         }
 

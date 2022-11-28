@@ -143,7 +143,7 @@ export default function UserListPage() {
     if (res.status < 400) {
       setListUsers(res.data.data);
     } else {
-      console.log('error');
+      console.log(res.message);
     }
   }
 

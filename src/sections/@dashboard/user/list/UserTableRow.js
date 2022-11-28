@@ -114,7 +114,7 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="eva:trash-2-outline" />
-          Delete
+          Vô hiệu hóa
         </MenuItem>
 
         <MenuItem
@@ -124,7 +124,7 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Edit
+          Cập nhật
         </MenuItem>
       </MenuPopover>
 

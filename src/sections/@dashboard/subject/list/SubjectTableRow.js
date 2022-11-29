@@ -63,13 +63,6 @@ export default function SubjectTableRow({ row, selected, onEditRow, onSelectRow,
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography variant="subtitle2" noWrap>
-              {id}
-            </Typography>
-          </Stack>
-        </TableCell>
 
         <TableCell align="left">{code}</TableCell>
 

@@ -1,14 +1,9 @@
 import PropTypes from 'prop-types';
 // @mui
-import { LoadingButton } from '@mui/lab';
-import { alpha } from '@mui/material/styles';
-import { Box, Button, Container, Typography, DialogActions, Dialog, Divider } from '@mui/material';
+import {LoadingButton} from '@mui/lab';
+import {Button, Container, Dialog, DialogActions, Divider, Typography} from '@mui/material';
 // components
-import Image from '../../../components/image';
-import Markdown from '../../../components/markdown';
 import Scrollbar from '../../../components/scrollbar';
-import FileViewer from 'react-file-viewer';
-import EmptyContent from '../../../components/empty-content';
 
 // ----------------------------------------------------------------------
 
@@ -18,10 +13,6 @@ FilePreview.propTypes = {
 };
 
 export default function FilePreview({ open, onClose }) {
-
-  const file = ''
-  const type = 'png'
-
 
   return (
     <Dialog fullScreen open={open} onClose={onClose}>

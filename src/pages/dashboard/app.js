@@ -50,8 +50,8 @@ export default function GeneralAppPage() {
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             <AppWelcome
-              title={`Welcome back! \n ${user?.displayName}`}
-              description="If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything."
+              title={`Chào mừng quay trở lại! \n ${user?.firstName} ${user?.lastName}`}
+              description="Hệ thống quản lí dạy và học tích hợp với hệ sinh thái học liệu số mang lại tiện ích đầy đủ."
               img={
                 <SeoIllustration
                   sx={{
@@ -61,7 +61,6 @@ export default function GeneralAppPage() {
                   }}
                 />
               }
-              action={<Button variant="contained">Go Now</Button>}
             />
           </Grid>
 

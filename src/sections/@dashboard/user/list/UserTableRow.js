@@ -59,21 +59,21 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell align="left">{id}</TableCell>
+
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar src={`http://lmms.site:7070/assets/images/avatars/avatar_${gender * 10 + (id % 10) + 1 + 1}.jpg`} />
 
             <Typography variant="subtitle2" noWrap>
-              {`${lastName} ${firstName}`}
+              {`${firstName} ${lastName}`}
             </Typography>
           </Stack>
         </TableCell>
 
         <TableCell align="left">{email}</TableCell>
 
-        <TableCell align="left">{gender ? 'Nam' : 'Nữ'}</TableCell>
+        <TableCell align="left">{gender ? 'Nữ' : 'Nam'}</TableCell>
 
         <TableCell align="left">{new Date(birthDate)?.toLocaleDateString().padStart(10, '0')}</TableCell>
         <TableCell align="left">{phone}</TableCell>
@@ -96,7 +96,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         </TableCell>
 
         <TableCell align="left">
-          {enable ? <Chip label="Disabled" /> : <Chip color="primary" label="Active" />}
+          {enable ? <Chip label="Không hiệu lực" /> : <Chip color="primary" label="Có hiệu lực" />}
         </TableCell>
 
         <TableCell align="right">

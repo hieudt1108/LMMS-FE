@@ -101,13 +101,13 @@ const navConfig = [
         path: PATH_DASHBOARD.blog.root,
         icon: ICONS.blog,
         children: [
-          { title: 'posts', path: PATH_DASHBOARD.blog.posts },
-          { title: 'post', path: PATH_DASHBOARD.blog.demoView },
-          { title: 'create', path: PATH_DASHBOARD.blog.new },
+          { title: 'Danh sách', path: PATH_DASHBOARD.blog.posts },
+          { title: 'Chi tiết', path: PATH_DASHBOARD.blog.demoView },
+          { title: 'Tạo mới', path: PATH_DASHBOARD.blog.new },
         ],
       },
       {
-        title: 'File manager',
+        title: 'Quản lý tài liệu',
         path: PATH_DASHBOARD.fileManager,
         icon: ICONS.folder,
       },

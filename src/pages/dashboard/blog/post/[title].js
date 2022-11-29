@@ -93,11 +93,11 @@ export default function BlogPostPage() {
           heading="Post Details"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Blog',
+              name: 'Danh sách tài liệu',
               href: PATH_DASHBOARD.blog.root,
             },
             {

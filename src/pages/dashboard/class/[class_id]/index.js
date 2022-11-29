@@ -59,7 +59,7 @@ export default function ClassDetail() {
             <ClassWidgetSummary title="Tài liệu" total={124000} icon={<CheckOutIllustration />} />
           </Grid>
 
-          <Grid item xs={12} md={8}>
+          {/* <Grid item xs={12} md={8}>
             <ClassReservationStats
               title="Thống kê tài liệu"
               subheader="Tiên học lễ. Hậu học văn"
@@ -94,7 +94,7 @@ export default function ClassDetail() {
 
           <Grid item xs={12} md={4}>
             <ClassCustomerReviews title="Thông tin giáo viên" list={_subjectReview} />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12}>
             <ClassNewestBooking title="Môn học" subheader="12 môn học" list={_subjectNew} />

@@ -88,10 +88,10 @@ export default function SettingsDrawer() {
           sx={{ py: 2, pr: 1, pl: SPACING }}
         >
           <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
-            Settings
+            Cài đặt
           </Typography>
 
-          <Tooltip title="Reset">
+          <Tooltip title="Mặc định">
             <Box sx={{ position: 'relative' }}>
               {notDefault && <BadgeDot />}
               <IconButton onClick={onResetSetting}>
@@ -108,27 +108,27 @@ export default function SettingsDrawer() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Scrollbar sx={{ p: SPACING, pb: 0 }}>
-          <Block title="Mode">
+          <Block title="Chế độ">
             <ModeOptions />
           </Block>
 
-          <Block title="Contrast">
+          <Block title="Tương phản">
             <ContrastOptions />
           </Block>
 
-          <Block title="Direction">
+          <Block title="Hướng nhìn">
             <DirectionOptions />
           </Block>
 
-          <Block title="Layout">
+          <Block title="Bố cục">
             <LayoutOptions />
           </Block>
 
-          <Block title="Stretch" tooltip="Only available at large resolutions > 1600px (xl)">
+          <Block title="Khoảng rộng" tooltip="Chỉ khả dụng ở độ phân giải lớn> 1600px (xl)">
             <StretchOptions />
           </Block>
 
-          <Block title="Presets">
+          <Block title="Màu sắc">
             <ColorPresetsOptions />
           </Block>
         </Scrollbar>

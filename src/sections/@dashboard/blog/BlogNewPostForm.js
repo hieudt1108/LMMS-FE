@@ -23,7 +23,7 @@ import FormProvider, {
 import BlogNewPostPreview from './BlogNewPostPreview';
 import BlogPostsSort from './filter/BlogPostsSort';
 // ----------------------------------------------------------------------
-import { getAllSubjectInClass, getAllTypeDocument, getAllPermission } from '../../../dataProvider/agent';
+import { getAllSubject, getAllTypeDocument, getAllPermission } from '../../../dataProvider/agent';
 const SORT_OPTIONS = [
   { id: 0, name: 'Chim cút' },
   { id: 1, name: 'Được View' },
@@ -57,7 +57,7 @@ export default function BlogNewPostForm() {
   const [permissions, setPermissions] = useState([]);
 
   async function fetchApiGet() {
-    const res_subj = await getAllSubjectInClass({ pageIndex: 1, pageSize: 100 });
+    const res_subj = await getAllSubject({ pageIndex: 1, pageSize: 100 });
     const res_typeDoc = await getAllTypeDocument({ pageIndex: 1, pageSize: 100 });
     const res_permission = await getAllPermission({ pageIndex: 1, pageSize: 100 });
     if (res_subj.status < 400) {

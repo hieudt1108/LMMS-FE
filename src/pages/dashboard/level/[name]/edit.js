@@ -15,6 +15,8 @@ import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
 import LevelNewEditForm from '../../../../sections/@dashboard/level/LevelNewEditForm';
+import {useEffect, useState} from "react";
+import {getLevelById, getProgramById} from "../../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +31,22 @@ export default function LevelEditPage() {
     query: { name },
   } = useRouter();
 
-  const currentLevel = _levelList.find((level) => level.id === name);
+
+    const [levelData, setLevelData] = useState([]);
+
+    useEffect(() => {
+        fetchLevel();
+    }, []);
+
+    async function fetchLevel() {
+        const res = await getLevelById(name);
+        console.log(res.data.data)
+        if (res.status < 400) {
+            setLevelData(res.data.data);
+        } else {
+            console.log('error');
+        }
+    }
 
   return (
     <>
@@ -49,11 +66,11 @@ export default function LevelEditPage() {
               name: 'Danh sách cấp học',
               href: PATH_DASHBOARD.level.list,
             },
-            { name: `Cập nhật ${currentLevel?.id}`},
+            { name: 'Cập nhật cấp học'},
           ]}
         />
 
-        <LevelNewEditForm isEdit currentLevel={currentLevel} />
+        <LevelNewEditForm isEdit currentLevel={levelData} />
       </Container>
     </>
   );

@@ -72,13 +72,11 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       tagsId: [],
       subjectId: [],
       suId: [0],
-      birthDate: new Date(),
+      birthDate: currentUser?.birthDate || new Date(),
       enable: currentUser?.enable || 0,
     }),
     [currentUser]
   );
-
-  const [open, setOpen] = useState(true);
 
   const methods = useForm({
     resolver: yupResolver(validationSchema),
@@ -242,8 +240,8 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                       render={({ field }) => (
                         <Switch
                           {...field}
-                          checked={field.value !== 'active'}
-                          onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
+                          checked={field.value !== 0}
+                          onChange={(event) => field.onChange(event.target.checked ? 1 : 0)}
                         />
                       )}
                     />
@@ -330,7 +328,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
-                      label="Date create"
+                      label="Sinh nhật"
                       value={field.value}
                       onChange={(newValue) => {
                         field.onChange(newValue);

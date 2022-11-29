@@ -56,7 +56,7 @@ export default function TableSelectedAction({ dense, action, rowCount, numSelect
           }),
         }}
       >
-        {numSelected} selected
+          Đã chọn {numSelected}
       </Typography>
 
       {action && action}

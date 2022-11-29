@@ -15,6 +15,8 @@ import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
 import ProgramNewEditForm from '../../../../sections/@dashboard/program/ProgramNewEditForm';
+import {useEffect, useState} from "react";
+import {getProgramById, getUserById} from "../../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +31,21 @@ export default function ProgramEditPage() {
     query: { name },
   } = useRouter();
 
-  const currentProgram = _programList.find((program) => program.id === name);
+    const [programData, setProgramData] = useState([]);
+
+    useEffect(() => {
+        fetchProgram();
+    }, []);
+
+    async function fetchProgram() {
+        const res = await getProgramById(name);
+        console.log(res.data.data)
+        if (res.status < 400) {
+            setProgramData(res.data.data);
+        } else {
+            console.log('error');
+        }
+    }
 
   return (
     <>
@@ -49,11 +65,11 @@ export default function ProgramEditPage() {
               name: 'Danh sách chương trình học',
               href: PATH_DASHBOARD.program.list,
             },
-            { name: `Cập nhật ${currentProgram?.id}`},
+            { name: `Cập nhật chương trình học`},
           ]}
         />
 
-        <ProgramNewEditForm isEdit currentProgram={currentProgram} />
+        <ProgramNewEditForm isEdit currentProgram={programData} />
       </Container>
     </>
   );

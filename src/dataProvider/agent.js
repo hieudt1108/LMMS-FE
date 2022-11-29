@@ -198,6 +198,8 @@ const createUserAuth = (payload) => {
   return postApi('Auth/registerSingleUser', payload);
 };
 
+
+
 // UPLOAD FILE
 const uploadFile = (payload) => {
   return postApi('File/uploadFile', payload);
@@ -284,6 +286,10 @@ const updateSubject = (id, payload) => {
 const updateUser = (id, payload) => {
   return putApi(`User/${id}`, payload);
 };
+
+const changePasswordUserAuth = (payload) => {
+  return putApi('Auth/resetPassword', payload);
+};
 //export api here
 
 function addParameter(url, params) {
@@ -318,6 +324,7 @@ export {
   deleteUser,
   updateUser,
   createUserAuth,
+  changePasswordUserAuth,
   getGradeById,
   postGrade,
   getAllLevel,

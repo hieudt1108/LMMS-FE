@@ -30,7 +30,7 @@ UserTableRow.propTypes = {
 };
 
 export default function UserTableRow({ data, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { id, firstName, lastName, email, roles, gender, phone, address, birthDate, enable } = data;
+  const { id,firstName, lastName, email, roles, gender, phone, address, birthDate, enable } = data;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -55,9 +55,7 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
+
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
@@ -113,7 +111,7 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
           }}
           sx={{ color: 'error.main' }}
         >
-          <Iconify icon="eva:trash-2-outline" />
+          <Iconify icon="eva:alert-circle-outline" />
           Vô hiệu hóa
         </MenuItem>
 

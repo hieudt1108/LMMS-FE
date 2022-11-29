@@ -57,8 +57,7 @@ const TABLE_HEAD = [
   { id: 'phone', label: 'SĐT', align: 'left' },
   { id: 'address', label: 'Địa chỉ', align: 'left' },
   { id: 'role', label: 'Vai trò', align: 'left' },
-  { id: 'status', label: 'Trạng thái', align: 'left' },
-  { id: '' },
+  { id: 'status', label: 'Trạng thái', align: 'right' },
 ];
 
 // ----------------------------------------------------------------------
@@ -336,7 +335,7 @@ export default function UserListPage() {
                   {dataFiltered?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
                     <UserTableRow
                       key={user.id}
-                      row={user}
+                      data={user}
                       selected={selected.includes(user.id)}
                       onSelectRow={() => onSelectRow(user.id)}
                       onDeleteRow={() => handleDeleteRow(user.id)}

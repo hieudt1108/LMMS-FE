@@ -202,6 +202,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       }
     }
   };
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>

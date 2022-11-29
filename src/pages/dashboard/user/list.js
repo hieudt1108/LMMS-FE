@@ -115,24 +115,24 @@ export default function UserListPage() {
     filterStatus,
   });
 
-  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const dataInPage = dataFiltered?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
 
   const isFiltered = filterName !== '';
 
-  const getLengthByStatus = (status) => listUsers.filter((user) => user.enable === status).length;
+  const getLengthByStatus = (status) => listUsers?.filter((user) => user.enable === status).length;
 
   const STATUS_OPTIONS = [
-    { label: 'tất cả', id: -1, color: 'info', count: listUsers.length },
+    { label: 'tất cả', id: -1, color: 'info', count: listUsers?.length },
     { label: 'hiệu lực', id: 0, color: 'success', count: getLengthByStatus(0) },
     { label: 'không hiệu lực', id: 1, color: 'error', count: getLengthByStatus(1) },
   ];
 
   const isNotFound =
-    (!dataFiltered.length && !!filterName) ||
-    (!dataFiltered.length && !!filterRole) ||
-    (!dataFiltered.length && !!filterStatus);
+    (!dataFiltered?.length && !!filterName) ||
+    (!dataFiltered?.length && !!filterRole) ||
+    (!dataFiltered?.length && !!filterStatus);
 
   useEffect(() => {
     fetchUsers();
@@ -321,7 +321,7 @@ export default function UserListPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={listUsers.length}
+                  rowCount={listUsers?.length}
                   numSelected={selected.length}
                   onSort={onSort}
                   onSelectAllRows={(checked) =>
@@ -333,10 +333,10 @@ export default function UserListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+                  {dataFiltered?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
                     <UserTableRow
                       key={user.id}
-                      data={user}
+                      row={user}
                       selected={selected.includes(user.id)}
                       onSelectRow={() => onSelectRow(user.id)}
                       onDeleteRow={() => handleDeleteRow(user.id)}
@@ -344,7 +344,7 @@ export default function UserListPage() {
                     />
                   ))}
 
-                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, listUsers.length)} />
+                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, listUsers?.length)} />
 
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
@@ -354,7 +354,7 @@ export default function UserListPage() {
 
           <TablePaginationCustom
             labelRowsPerPage="Hàng trên mỗi trang"
-            count={dataFiltered.length}
+            count={dataFiltered?.length}
             page={page}
             rowsPerPage={rowsPerPage}
             onPageChange={onChangePage}
@@ -391,30 +391,30 @@ export default function UserListPage() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filterName, filterStatus, filterRole }) {
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
-  stabilizedThis.sort((a, b) => {
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el) => el[0]);
 
   if (filterName) {
-    inputData = inputData.filter((user) => user.lastName.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
+    inputData = inputData?.filter((user) => user.lastName.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
   }
 
   if (filterStatus === 0) {
-    inputData = inputData.filter((user) => user.enable === 0);
+    inputData = inputData?.filter((user) => user.enable === 0);
   }
 
   if (filterStatus === 1) {
-    inputData = inputData.filter((user) => user.enable === 1);
+    inputData = inputData?.filter((user) => user.enable === 1);
   }
 
   if (filterRole !== 'all') {
-    inputData = inputData.filter((user) => user.roles === filterRole);
+    inputData = inputData?.filter((user) => user.roles === filterRole);
   }
 
   return inputData;

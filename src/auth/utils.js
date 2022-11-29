@@ -49,7 +49,7 @@ export const tokenExpired = (exp) => {
   clearTimeout(expiredTimer);
 
   expiredTimer = setTimeout(() => {
-    alert('Token expired');
+    alert('Hết hạn đăng nhập, xin mời đăng nhập lại');
 
     localStorage.removeItem('access_token');
 

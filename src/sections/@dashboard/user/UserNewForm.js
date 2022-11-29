@@ -78,8 +78,6 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
     [currentUser]
   );
 
-  const [open, setOpen] = useState(true);
-
   const methods = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues,

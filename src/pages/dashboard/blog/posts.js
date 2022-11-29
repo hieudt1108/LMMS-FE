@@ -62,7 +62,7 @@ export default function BlogPostsPage() {
     if (res.status < 400) {
       setDocuments(res.data.data);
     } else {
-      console.log('error');
+      console.log(res.message);
     }
   }
   useEffect(() => {

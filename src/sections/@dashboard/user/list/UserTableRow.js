@@ -29,8 +29,8 @@ UserTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { id, firstName, lastName, email, roles, gender, phone, address, birthDate, enable } = row;
+export default function UserTableRow({ data, selected, onEditRow, onSelectRow, onDeleteRow }) {
+  const { id, firstName, lastName, email, roles, gender, phone, address, birthDate, enable } = data;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -59,8 +59,6 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-
-
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar src={`http://lmms.site:7070/assets/images/avatars/avatar_${gender * 10 + (id % 10) + 1 + 1}.jpg`} />
@@ -85,6 +83,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
               <Label></Label>
             ) : (
               <Label
+                key={r.id}
                 variant="soft"
                 color={(status === 'banned' && 'error') || 'success'}
                 sx={{ textTransform: 'capitalize' }}
@@ -115,7 +114,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="eva:trash-2-outline" />
-          Delete
+          Vô hiệu hóa
         </MenuItem>
 
         <MenuItem
@@ -125,7 +124,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Edit
+          Cập nhật
         </MenuItem>
       </MenuPopover>
 

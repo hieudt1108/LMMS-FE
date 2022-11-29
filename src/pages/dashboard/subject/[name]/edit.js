@@ -39,11 +39,10 @@ export default function SubjectEditPage() {
 
     async function fetchSubject() {
         const res = await getSubjectById(name);
-        console.log(res.data.data)
         if (res.status < 400) {
             setSubjectData(res.data.data);
         } else {
-            console.log('error');
+            console.log(res.message);
         }
     }
 

@@ -40,11 +40,10 @@ export default function LevelEditPage() {
 
     async function fetchLevel() {
         const res = await getLevelById(name);
-        console.log(res.data.data)
         if (res.status < 400) {
             setLevelData(res.data.data);
         } else {
-            console.log('error');
+            console.log(res.message);
         }
     }
 

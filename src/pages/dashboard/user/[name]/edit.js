@@ -38,11 +38,10 @@ export default function UserEditPage() {
 
     async function fetchUser() {
         const res = await getUserById(name);
-        console.log(res.data.data)
         if (res.status < 400) {
             setUserData(res.data.data);
         } else {
-            console.log('error');
+            console.log(res.message);
         }
     }
 
@@ -61,7 +60,7 @@ export default function UserEditPage() {
                             href: PATH_DASHBOARD.root,
                         },
                         {
-                            name: 'Danh sách nguười dùng',
+                            name: 'Danh sách người dùng',
                             href: PATH_DASHBOARD.user.list,
                         },
 

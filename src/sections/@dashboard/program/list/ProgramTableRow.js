@@ -2,16 +2,16 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 // @mui
 import {
-    Stack,
-    Avatar,
-    Button,
-    Checkbox,
-    TableRow,
-    MenuItem,
-    TableCell,
-    IconButton,
-    Typography,
-    Chip
+  Stack,
+  Avatar,
+  Button,
+  Checkbox,
+  TableRow,
+  MenuItem,
+  TableCell,
+  IconButton,
+  Typography,
+  Chip,
 } from '@mui/material';
 // components
 import Label from '../../../../components/label';
@@ -21,22 +21,16 @@ import ConfirmDialog from '../../../../components/confirm-dialog';
 
 // ----------------------------------------------------------------------
 
-
-
 ProgramTableRow.propTypes = {
-  row: PropTypes.array,
+  data: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onSelectRow: PropTypes.func,
 };
 
-
-
-
-export default function ProgramTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-
-  const { id, name , description  } = row;
+export default function ProgramTableRow({ data, selected, onEditRow, onSelectRow, onDeleteRow }) {
+  const { id, name, description } = data;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -65,12 +59,9 @@ export default function ProgramTableRow({ row, selected, onEditRow, onSelectRow,
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-
         <TableCell align="left">{name}</TableCell>
 
         <TableCell align="left">{description}</TableCell>
-
-
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
@@ -98,7 +89,7 @@ export default function ProgramTableRow({ row, selected, onEditRow, onSelectRow,
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Sửa
+          Cập nhật
         </MenuItem>
       </MenuPopover>
 

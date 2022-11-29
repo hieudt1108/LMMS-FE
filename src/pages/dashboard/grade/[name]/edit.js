@@ -39,11 +39,10 @@ export default function GradeEditPage() {
 
     async function fetchGrade() {
         const res = await getGradeById(name);
-        console.log(res.data.data)
         if (res.status < 400) {
             setGradeData(res.data.data);
         } else {
-            console.log('error');
+            console.log(res.message);
         }
     }
 

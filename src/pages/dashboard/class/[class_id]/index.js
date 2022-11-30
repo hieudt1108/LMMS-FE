@@ -2,7 +2,7 @@
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Grid, Container, Tab, Tabs, Card, Divider, Box } from '@mui/material';
 // layouts
@@ -62,7 +62,7 @@ export default function ClassDetail() {
   return (
     <>
       <Head>
-        <title> Class: Class Detail</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

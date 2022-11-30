@@ -26,7 +26,7 @@ export default function ProgramSliderCards({ id, img, title, description, sx, ..
   const { push } = useRouter();
 
   const handlerRedirect = (id) => {
-    router.push(PATH_DASHBOARD.program.grade(id));
+    router.push(PATH_DASHBOARD.program.level(id));
     // console.log('clicked: ');
   };
   return (

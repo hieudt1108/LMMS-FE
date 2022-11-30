@@ -21,13 +21,11 @@ import {LoadingButton} from '@mui/lab';
 import Iconify from '../../../../components/iconify';
 import {useSnackbar} from '../../../../components/snackbar';
 import FormProvider, {RHFTextField} from '../../../../components/hook-form';
-import RemoveIcon from '@mui/icons-material/Remove';
 import {useState} from "react";
 import {Formik} from "formik";
 import {changePasswordUserAuth, createUserAuth} from "../../../../dataProvider/agent";
 import {PATH_DASHBOARD} from "../../../../routes/paths";
 import {isLowercaseChar, isUppercaseChar, minLength, isNumber, isSpecialChar} from "../../../../utils/password-validation";
-import {CheckOutlined} from "@mui/icons-material";
 
 // ----------------------------------------------------------------------
 

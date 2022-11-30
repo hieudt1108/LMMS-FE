@@ -4,13 +4,13 @@ import { MenuItem, TextField } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-BlogPostsSort.propTypes = {
+DocumentPostsSort.propTypes = {
   onSort: PropTypes.func,
   sortBy: PropTypes.string,
   sortOptions: PropTypes.array,
 };
 
-export default function BlogPostsSort({ sortBy, sortOptions, onSort }) {
+export default function DocumentPostsSort({ sortBy, sortOptions, onSort }) {
   return (
     <TextField
       select

@@ -10,7 +10,7 @@ import FormProvider, { RHFTextField } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function BlogPostCommentForm() {
+export default function DocumentPostCommentForm() {
   const CommentSchema = Yup.object().shape({
     comment: Yup.string().required('Comment is required'),
     name: Yup.string().required('Name is required'),

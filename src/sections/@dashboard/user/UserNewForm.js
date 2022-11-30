@@ -174,12 +174,13 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
         const res = await createUserAuth(dataCreate);
         if (res.status < 400) {
           reset();
-          enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+          enqueueSnackbar('Tạo người dùng thành công');
           push(PATH_DASHBOARD.user.list);
         } else {
-          enqueueSnackbar('Create Fail');
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }
       } catch (error) {
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         console.error(error);
       }
     } else {
@@ -195,10 +196,10 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       });
       if (res.status < 400) {
         reset();
-        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+        enqueueSnackbar('Cập nhật người dùng thành công');
         push(PATH_DASHBOARD.user.list);
       } else {
-        enqueueSnackbar('Update Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
       }
     }
   };
@@ -223,7 +224,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                 </Typography>
               )}
               {!isEdit && <div></div>}
-              {!isEdit && <RHFTextField name="userName" label="Tên người dùng" id="userName" />}
+              {!isEdit && <RHFTextField name="userName" label="Tên tài khoản" id="userName" />}
               {!isEdit && <RHFTextField name="password" label="Mật khẩu" id="password" />}
 
               <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>

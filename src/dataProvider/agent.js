@@ -115,10 +115,16 @@ function getProgramById(id) {
 function getAllDocument(params) {
   return getApi('/Document/getAllDocumentsPublic', params);
 }
+
 // TYPE DOCUMENT
 function getAllTypeDocument(params) {
   return getApi('/TypeDocument/getAll', params);
 }
+
+function getTypeDocumentById(id) {
+  return getApi(`/TypeDocument/getOne/${id}`);
+}
+
 
 // SLOT
 function getALlSlot() {
@@ -209,6 +215,11 @@ const postDocument = (payload) => {
   return postApi('Document', payload);
 };
 
+// TYPE_DOCUMENT
+const postTypeDocument = (payload) => {
+  return postApi('TypeDocument', payload);
+};
+
 // DELETE API AREA ============================>
 async function deleteApi(url) {
   const token = getLocalStorage('access_token');
@@ -247,6 +258,11 @@ const deleteGrade = (id) => {
 const deleteSubject = (id) => {
   return deleteApi(`Subject/${id}`);
 };
+
+// TYPE_DOCUMENT
+const deleteTypeDocument = (id) => {
+  return deleteApi(`TypeDocument/${id}`);
+};
 // PUT API AREA ============================>
 async function putApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -280,6 +296,11 @@ const updateGrade = (id, payload) => {
 // SUBJECT
 const updateSubject = (id, payload) => {
   return putApi(`Subject/${id}`, payload);
+};
+
+// TYPE_DOCUMENT
+const updateTypeDocument = (id, payload) => {
+  return putApi(`TypeDocument/${id}`, payload);
 };
 
 // USER
@@ -342,6 +363,10 @@ export {
   postFile,
   getALlSlot,
   getAllTypeDocument,
+  getTypeDocumentById,
+  postTypeDocument,
+  deleteTypeDocument,
+  updateTypeDocument,
   postDocument,
   postLevel,
   getAllPermission,

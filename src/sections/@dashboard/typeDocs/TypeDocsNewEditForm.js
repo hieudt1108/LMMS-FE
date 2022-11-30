@@ -17,16 +17,16 @@ import {PATH_DASHBOARD} from '../../../routes/paths';
 import {useSnackbar} from '../../../components/snackbar';
 import FormProvider, {RHFTextField} from '../../../components/hook-form';
 import Iconify from "../../../components/iconify";
-import {createLevel, updateLevel} from "../../../dataProvider/agent";
+import {postTypeDocument, updateTypeDocument} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
-LevelNewEditForm.propTypes = {
+TypeDocsNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
-  currentLevel: PropTypes.object,
+  currentTypeDocs: PropTypes.object,
 };
 
-export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
+export default function TypeDocsNewEditForm({ isEdit = false, currentTypeDocs }) {
   const { push } = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -38,10 +38,10 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
 
   const defaultValues = useMemo(
       () => ({
-        name: currentLevel?.name || '',
-        description: currentLevel?.description || '',
+        name: currentTypeDocs?.name || '',
+        description: currentTypeDocs?.createDate || '',
       }),
-      [currentLevel]
+      [currentTypeDocs]
   );
 
   const methods = useForm({
@@ -60,43 +60,42 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
 
 
   useEffect(() => {
-    if (isEdit && currentLevel) {
+    if (isEdit && currentTypeDocs) {
       reset(defaultValues);
     }
     if (!isEdit) {
       reset(defaultValues);
     }
-  }, [isEdit, currentLevel]);
+  }, [isEdit, currentTypeDocs]);
 
   const onSubmit = async (data) => {
     if(!isEdit){
       try {
-        const res = await createLevel(data)
+        const res = await postTypeDocument(data)
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Tạo cấp học thành công');
-          push(PATH_DASHBOARD.level.list);
+          enqueueSnackbar('Create success!');
+          push(PATH_DASHBOARD.type_documents.list);
         } else {
-          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+          enqueueSnackbar('Create Fail');
         }
       } catch (error) {
-        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+        enqueueSnackbar('Create Fail');
       }
     }else{
       try {
-        const res = await updateLevel(currentLevel.id,{
+        const res = await updateTypeDocument(currentTypeDocs.id,{
           name: data.name,
-          description: data.description
         })
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Cập nhật cấp học thành công');
-          push(PATH_DASHBOARD.level.list);
+          enqueueSnackbar('Update success!');
+          push(PATH_DASHBOARD.type_documents.list);
         } else {
-          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+          enqueueSnackbar('Update Fail');
         }
       } catch (error) {
-        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+        enqueueSnackbar('Update Fail');
       }
     }
 
@@ -116,13 +115,8 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
                   <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                     <RHFTextField
                         name="name"
-                        label="Tên cấp học"
+                        label="Tên loại tài liệu"
                         id="name"
-                    />
-                    <RHFTextField
-                        name="description"
-                        label="Mô tả"
-                        id="description"
                     />
                   </Stack>
                   <Button
@@ -131,7 +125,7 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
                       onClick={ e => formik.resetForm()}
                       startIcon={<Iconify icon="eva:trash-2-outline" />}
                   >
-                    Clear
+                    Xóa
                   </Button>
                 </Stack>
               </Stack>

@@ -2,15 +2,15 @@ import PropTypes from 'prop-types';
 // @mui
 import { Box, List } from '@mui/material';
 //
-import BlogPostCommentItem from './BlogPostCommentItem';
+import DocumentPostCommentItem from './DocumentPostCommentItem';
 
 // ----------------------------------------------------------------------
 
-BlogPostCommentList.propTypes = {
+DocumentPostCommentList.propTypes = {
   comments: PropTypes.array,
 };
 
-export default function BlogPostCommentList({ comments }) {
+export default function DocumentPostCommentList({ comments }) {
   return (
     <List disablePadding>
       {comments.map((comment) => {
@@ -20,13 +20,13 @@ export default function BlogPostCommentList({ comments }) {
 
         return (
           <Box key={id}>
-            <BlogPostCommentItem name={name} message={message} postedAt={postedAt} avatarUrl={avatarUrl} />
+            <DocumentPostCommentItem name={name} message={message} postedAt={postedAt} avatarUrl={avatarUrl} />
             {hasReply &&
               replyComment.map((reply) => {
                 const userReply = users.find((user) => user.id === reply.userId);
 
                 return (
-                  <BlogPostCommentItem
+                  <DocumentPostCommentItem
                     key={reply.id}
                     name={userReply?.name || ''}
                     message={reply.message}

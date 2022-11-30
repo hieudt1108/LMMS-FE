@@ -84,12 +84,18 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/subject/list'),
     edit: (name) => path(ROOTS_DASHBOARD, `/subject/${name}/edit`),
   },
-  blog: {
-    root: path(ROOTS_DASHBOARD, '/blog'),
-    posts: path(ROOTS_DASHBOARD, '/blog/posts'),
-    new: path(ROOTS_DASHBOARD, '/blog/new'),
-    view: (id) => path(ROOTS_DASHBOARD, `/blog/post/${id}`),
-    demoView: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
+  documents: {
+    root: path(ROOTS_DASHBOARD, '/documents'),
+    posts: path(ROOTS_DASHBOARD, '/documents/document/posts'),
+    new: path(ROOTS_DASHBOARD, '/documents/document/new'),
+    view: (id) => path(ROOTS_DASHBOARD, `/documents/document/post/${id}`),
+    demoView: path(ROOTS_DASHBOARD, '/documents/document/post/apply-these-7-secret-techniques-to-improve-event'),
+  },
+  type_documents: {
+    root: path(ROOTS_DASHBOARD, '/typeDocs'),
+    new: path(ROOTS_DASHBOARD, '/typeDocs/new'),
+    list: path(ROOTS_DASHBOARD, '/typeDocs/list'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/typeDocs/${name}/edit`),
   },
 };
 

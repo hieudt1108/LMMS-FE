@@ -6,21 +6,21 @@ import NextLink from 'next/link';
 // @mui
 import { Grid, Button, Container, Stack } from '@mui/material';
 // utils
-import axios from '../../../utils/axios';
+import axios from '../../../../utils/axios';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // layouts
-import DashboardLayout from '../../../layouts/dashboard';
+import DashboardLayout from '../../../../layouts/dashboard';
 // components
-import Iconify from '../../../components/iconify';
-import { SkeletonPostItem } from '../../../components/skeleton';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import { useSettingsContext } from '../../../components/settings';
+import Iconify from '../../../../components/iconify';
+import { SkeletonPostItem } from '../../../../components/skeleton';
+import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
+import { useSettingsContext } from '../../../../components/settings';
 // sections
-import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../../../sections/@dashboard/blog';
+import { DocumentPostCard, DocumentPostsSort, DocumentPostsSearch } from '../../../../sections/@dashboard/documents';
 
 // api
-import { getAllDocument } from '../../../dataProvider/agent';
+import { getAllDocument } from '../../../../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -32,11 +32,11 @@ const SORT_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-BlogPostsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+DocumentPostsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function BlogPostsPage() {
+export default function DocumentPostsPage() {
   const { themeStretch } = useSettingsContext();
 
   const [posts, setPosts] = useState([]);
@@ -48,7 +48,7 @@ export default function BlogPostsPage() {
 
   const getAllPosts = useCallback(async () => {
     try {
-      const response = await axios.get('/api/blog/posts');
+      const response = await axios.get('/api/Document/posts');
       setPosts(response.data.posts);
     } catch (error) {
       console.error(error);
@@ -99,7 +99,7 @@ export default function BlogPostsPage() {
             },
           ]}
           action={
-            <NextLink href={PATH_DASHBOARD.blog.new} passHref>
+            <NextLink href={PATH_DASHBOARD.documents.new} passHref>
               <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                 New Document
               </Button>
@@ -108,15 +108,15 @@ export default function BlogPostsPage() {
         />
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <BlogPostsSearch />
-          <BlogPostsSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
+          <DocumentPostsSearch />
+          <DocumentPostsSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
         </Stack>
 
         <Grid container spacing={3}>
           {/* {(!posts.length ? [...Array(12)] : sortedPosts).map((post, index) =>
             post ? (
               <Grid key={post.id} item xs={12} sm={6} md={3}>
-                <BlogPostCard documents={documents} post={post} index={index} />
+                <DocumentPostCard documents={documents} post={post} index={index} />
               </Grid>
             ) : (
               <SkeletonPostItem key={index} />
@@ -124,7 +124,7 @@ export default function BlogPostsPage() {
           )} */}
           {documents?.map((document, index) => (
             <Grid key={document.id} item xs={12} sm={6} md={3}>
-              <BlogPostCard document={document} index={index} />
+              <DocumentPostCard document={document} index={index} />
             </Grid>
           ))}
         </Grid>

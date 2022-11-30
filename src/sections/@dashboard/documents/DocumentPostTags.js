@@ -9,11 +9,11 @@ import { CustomAvatarGroup } from '../../../components/custom-avatar';
 
 // ----------------------------------------------------------------------
 
-BlogPostTags.propTypes = {
+DocumentPostTags.propTypes = {
   post: PropTypes.object,
 };
 
-export default function BlogPostTags({ post }) {
+export default function DocumentPostTags({ post }) {
   const { favorite, tags, favoritePerson } = post;
 
   return (

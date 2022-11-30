@@ -80,13 +80,13 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
                 const res = await createSubject(data)
                 if (res.status < 400) {
                     reset();
-                    enqueueSnackbar( 'Create success!');
+                    enqueueSnackbar('Tạo môn học thành công');
                     push(PATH_DASHBOARD.subject.list);
                 } else {
-                    enqueueSnackbar('Create Fail');
+                    enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
                 }
             } catch (error) {
-                enqueueSnackbar('Create Fail');
+                enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
             }
         }else{
             try {

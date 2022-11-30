@@ -136,9 +136,8 @@ export default function SubjectListPage() {
             await fetchSubjects();
             enqueueSnackbar('Xóa môn học thành công');
         } else {
-            enqueueSnackbar('Xóa môn học thất bại');
+            enqueueSnackbar('Xóa môn học thất bại', { variant: 'error' });
         }
-
         if (page > 0) {
             if (dataInPage.length < 2) {
                 setPage(page - 1);
@@ -153,7 +152,7 @@ export default function SubjectListPage() {
             await fetchSubjects();
             enqueueSnackbar('Xóa khối học thành công');
         } else {
-            enqueueSnackbar('Xóa khối học thất bại');
+            enqueueSnackbar('Xóa môn học thất bại', { variant: 'error' });
         }
 
         if (page > 0) {

@@ -231,9 +231,9 @@ export default function AccountChangePassword() {
                                                 }}
                                             >
                                                 {minLength(values.newPassword) ? (
-                                                    <CheckOutlined />
+                                                    <Iconify icon="eva:checkmark-outline" />
                                                 ) : (
-                                                    <RemoveIcon />
+                                                    <Iconify icon="eva:minus-outline" />
                                                 )}
                                             </ListItemIcon>
                                             <ListItemText primary="Ít nhất 8 ký tự"/>
@@ -247,9 +247,9 @@ export default function AccountChangePassword() {
                                                 }}
                                             >
                                                 {isLowercaseChar(values.newPassword) ? (
-                                                    <CheckOutlined />
+                                                    <Iconify icon="eva:checkmark-outline" />
                                                 ) : (
-                                                    <RemoveIcon />
+                                                    <Iconify icon="eva:minus-outline" />
                                                 )}
                                             </ListItemIcon>
                                             <ListItemText primary="Ít nhất 1 chữ cái thường (a-z)"/>
@@ -263,9 +263,9 @@ export default function AccountChangePassword() {
                                                 }}
                                             >
                                                 {isUppercaseChar(values.newPassword) ? (
-                                                    <CheckOutlined />
+                                                    <Iconify icon="eva:checkmark-outline" />
                                                 ) : (
-                                                    <RemoveIcon />
+                                                    <Iconify icon="eva:minus-outline" />
                                                 )}
                                             </ListItemIcon>
                                             <ListItemText primary="Ít nhất 1 chữ cái viết hoa (A-Z)"/>
@@ -279,9 +279,9 @@ export default function AccountChangePassword() {
                                                 }}
                                             >
                                                 {isNumber(values.newPassword) ? (
-                                                    <CheckOutlined />
+                                                    <Iconify icon="eva:checkmark-outline" />
                                                 ) : (
-                                                    <RemoveIcon />
+                                                    <Iconify icon="eva:minus-outline" />
                                                 )}
                                             </ListItemIcon>
                                             <ListItemText primary="Ít nhất 1 số (0-9)"/>
@@ -295,9 +295,9 @@ export default function AccountChangePassword() {
                                                 }}
                                             >
                                                 {isSpecialChar(values.newPassword) ? (
-                                                    <CheckOutlined />
+                                                    <Iconify icon="eva:checkmark-outline" />
                                                 ) : (
-                                                    <RemoveIcon />
+                                                    <Iconify icon="eva:minus-outline" />
                                                 )}
                                             </ListItemIcon>
                                             <ListItemText primary="Ít nhất 1 ký tự đặc biệt"/>

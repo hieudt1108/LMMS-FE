@@ -18,10 +18,11 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import { format } from 'date-fns'
 
 // ----------------------------------------------------------------------
 
-LevelTableRow.propTypes = {
+TypeDocsTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
@@ -29,8 +30,8 @@ LevelTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function LevelTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { id, name, description, createDate } = row;
+export default function TypeDocsTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+  const { id, name, createDate } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -60,8 +61,6 @@ export default function LevelTableRow({ row, selected, onEditRow, onSelectRow, o
         </TableCell>
 
         <TableCell align="left">{name}</TableCell>
-
-        <TableCell align="left">{description}</TableCell>
 
         <TableCell align="left">{new Date(createDate).toLocaleDateString()}</TableCell>
 

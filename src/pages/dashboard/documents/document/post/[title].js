@@ -5,32 +5,32 @@ import { useRouter } from 'next/router';
 // @mui
 import { Box, Divider, Stack, Container, Typography, Pagination } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../../routes/paths';
 // utils
-import axios from '../../../../utils/axios';
+import axios from '../../../../../utils/axios';
 // layouts
-import DashboardLayout from '../../../../layouts/dashboard';
+import DashboardLayout from '../../../../../layouts/dashboard';
 // components
-import Markdown from '../../../../components/markdown';
-import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
-import { useSettingsContext } from '../../../../components/settings';
-import { SkeletonPostDetails } from '../../../../components/skeleton';
+import Markdown from '../../../../../components/markdown';
+import CustomBreadcrumbs from '../../../../../components/custom-breadcrumbs';
+import { useSettingsContext } from '../../../../../components/settings';
+import { SkeletonPostDetails } from '../../../../../components/skeleton';
 // sections
 import {
-  BlogPostHero,
-  BlogPostTags,
-  BlogPostCard,
-  BlogPostCommentList,
-  BlogPostCommentForm,
-} from '../../../../sections/@dashboard/blog';
+  DocumentPostHero,
+  DocumentPostTags,
+  DocumentPostCard,
+  DocumentPostCommentList,
+  DocumentPostCommentForm,
+} from '../../../../../sections/@dashboard/documents';
 
 // ----------------------------------------------------------------------
 
-BlogPostPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+DocumentPostPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function BlogPostPage() {
+export default function DocumentPostPage() {
   const { themeStretch } = useSettingsContext();
 
   const {
@@ -47,7 +47,7 @@ export default function BlogPostPage() {
 
   // const getPost = useCallback(async () => {
   //   try {
-  //     const response = await axios.get('/api/blog/post', {
+  //     const response = await axios.get('/api/Document/post', {
   //       params: { title },
   //     });
 
@@ -62,7 +62,7 @@ export default function BlogPostPage() {
 
   // const getRecentPosts = useCallback(async () => {
   //   try {
-  //     const response = await axios.get('/api/blog/posts/recent', {
+  //     const response = await axios.get('/api/Document/posts/recent', {
   //       params: { title },
   //     });
 
@@ -85,7 +85,7 @@ export default function BlogPostPage() {
   return (
     <>
       {/* <Head>
-        <title>{`Blog: ${post?.title || ''} | Minimal UI`}</title>
+        <title>{`Document: ${post?.title || ''} | Minimal UI`}</title>
       </Head> */}
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -98,7 +98,7 @@ export default function BlogPostPage() {
             },
             {
               name: 'Danh sách tài liệu',
-              href: PATH_DASHBOARD.blog.root,
+              href: PATH_DASHBOARD.documents.root,
             },
             {
               name: post?.title,
@@ -115,7 +115,7 @@ export default function BlogPostPage() {
               }),
             }}
           >
-            <BlogPostHero post={post} />
+            <DocumentPostHero post={post} />
 
             <Typography
               variant="h6"
@@ -142,7 +142,7 @@ export default function BlogPostPage() {
               }}
             >
               <Divider />
-              <BlogPostTags post={post} />
+              <DocumentPostTags post={post} />
               <Divider />
             </Stack>
 
@@ -159,7 +159,7 @@ export default function BlogPostPage() {
                 </Typography>
               </Stack>
 
-              <BlogPostCommentForm />
+              <DocumentPostCommentForm />
 
               <Divider sx={{ mt: 5, mb: 2 }} />
             </Stack>
@@ -169,7 +169,7 @@ export default function BlogPostPage() {
                 px: { md: 5 },
               }}
             >
-              <BlogPostCommentList comments={post.comments} />
+              <DocumentPostCommentList comments={post.comments} />
 
               <Pagination
                 count={8}
@@ -203,7 +203,7 @@ export default function BlogPostPage() {
               }}
             >
               {recentPosts.slice(recentPosts.length - 4).map((post) => (
-                <BlogPostCard key={post.id} post={post} />
+                <DocumentPostCard key={post.id} post={post} />
               ))}
             </Box>
           </>

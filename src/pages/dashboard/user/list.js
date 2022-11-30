@@ -50,14 +50,15 @@ import Label from '../../../components/label';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Tên', align: 'left' },
-  { id: 'email', label: 'Email', align: 'left' },
+  { id: 'name', label: 'Họ Tên', align: 'left' },
   { id: 'gender', label: 'Giới tính', align: 'left' },
   { id: 'birthdate', label: 'Sinh nhật', align: 'left' },
+  { id: 'email', label: 'Email', align: 'left' },
   { id: 'phone', label: 'SĐT', align: 'left' },
   { id: 'address', label: 'Địa chỉ', align: 'left' },
   { id: 'role', label: 'Vai trò', align: 'left' },
-  { id: 'status', label: 'Trạng thái', align: 'right' },
+  { id: 'status', label: 'Trạng thái', align: 'left' },
+  {id: ''}
 ];
 
 // ----------------------------------------------------------------------
@@ -176,7 +177,7 @@ export default function UserListPage() {
       await fetchUsers();
       enqueueSnackbar('Xóa người dùng thành công');
     } else {
-      enqueueSnackbar('Xóa người dùng thất bại');
+      enqueueSnackbar('Xóa người dùng thất bại', { variant: 'error' });
     }
     if (page > 0) {
       if (dataInPage.length < 2) {
@@ -192,7 +193,7 @@ export default function UserListPage() {
       await fetchUsers();
       enqueueSnackbar('Xóa người dùng thành công');
     } else {
-      enqueueSnackbar('Xóa người dùng thất bại');
+      enqueueSnackbar('Xóa người dùng thất bại', { variant: 'error' });
     }
     if (page > 0) {
       if (selected.length === dataInPage.length) {

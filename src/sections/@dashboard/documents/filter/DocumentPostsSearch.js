@@ -18,7 +18,7 @@ import SearchNotFound from '../../../../components/search-not-found';
 
 // ----------------------------------------------------------------------
 
-export default function BlogPostsSearch() {
+export default function DocumentPostsSearch() {
   const { push } = useRouter();
 
   const [searchPosts, setSearchPosts] = useState('');
@@ -29,7 +29,7 @@ export default function BlogPostsSearch() {
     try {
       setSearchPosts(value);
       if (value) {
-        const response = await axios.get('/api/blog/posts/search', {
+        const response = await axios.get('/api/documents/posts/search', {
           params: { query: value },
         });
 
@@ -41,7 +41,7 @@ export default function BlogPostsSearch() {
   };
 
   const handleClick = (title) => {
-    push(PATH_DASHBOARD.blog.view(paramCase(title)));
+    push(PATH_DASHBOARD.documents.view(paramCase(title)));
   };
 
   const handleKeyUp = (event) => {

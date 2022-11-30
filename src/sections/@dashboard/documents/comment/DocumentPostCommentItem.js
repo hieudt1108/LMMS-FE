@@ -7,7 +7,7 @@ import { fDate } from '../../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
-BlogPostCommentItem.propTypes = {
+DocumentPostCommentItem.propTypes = {
   name: PropTypes.string,
   hasReply: PropTypes.bool,
   message: PropTypes.string,
@@ -16,7 +16,7 @@ BlogPostCommentItem.propTypes = {
   avatarUrl: PropTypes.string,
 };
 
-export default function BlogPostCommentItem({ name, avatarUrl, message, tagUser, postedAt, hasReply }) {
+export default function DocumentPostCommentItem({ name, avatarUrl, message, tagUser, postedAt, hasReply }) {
   const [openReply, setOpenReply] = useState(false);
 
   return (

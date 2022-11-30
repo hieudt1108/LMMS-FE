@@ -31,12 +31,12 @@ const StyledOverlay = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-BlogPostCard.propTypes = {
+DocumentPostCard.propTypes = {
   index: PropTypes.number,
   document: PropTypes.object,
 };
 
-export default function BlogPostCard({ document }) {
+export default function DocumentPostCard({ document }) {
   // const isDesktop = useResponsive('up', 'md');
 
   const { code, name, typeFile, id } = document;
@@ -114,7 +114,7 @@ PostContent.propTypes = {
 export function PostContent({ code, name, typeFile, id }) {
   // const isDesktop = useResponsive('up', 'md');
 
-  const linkTo = PATH_DASHBOARD.blog.view(id);
+  const linkTo = PATH_DASHBOARD.documents.view(id);
 
   // const latestPostLarge = index === 0;
 

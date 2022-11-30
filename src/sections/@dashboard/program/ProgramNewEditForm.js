@@ -78,13 +78,13 @@ export default function ProgramNewEditForm({ isEdit = false, currentProgram }) {
         const res = await createProgram(data)
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Create success!');
+          enqueueSnackbar('Tạo chương trình học thành công');
           push(PATH_DASHBOARD.program.list);
         } else {
-          enqueueSnackbar('Create Fail');
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Create Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
       }
     }else {
       try {
@@ -94,13 +94,13 @@ export default function ProgramNewEditForm({ isEdit = false, currentProgram }) {
         })
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Update success!');
+          enqueueSnackbar('Cập nhật chương trình học thành công');
           push(PATH_DASHBOARD.program.list);
         } else {
-          enqueueSnackbar('Update Fail');
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Update Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
       }
     }
   };

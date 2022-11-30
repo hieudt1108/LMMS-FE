@@ -25,8 +25,6 @@ addStudent.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-import React from 'react';
-
 export default function addStudent() {
   const {
     query: { class_id },
@@ -59,7 +57,7 @@ export default function addStudent() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Thêm người dùng vào class"
+          heading="Thêm người dùng vào lớp"
           links={[
             {
               name: 'Dashboard',

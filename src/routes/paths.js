@@ -63,6 +63,7 @@ export const PATH_DASHBOARD = {
     new: path(ROOTS_DASHBOARD, '/program/manage/new'),
     list: path(ROOTS_DASHBOARD, '/program/manage/list'),
     edit: (name) => path(ROOTS_DASHBOARD, `/program/${name}/edit`),
+    grade: (sub_id) => path(ROOTS_DASHBOARD, `/program/${sub_id}/grade`),
   },
   grade: {
     root: path(ROOTS_DASHBOARD, '/grade'),

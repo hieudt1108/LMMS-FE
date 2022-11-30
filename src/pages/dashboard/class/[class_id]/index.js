@@ -2,7 +2,9 @@
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container } from '@mui/material';
+import { useEffect, useState } from 'react';
+
+import { Grid, Container, Tab, Tabs, Card, Divider, Box } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // _mock_
@@ -21,6 +23,9 @@ import {
   ClassBookedRoom,
 } from '../../../../sections/@dashboard/class';
 // assets
+import ManageSubject from '../../../../sections/@dashboard/class/manage/ManageSubject';
+import ManageUser from '../../../../sections/@dashboard/class/manage/ManageUser';
+
 import { BookingIllustration, CheckInIllustration, CheckOutIllustration } from '../../../../assets/illustrations';
 import { useRouter } from 'next/router';
 
@@ -32,6 +37,21 @@ ClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function ClassDetail() {
   const router = useRouter();
   const theme = useTheme();
+
+  const [currentTab, setCurrentTab] = useState('description');
+
+  const TABS = [
+    {
+      value: 'description',
+      label: 'Quản lý môn học',
+      component: <ManageSubject />,
+    },
+    {
+      value: 'reviews',
+      label: `Quản lý người dùng`,
+      component: <ManageUser />,
+    },
+  ];
 
   const {
     query: { class_id },
@@ -46,7 +66,7 @@ export default function ClassDetail() {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} mb={2}>
           <Grid item xs={12} md={4}>
             <ClassWidgetSummary title="Giáo viên" total={7} icon={<BookingIllustration />} />
           </Grid>
@@ -92,11 +112,11 @@ export default function ClassDetail() {
             />
           </Grid>
 
-          <Grid item xs={12} md={4}>
-            <ClassCustomerReviews title="Thông tin giáo viên" list={_subjectReview} />
-          </Grid> */}
+          // <Grid item xs={12} md={4}>
+          //   <ClassCustomerReviews title="Thông tin giáo viên" list={_subjectReview} />
+          // </Grid> */}
 
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <ClassNewestBooking title="Môn học" subheader="12 môn học" list={_subjectNew} />
           </Grid>
 
@@ -113,8 +133,37 @@ export default function ClassDetail() {
                 { id: '' },
               ]}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
+        <Card>
+          <Tabs
+            value={currentTab}
+            onChange={(event, newValue) => setCurrentTab(newValue)}
+            sx={{ px: 3, bgcolor: 'background.neutral' }}
+          >
+            {TABS.map((tab) => (
+              <Tab key={tab.value} value={tab.value} label={tab.label} />
+            ))}
+          </Tabs>
+
+          <Divider />
+
+          {TABS.map(
+            (tab) =>
+              tab.value === currentTab && (
+                <Box
+                  key={tab.value}
+                  sx={{
+                    ...(currentTab === 'description' && {
+                      p: 3,
+                    }),
+                  }}
+                >
+                  {tab.component}
+                </Box>
+              )
+          )}
+        </Card>
       </Container>
     </>
   );

@@ -64,7 +64,7 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/program/manage/list'),
     edit: (name) => path(ROOTS_DASHBOARD, `/program/${name}/edit`),
     level: (id) => path(ROOTS_DASHBOARD, `/program/level/${id}`),
-    gradeSub: (id, classId) => path(ROOTS_DASHBOARD, `/program/level/${id}/${classId}`),
+    gradeSub: (id, classId) => path(ROOTS_DASHBOARD, `/program/gradeSub/${id}/${classId}`),
   },
   grade: {
     root: path(ROOTS_DASHBOARD, '/grade'),

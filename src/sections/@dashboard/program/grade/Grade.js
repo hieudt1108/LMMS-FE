@@ -1,23 +1,25 @@
-import React from 'react';
+import { useCallback, useState } from 'react';
 import { Box, Card, CardHeader, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 //
 import { PATH_DASHBOARD } from 'src/routes/paths';
-export default function LevelSecond({ title }) {
-  const {
-    query: { title },
-  } = useRouter();
+export default function Grade() {
+  // const {
+  //   query: { title },
+  // } = useRouter();
+  // console.log(title);
   const router = useRouter();
   const { push } = useRouter();
 
-  const handlerRedirect = (id) => {
-    router.push(PATH_DASHBOARD.program.gradeSub(title, id));
-    console.log('clicked: ', id + 1);
-  };
+  const handleClassDetails = useCallback((class_id) => {
+    router.push(PATH_DASHBOARD.class.detail(class_id));
+  }, []);
+
   return (
     <Box sx={{ p: 3, cursor: 'pointer' }} gap={3} display="grid" gridTemplateColumns="repeat(2, 1fr)">
-      {[...Array(4)].map((_, index) => (
+      {[...Array(5)].map((_, index) => (
         <Card
+          onClick={() => handleClassDetails(index)}
           key={index}
           sx={{
             boxShadow: 0.3,
@@ -28,7 +30,7 @@ export default function LevelSecond({ title }) {
             },
           }}
         >
-          <CardHeader title={`Lớp ${index + 6}`} subheader="Proin viverra ligula" />
+          <CardHeader title={`Lớp 1A`} subheader="Proin viverra ligula" />
 
           <Typography sx={{ p: 3, color: 'text.secondary' }}>
             Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. In enim justo, rhoncus ut, imperdiet a,

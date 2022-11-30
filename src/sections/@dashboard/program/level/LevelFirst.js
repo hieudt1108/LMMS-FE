@@ -19,7 +19,18 @@ export default function Level() {
   return (
     <Box sx={{ p: 3, cursor: 'pointer' }} gap={3} display="grid" gridTemplateColumns="repeat(2, 1fr)">
       {[...Array(5)].map((_, index) => (
-        <Card key={index} onClick={() => handlerRedirect(index)}>
+        <Card
+          key={index}
+          sx={{
+            boxShadow: 0.3,
+            ':hover': {
+              boxShadow: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
+              transition: 'transform 150ms',
+              transform: 'translateY(-10px)',
+            },
+          }}
+          onClick={() => handlerRedirect(index)}
+        >
           <CardHeader title={`Lớp ${index + 1}`} subheader="Proin viverra ligula" />
 
           <Typography sx={{ p: 3, color: 'text.secondary' }}>

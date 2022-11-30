@@ -57,7 +57,7 @@ export default function LevelLayout() {
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Danh sách tài liệu',
+              name: 'Chương trình học',
               href: PATH_DASHBOARD.program.choose,
             },
             {

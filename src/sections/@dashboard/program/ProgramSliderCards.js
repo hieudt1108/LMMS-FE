@@ -45,7 +45,7 @@ export default function ProgramSliderCards({ id, img, title, description, sx, ..
         }}
       />
       <Box
-        onClick={() => handlerRedirect(title)}
+        onClick={() => handlerRedirect(id)}
         sx={{
           mt: -15,
           color: 'common.white',

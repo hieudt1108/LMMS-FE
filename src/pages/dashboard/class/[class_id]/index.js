@@ -13,14 +13,14 @@ import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../..
 import { useSettingsContext } from '../../../../components/settings';
 // sections
 import {
-  ClassCustomerReviews,
-  CLassDetails,
-  ClassNewestBooking,
-  ClassReservationStats,
-  ClassRoomAvailable,
-  ClassTotalIncomes,
+  // ClassCustomerReviews,
+  // CLassDetails,
+  // ClassNewestBooking,
+  // ClassReservationStats,
+  // ClassRoomAvailable,
+  // ClassTotalIncomes,
   ClassWidgetSummary,
-  ClassBookedRoom,
+  // ClassBookedRoom,
 } from '../../../../sections/@dashboard/class';
 // assets
 import ManageSubject from '../../../../sections/@dashboard/class/manage/ManageSubject';

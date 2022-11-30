@@ -53,6 +53,7 @@ export default function Program() {
           {listPrograms.map((item) => (
             <Grid item xs={12} md={4} sm={6}>
               <ProgramSliderCards
+                id={item.id}
                 title={item.name}
                 description={item.description}
                 img="/assets/illustrations/characters/character_11.png"

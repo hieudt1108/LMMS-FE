@@ -53,7 +53,7 @@ export default function CLassDetails({ title, subheader, tableLabels, tableData,
       <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
         <CardHeader sx={{ display: 'contents' }} title={title} subheader={subheader} />
         <Button onClick={handleOnClickSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-          Add Student
+          Add User
         </Button>
       </Box>
 

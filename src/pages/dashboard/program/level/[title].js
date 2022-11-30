@@ -1,74 +1,67 @@
+import { useState } from 'react';
 // next
-import Head from 'next/head';
+import { useRouter } from 'next/router';
 // @mui
-import { Container, Tab, Tabs, Card, Divider, Box } from '@mui/material';
+import { Box, Container, Divider, Tab, Tabs, Card } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+// utils
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // components
-import { useSettingsContext } from '../../../../components/settings';
+import Markdown from '../../../../components/markdown';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
-// sections
-// import ClassNewEditForm from '../../../../sections/@dashboard/class/form/ClassNewEditForm';
-import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-// import { getClassRedux } from 'src/redux/slices/class';
-import ClassAddStudentForm from '../../../../sections/@dashboard/class/form/ClassAddStudentForm';
-import ClassAddStudentXls from '../../../../sections/@dashboard/class/form/ClassAddStudentXls';
+import { useSettingsContext } from '../../../../components/settings';
+import { SkeletonPostDetails } from '../../../../components/skeleton';
+//
+import LevelFirst from '../../../../sections/@dashboard/program/level/LevelFirst';
+import LevelSecond from '../../../../sections/@dashboard/program/level/LevelSecond';
 
 // ----------------------------------------------------------------------
 
-addStudent.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+LevelLayout.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function addStudent() {
-  const {
-    query: { class_id },
-  } = useRouter();
-
-  const [currentTab, setCurrentTab] = useState('description');
-
+export default function LevelLayout() {
   const { themeStretch } = useSettingsContext();
 
-  console.log('class ID: ', class_id);
+  const {
+    query: { title },
+  } = useRouter();
+  console.log('test: ', title);
+
+  const [currentTab, setCurrentTab] = useState('description');
 
   const TABS = [
     {
       value: 'description',
-      label: 'Thêm thành viên vào class',
-      component: <ClassAddStudentForm isEdit />,
+      label: 'Tiểu học',
+      component: <LevelFirst title={title} />,
     },
     {
       value: 'reviews',
-      label: `Thêm thành viên từ danh sách Excel`,
-      component: <ClassAddStudentXls />,
+      label: `Trung học cơ sở`,
+      component: <LevelSecond title={title} />,
     },
   ];
 
   return (
     <>
-      <Head>
-        <title> Hệ thống quản lý Học liệu</title>
-      </Head>
-
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Thêm người dùng vào lớp"
+          heading="Khối học"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Class',
-              href: PATH_DASHBOARD.class.detail(class_id),
+              name: 'Chương trình học',
+              href: PATH_DASHBOARD.program.choose,
             },
             {
-              name: 'New Student',
+              name: title,
             },
           ]}
         />
@@ -91,9 +84,7 @@ export default function addStudent() {
                 <Box
                   key={tab.value}
                   sx={{
-                    ...(currentTab === 'description' && {
-                      p: 3,
-                    }),
+                    ...(currentTab === 'description'),
                   }}
                 >
                   {tab.component}

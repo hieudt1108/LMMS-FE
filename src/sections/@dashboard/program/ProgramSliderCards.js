@@ -6,6 +6,10 @@ import { Box, Button, Card, Grid, InputBase, Stack, Typography } from '@mui/mate
 import Image from '../../../components/image';
 // utils
 import { bgGradient } from '../../../utils/cssStyles';
+//
+import { useRouter } from 'next/router';
+//
+import { PATH_DASHBOARD } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -16,11 +20,17 @@ ProgramSliderCards.propTypes = {
   description: PropTypes.string,
 };
 
-export default function ProgramSliderCards({ img, title, description, sx, ...other }) {
+export default function ProgramSliderCards({ id, img, title, description, sx, ...other }) {
   const theme = useTheme();
+  const router = useRouter();
+  const { push } = useRouter();
 
+  const handlerRedirect = (id) => {
+    router.push(PATH_DASHBOARD.program.level(id));
+    // console.log('clicked: ');
+  };
   return (
-    <Box {...other} sx={{ position: 'relative' }}>
+    <Box {...other} sx={{ position: 'relative', cursor: 'pointer' }}>
       <Image
         disabledEffect
         alt="illustration-invite"
@@ -35,6 +45,7 @@ export default function ProgramSliderCards({ img, title, description, sx, ...oth
         }}
       />
       <Box
+        onClick={() => handlerRedirect(id)}
         sx={{
           mt: -15,
           color: 'common.white',

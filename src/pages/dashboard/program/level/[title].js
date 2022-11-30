@@ -16,6 +16,7 @@ import { SkeletonPostDetails } from '../../../../components/skeleton';
 //
 import LevelFirst from '../../../../sections/@dashboard/program/level/LevelFirst';
 import LevelSecond from '../../../../sections/@dashboard/program/level/LevelSecond';
+import Head from "next/head";
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +49,10 @@ export default function LevelLayout() {
 
   return (
     <>
+      <Head>
+        <title> Hệ thống quản lý Học liệu</title>
+      </Head>
+
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Khối học"

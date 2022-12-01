@@ -51,7 +51,7 @@ export default function ProgramSliderCards({ item, icon, sx, ...other }) {
       <div>
         <Typography variant="h4"> {item.name}</Typography>
 
-        <Typography noWrap="true" variant="subtitle2" sx={{ color: 'text.secondary' }}>
+        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
           {item.description}
         </Typography>
       </div>

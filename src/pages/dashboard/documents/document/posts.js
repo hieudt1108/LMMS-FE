@@ -1,4 +1,3 @@
-import orderBy from 'lodash/orderBy';
 import { useEffect, useCallback, useState } from 'react';
 // next
 import Head from 'next/head';
@@ -18,8 +17,6 @@ import {
   TextField,
   InputAdornment,
 } from '@mui/material';
-// utils
-import axios from '../../../../utils/axios';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // layouts

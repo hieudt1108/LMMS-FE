@@ -74,7 +74,16 @@ const navConfig = [
           { title: 'Tạo lớp', path: PATH_DASHBOARD.class.new },
         ],
       },
-      // USER
+      {
+        title: 'Vai trò',
+        path: PATH_DASHBOARD.role.list,
+        icon: ICONS.external,
+      },
+      {
+        title: 'Quyền hạn',
+        path: PATH_DASHBOARD.permission.list,
+        icon: ICONS.blank,
+      },
       {
         title: 'Người dùng',
         path: PATH_DASHBOARD.user.list,
@@ -103,6 +112,12 @@ const navConfig = [
         title: 'Môn học',
         path: PATH_DASHBOARD.subject.list,
         icon: ICONS.booking,
+      },
+
+      {
+        title: 'Tiết học',
+        path: PATH_DASHBOARD.slot.list,
+        icon: ICONS.disabled,
       },
 
       // BLOG

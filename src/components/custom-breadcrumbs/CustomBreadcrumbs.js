@@ -15,7 +15,7 @@ CustomBreadcrumbs.propTypes = {
   activeLast: PropTypes.bool,
 };
 
-export default function CustomBreadcrumbs({ links, action, heading, moreLink, activeLast, sx, ...other }) {
+export default function CustomBreadcrumbs({ links, action, action2, heading, moreLink, activeLast, sx, ...other }) {
   const lastLink = links[links.length - 1].name;
 
   return (
@@ -40,6 +40,7 @@ export default function CustomBreadcrumbs({ links, action, heading, moreLink, ac
         </Box>
 
         {action && <Box sx={{ flexShrink: 0 }}> {action} </Box>}
+        {action2 && <Box sx={{ flexShrink: 0,ml:2 }}> {action2} </Box>}
       </Stack>
 
       {/* MORE LINK */}

@@ -17,31 +17,29 @@ import {PATH_DASHBOARD} from '../../../routes/paths';
 import {useSnackbar} from '../../../components/snackbar';
 import FormProvider, {RHFTextField} from '../../../components/hook-form';
 import Iconify from "../../../components/iconify";
-import {postTypeDocument, updateTypeDocument} from "../../../dataProvider/agent";
+import {createSlot, updateSlot} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
-TypeDocsNewEditForm.propTypes = {
+SlotNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
-  currentTypeDocs: PropTypes.object,
+  currentSlot: PropTypes.object,
 };
 
-export default function TypeDocsNewEditForm({ isEdit = false, currentTypeDocs }) {
+export default function SlotNewEditForm({ isEdit = false, currentSlot }) {
   const { push } = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().trim().required('Tên cấp học không được trống'),
-    description: Yup.string().notRequired(),
+    name: Yup.string().trim().required('Tên tiết học không được trống'),
   })
 
   const defaultValues = useMemo(
       () => ({
-        name: currentTypeDocs?.name || '',
-        description: currentTypeDocs?.createDate || '',
+        name: currentSlot?.name || '',
       }),
-      [currentTypeDocs]
+      [currentSlot]
   );
 
   const methods = useForm({
@@ -60,42 +58,42 @@ export default function TypeDocsNewEditForm({ isEdit = false, currentTypeDocs })
 
 
   useEffect(() => {
-    if (isEdit && currentTypeDocs) {
+    if (isEdit && currentSlot) {
       reset(defaultValues);
     }
     if (!isEdit) {
       reset(defaultValues);
     }
-  }, [isEdit, currentTypeDocs]);
+  }, [isEdit, currentSlot]);
 
   const onSubmit = async (data) => {
     if(!isEdit){
       try {
-        const res = await postTypeDocument(data)
+        const res = await createSlot(data)
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Create success!');
-          push(PATH_DASHBOARD.type_documents.list);
+          enqueueSnackbar('Tạo tiết học thành công');
+          push(PATH_DASHBOARD.slot.list);
         } else {
-          enqueueSnackbar('Create Fail');
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Create Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
       }
     }else{
       try {
-        const res = await updateTypeDocument(currentTypeDocs.id,{
+        const res = await updateSlot(currentSlot.id,{
           name: data.name,
         })
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Update success!');
-          push(PATH_DASHBOARD.type_documents.list);
+          enqueueSnackbar('Cập nhật tiết học thành công');
+          push(PATH_DASHBOARD.slot.list);
         } else {
-          enqueueSnackbar('Update Fail');
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Update Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
       }
     }
 
@@ -115,7 +113,7 @@ export default function TypeDocsNewEditForm({ isEdit = false, currentTypeDocs })
                   <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                     <RHFTextField
                         name="name"
-                        label="Tên loại tài liệu"
+                        label="Tên tiết học"
                         id="name"
                     />
                   </Stack>

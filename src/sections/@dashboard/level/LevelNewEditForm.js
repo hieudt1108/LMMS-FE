@@ -128,7 +128,9 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
                   <Button
                       size="small"
                       color="error"
-                      onClick={ e => formik.resetForm()}
+                      onClick={() => {
+                        reset(defaultValues);
+                      }}
                       startIcon={<Iconify icon="eva:trash-2-outline" />}
                   >
                     Clear

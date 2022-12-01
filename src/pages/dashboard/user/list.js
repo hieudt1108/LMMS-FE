@@ -46,6 +46,7 @@ import { deleteUser, getALlRoles, getAllUsers } from '../../../dataProvider/agen
 import { useSnackbar } from '../../../components/snackbar';
 import error from 'eslint-plugin-react/lib/util/error';
 import Label from '../../../components/label';
+import FileNewUserDialog from "../../../sections/@dashboard/file/portal/FileNewUsersDialog";
 
 // ----------------------------------------------------------------------
 
@@ -107,6 +108,8 @@ export default function UserListPage() {
 
   const [tableData, setTableData] = useState([]);
 
+  const [openUploadFile, setOpenUploadFile] = useState(false);
+
   const dataFiltered = applyFilter({
     inputData: listUsers,
     comparator: getComparator(order, orderBy),
@@ -146,6 +149,16 @@ export default function UserListPage() {
       console.log(res.message);
     }
   }
+
+
+
+  const handleOpenUploadFile = () => {
+    setOpenUploadFile(true);
+  };
+
+  const handleCloseUploadFile = () => {
+    setOpenUploadFile(false);
+  };
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -258,6 +271,15 @@ export default function UserListPage() {
               </Button>
             </NextLink>
           }
+          action2={
+            <Button
+                variant="contained"
+                startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+                onClick={handleOpenUploadFile}
+            >
+              Import danh sách
+            </Button>
+          }
         />
 
         <Card>
@@ -365,7 +387,7 @@ export default function UserListPage() {
           />
         </Card>
       </Container>
-
+      <FileNewUserDialog open={openUploadFile} onClose={handleCloseUploadFile}  />
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
@@ -384,6 +406,7 @@ export default function UserListPage() {
           </Button>
         }
       />
+
     </>
   );
 }

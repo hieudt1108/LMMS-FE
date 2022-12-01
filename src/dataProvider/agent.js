@@ -126,18 +126,32 @@ function getTypeDocumentById(id) {
 }
 
 // SLOT
-function getALlSlot() {
-  return getApi('/Slot/getAll?pageIndex=1&pageSize=1000');
+
+function getAllSlot(params) {
+  return getApi('/Slot/getAll', params);
+}
+
+function getSlotById(id) {
+  return getApi(`/Slot/getOne/${id}`);
 }
 
 // ROLES
 function getALlRoles(params) {
   return getApi('/Role/getAll', params);
 }
+
+function getRoleById(id) {
+  return getApi(`/Role/getOne/${id}`);
+}
 // Permission
 function getAllPermission(params) {
   return getApi('/Permission/getAll', params);
 }
+
+function getPermissionById(id) {
+  return getApi(`/Permission/getOne/${id}`);
+}
+
 // POST API AREA ============================>
 async function postApi(url, payload, file) {
   const token = getLocalStorage('access_token');
@@ -198,10 +212,27 @@ const createSubject = (payload) => {
   return postApi('Subject', payload);
 };
 
+// Slot
+const createSlot = (payload) => {
+  return postApi('Slot', payload);
+};
+
 // User Auth
 const createUserAuth = (payload) => {
   return postApi('Auth/registerSingleUser', payload);
 };
+
+// ROLE
+const createRole = (payload) => {
+  return postApi('Role', payload);
+};
+
+// Permission
+const createPermission = (payload) => {
+  return postApi('Permission', payload);
+};
+
+
 
 // UPLOAD FILE
 const uploadFile = (payload) => {
@@ -256,10 +287,26 @@ const deleteSubject = (id) => {
   return deleteApi(`Subject/${id}`);
 };
 
+// SLOT
+const deleteSlot = (id) => {
+  return deleteApi(`Slot/${id}`);
+};
+
 // TYPE_DOCUMENT
 const deleteTypeDocument = (id) => {
   return deleteApi(`TypeDocument/${id}`);
 };
+
+// ROLE
+const deleteRole = (id) => {
+  return deleteApi(`Role/${id}`);
+};
+
+// Permission
+const deletePermission = (id) => {
+  return deleteApi(`Permission/${id}`);
+};
+
 // PUT API AREA ============================>
 async function putApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -295,6 +342,11 @@ const updateSubject = (id, payload) => {
   return putApi(`Subject/${id}`, payload);
 };
 
+// SLOT
+const updateSlot = (id, payload) => {
+  return putApi(`Slot/${id}`,payload);
+};
+
 // TYPE_DOCUMENT
 const updateTypeDocument = (id, payload) => {
   return putApi(`TypeDocument/${id}`, payload);
@@ -308,6 +360,18 @@ const updateUser = (id, payload) => {
 const changePasswordUserAuth = (payload) => {
   return putApi('Auth/resetPassword', payload);
 };
+
+// ROLE
+const updateRole = (id, payload) => {
+  return putApi(`Role/${id}`, payload);
+};
+
+// Permission
+const updatePermission = (id, payload) => {
+  return putApi(`Permission/${id}`, payload);
+};
+
+
 //export api here
 
 function addParameter(url, params) {
@@ -334,6 +398,10 @@ export {
   postClass,
   getAllGrade,
   getALlRoles,
+  getRoleById,
+  createRole,
+  updateRole,
+  deleteRole,
   createGrade,
   deleteGrade,
   updateGrade,
@@ -358,7 +426,11 @@ export {
   getAllDocument,
   uploadFile,
   postFile,
-  getALlSlot,
+  getAllSlot,
+  getSlotById,
+  createSlot,
+  updateSlot,
+  deleteSlot,
   getAllTypeDocument,
   getTypeDocumentById,
   postTypeDocument,
@@ -367,4 +439,8 @@ export {
   postDocument,
   postLevel,
   getAllPermission,
+  getPermissionById,
+  createPermission,
+  updatePermission,
+  deletePermission,
 };

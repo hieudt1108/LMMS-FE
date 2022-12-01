@@ -18,6 +18,7 @@ import {useSnackbar} from '../../../components/snackbar';
 import FormProvider, {RHFTextField, RHFUploadAvatar} from '../../../components/hook-form';
 import {createSubject, updateSubject} from "../../../dataProvider/agent";
 import {fData} from "../../../utils/formatNumber";
+import SubjectNewEditSlot from "./SubjectNewEditSlot";
 
 // ----------------------------------------------------------------------
 
@@ -158,11 +159,13 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
                         </Box>
                     </Card>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={12} md={8}>
                     <Card sx={{ p: 3 }}>
-                        <Stack spacing={3}>
-
-
+                        <Box
+                            rowGap={3}
+                            columnGap={2}
+                            display="grid"
+                        >
                             <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
                                 Thông tin môn học
                             </Typography>
@@ -182,13 +185,14 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
                                 id="description"
                                 multiline rows={5}
                             />
-
+                            <SubjectNewEditSlot/>
+                        </Box>
                         <Stack alignItems="flex-end" sx={{mt: 3}}>
                             <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                                 {!isEdit ? 'Tạo mới' : 'Cập nhật'}
                             </LoadingButton>
                         </Stack>
-                        </Stack>
+
                     </Card>
                 </Grid>
             </Grid>

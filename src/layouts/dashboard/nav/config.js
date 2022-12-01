@@ -120,17 +120,10 @@ const navConfig = [
         icon: ICONS.disabled,
       },
 
-      // BLOG
       {
-        title: 'Tài liệu',
-        path: PATH_DASHBOARD.documents.root,
+        title: 'Loại tài liệu',
+        path: PATH_DASHBOARD.type_documents.root,
         icon: ICONS.blog,
-        children: [
-          { title: 'Danh sách loại tài liệu', path: PATH_DASHBOARD.type_documents.root },
-          { title: 'Danh sách tài liệu', path: PATH_DASHBOARD.documents.posts },
-          { title: 'Chi tiết', path: PATH_DASHBOARD.documents.demoView },
-          { title: 'Tạo mới', path: PATH_DASHBOARD.documents.new },
-        ],
       },
       {
         title: 'Quản lý tài liệu',

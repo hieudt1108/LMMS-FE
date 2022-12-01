@@ -73,14 +73,15 @@ export default function FileNewFolderDialog({
         {(onCreate || onUpdate) && (
           <TextField fullWidth label="Folder name" value={folderName} onChange={onChangeFolderName} sx={{ mb: 3 }} />
         )}
-
-        <Upload multiple files={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
+        {!(onCreate || onUpdate) && <Upload multiple files={files} onDrop={handleDrop} onRemove={handleRemoveFile} />}
       </DialogContent>
 
       <DialogActions>
-        <Button variant="contained" startIcon={<Iconify icon="eva:cloud-upload-fill" />} onClick={handleUpload}>
-          Upload
-        </Button>
+        {!(onCreate || onUpdate) && (
+          <Button variant="contained" startIcon={<Iconify icon="eva:cloud-upload-fill" />} onClick={handleUpload}>
+            Upload
+          </Button>
+        )}
 
         {!!files.length && (
           <Button variant="outlined" color="inherit" onClick={handleRemoveAllFiles}>

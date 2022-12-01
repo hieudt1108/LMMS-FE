@@ -133,6 +133,11 @@ function getALlRoles(params) {
 function getAllPermission(params) {
   return getApi('/Permission/getAll', params);
 }
+
+// Folder
+function getFolderByID(id) {
+  return getApi(`/Folder/getOne/${id}`);
+}
 // POST API AREA ============================>
 async function postApi(url, payload, file) {
   const token = getLocalStorage('access_token');
@@ -205,6 +210,10 @@ const uploadFile = (payload) => {
 // DOCUMENT
 const postDocument = (payload) => {
   return postApi('Document', payload);
+};
+// Folder
+const postFolder = (payload) => {
+  return postApi('Folder', payload);
 };
 
 // DELETE API AREA ============================>
@@ -338,4 +347,6 @@ export {
   postDocument,
   postLevel,
   getAllPermission,
+  getFolderByID,
+  postFolder,
 };

@@ -10,8 +10,6 @@ const FILE_TYPE = [
   'mp3',
   'mp4',
   'pdf',
-  'jpg',
-  'jpg',
   'txt',
   'psd',
   'doc',
@@ -27,8 +25,6 @@ const FILE_TYPE = [
   'pptx',
   'wav',
   'm4v',
-  'jpg',
-  'jpg',
   'pdf',
 ];
 

@@ -98,13 +98,13 @@ export default function BlogPostsPage() {
               name: 'Danh sách tài liệu',
             },
           ]}
-          action={
-            <NextLink href={PATH_DASHBOARD.blog.new} passHref>
-              <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                New Document
-              </Button>
-            </NextLink>
-          }
+          // action={
+          //   <NextLink href={PATH_DASHBOARD.blog.new} passHref>
+          //     <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          //       New Document
+          //     </Button>
+          //   </NextLink>
+          // }
         />
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">

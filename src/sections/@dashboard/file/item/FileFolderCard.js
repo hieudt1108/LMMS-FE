@@ -34,7 +34,6 @@ export default function FileFolderCard({ folder, selected, onSelect, onDelete, s
   const {
     query: { pid },
   } = useRouter();
-  console.log('FileFolderCard', pid);
   const { enqueueSnackbar } = useSnackbar();
 
   const { copy } = useCopyToClipboard();
@@ -174,7 +173,7 @@ export default function FileFolderCard({ folder, selected, onSelect, onDelete, s
           {folder.name}
         </TextMaxLine>
 
-        <Stack
+        {/* <Stack
           direction="row"
           alignItems="center"
           spacing={0.75}
@@ -184,8 +183,8 @@ export default function FileFolderCard({ folder, selected, onSelect, onDelete, s
 
           <Box sx={{ width: 2, height: 2, borderRadius: '50%', bgcolor: 'currentColor' }} />
 
-          <Box> {folder.totalFiles} files </Box>
-        </Stack>
+           <Box> {folder.totalFiles} files </Box> 
+        </Stack> */}
       </Card>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
@@ -233,7 +232,7 @@ export default function FileFolderCard({ folder, selected, onSelect, onDelete, s
         </MenuItem>
       </MenuPopover>
 
-      <FileDetailsDrawer
+      {/* <FileDetailsDrawer
         item={folder}
         favorited={favorited}
         onFavorite={handleFavorite}
@@ -244,7 +243,7 @@ export default function FileFolderCard({ folder, selected, onSelect, onDelete, s
           handleCloseDetails();
           onDelete();
         }}
-      />
+      /> */}
 
       <FileShareDialog
         open={openShare}

@@ -46,7 +46,7 @@ const navConfig = [
       // { title: 'analytics--Template', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
       // { title: 'banking--Template', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
       { title: 'Chương trình học', path: PATH_DASHBOARD.program.choose, icon: ICONS.kanban },
-      { title: 'Học liệu', path: PATH_DASHBOARD.general.file, icon: ICONS.file },
+      { title: 'Học liệu', path: PATH_DASHBOARD.general.folder.default, icon: ICONS.file },
     ],
   },
 
@@ -103,7 +103,7 @@ const navConfig = [
         children: [
           { title: 'Danh sách', path: PATH_DASHBOARD.blog.posts },
           { title: 'Chi tiết', path: PATH_DASHBOARD.blog.demoView },
-          { title: 'Tạo mới', path: PATH_DASHBOARD.blog.new },
+          // { title: 'Tạo mới', path: PATH_DASHBOARD.blog.new },
         ],
       },
       {

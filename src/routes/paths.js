@@ -45,7 +45,11 @@ export const PATH_DASHBOARD = {
   },
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
-    file: path(ROOTS_DASHBOARD, '/file/root'),
+    folder: {
+      default: path(ROOTS_DASHBOARD, `/folder/0`),
+      link: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}`),
+      newDocument: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}/new`),
+    },
   },
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
@@ -85,7 +89,7 @@ export const PATH_DASHBOARD = {
   blog: {
     root: path(ROOTS_DASHBOARD, '/blog'),
     posts: path(ROOTS_DASHBOARD, '/blog/posts'),
-    new: path(ROOTS_DASHBOARD, '/blog/new'),
+    new: (folder_id) => path(ROOTS_DASHBOARD, `/blog/new/${folder_id}`),
     view: (id) => path(ROOTS_DASHBOARD, `/blog/post/${id}`),
     demoView: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
   },

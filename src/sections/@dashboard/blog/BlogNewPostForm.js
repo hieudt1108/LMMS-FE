@@ -49,29 +49,22 @@ const SORT_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function BlogNewPostForm() {
-  const { push } = useRouter();
+  const {
+    query: { folder_id: folderID },
+    push,
+  } = useRouter();
+  console.log('BlogNewPostForm', folderID);
+  // const { folder } = useSelector((state) => state.folder);
+
+  // const { id, listFolders, listDocuments } = folder;
+
+  // useEffect(() => {
+  //   dispatch(getFolderRedux(fileName));
+  // }, [dispatch, fileName]);
 
   const [subjects, setSubjects] = useState([]);
   const [typeDocs, setTypeDocs] = useState([]);
 
-  const [permissions, setPermissions] = useState([]);
-
-  async function fetchApiGet() {
-    const res_subj = await getAllSubject({ pageIndex: 1, pageSize: 100 });
-    const res_typeDoc = await getAllTypeDocument({ pageIndex: 1, pageSize: 100 });
-    const res_permission = await getAllPermission({ pageIndex: 1, pageSize: 100 });
-    if (res_subj.status < 400) {
-      setSubjects(res_subj.data.data);
-      setTypeDocs(res_typeDoc.data.data);
-      setPermissions(res_permission.data.data);
-    } else {
-      console.log('error');
-    }
-  }
-  console.log('test: ', typeDocs);
-  useEffect(() => {
-    fetchApiGet();
-  }, []);
   const [sortBySubject, setSortBySubject] = useState('');
   const [sortByDocs, setSortByDocs] = useState('');
 
@@ -308,15 +301,6 @@ export default function BlogNewPostForm() {
           </Grid>
         </Grid>
       </FormProvider>
-
-      {/* <BlogNewPostPreview
-        values={values}
-        open={openPreview}
-        isValid={isValid}
-        isSubmitting={isSubmitting}
-        onClose={handleClosePreview}
-        onSubmit={handleSubmit(onSubmit)}
-      /> */}
     </>
   );
 }

@@ -51,7 +51,7 @@ export default function Program() {
         />
         <Grid container spacing={2}>
           {listPrograms.map((item) => (
-            <Grid item xs={12} md={4} sm={6}>
+            <Grid item xs={12} md={6} sm={6}>
               <ProgramSliderCards item={item} icon={<BookingIllustration />} />
             </Grid>
           ))}

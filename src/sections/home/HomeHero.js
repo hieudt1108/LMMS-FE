@@ -1,22 +1,20 @@
-import { m, useScroll } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import {m} from 'framer-motion';
 // next
 import NextLink from 'next/link';
 // @mui
-import { styled, alpha, useTheme } from '@mui/material/styles';
-import { Button, Box, Link, Container, Typography, Stack, Grid } from '@mui/material';
+import {alpha, styled, useTheme} from '@mui/material/styles';
+import {Box, Button, Container, Grid, Stack, Typography} from '@mui/material';
 // routes
-import {PATH_AUTH, PATH_DASHBOARD, PATH_FIGMA_PREVIEW, PATH_FREE_VERSION} from '../../routes/paths';
+import {PATH_AUTH} from '../../routes/paths';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // utils
-import { textGradient, bgGradient } from '../../utils/cssStyles';
+import {bgGradient, textGradient} from '../../utils/cssStyles';
 // config
-import { HEADER } from '../../config';
+import {HEADER} from '../../config';
 // components
-import SvgColor from '../../components/svg-color';
 import Iconify from '../../components/iconify';
-import { MotionContainer, varFade } from '../../components/animate';
+import {MotionContainer, varFade} from '../../components/animate';
 
 // ----------------------------------------------------------------------
 

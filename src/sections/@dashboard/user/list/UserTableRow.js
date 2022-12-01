@@ -82,7 +82,7 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
                     <Label
                         key={r.id}
                         variant="soft"
-                        color={(status === 'banned' && 'error') || 'success'}
+                        color={'success'}
                         sx={{ textTransform: 'capitalize' }}
                     >
                       {r.name}

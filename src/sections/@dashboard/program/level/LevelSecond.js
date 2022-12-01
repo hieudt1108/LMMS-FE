@@ -3,8 +3,8 @@ import { Box, Card, CardHeader, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 //
 import { PATH_DASHBOARD } from 'src/routes/paths';
-import {bgGradient} from "../../../../utils/cssStyles";
-import {useTheme} from "@mui/material/styles";
+import { bgGradient } from '../../../../utils/cssStyles';
+import { useTheme } from '@mui/material/styles';
 
 export default function LevelSecond() {
   const {
@@ -18,12 +18,7 @@ export default function LevelSecond() {
     console.log('clicked: ', id + 1);
   };
   return (
-    <Box sx={{ p: 3,
-      cursor: 'pointer',
-    }}
-         gap={3}
-         display="grid"
-         gridTemplateColumns="repeat(2, 1fr)">
+    <Box sx={{ p: 3, cursor: 'pointer' }} gap={3} display="grid" gridTemplateColumns="repeat(2, 1fr)">
       {[...Array(4)].map((_, index) => (
         <Card
           key={index}

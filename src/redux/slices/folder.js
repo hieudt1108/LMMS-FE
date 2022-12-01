@@ -3,7 +3,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from '../../utils/axios';
 //
 import { dispatch } from '../store';
-import { getAllProgram, getAllSubject, getAllTypeDocument, getFolderByID, postFolder } from 'src/dataProvider/agent';
+import {
+  getAllProgram,
+  getAllSubject,
+  getAllTypeDocument,
+  getFolderByID,
+  postDocument,
+  postFile,
+  postFolder,
+} from 'src/dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -19,20 +27,18 @@ const initialState = {
   },
   newDocument: {
     data: {
-      id: 0,
-      typeDocumentId: 0,
-      subjectId: 0,
-      programId: 0,
-      folderId: 0,
       code: 'NB-BCOF80-2',
-      name: 'Ten tai lieu',
-      link: 'link',
-      description: 'This is document',
+      name: 'Tài liệu môn toán',
+      description: 'Mô tả chi tiết về tài liệu',
+      file: '',
+      programId: '',
+      subjectId: '',
+      typeDocumentId: '',
+      urlDocument: '',
       size: 0,
-      typeFile: 'string',
-      urlDocument: 'string',
-      viewNumber: 0,
-      status: 1,
+      TypeFile: '',
+      status: 0,
+      folderId: 1,
       shareUser: [],
       shareClass: [],
     },
@@ -75,8 +81,16 @@ const slice = createSlice({
 
     createDocumentInitialSuccess(state, action) {
       console.log('createDocumentInitialSuccess', action);
+      const { programs, subjects, typeDocuments, folderId } = action.payload;
       state.isLoading = false;
       state.newDocument.init = { ...state.newDocument.init, ...action.payload };
+      state.newDocument.data = {
+        ...state.newDocument.data,
+        programId: programs[0].id,
+        subjectId: subjects[0].id,
+        typeDocumentId: typeDocuments[0].id,
+        folderId: folderId,
+      };
     },
   },
 });
@@ -116,7 +130,7 @@ export function createFolderRedux(payload) {
   };
 }
 
-export function createDocumentInitialRedux() {
+export function createDocumentInitialRedux(folderId) {
   return async () => {
     try {
       dispatch(slice.actions.startLoading());
@@ -131,8 +145,21 @@ export function createDocumentInitialRedux() {
           programs: response[0].data.data,
           subjects: response[1].data.data,
           typeDocuments: response[2].data,
+          folderId,
         })
       );
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function uploadDocumentRedux(data) {
+  return async () => {
+    try {
+      dispatch(slice.actions.startLoading());
+      const response = await postDocument(data);
+      console.log('uploadDocumentRedux', response);
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

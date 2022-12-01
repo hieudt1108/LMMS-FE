@@ -206,15 +206,13 @@ export default function GeneralFilePage() {
 
               <Stack spacing={2}>
                 {listDocuments && listDocuments.length
-                  ? listDocuments
-                      .slice(0, 5)
-                      .map((file) => (
-                        <FileGeneralRecentCard
-                          key={file.id}
-                          file={file}
-                          onDelete={() => console.log('DELETE', file.id)}
-                        />
-                      ))
+                  ? listDocuments.map((file) => (
+                      <FileGeneralRecentCard
+                        key={file.id}
+                        file={file}
+                        onDelete={() => console.log('DELETE', file.id)}
+                      />
+                    ))
                   : ''}
               </Stack>
             </div>

@@ -115,19 +115,33 @@ function getProgramById(id) {
 function getAllDocument(params) {
   return getApi('/Document/getAllDocumentsPublic', params);
 }
+
 // TYPE DOCUMENT
 function getAllTypeDocument(params) {
   return getApi('/TypeDocument/getAll', params);
 }
 
+function getTypeDocumentById(id) {
+  return getApi(`/TypeDocument/getOne/${id}`);
+}
+
 // SLOT
-function getALlSlot() {
-  return getApi('/Slot/getAll?pageIndex=1&pageSize=1000');
+
+function getAllSlot(params) {
+  return getApi('/Slot/getAll', params);
+}
+
+function getSlotById(id) {
+  return getApi(`/Slot/getOne/${id}`);
 }
 
 // ROLES
 function getALlRoles(params) {
   return getApi('/Role/getAll', params);
+}
+
+function getRoleById(id) {
+  return getApi(`/Role/getOne/${id}`);
 }
 // Permission
 function getAllPermission(params) {
@@ -138,6 +152,10 @@ function getAllPermission(params) {
 function getFolderByID(id) {
   return getApi(`/Folder/getOne/${id}`);
 }
+function getPermissionById(id) {
+  return getApi(`/Permission/getOne/${id}`);
+}
+
 // POST API AREA ============================>
 async function postApi(url, payload, file) {
   const token = getLocalStorage('access_token');
@@ -198,9 +216,24 @@ const createSubject = (payload) => {
   return postApi('Subject', payload);
 };
 
+// Slot
+const createSlot = (payload) => {
+  return postApi('Slot', payload);
+};
+
 // User Auth
 const createUserAuth = (payload) => {
   return postApi('Auth/registerSingleUser', payload);
+};
+
+// ROLE
+const createRole = (payload) => {
+  return postApi('Role', payload);
+};
+
+// Permission
+const createPermission = (payload) => {
+  return postApi('Permission', payload);
 };
 
 // UPLOAD FILE
@@ -214,6 +247,11 @@ const postDocument = (payload) => {
 // Folder
 const postFolder = (payload) => {
   return postApi('Folder', payload);
+};
+
+// TYPE_DOCUMENT
+const postTypeDocument = (payload) => {
+  return postApi('TypeDocument', payload);
 };
 
 // DELETE API AREA ============================>
@@ -254,6 +292,27 @@ const deleteGrade = (id) => {
 const deleteSubject = (id) => {
   return deleteApi(`Subject/${id}`);
 };
+
+// SLOT
+const deleteSlot = (id) => {
+  return deleteApi(`Slot/${id}`);
+};
+
+// TYPE_DOCUMENT
+const deleteTypeDocument = (id) => {
+  return deleteApi(`TypeDocument/${id}`);
+};
+
+// ROLE
+const deleteRole = (id) => {
+  return deleteApi(`Role/${id}`);
+};
+
+// Permission
+const deletePermission = (id) => {
+  return deleteApi(`Permission/${id}`);
+};
+
 // PUT API AREA ============================>
 async function putApi(url, payload) {
   const token = getLocalStorage('access_token');
@@ -289,10 +348,35 @@ const updateSubject = (id, payload) => {
   return putApi(`Subject/${id}`, payload);
 };
 
+// SLOT
+const updateSlot = (id, payload) => {
+  return putApi(`Slot/${id}`, payload);
+};
+
+// TYPE_DOCUMENT
+const updateTypeDocument = (id, payload) => {
+  return putApi(`TypeDocument/${id}`, payload);
+};
+
 // USER
 const updateUser = (id, payload) => {
   return putApi(`User/${id}`, payload);
 };
+
+const changePasswordUserAuth = (payload) => {
+  return putApi('Auth/resetPassword', payload);
+};
+
+// ROLE
+const updateRole = (id, payload) => {
+  return putApi(`Role/${id}`, payload);
+};
+
+// Permission
+const updatePermission = (id, payload) => {
+  return putApi(`Permission/${id}`, payload);
+};
+
 //export api here
 
 function addParameter(url, params) {
@@ -319,6 +403,10 @@ export {
   postClass,
   getAllGrade,
   getALlRoles,
+  getRoleById,
+  createRole,
+  updateRole,
+  deleteRole,
   createGrade,
   deleteGrade,
   updateGrade,
@@ -327,6 +415,7 @@ export {
   deleteUser,
   updateUser,
   createUserAuth,
+  changePasswordUserAuth,
   getGradeById,
   postGrade,
   getAllLevel,
@@ -342,11 +431,23 @@ export {
   getAllDocument,
   uploadFile,
   postFile,
-  getALlSlot,
+  getAllSlot,
+  getSlotById,
+  createSlot,
+  updateSlot,
+  deleteSlot,
   getAllTypeDocument,
+  getTypeDocumentById,
+  postTypeDocument,
+  deleteTypeDocument,
+  updateTypeDocument,
   postDocument,
   postLevel,
   getAllPermission,
   getFolderByID,
   postFolder,
+  getPermissionById,
+  createPermission,
+  updatePermission,
+  deletePermission,
 };

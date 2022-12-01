@@ -16,8 +16,10 @@ import FileThumbnail from '../../../../components/file-thumbnail';
 //
 import { FileShareDialog, FileDetailsDrawer } from '../../file';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import BlogNewPostPreview from '../../blog/BlogNewPostPreview';
-import FilePreview from '../../blog/FilePreview';
+import { FileShareDialog, FileDetailsDrawer } from '../../file';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
+import DocumentNewPostPreview from '../../documents/DocumentNewPostPreview';
+import FilePreview from '../../documents/DocumentPreview';
 
 // ----------------------------------------------------------------------
 

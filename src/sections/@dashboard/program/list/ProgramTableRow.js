@@ -30,7 +30,7 @@ ProgramTableRow.propTypes = {
 };
 
 export default function ProgramTableRow({ data, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { id, name, description } = data;
+  const { id, name, description, createDate } = data;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -63,6 +63,8 @@ export default function ProgramTableRow({ data, selected, onEditRow, onSelectRow
 
         <TableCell align="left">{description}</TableCell>
 
+        <TableCell align="left">{new Date(createDate).toLocaleDateString()}</TableCell>
+
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -89,7 +91,7 @@ export default function ProgramTableRow({ data, selected, onEditRow, onSelectRow
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Sửa
+          Cập nhật
         </MenuItem>
       </MenuPopover>
 

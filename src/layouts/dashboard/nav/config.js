@@ -44,9 +44,19 @@ const navConfig = [
       { title: 'Trang Chủ', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
       // { title: 'ecommerce--Template', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
       // { title: 'analytics--Template', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
-      // { title: 'banking--Template', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
       { title: 'Chương trình học', path: PATH_DASHBOARD.program.choose, icon: ICONS.kanban },
-      { title: 'Học liệu', path: PATH_DASHBOARD.general.folder.default, icon: ICONS.file },
+      // BLOG
+      {
+        title: 'Tài liệu',
+        path: PATH_DASHBOARD.documents.root,
+        icon: ICONS.blog,
+        children: [
+          { title: 'Danh sách', path: PATH_DASHBOARD.documents.posts },
+          { title: 'Chi tiết', path: PATH_DASHBOARD.documents.demoView },
+          { title: 'Tạo mới', path: PATH_DASHBOARD.documents.new },
+        ],
+      },
+      { title: 'Học liệu', path: PATH_DASHBOARD.general.file, icon: ICONS.file },
     ],
   },
 
@@ -64,7 +74,16 @@ const navConfig = [
           { title: 'Tạo lớp', path: PATH_DASHBOARD.class.new },
         ],
       },
-      // USER
+      {
+        title: 'Vai trò',
+        path: PATH_DASHBOARD.role.list,
+        icon: ICONS.external,
+      },
+      {
+        title: 'Quyền hạn',
+        path: PATH_DASHBOARD.permission.list,
+        icon: ICONS.blank,
+      },
       {
         title: 'Người dùng',
         path: PATH_DASHBOARD.user.list,
@@ -95,10 +114,15 @@ const navConfig = [
         icon: ICONS.booking,
       },
 
-      // BLOG
       {
-        title: 'Tài liệu',
-        path: PATH_DASHBOARD.blog.root,
+        title: 'Tiết học',
+        path: PATH_DASHBOARD.slot.list,
+        icon: ICONS.disabled,
+      },
+
+      {
+        title: 'Loại tài liệu',
+        path: PATH_DASHBOARD.type_documents.root,
         icon: ICONS.blog,
         children: [
           { title: 'Danh sách', path: PATH_DASHBOARD.blog.posts },

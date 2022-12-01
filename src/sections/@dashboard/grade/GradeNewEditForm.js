@@ -101,13 +101,13 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
               const res = await createGrade(data)
               if (res.status < 400) {
                   reset();
-                  enqueueSnackbar( 'Create success!' );
+                  enqueueSnackbar('Tạo khối học thành công');
                   push(PATH_DASHBOARD.grade.list);
               } else {
-                  enqueueSnackbar('Create Fail');
+                  enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
               }
           } catch (error) {
-              enqueueSnackbar('Create Fail');
+              enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
           }
       }else{
           try {
@@ -119,13 +119,13 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
               console.log(data)
               if (res.status < 400) {
                   reset();
-                  enqueueSnackbar( 'Update success!');
+                  enqueueSnackbar('Cập nhật khối học thành công');
                   push(PATH_DASHBOARD.grade.list);
               } else {
-                  enqueueSnackbar('Update Fail');
+                  enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
               }
           } catch (error) {
-              enqueueSnackbar('Update Fail');
+              enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
           }
       }
   };

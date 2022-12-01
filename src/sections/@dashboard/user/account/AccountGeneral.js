@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
 import { useCallback } from 'react';
 // form
-import {Controller, useForm} from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import {Box, Grid, Card, Stack, Typography, TextField} from '@mui/material';
+import { Box, Grid, Card, Stack, Typography, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // auth
 import { useAuthContext } from '../../../../auth/useAuthContext';
@@ -19,11 +19,11 @@ import FormProvider, {
   RHFSelect,
   RHFTextField,
   RHFUploadAvatar,
-  RHFRadioGroup
+  RHFRadioGroup,
 } from '../../../../components/hook-form';
-import {DatePicker} from "@mui/x-date-pickers";
-import {updateUser} from "../../../../dataProvider/agent";
-import {PATH_DASHBOARD} from "../../../../routes/paths";
+import { DatePicker } from '@mui/x-date-pickers';
+import { updateUser } from '../../../../dataProvider/agent';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
 const GENDER_OPTION = [
@@ -64,8 +64,6 @@ export default function AccountGeneral() {
 
   const onSubmit = async (data) => {
     try {
-      console.log('id',user.id)
-      console.log('data',data)
       const res = await updateUser(user.id, {
         email: data.email,
         firstName: data.firstName,
@@ -85,7 +83,6 @@ export default function AccountGeneral() {
       console.error(error);
     }
   };
-
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -112,29 +109,30 @@ export default function AccountGeneral() {
                   Giới tính
                 </Typography>
                 <RHFRadioGroup
-                    name="gender"
-                    options={GENDER_OPTION}
-                    sx={{
-                      mt: 0.5,
-                      '& .MuiFormControlLabel-root': { mr: 4 },
-                    }}
+                  name="gender"
+                  options={GENDER_OPTION}
+                  sx={{
+                    mt: 0.5,
+                    '& .MuiFormControlLabel-root': { mr: 4 },
+                  }}
                 />
               </Stack>
               <Stack sx={{ mt: 2.5 }}>
                 <Controller
-                    name="birthDate"
-                    render={({ field, fieldState: { error } }) => (
-                        <DatePicker
-                            label="Sinh nhật"
-                            value={field.value}
-                            onChange={(newValue) => {
-                              field.onChange(newValue);
-                            }}
-                            renderInput={(params) => (
-                                <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
-                            )}
-                        />
-                    )}
+                  name="birthDate"
+                  render={({ field, fieldState: { error } }) => (
+                    <DatePicker
+                      label="Sinh nhật"
+                      value={field.value}
+                      onChange={(newValue) => {
+                        field.onChange(new Date(newValue));
+                        console.log(new Date(newValue));
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
+                      )}
+                    />
+                  )}
                 />
               </Stack>
               <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
@@ -148,7 +146,6 @@ export default function AccountGeneral() {
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 Cập nhật
               </LoadingButton>

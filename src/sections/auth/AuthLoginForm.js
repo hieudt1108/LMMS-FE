@@ -15,7 +15,7 @@ import { useAuthContext } from '../../auth/useAuthContext';
 // components
 import Iconify from '../../components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from '../../components/hook-form';
-import { BlogPostsSort } from '../@dashboard/blog';
+import { DocumentPostsSort } from '../@dashboard/documents';
 
 // ----------------------------------------------------------------------
 

@@ -74,13 +74,13 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
         const res = await createLevel(data)
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Create success!');
+          enqueueSnackbar('Tạo cấp học thành công');
           push(PATH_DASHBOARD.level.list);
         } else {
-          enqueueSnackbar('Create Fail');
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Create Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
       }
     }else{
       try {
@@ -90,13 +90,13 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
         })
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Update success!');
+          enqueueSnackbar('Cập nhật cấp học thành công');
           push(PATH_DASHBOARD.level.list);
         } else {
-          enqueueSnackbar('Update Fail');
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Update Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
       }
     }
 
@@ -128,7 +128,9 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
                   <Button
                       size="small"
                       color="error"
-                      onClick={ e => formik.resetForm()}
+                      onClick={() => {
+                        reset(defaultValues);
+                      }}
                       startIcon={<Iconify icon="eva:trash-2-outline" />}
                   >
                     Clear

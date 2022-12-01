@@ -3,54 +3,70 @@ import PropTypes from 'prop-types';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Box, Button, Card, Grid, InputBase, Stack, Typography } from '@mui/material';
 // components
-import Image from '../../../components/image';
-// utils
+import { fShortenNumber } from '../../../utils/formatNumber'; // utils
 import { bgGradient } from '../../../utils/cssStyles';
+//
+import { useRouter } from 'next/router';
+//
+import { PATH_DASHBOARD } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
 ProgramSliderCards.propTypes = {
+  icon: PropTypes.node,
   sx: PropTypes.object,
-  img: PropTypes.string,
-  title: PropTypes.string,
-  description: PropTypes.string,
 };
 
-export default function ProgramSliderCards({ img, title, description, sx, ...other }) {
+export default function ProgramSliderCards({ item, icon, sx, ...other }) {
   const theme = useTheme();
+  const router = useRouter();
+  const { push } = useRouter();
 
+  const handlerRedirect = (id) => {
+    router.push(PATH_DASHBOARD.program.level(id));
+    // console.log('clicked: ');
+  };
   return (
-    <Box {...other} sx={{ position: 'relative' }}>
-      <Image
-        disabledEffect
-        alt="illustration-invite"
-        src={img}
-        sx={{
-          left: 40,
-          zIndex: 9,
-          width: 140,
-          position: 'relative',
-          filter: 'drop-shadow(0 12px 24px rgba(0,0,0,0.24))',
-          ...sx,
-        }}
-      />
+    <Card
+      key={item.id}
+      onClick={() => handlerRedirect(item.id)}
+      sx={{
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        p: 2,
+        pl: 3,
+        boxShadow: 0.5,
+        border: '1px solid #f0e6d8',
+        ':hover': {
+          boxShadow: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
+          transition: 'transform 150ms',
+          transform: 'translateY(-10px)',
+        },
+        ...sx,
+      }}
+      {...other}
+    >
+      <div>
+        <Typography variant="h4"> {item.name}</Typography>
+
+        <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+          {item.description}
+        </Typography>
+      </div>
+
       <Box
         sx={{
-          mt: -15,
-          color: 'common.white',
-          borderRadius: 2,
-          p: (theme) => theme.spacing(19, 19, 19, 19),
-          ...bgGradient({
-            direction: '135deg',
-            startColor: theme.palette.primary.main,
-            endColor: theme.palette.primary.dark,
-          }),
+          width: 120,
+          height: 120,
+          lineHeight: 0,
+          borderRadius: '50%',
+          bgcolor: 'background.neutral',
         }}
       >
-        <Typography variant="h4" sx={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
-          {title}
-        </Typography>
+        {icon}
       </Box>
-    </Box>
+    </Card>
   );
 }

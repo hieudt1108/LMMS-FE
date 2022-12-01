@@ -149,55 +149,6 @@ export default function GeneralAppPage() {
               }}
             />
           </Grid>
-
-          <Grid item xs={12} lg={8}>
-            <AppNewInvoice
-              title="New Invoice"
-              tableData={_appInvoices}
-              tableLabels={[
-                { id: 'id', label: 'Invoice ID' },
-                { id: 'category', label: 'Category' },
-                { id: 'price', label: 'Price' },
-                { id: 'status', label: 'Status' },
-                { id: '' },
-              ]}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppTopRelated title="Top Related Applications" list={_appRelated} />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppTopInstalledCountries title="Top Installed Countries" list={_appInstalled} />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppTopAuthors title="Top Authors" list={_appAuthors} />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <Stack spacing={3}>
-              <AppWidget
-                title="Conversion"
-                total={38566}
-                icon="eva:person-fill"
-                chart={{
-                  series: 48,
-                }}
-              />
-
-              <AppWidget
-                title="Applications"
-                total={55566}
-                icon="eva:email-fill"
-                color="info"
-                chart={{
-                  series: 75,
-                }}
-              />
-            </Stack>
-          </Grid>
         </Grid>
       </Container>
     </>

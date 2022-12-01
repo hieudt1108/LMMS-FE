@@ -67,8 +67,8 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       gender: currentUser?.gender || 0,
       phone: currentUser?.phone || '',
       address: currentUser?.address || '',
-      isTeacher: currentUser?.isTeacher || 0,
-      roleID: currentUser?.roles || [],
+      isTeacher: 0,
+      roleID: [],
       tagsId: [],
       subjectId: [],
       suId: [0],
@@ -77,8 +77,6 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
     }),
     [currentUser]
   );
-
-  const [open, setOpen] = useState(true);
 
   const methods = useForm({
     resolver: yupResolver(validationSchema),
@@ -176,12 +174,13 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
         const res = await createUserAuth(dataCreate);
         if (res.status < 400) {
           reset();
-          enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+          enqueueSnackbar('Tạo người dùng thành công');
           push(PATH_DASHBOARD.user.list);
         } else {
-          enqueueSnackbar('Create Fail');
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }
       } catch (error) {
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         console.error(error);
       }
     } else {
@@ -197,13 +196,14 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       });
       if (res.status < 400) {
         reset();
-        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+        enqueueSnackbar('Cập nhật người dùng thành công');
         push(PATH_DASHBOARD.user.list);
       } else {
-        enqueueSnackbar('Update Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
       }
     }
   };
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -224,7 +224,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                 </Typography>
               )}
               {!isEdit && <div></div>}
-              {!isEdit && <RHFTextField name="userName" label="Tên người dùng" id="userName" />}
+              {!isEdit && <RHFTextField name="userName" label="Tên tài khoản" id="userName" />}
               {!isEdit && <RHFTextField name="password" label="Mật khẩu" id="password" />}
 
               <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>

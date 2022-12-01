@@ -39,11 +39,10 @@ export default function ProgramEditPage() {
 
     async function fetchProgram() {
         const res = await getProgramById(name);
-        console.log(res.data.data)
         if (res.status < 400) {
             setProgramData(res.data.data);
         } else {
-            console.log('error');
+            console.log(res.message);
         }
     }
 

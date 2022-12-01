@@ -11,6 +11,7 @@ import Iconify from '../iconify';
 import RejectionFiles from './errors/RejectionFiles';
 import MultiFilePreview from './preview/MultiFilePreview';
 import SingleFilePreview from './preview/SingleFilePreview';
+import {UsersExcelTemple} from "./index";
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,8 @@ export default function Upload({
   error,
   helperText,
   //
+  hasDefault = false,
+  defaultFile,
   file,
   onDelete,
   //
@@ -74,6 +77,7 @@ export default function Upload({
   const hasFiles = files && multiple && files.length > 0;
 
   const isError = isDragReject || !!error;
+
 
   return (
     <Box sx={{ width: 1, position: 'relative', ...sx }}>
@@ -130,6 +134,13 @@ export default function Upload({
         >
           <Iconify icon="eva:close-fill" width={18} />
         </IconButton>
+      )}
+      {hasDefault && (
+          <>
+          <Box sx={{ my: 3 }}>
+            <UsersExcelTemple files={defaultFile} />
+          </Box>
+          </>
       )}
 
       {hasFiles && (
@@ -189,11 +200,11 @@ function Placeholder({ sx, ...other }) {
 
       <Box sx={{ p: 3 }}>
         <Typography gutterBottom variant="h5">
-          Drop or Select file
+          Kéo & Thả hoặc Chọn tệp
         </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Drop files here or click
+          Thả tệp vào đây hoặc nhấp vào để
           <Typography
             variant="body2"
             component="span"
@@ -203,9 +214,9 @@ function Placeholder({ sx, ...other }) {
               textDecoration: 'underline',
             }}
           >
-            browse
+            duyệt
           </Typography>
-          thorough your machine
+          qua máy tính của bạn
         </Typography>
       </Box>
     </Stack>

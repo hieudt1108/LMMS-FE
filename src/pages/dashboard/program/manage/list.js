@@ -50,6 +50,7 @@ import { useSnackbar } from '../../../../components/snackbar';
 const TABLE_HEAD = [
   { id: 'name', label: 'Tên chương trình', align: 'left' },
   { id: 'description', label: 'Mô tả', align: 'left' },
+  {id: 'createDate', label: 'Ngày tạo', align: 'left'},
   { id: '' },
 ];
 
@@ -132,7 +133,7 @@ export default function ProgramListPage() {
       await fetchPrograms();
       enqueueSnackbar('Xóa chương trình học thành công');
     } else {
-      enqueueSnackbar('Xóa chương trình học thất bại');
+      enqueueSnackbar('Xóa chương trình học thất bại', { variant: 'error' });
     }
     if (page > 0) {
       if (dataInPage.length < 2) {
@@ -148,7 +149,7 @@ export default function ProgramListPage() {
       await fetchPrograms();
       enqueueSnackbar('Xóa chương trình học thành công');
     } else {
-      enqueueSnackbar('Xóa chương trình học thất bại');
+      enqueueSnackbar('Xóa chương trình học thất bại', { variant: 'error' });
     }
 
     if (page > 0) {
@@ -182,7 +183,7 @@ export default function ProgramListPage() {
     if (res.status < 400) {
       setListPrograms(res.data.data);
     } else {
-      console.log('error');
+      console.log(res.message);
     }
   }
 

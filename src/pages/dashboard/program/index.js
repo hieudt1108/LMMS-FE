@@ -9,7 +9,7 @@ import ProgramSliderCards from '../../../sections/@dashboard/program/ProgramSlid
 import { getAllProgram } from '../../../dataProvider/agent';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-
+import { BookingIllustration } from '../../../assets/illustrations';
 Program.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function Program() {
@@ -26,7 +26,7 @@ export default function Program() {
     if (res.status < 400) {
       setListPrograms(res.data.data);
     } else {
-      console.log('error');
+      console.log(res.message);
     }
   }
 
@@ -51,12 +51,8 @@ export default function Program() {
         />
         <Grid container spacing={2}>
           {listPrograms.map((item) => (
-            <Grid item xs={12} md={4} sm={6}>
-              <ProgramSliderCards
-                title={item.name}
-                description={item.description}
-                img="/assets/illustrations/characters/character_11.png"
-              />
+            <Grid item xs={12} md={6} sm={6}>
+              <ProgramSliderCards item={item} icon={<BookingIllustration />} />
             </Grid>
           ))}
         </Grid>

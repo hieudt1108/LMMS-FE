@@ -8,6 +8,7 @@ import { PATH_DASHBOARD } from '../../../../../routes/paths';
 // component subject
 import SysllabusSubject from '../../../../../sections/@dashboard/class/subject/SysllabusSubject';
 import DocumentLocal from '../../../../../sections/@dashboard/class/subject/DocumentLocal';
+import Head from "next/head";
 
 //
 index.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -22,6 +23,10 @@ export default function index() {
   console.log(class_id, subject_id);
   return (
     <>
+      <Head>
+        <title> Hệ thống quản lý Học liệu</title>
+      </Head>
+
       <Container maxWidth={'xl'}>
         <CustomBreadcrumbs
           heading="Khung chương trình"

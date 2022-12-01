@@ -91,7 +91,7 @@ export default function SubjectTableRow({ row, selected, onEditRow, onSelectRow,
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Sửa
+          Cập nhật
         </MenuItem>
       </MenuPopover>
 

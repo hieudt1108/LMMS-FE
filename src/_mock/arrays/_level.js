@@ -9,6 +9,7 @@ export const _levelList = [...Array(24)].map((_, index) => ({
   id: _mock.id(index),
   name: String,
   description: String,
+  createDate: any,
   grade: any
 }));
 

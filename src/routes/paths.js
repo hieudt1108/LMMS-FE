@@ -1,5 +1,7 @@
 // ----------------------------------------------------------------------
 
+import { is } from 'date-fns/locale';
+
 function path(root, sublink) {
   return `${root}${sublink}`;
 }
@@ -67,6 +69,8 @@ export const PATH_DASHBOARD = {
     new: path(ROOTS_DASHBOARD, '/program/manage/new'),
     list: path(ROOTS_DASHBOARD, '/program/manage/list'),
     edit: (name) => path(ROOTS_DASHBOARD, `/program/${name}/edit`),
+    level: (id) => path(ROOTS_DASHBOARD, `/program/level/${id}`),
+    gradeSub: (id, classId) => path(ROOTS_DASHBOARD, `/program/gradeSub/${id}/${classId}`),
   },
   grade: {
     root: path(ROOTS_DASHBOARD, '/grade'),
@@ -92,19 +96,35 @@ export const PATH_DASHBOARD = {
     new: (folder_id) => path(ROOTS_DASHBOARD, `/blog/new/${folder_id}`),
     view: (id) => path(ROOTS_DASHBOARD, `/blog/post/${id}`),
     demoView: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
+  slot: {
+    root: path(ROOTS_DASHBOARD, '/slot'),
+    new: path(ROOTS_DASHBOARD, '/slot/new'),
+    list: path(ROOTS_DASHBOARD, '/slot/list'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/slot/${name}/edit`),
+  },
+  documents: {
+    root: path(ROOTS_DASHBOARD, '/documents'),
+    posts: path(ROOTS_DASHBOARD, '/documents/document/posts'),
+    new: path(ROOTS_DASHBOARD, '/documents/document/new'),
+    view: (id) => path(ROOTS_DASHBOARD, `/documents/document/post/${id}`),
+    demoView: path(ROOTS_DASHBOARD, '/documents/document/post/apply-these-7-secret-techniques-to-improve-event'),
+  },
+  type_documents: {
+    root: path(ROOTS_DASHBOARD, '/typeDocs'),
+    new: path(ROOTS_DASHBOARD, '/typeDocs/new'),
+    list: path(ROOTS_DASHBOARD, '/typeDocs/list'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/typeDocs/${name}/edit`),
+  },
+  role: {
+    root: path(ROOTS_DASHBOARD, '/roles'),
+    new: path(ROOTS_DASHBOARD, '/roles/new'),
+    list: path(ROOTS_DASHBOARD, '/roles/list'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/roles/${name}/edit`),
+  },
+  permission: {
+    root: path(ROOTS_DASHBOARD, '/permission'),
+    new: path(ROOTS_DASHBOARD, '/permission/new'),
+    list: path(ROOTS_DASHBOARD, '/permission/list'),
+    edit: (name) => path(ROOTS_DASHBOARD, `/permission/${name}/edit`),
   },
 };
-
-export const PATH_DOCS = {
-  root: 'https://docs.minimals.cc',
-  changelog: 'https://docs.minimals.cc/changelog',
-};
-
-export const PATH_ZONE_ON_STORE = 'https://mui.com/store/items/zone-landing-page/';
-
-export const PATH_MINIMAL_ON_STORE = 'https://mui.com/store/items/minimal-dashboard/';
-
-export const PATH_FREE_VERSION = 'https://mui.com/store/items/minimal-dashboard-free/';
-
-export const PATH_FIGMA_PREVIEW =
-  'https://www.figma.com/file/OBEorYicjdbIT6P1YQTTK7/%5BPreview%5D-Minimal-Web.15.10.22?node-id=0%3A1';

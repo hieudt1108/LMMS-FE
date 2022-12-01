@@ -10,6 +10,7 @@ export { default as FileShareDialog } from './portal/FileShareDialog';
 export { default as FileDetailsDrawer } from './portal/FileDetailsDrawer';
 export { default as FileActionSelected } from './portal/FileActionSelected';
 export { default as FileNewFolderDialog } from './portal/FileNewFolderDialog';
+export { default as FileNewUsersDialog } from './portal/FileNewUsersDialog';
 
 export { default as FileListView } from './view/FileListView';
 export { default as FileGridView } from './view/FileGridView';

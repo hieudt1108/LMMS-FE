@@ -51,6 +51,7 @@ import {useSnackbar} from "../../../components/snackbar";
 const TABLE_HEAD = [
     {id: 'name', label: 'Tên cấp học', align: 'left'},
     {id: 'description', label: 'Mô tả', align: 'left'},
+    {id: 'createDate', label: 'Ngày tạo', align: 'left'},
     {id: ''},
 ];
 
@@ -135,7 +136,7 @@ export default function LevelListPage() {
             await fetchLevels();
             enqueueSnackbar('Xóa cấp học thành công');
         } else {
-            enqueueSnackbar('Xóa cấp học thất bại');
+            enqueueSnackbar('Xóa cấp học thất bại', { variant: 'error' });
         }
 
         if (page > 0) {
@@ -152,7 +153,7 @@ export default function LevelListPage() {
             await fetchLevels();
             enqueueSnackbar('Xóa cấp học thành công');
         } else {
-            enqueueSnackbar('Xóa cấp học thất bại');
+            enqueueSnackbar('Xóa cấp học thất bại', { variant: 'error' });
         }
 
         if (page > 0) {
@@ -184,7 +185,7 @@ export default function LevelListPage() {
         if (res.status < 400) {
             setListLevels(res.data.data);
         } else {
-            console.log('error');
+            console.log(res.message);
         }
     }
 

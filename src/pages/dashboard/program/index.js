@@ -9,7 +9,7 @@ import ProgramSliderCards from '../../../sections/@dashboard/program/ProgramSlid
 import { getAllProgram } from '../../../dataProvider/agent';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-
+import { BookingIllustration } from '../../../assets/illustrations';
 Program.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function Program() {
@@ -52,12 +52,7 @@ export default function Program() {
         <Grid container spacing={2}>
           {listPrograms.map((item) => (
             <Grid item xs={12} md={4} sm={6}>
-              <ProgramSliderCards
-                id={item.id}
-                title={item.name}
-                description={item.description}
-                img="/assets/illustrations/characters/character_11.png"
-              />
+              <ProgramSliderCards item={item} icon={<BookingIllustration />} />
             </Grid>
           ))}
         </Grid>

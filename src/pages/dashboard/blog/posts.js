@@ -4,7 +4,20 @@ import { useEffect, useCallback, useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
 // @mui
-import { Grid, Button, Container, Stack } from '@mui/material';
+import {
+  Alert,
+  Pagination,
+  Button,
+  Container,
+  Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+  TextField,
+  InputAdornment,
+} from '@mui/material';
 // utils
 import axios from '../../../utils/axios';
 // routes
@@ -17,20 +30,10 @@ import { SkeletonPostItem } from '../../../components/skeleton';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
 // sections
-import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../../../sections/@dashboard/blog';
+import { BlogPostCard } from '../../../sections/@dashboard/blog';
 
 // api
-import { getAllDocument } from '../../../dataProvider/agent';
-
-// ----------------------------------------------------------------------
-
-const SORT_OPTIONS = [
-  { value: 'latest', label: 'Latest' },
-  { value: 'popular', label: 'Popular' },
-  { value: 'oldest', label: 'Oldest' },
-];
-
-// ----------------------------------------------------------------------
+import { getAllDocument, getAllTypeDocument, getAllSubject } from '../../../dataProvider/agent';
 
 BlogPostsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -39,46 +42,101 @@ BlogPostsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function BlogPostsPage() {
   const { themeStretch } = useSettingsContext();
 
-  const [posts, setPosts] = useState([]);
+  const [filter, setFilter] = useState({
+    pageIndex: 1,
+    pageSize: 8,
+    programId: 6,
+    searchByName: '',
+    typeDocumentId: '',
+    subjectId: '',
+  });
 
-  const [documents, setDocuments] = useState([]);
-  const [sortBy, setSortBy] = useState('latest');
-
-  const sortedPosts = applySortBy(posts, sortBy);
-
-  const getAllPosts = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/blog/posts');
-      setPosts(response.data.posts);
-    } catch (error) {
-      console.error(error);
+  const renderMenuItem = useCallback((item) => {
+    if (item && item.length) {
+      return item.map((obj, index) => (
+        <MenuItem value={obj} key={index}>
+          {obj.name}
+        </MenuItem>
+      ));
     }
-  }, []);
-
-  console.log('data: ', documents);
+    return (
+      <MenuItem>
+        <Alert severity="error">This is an error !</Alert>
+      </MenuItem>
+    );
+  });
+  const [documents, setDocuments] = useState([]);
+  const [typeDocs, setTypeDoc] = useState([]);
+  const [subjects, setSubject] = useState([]);
 
   async function fetchAllDocument() {
-    const res = await getAllDocument({ pageIndex: 1, pageSize: 100 });
+    const res = await getAllDocument(filter);
     if (res.status < 400) {
       setDocuments(res.data.data);
     } else {
       console.log(res.message);
     }
   }
+  async function fetchAllTypeDoc() {
+    const res = await getAllTypeDocument({
+      pageIndex: 1,
+      pageSize: 100,
+    });
+    if (res.status < 400) {
+      setTypeDoc(res.data);
+    } else {
+      console.log(res.message);
+    }
+  }
+  console.log('test: ', typeDocs);
+
+  async function fetchAllSubject() {
+    const res = await getAllSubject({
+      pageIndex: 1,
+      pageSize: 100,
+    });
+    if (res.status < 400) {
+      setSubject(res.data.data);
+    } else {
+      console.log(res.message);
+    }
+  }
+
+  const handleSearchChange = useCallback(
+    (event, value) => {
+      setFilter({ ...filter, searchByName: event.target.value });
+    },
+    [filter]
+  );
+
+  const handleFilterDocType = useCallback(
+    (event, value) => {
+      setFilter({ ...filter, typeDocumentId: event.target.value.id });
+    },
+    [filter]
+  );
+
+  const handleFilterSubject = useCallback(
+    (event, value) => {
+      setFilter({ ...filter, subjectId: event.target.value.id });
+    },
+    [filter]
+  );
+  const handlePageChange = useCallback(async (event, pageIndex) => {
+    let response = await getAllDocument({
+      ...filter,
+      pageIndex: pageIndex,
+    });
+    setFilter({ ...filter, pageIndex: pageIndex });
+  }, []);
   useEffect(() => {
     fetchAllDocument();
+  }, [filter]);
+
+  useEffect(() => {
+    fetchAllTypeDoc();
+    fetchAllSubject();
   }, []);
-
-  // useEffect(() => {
-  //   getAllPosts();
-  // }, [getAllPosts]);
-
-  // useEffect(() => {
-  //   getAllDocument();
-  // }, []);
-  const handleChangeSortBy = (event) => {
-    setSortBy(event.target.value);
-  };
 
   return (
     <>
@@ -108,44 +166,53 @@ export default function BlogPostsPage() {
         />
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <BlogPostsSearch />
-          <BlogPostsSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
+          <Box>
+            <TextField
+              size="small"
+              sx={{ mr: 1, mr: 3 }}
+              autoHighlight
+              onChange={handleSearchChange}
+              placeholder="Search..."
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <FormControl sx={{ minWidth: 120, mr: 2 }} size="small">
+              <InputLabel id="demo-simple-select-helper-label">Khối</InputLabel>
+              <Select id="demo-simple-select-helper" label="Khối" onChange={handleFilterDocType}>
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {renderMenuItem(typeDocs)}
+              </Select>
+            </FormControl>
+            <FormControl sx={{ minWidth: 120 }} size="small">
+              <InputLabel id="demo-simple-select-helper-label">Subject</InputLabel>
+              <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterSubject}>
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {renderMenuItem(subjects)}
+              </Select>
+            </FormControl>
+          </Box>
         </Stack>
 
-        <Grid container spacing={3}>
-          {/* {(!posts.length ? [...Array(12)] : sortedPosts).map((post, index) =>
-            post ? (
-              <Grid key={post.id} item xs={12} sm={6} md={3}>
-                <BlogPostCard documents={documents} post={post} index={index} />
-              </Grid>
-            ) : (
-              <SkeletonPostItem key={index} />
-            )
-          )} */}
-          {documents?.map((document, index) => (
-            <Grid key={document.id} item xs={12} sm={6} md={3}>
-              <BlogPostCard document={document} index={index} />
-            </Grid>
-          ))}
-        </Grid>
+        <BlogPostCard documents={documents} />
+        <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
+          <Pagination
+            size="small"
+            count={documents?.length}
+            rowsperpage={filter.pageSize}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Stack>
       </Container>
     </>
   );
 }
-
-// ----------------------------------------------------------------------
-
-const applySortBy = (posts, sortBy) => {
-  if (sortBy === 'latest') {
-    return orderBy(posts, ['createdAt'], ['desc']);
-  }
-
-  if (sortBy === 'oldest') {
-    return orderBy(posts, ['createdAt'], ['asc']);
-  }
-
-  if (sortBy === 'popular') {
-    return orderBy(posts, ['view'], ['desc']);
-  }
-  return posts;
-};

@@ -4,30 +4,18 @@ import { paramCase } from 'change-case';
 import NextLink from 'next/link';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Card, Avatar, Typography, CardContent, Stack } from '@mui/material';
+import { Card, Typography, Stack, Avatar, Box } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // utils
-import { fDate } from '../../../utils/formatTime';
+import { fData } from '../../../utils/formatNumber';
 import { fShortenNumber } from '../../../utils/formatNumber';
 // components
-import Image from '../../../components/image';
 import Iconify from '../../../components/iconify';
-import TextMaxLine from '../../../components/text-max-line';
-import SvgColor from '../../../components/svg-color';
-// import second from '../../../../public/assets/cover_8.jpg'
-// ----------------------------------------------------------------------
 
-const StyledOverlay = styled('div')(({ theme }) => ({
-  top: 0,
-  zIndex: 1,
-  width: '100%',
-  height: '100%',
-  position: 'absolute',
-  backgroundColor: alpha(theme.palette.grey[900], 0.64),
-}));
+// ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
@@ -36,160 +24,44 @@ BlogPostCard.propTypes = {
   document: PropTypes.object,
 };
 
-export default function BlogPostCard({ document }) {
+export default function BlogPostCard({ documents }) {
   // const isDesktop = useResponsive('up', 'md');
 
-  const { code, name, typeFile, id } = document;
-
-  // const latestPost = index === 0 || index === 1 || index === 2;
-
-  // if (isDesktop && latestPost) {
-  //   return (
-  //     <Card>
-  //       <Avatar
-  //         alt={author.name}
-  //         src={author.avatarUrl}
-  //         sx={{
-  //           top: 24,
-  //           left: 24,
-  //           zIndex: 9,
-  //           position: 'absolute',
-  //         }}
-  //       />
-
-  //       <PostContent title={title} view={view} comment={comment} share={share} createdAt={createdAt} index={index} />
-
-  //       <StyledOverlay />
-
-  //       <Image alt="cover" src={cover} sx={{ height: 360 }} />
-  //     </Card>
-  //   );
-  // }
-
+  // const { code, name, typeFile, id } = document;
   return (
-    <Card>
-      <Box sx={{ position: 'relative' }}>
-        <SvgColor
-          src="/assets/shape_avatar.svg"
-          sx={{
-            width: 80,
-            height: 36,
-            zIndex: 9,
-            bottom: -15,
-            position: 'absolute',
-            color: 'background.paper',
-          }}
-        />
+    <Card sx={{ p: 3, cursor: 'pointer' }}>
+      <Stack spacing={3}>
+        {documents.map((category) => (
+          <Stack
+            key={category.id}
+            spacing={3}
+            direction="row"
+            alignItems="center"
+            sx={{ border: '1px solid #f3f2f2', borderRadius: '12px' }}
+            p={2}
+          >
+            <Avatar variant="rounded" sx={{ bgcolor: 'background.neutral', width: 48, height: 48, borderRadius: 1.5 }}>
+              <Box component="img" src="/assets/icons/files/ic_document.svg" />
+            </Avatar>
 
-        {/* <Avatar
-          alt={author.name}
-          src={author.avatarUrl}
-          sx={{
-            left: 24,
-            zIndex: 9,
-            width: 32,
-            height: 32,
-            bottom: -16,
-            position: 'absolute',
-          }}
-        /> */}
+            <Stack spacing={0.5} flexGrow={1}>
+              <Typography variant="subtitle2"> {category.name} </Typography>
+              <Box>
+                <Typography variant="caption" sx={{ color: 'text.disabled', mr: 3 }}>
+                  TypeFile: {category.typeFile}
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'text.disabled' }}>
+                  dateCreated:
+                </Typography>
+              </Box>
+            </Stack>
 
-        <Image alt="cover" src="https://api-dev-minimal-v4.vercel.app/assets/images/covers/cover_8.jpg" ratio="4/3" />
-      </Box>
-
-      <PostContent code={code} name={name} typeFile={typeFile} id={id} />
+            {/* <Typography variant="subtitle2"> {fData(category.usedStorage)} </Typography> */}
+          </Stack>
+        ))}
+      </Stack>
     </Card>
   );
 }
 
 // ----------------------------------------------------------------------
-
-PostContent.propTypes = {
-  code: PropTypes.string,
-  name: PropTypes.string,
-  typeFile: PropTypes.string,
-  id: PropTypes.number,
-};
-
-export function PostContent({ code, name, typeFile, id }) {
-  // const isDesktop = useResponsive('up', 'md');
-
-  const linkTo = PATH_DASHBOARD.blog.view(id);
-
-  // const latestPostLarge = index === 0;
-
-  // const latestPostSmall = index === 1 || index === 2;
-
-  // const POST_INFO = [
-  //   { number: comment, icon: 'eva:message-circle-fill' },
-  //   { number: view, icon: 'eva:eye-fill' },
-  //   { number: share, icon: 'eva:share-fill' },
-  // ];
-
-  return (
-    <CardContent
-      sx={{
-        pt: 4.5,
-        width: 1,
-        zIndex: 9,
-        bottom: 0,
-        position: 'absolute',
-        color: 'common.white',
-      }}
-    >
-      <Typography
-        gutterBottom
-        variant="caption"
-        component="div"
-        sx={{
-          color: 'text.disabled',
-
-          opacity: 1.2,
-        }}
-      >
-        t.manh - {code}
-      </Typography>
-
-      <NextLink href={linkTo} passHref>
-        <TextMaxLine asLink variant="h5" line={2} persistent>
-          {name}
-        </TextMaxLine>
-      </NextLink>
-      {/* <Typography
-        gutterBottom
-        variant="caption"
-        component="div"
-        sx={{
-          color: 'common.white',
-        }}
-      >
-        TypeFile: {typeFile}
-      </Typography> */}
-
-      {/* <Stack
-        flexWrap="wrap"
-        direction="row"
-        justifyContent="flex-end"
-        sx={{
-          mt: 3,
-          color: 'text.disabled',
-
-          opacity: 0.64,
-          color: 'common.white',
-        }}
-      >
-        {POST_INFO.map((info, index) => (
-          <Stack
-            key={index}
-            direction="row"
-            alignItems="center"
-            sx={{ typography: 'caption', ml: index === 0 ? 0 : 1.5 }}
-          >
-            <Iconify icon={info.icon} width={16} sx={{ mr: 0.5 }} />
-            {fShortenNumber(info.number)}
-          </Stack>
-        ))}
-      </Stack> */}
-    </CardContent>
-  );
-}

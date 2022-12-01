@@ -57,7 +57,7 @@ export default function FileListView({ table, tableData, isNotFound, onDeleteRow
   return (
     <>
       <Box sx={{ px: 1, position: 'relative', borderRadius: 1.5, bgcolor: 'background.neutral' }}>
-        <TableSelectedAction
+        {/* <TableSelectedAction
           dense={dense}
           numSelected={selected.length}
           rowCount={tableData.length}
@@ -91,7 +91,7 @@ export default function FileListView({ table, tableData, isNotFound, onDeleteRow
             width: 'auto',
             borderRadius: 1,
           }}
-        />
+        /> */}
 
         <TableContainer>
           <Table

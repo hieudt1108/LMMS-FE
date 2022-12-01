@@ -3,7 +3,7 @@ import { Box, Card, CardHeader, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 //
 import { PATH_DASHBOARD } from 'src/routes/paths';
-export default function LevelSecond({ title }) {
+export default function LevelSecond() {
   const {
     query: { title },
   } = useRouter();

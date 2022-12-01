@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://lmms.site:9090/api/',
+  baseURL: 'http://lmms.site:6060/api/',
   timeout: 3000,
 });
 import { PATH_AUTH } from '../routes/paths';
@@ -197,8 +197,6 @@ const createSubject = (payload) => {
 const createUserAuth = (payload) => {
   return postApi('Auth/registerSingleUser', payload);
 };
-
-
 
 // UPLOAD FILE
 const uploadFile = (payload) => {

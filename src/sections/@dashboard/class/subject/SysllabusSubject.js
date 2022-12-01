@@ -1,20 +1,42 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 // @mui
-import { Box, Card, Button, Typography, Stack, Divider } from '@mui/material';
+import {Box, Card, Button, Typography, Stack, Divider, MenuItem} from '@mui/material';
 // components
 import Iconify from '../../../../components/iconify';
+import MenuPopover from "../../../../components/menu-popover";
+import FilePreview from "../../documents/DocumentPreview";
 
 export default function SysllabusSubject() {
+  const [openPreview, setOpenPreview] = useState(false);
+  const [openPopover, setOpenPopover] = useState(null);
+
+  const handleOpenPopover = (event) => {
+    setOpenPopover(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setOpenPopover(null);
+  };
+
+  const handleOpenPreview = () => {
+    setOpenPreview(true);
+  };
+
+  const handleClosePreview = () => {
+    setOpenPreview(false);
+  };
+
   return (
+      <>
     <Card sx={{ p: 3 }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3 }}>
         <Typography variant="overline" sx={{ color: 'text.secondary' }}>
-          Week 1 Info
+          Tuần 1
         </Typography>
 
         <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New Billing Address
+          Thêm tài liệu
         </Button>
       </Stack>
 
@@ -28,8 +50,13 @@ export default function SysllabusSubject() {
           </Typography>
 
           <Box variant="body2" sx={{ display: 'flex' }}>
+
             <Box component="img" src="/assets/icons/files/ic_document.svg" sx={{ ml: 1 }} />
-            <Button variant="text">Silde Chapter 4</Button>
+            <Button variant="text"  onClick={() => {
+              handleClosePopover();
+              handleOpenPreview();
+            }}>Silde Chapter 4</Button>
+
           </Box>
 
           {/* <Stack direction="row" spacing={1}>
@@ -44,5 +71,10 @@ export default function SysllabusSubject() {
         </Stack>
       </Stack>
     </Card>
+  <FilePreview
+      open={openPreview}
+      onClose={handleClosePreview}
+  />
+      </>
   );
 }

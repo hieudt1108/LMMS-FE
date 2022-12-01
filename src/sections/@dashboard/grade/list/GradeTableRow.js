@@ -63,6 +63,7 @@ export default function GradeTableRow({ row, selected, onEditRow, onSelectRow, o
 
         <TableCell align="left">{description}</TableCell>
 
+
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />

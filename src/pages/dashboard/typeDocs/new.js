@@ -10,42 +10,39 @@ import DashboardLayout from '../../../layouts/dashboard';
 import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 // sections
-import { BlogNewPostForm } from '../../../sections/@dashboard/blog';
+import TypeDocsNewEditForm from '../../../sections/@dashboard/typeDocs/TypeDocsNewEditForm';
 
 // ----------------------------------------------------------------------
 
-BlogNewPostPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+TypeDocsCreatePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function BlogNewPostPage() {
+export default function TypeDocsCreatePage() {
   const { themeStretch } = useSettingsContext();
 
   return (
     <>
       <Head>
-        <title> Hệ thống quản lý Học liệu</title>
+        <title>Hệ thống quản lý học liệu</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Tạo một tài liệu mới"
+          heading="Tạo loại tài liệu"
           links={[
             {
               name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Danh sách tài liệu',
-              href: PATH_DASHBOARD.blog.root,
+              name: 'Danh sách loại tài liệu',
+              href: PATH_DASHBOARD.type_documents.list,
             },
-            {
-              name: 'Tạo tài liệu',
-            },
+            { name: 'Tạo mới' },
           ]}
         />
-
-        <BlogNewPostForm />
+        <TypeDocsNewEditForm />
       </Container>
     </>
   );

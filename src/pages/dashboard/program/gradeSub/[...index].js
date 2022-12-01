@@ -10,6 +10,7 @@ import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 //
 import Grade from '../../../../sections/@dashboard/program/grade/Grade';
+import Head from "next/head";
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +27,10 @@ export default function GradeSub() {
 
   return (
     <>
+        <Head>
+            <title> Hệ thống quản lý Học liệu</title>
+        </Head>
+
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Khối học"

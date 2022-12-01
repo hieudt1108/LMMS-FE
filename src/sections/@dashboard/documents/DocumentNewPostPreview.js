@@ -11,7 +11,7 @@ import EmptyContent from '../../../components/empty-content';
 
 // ----------------------------------------------------------------------
 
-BlogNewPostPreview.propTypes = {
+DocumentNewPostPreview.propTypes = {
   open: PropTypes.bool,
   isValid: PropTypes.bool,
   onClose: PropTypes.func,
@@ -20,7 +20,7 @@ BlogNewPostPreview.propTypes = {
   isSubmitting: PropTypes.bool,
 };
 
-export default function BlogNewPostPreview({ values, isValid, isSubmitting, open, onClose, onSubmit }) {
+export default function DocumentNewPostPreview({ values, isValid, isSubmitting, open, onClose, onSubmit }) {
   const { title = '', content = '', description = '' } = values;
 
   const cover = typeof values.cover === 'string' ? values.cover : values.cover?.preview;

@@ -20,8 +20,8 @@ import FormProvider, {
   RHFAutocomplete,
 } from '../../../components/hook-form';
 //
-import BlogNewPostPreview from './BlogNewPostPreview';
-import BlogPostsSort from './filter/BlogPostsSort';
+import DocumentNewPostPreview from './DocumentNewPostPreview';
+import DocumentPostsSort from './filter/DocumentPostsSort';
 // ----------------------------------------------------------------------
 import { getAllSubject, getAllTypeDocument, getAllPermission } from '../../../dataProvider/agent';
 const SORT_OPTIONS = [
@@ -48,7 +48,7 @@ const SORT_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function BlogNewPostForm() {
+export default function DocumentNewPostForm() {
   const { push } = useRouter();
 
   const [subjects, setSubjects] = useState([]);
@@ -82,7 +82,7 @@ export default function BlogNewPostForm() {
 
   const [openPreview, setOpenPreview] = useState(false);
 
-  const NewBlogSchema = Yup.object().shape({
+  const NewDocumentSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     description: Yup.string().required('Description is required'),
     content: Yup.string().required('Content is required'),
@@ -103,7 +103,7 @@ export default function BlogNewPostForm() {
   };
 
   const methods = useForm({
-    resolver: yupResolver(NewBlogSchema),
+    resolver: yupResolver(NewDocumentSchema),
     defaultValues,
   });
 
@@ -135,7 +135,7 @@ export default function BlogNewPostForm() {
       reset();
       handleClosePreview();
       enqueueSnackbar('Post success!');
-      push(PATH_DASHBOARD.blog.posts);
+      push(PATH_DASHBOARD.documents.posts);
     } catch (error) {
       console.error(error);
     }
@@ -224,7 +224,7 @@ export default function BlogNewPostForm() {
                 /> */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>Loại tài liệu</span>
-                  <BlogPostsSort
+                  <DocumentPostsSort
                     sortBy={sortByDocs}
                     sortOptions={typeDocs}
                     onSort={(e) => setSortByDocs(e.target.value)}
@@ -238,7 +238,7 @@ export default function BlogNewPostForm() {
                   }}
                 >
                   <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>Môn học</span>
-                  <BlogPostsSort
+                  <DocumentPostsSort
                     sortBy={sortBySubject}
                     sortOptions={subjects}
                     onSort={(e) => setSortBySubject(e.target.value)}
@@ -254,11 +254,11 @@ export default function BlogNewPostForm() {
                     }}
                   >
                     <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>Chọn User</span>
-                    <BlogPostsSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
+                    <DocumentPostsSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>Quyền truy cập</span>
-                    <BlogPostsSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
+                    <DocumentPostsSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
                   </div>
                 </div>
 
@@ -272,7 +272,7 @@ export default function BlogNewPostForm() {
                     }}
                   >
                     <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>Chọn lớp</span>
-                    <BlogPostsSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
+                    <DocumentPostsSort sortBy={sortBy} sortOptions={SORT_OPTIONS} onSort={handleChangeSortBy} />
                   </div>
                 </div>
 
@@ -309,7 +309,7 @@ export default function BlogNewPostForm() {
         </Grid>
       </FormProvider>
 
-      {/* <BlogNewPostPreview
+      {/* <DocumentNewPostPreview
         values={values}
         open={openPreview}
         isValid={isValid}

@@ -21,7 +21,7 @@ import {
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
 // _mock_
-import {_levelList} from '../../../_mock/arrays';
+import {_typeDocumentList} from '../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
@@ -41,27 +41,26 @@ import {
     TablePaginationCustom,
 } from '../../../components/table';
 // sections
-import {LevelTableToolbar, LevelTableRow} from '../../../sections/@dashboard/level/list';
-import {deleteLevel, deleteProgram, getAllLevel} from "../../../dataProvider/agent";
+import {TypeDocsTableToolbar, TypeDocsTableRow} from '../../../sections/@dashboard/typeDocs/list';
+import {deleteTypeDocument, getAllTypeDocument} from "../../../dataProvider/agent";
 import {useSnackbar} from "../../../components/snackbar";
 
 // ----------------------------------------------------------------------
 
 
 const TABLE_HEAD = [
-    {id: 'name', label: 'Tên cấp học', align: 'left'},
-    {id: 'description', label: 'Mô tả', align: 'left'},
-    {id: 'createDate', label: 'Ngày tạo', align: 'left'},
+    {id: 'name', label: 'Tên loại tài liệu', align: 'left'},
+    {id: 'description', label: 'Ngày tạo', align: 'left'},
     {id: ''},
 ];
 
 // ----------------------------------------------------------------------
 
-LevelListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+TypeDocsListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function LevelListPage() {
+export default function TypeDocsListPage() {
     const {
         dense,
         page,
@@ -87,16 +86,16 @@ export default function LevelListPage() {
 
     const {push} = useRouter();
 
-    const [tableData, setTableData] = useState(_levelList);
+    const [tableData, setTableData] = useState(_typeDocumentList);
 
     const [openConfirm, setOpenConfirm] = useState(false);
 
     const [filterName, setFilterName] = useState('');
 
-    const [listLevels, setListLevels] = useState([]);
+    const [listTypeDocs, setListTypeDocs] = useState([]);
 
     const dataFiltered = applyFilter({
-        inputData: listLevels,
+        inputData: listTypeDocs,
         comparator: getComparator(order, orderBy),
         filterName,
     });
@@ -130,13 +129,13 @@ export default function LevelListPage() {
 
 
     const handleDeleteRow = async (id) => {
-        const response = await deleteLevel(id)
+        const response = await deleteTypeDocument(id)
         if (response.status < 400) {
             setSelected([]);
-            await fetchLevels();
+            await fetchTypeDocs();
             enqueueSnackbar('Xóa cấp học thành công');
         } else {
-            enqueueSnackbar('Xóa cấp học thất bại', { variant: 'error' });
+            enqueueSnackbar('Xóa cấp học thất bại');
         }
 
         if (page > 0) {
@@ -147,13 +146,13 @@ export default function LevelListPage() {
     };
 
     const handleDeleteRows = async (selected) => {
-        const response = await deleteLevel(selected)
+        const response = await deleteTypeDocument(selected)
         if (response.status < 400) {
             setSelected([]);
-            await fetchLevels();
+            await fetchTypeDocs();
             enqueueSnackbar('Xóa cấp học thành công');
         } else {
-            enqueueSnackbar('Xóa cấp học thất bại', { variant: 'error' });
+            enqueueSnackbar('Xóa cấp học thất bại');
         }
 
         if (page > 0) {
@@ -162,14 +161,14 @@ export default function LevelListPage() {
             } else if (selected.length === dataFiltered.length) {
                 setPage(0);
             } else if (selected.length > dataInPage.length) {
-                const newPage = Math.ceil((listLevels.length - selected.length) / rowsPerPage) - 1;
+                const newPage = Math.ceil((listTypeDocs.length - selected.length) / rowsPerPage) - 1;
                 setPage(newPage);
             }
         }
     };
 
     const handleEditRow = (id) => {
-        push(PATH_DASHBOARD.level.edit(id));
+        push(PATH_DASHBOARD.type_documents.edit(id));
     };
 
     const handleResetFilter = () => {
@@ -177,13 +176,14 @@ export default function LevelListPage() {
     };
 
     useEffect(() => {
-        fetchLevels();
+        fetchTypeDocs();
     }, []);
 
-    async function fetchLevels() {
-        const res = await getAllLevel({pageIndex: 1, pageSize: 100});
+    async function fetchTypeDocs() {
+        const res = await getAllTypeDocument({pageIndex: 1, pageSize: 100});
+        console.log(res.data)
         if (res.status < 400) {
-            setListLevels(res.data.data);
+            setListTypeDocs(res.data);
         } else {
             console.log(res.message);
         }
@@ -197,16 +197,16 @@ export default function LevelListPage() {
 
             <Container maxWidth={'xl'}>
                 <CustomBreadcrumbs
-                    heading="Danh sách cấp học"
+                    heading="Danh sách loại tài liệu"
                     links={[
                         {name: 'Trang chủ', href: PATH_DASHBOARD.root},
-                        {name: 'Cấp học', href: PATH_DASHBOARD.level.root},
+                        {name: 'Loại tài liệu', href: PATH_DASHBOARD.type_documents.root},
                         {name: 'Danh sách'},
                     ]}
                     action={
-                        <NextLink href={PATH_DASHBOARD.level.new} passHref>
+                        <NextLink href={PATH_DASHBOARD.type_documents.new} passHref>
                             <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill"/>}>
-                                Thêm cấp học
+                                Thêm loại tài liệu
                             </Button>
                         </NextLink>
                     }
@@ -216,7 +216,7 @@ export default function LevelListPage() {
 
                     <Divider/>
 
-                    <LevelTableToolbar
+                    <TypeDocsTableToolbar
                         isFiltered={isFiltered}
                         filterName={filterName}
                         onFilterName={handleFilterName}
@@ -227,11 +227,11 @@ export default function LevelListPage() {
                         <TableSelectedAction
                             dense={dense}
                             numSelected={selected.length}
-                            rowCount={listLevels.length}
+                            rowCount={listTypeDocs.length}
                             onSelectAllRows={(checked) =>
                                 onSelectAllRows(
                                     checked,
-                                    listLevels.map((row) => row.id)
+                                    listTypeDocs.map((row) => row.id)
                                 )
                             }
                             action={
@@ -249,31 +249,31 @@ export default function LevelListPage() {
                                     order={order}
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
-                                    rowCount={listLevels.length}
+                                    rowCount={listTypeDocs.length}
                                     numSelected={selected.length}
                                     onSort={onSort}
                                     onSelectAllRows={(checked) =>
                                         onSelectAllRows(
                                             checked,
-                                            listLevels.map((row) => row.id)
+                                            listTypeDocs.map((row) => row.id)
                                         )
                                     }
                                 />
 
                                 <TableBody>
-                                    {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((level) => (
-                                        <LevelTableRow
-                                            key={level.id}
-                                            row={level}
-                                            selected={selected.includes(level.id)}
-                                            onSelectRow={() => onSelectRow(level.id)}
-                                            onDeleteRow={() => handleDeleteRow(level.id)}
-                                            onEditRow={() => handleEditRow(level.id)}
+                                    {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((typeDocs) => (
+                                        <TypeDocsTableRow
+                                            key={typeDocs.id}
+                                            row={typeDocs}
+                                            selected={selected.includes(typeDocs.id)}
+                                            onSelectRow={() => onSelectRow(typeDocs.id)}
+                                            onDeleteRow={() => handleDeleteRow(typeDocs.id)}
+                                            onEditRow={() => handleEditRow(typeDocs.id)}
                                         />
                                     ))}
 
                                     <TableEmptyRows height={denseHeight}
-                                                    emptyRows={emptyRows(page, rowsPerPage, listLevels.length)}/>
+                                                    emptyRows={emptyRows(page, rowsPerPage, listTypeDocs.length)}/>
 
                                     <TableNoData isNotFound={isNotFound}/>
                                 </TableBody>
@@ -335,7 +335,7 @@ function applyFilter({inputData, comparator, filterName}) {
     inputData = stabilizedThis.map((el) => el[0]);
 
     if (filterName) {
-        inputData = inputData.filter((level) => level.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
+        inputData = inputData.filter((typeDocs) => typeDocs.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
     }
 
 

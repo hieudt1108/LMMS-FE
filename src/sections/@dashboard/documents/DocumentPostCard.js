@@ -19,12 +19,12 @@ import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
-BlogPostCard.propTypes = {
+DocumentPostCard.propTypes = {
   index: PropTypes.number,
   document: PropTypes.object,
 };
 
-export default function BlogPostCard({ documents }) {
+export default function DocumentPostCard({ documents }) {
   // const isDesktop = useResponsive('up', 'md');
 
   // const { code, name, typeFile, id } = document;

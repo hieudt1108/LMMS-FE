@@ -19,27 +19,30 @@ import {
   InputAdornment,
 } from '@mui/material';
 // utils
-import axios from '../../../utils/axios';
+import axios from '../../../../utils/axios';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // layouts
-import DashboardLayout from '../../../layouts/dashboard';
+import DashboardLayout from '../../../../layouts/dashboard';
 // components
-import Iconify from '../../../components/iconify';
-import { SkeletonPostItem } from '../../../components/skeleton';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import { useSettingsContext } from '../../../components/settings';
+import Iconify from '../../../../components/iconify';
+import { SkeletonPostItem } from '../../../../components/skeleton';
+import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
+import { useSettingsContext } from '../../../../components/settings';
 // sections
-import { BlogPostCard } from '../../../sections/@dashboard/blog';
-
 // api
-import { getAllDocument, getAllTypeDocument, getAllSubject } from '../../../dataProvider/agent';
-
-BlogPostsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+import { getAllDocument, getAllTypeDocument, getAllSubject } from '../../../../dataProvider/agent';
+import { DocumentPostCard } from '../../../../sections/@dashboard/documents';
 
 // ----------------------------------------------------------------------
 
-export default function BlogPostsPage() {
+// ----------------------------------------------------------------------
+
+DocumentPostsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+// ----------------------------------------------------------------------
+
+export default function DocumentPostsPage() {
   const { themeStretch } = useSettingsContext();
 
   const [filter, setFilter] = useState({
@@ -157,7 +160,7 @@ export default function BlogPostsPage() {
             },
           ]}
           action={
-            <NextLink href={PATH_DASHBOARD.blog.new} passHref>
+            <NextLink href={PATH_DASHBOARD.documents.new} passHref>
               <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                 New Document
               </Button>
@@ -202,7 +205,8 @@ export default function BlogPostsPage() {
           </Box>
         </Stack>
 
-        <BlogPostCard documents={documents} />
+        <DocumentPostCard documents={documents} />
+
         <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
           <Pagination
             size="small"

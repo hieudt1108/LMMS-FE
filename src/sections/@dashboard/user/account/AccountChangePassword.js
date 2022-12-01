@@ -21,13 +21,11 @@ import {LoadingButton} from '@mui/lab';
 import Iconify from '../../../../components/iconify';
 import {useSnackbar} from '../../../../components/snackbar';
 import FormProvider, {RHFTextField} from '../../../../components/hook-form';
-import RemoveIcon from '@mui/icons-material/Remove';
 import {useState} from "react";
 import {Formik} from "formik";
 import {changePasswordUserAuth, createUserAuth} from "../../../../dataProvider/agent";
 import {PATH_DASHBOARD} from "../../../../routes/paths";
 import {isLowercaseChar, isUppercaseChar, minLength, isNumber, isSpecialChar} from "../../../../utils/password-validation";
-import {CheckOutlined} from "@mui/icons-material";
 
 // ----------------------------------------------------------------------
 
@@ -231,9 +229,9 @@ export default function AccountChangePassword() {
                                                 }}
                                             >
                                                 {minLength(values.newPassword) ? (
-                                                    <CheckOutlined />
+                                                    <Iconify icon="eva:checkmark-outline" />
                                                 ) : (
-                                                    <RemoveIcon />
+                                                    <Iconify icon="eva:minus-outline" />
                                                 )}
                                             </ListItemIcon>
                                             <ListItemText primary="Ít nhất 8 ký tự"/>
@@ -247,9 +245,9 @@ export default function AccountChangePassword() {
                                                 }}
                                             >
                                                 {isLowercaseChar(values.newPassword) ? (
-                                                    <CheckOutlined />
+                                                    <Iconify icon="eva:checkmark-outline" />
                                                 ) : (
-                                                    <RemoveIcon />
+                                                    <Iconify icon="eva:minus-outline" />
                                                 )}
                                             </ListItemIcon>
                                             <ListItemText primary="Ít nhất 1 chữ cái thường (a-z)"/>
@@ -263,9 +261,9 @@ export default function AccountChangePassword() {
                                                 }}
                                             >
                                                 {isUppercaseChar(values.newPassword) ? (
-                                                    <CheckOutlined />
+                                                    <Iconify icon="eva:checkmark-outline" />
                                                 ) : (
-                                                    <RemoveIcon />
+                                                    <Iconify icon="eva:minus-outline" />
                                                 )}
                                             </ListItemIcon>
                                             <ListItemText primary="Ít nhất 1 chữ cái viết hoa (A-Z)"/>
@@ -279,9 +277,9 @@ export default function AccountChangePassword() {
                                                 }}
                                             >
                                                 {isNumber(values.newPassword) ? (
-                                                    <CheckOutlined />
+                                                    <Iconify icon="eva:checkmark-outline" />
                                                 ) : (
-                                                    <RemoveIcon />
+                                                    <Iconify icon="eva:minus-outline" />
                                                 )}
                                             </ListItemIcon>
                                             <ListItemText primary="Ít nhất 1 số (0-9)"/>
@@ -295,9 +293,9 @@ export default function AccountChangePassword() {
                                                 }}
                                             >
                                                 {isSpecialChar(values.newPassword) ? (
-                                                    <CheckOutlined />
+                                                    <Iconify icon="eva:checkmark-outline" />
                                                 ) : (
-                                                    <RemoveIcon />
+                                                    <Iconify icon="eva:minus-outline" />
                                                 )}
                                             </ListItemIcon>
                                             <ListItemText primary="Ít nhất 1 ký tự đặc biệt"/>

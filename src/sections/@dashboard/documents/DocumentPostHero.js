@@ -63,11 +63,11 @@ const StyledFooter = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-BlogPostHero.propTypes = {
+DocumentPostHero.propTypes = {
   post: PropTypes.object,
 };
 
-export default function BlogPostHero({ post }) {
+export default function DocumentPostHero({ post }) {
   const { cover, title, author, createdAt } = post;
 
   const isDesktop = useResponsive('up', 'sm');

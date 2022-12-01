@@ -143,7 +143,7 @@ export default function GradeListPage() {
             await fetchGrades();
             enqueueSnackbar('Xóa khối học thành công');
         } else {
-            enqueueSnackbar('Xóa khối học thất bại');
+            enqueueSnackbar('Xóa khối học thất bại', { variant: 'error' });
         }
 
         if (page > 0) {
@@ -160,7 +160,7 @@ export default function GradeListPage() {
             await fetchGrades();
             enqueueSnackbar('Xóa khối học thành công');
         } else {
-            enqueueSnackbar('Xóa khối học thất bại');
+            enqueueSnackbar('Xóa khối học thất bại', { variant: 'error' });
         }
 
         if (page > 0) {

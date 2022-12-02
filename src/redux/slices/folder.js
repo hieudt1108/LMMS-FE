@@ -123,7 +123,7 @@ export function createFolderRedux(payload) {
       dispatch(slice.actions.startLoading());
       const response = await postFolder(payload);
       console.log('postFolder', response);
-      dispatch(slice.actions.createFolderSuccess(payload));
+      dispatch(slice.actions.createFolderSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

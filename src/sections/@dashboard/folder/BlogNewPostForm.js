@@ -38,7 +38,7 @@ export default function BlogNewPostForm() {
 
   const { id, programs, subjects, typeDocuments } = newDocument.init;
 
-  console.log('BlogNewPostForm', folderId, programs, subjects, typeDocuments);
+  console.log('BlogNewPostForm', folderId, programs, subjects, typeDocuments, newDocument);
 
   useEffect(() => {
     dispatch(createDocumentInitialRedux(folderId));
@@ -98,6 +98,7 @@ export default function BlogNewPostForm() {
     if (!data.typeDocumentId) {
       data.typeDocumentId = typeDocuments[0].id;
     }
+    data.folderId = folderId;
     data.status = data.status ? 1 : 0;
     console.log('onSubmit', data);
     dispatch(uploadDocumentRedux(data));

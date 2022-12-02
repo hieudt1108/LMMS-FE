@@ -1,24 +1,20 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import {useState} from 'react';
 // @mui
-import { Box, Stack, Avatar, Divider, Checkbox, MenuItem, Typography, IconButton, AvatarGroup } from '@mui/material';
+import {Box, Checkbox, Divider, IconButton, MenuItem, Stack, Typography} from '@mui/material';
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
 import useCopyToClipboard from '../../../../hooks/useCopyToClipboard';
 // utils
-import { fData } from '../../../../utils/formatNumber';
-import { fDateTime } from '../../../../utils/formatTime';
+import {fData} from '../../../../utils/formatNumber';
+import {fDateTime} from '../../../../utils/formatTime';
 // components
 import Iconify from '../../../../components/iconify';
-import { useSnackbar } from '../../../../components/snackbar';
+import {useSnackbar} from '../../../../components/snackbar';
 import MenuPopover from '../../../../components/menu-popover';
 import FileThumbnail from '../../../../components/file-thumbnail';
 //
-import { FileShareDialog, FileDetailsDrawer } from '../../file';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { FileShareDialog, FileDetailsDrawer } from '../../file';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-import DocumentNewPostPreview from '../../documents/DocumentNewPostPreview';
+import {FileShareDialog} from '../../file';
 import FilePreview from '../../documents/DocumentPreview';
 
 // ----------------------------------------------------------------------

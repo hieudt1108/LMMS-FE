@@ -78,7 +78,7 @@ export default function GeneralFilePage() {
   };
 
   const handleOpenUploadFile = () => {
-    push(PATH_DASHBOARD.general.folder.newDocument(Number.parseInt(id)));
+    push(PATH_DASHBOARD.folder.newDocument(Number.parseInt(id)));
     // setOpenUploadFile(true);
   };
 
@@ -117,7 +117,7 @@ export default function GeneralFilePage() {
 
   const handleOnClickFileFolderCard = useCallback((folder_id) => {
     console.log('handleOnClickFileFolderCard', folder_id);
-    push(PATH_DASHBOARD.general.file.link(folder_id));
+    push(PATH_DASHBOARD.folder.link(folder_id));
   }, []);
 
   const renderStorageOverview = (

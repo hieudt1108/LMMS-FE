@@ -45,14 +45,17 @@ export const PATH_DASHBOARD = {
     addStudent: (class_id) => path(ROOTS_DASHBOARD, `/class/${class_id}/addStudent`),
     subject: (class_id, subject_id) => path(ROOTS_DASHBOARD, `/class/${class_id}/${subject_id}`),
   },
+
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
-    folder: {
-      default: path(ROOTS_DASHBOARD, `/folder/0`),
-      link: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}`),
-      newDocument: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}/new`),
-    },
   },
+
+  folder: {
+    root: path(ROOTS_DASHBOARD, `/folder/0`),
+    link: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}`),
+    newDocument: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}/new`),
+  },
+
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
     new: path(ROOTS_DASHBOARD, '/user/new'),
@@ -90,12 +93,6 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/subject/list'),
     edit: (name) => path(ROOTS_DASHBOARD, `/subject/${name}/edit`),
   },
-  blog: {
-    root: path(ROOTS_DASHBOARD, '/blog'),
-    posts: path(ROOTS_DASHBOARD, '/blog/posts'),
-    new: (folder_id) => path(ROOTS_DASHBOARD, `/blog/new/${folder_id}`),
-    view: (id) => path(ROOTS_DASHBOARD, `/blog/post/${id}`),
-    demoView: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
   slot: {
     root: path(ROOTS_DASHBOARD, '/slot'),
     new: path(ROOTS_DASHBOARD, '/slot/new'),
@@ -109,6 +106,8 @@ export const PATH_DASHBOARD = {
     view: (id) => path(ROOTS_DASHBOARD, `/documents/document/post/${id}`),
     demoView: path(ROOTS_DASHBOARD, '/documents/document/post/apply-these-7-secret-techniques-to-improve-event'),
   },
+
+
   type_documents: {
     root: path(ROOTS_DASHBOARD, '/typeDocs'),
     new: path(ROOTS_DASHBOARD, '/typeDocs/new'),

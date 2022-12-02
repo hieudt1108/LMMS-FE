@@ -103,7 +103,7 @@ export default function SlotListDialog({ open, onClose, data }) {
   const handleGetId = (event) => {
     setPage(0);
     onSelectRow(event)
-    console.log('123')
+    console.log(event)
   };
 
 

@@ -14,11 +14,6 @@ const navConfig = [
     path: '/',
   },
   {
-    title: 'Components',
-    icon: <Iconify icon="ic:round-grain" />,
-    path: PATH_PAGE.components,
-  },
-  {
     title: 'Pages',
     path: '/pages',
     icon: <Iconify icon="eva:file-fill" />,

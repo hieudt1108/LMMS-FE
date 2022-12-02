@@ -51,12 +51,12 @@ const navConfig = [
       },
       // DOCUMENT
       {
-        title: 'Tài liệu',
+        title: 'Tài liệu của tôi',
         path: PATH_DASHBOARD.documents.root,
         icon: ICONS.blog,
         children: [
           { title: 'Danh sách', path: PATH_DASHBOARD.documents.posts },
-          { title: 'Chi tiết', path: PATH_DASHBOARD.documents.demoView },
+          // { title: 'Chi tiết', path: PATH_DASHBOARD.documents.demoView },
           // { title: 'Tạo mới', path: PATH_DASHBOARD.documents.new },
         ],
       },

@@ -125,6 +125,9 @@ function getProgramById(id) {
 function getAllDocument(params) {
   return getApi('/Document/getAllDocumentsPublic', params);
 }
+function getDocumentShareWithMe(params) {
+  return getApi('Document/getAllMyDocumentsShareWithMe', params);
+}
 
 // TYPE DOCUMENT
 function getAllTypeDocument(params) {
@@ -462,4 +465,5 @@ export {
   deletePermission,
   getAllMyClass,
   getMyClassGetOne,
+  getDocumentShareWithMe,
 };

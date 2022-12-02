@@ -35,6 +35,7 @@ const ICONS = {
   class: icon('ic_classroom'),
 };
 
+
 const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------

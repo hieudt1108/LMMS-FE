@@ -16,7 +16,6 @@ import navConfig from './config';
 
 function NavHorizontal() {
   const theme = useTheme();
-
   return (
     <AppBar
       component="nav"

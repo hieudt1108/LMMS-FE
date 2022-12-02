@@ -6,6 +6,7 @@ import { useLocales } from '../../../locales';
 //
 import { StyledSubheader } from './styles';
 import NavList from './NavList';
+import {PATH_DASHBOARD} from "../../../routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -16,7 +17,7 @@ NavSectionVertical.propTypes = {
 
 export default function NavSectionVertical({ data, sx, ...other }) {
   const { translate } = useLocales();
-
+  console.log("check1")
   return (
     <Stack sx={sx} {...other}>
       {data.map((group) => {

@@ -31,9 +31,9 @@ const initialState = {
   },
   newDocument: {
     data: {
-      code: 'NB-BCOF80-2',
-      name: 'Tài liệu môn toán',
-      description: 'Mô tả chi tiết về tài liệu',
+      code: '',
+      name: '',
+      description: '',
       file: '',
       programId: '',
       subjectId: '',

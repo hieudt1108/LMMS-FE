@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'https://localhost:7287/api/',
+  baseURL: 'http://lmms.site:9090/api/',
   timeout: 3000,
 });
 import {PATH_AUTH} from '../routes/paths';

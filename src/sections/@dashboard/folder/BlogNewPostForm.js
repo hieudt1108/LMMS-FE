@@ -54,9 +54,6 @@ export default function BlogNewPostForm() {
   }, [dispatch, folderId]);
 
 
-
-
-
   const methods = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: newDocument.data,
@@ -110,7 +107,7 @@ export default function BlogNewPostForm() {
     data.status = data.status ? 1 : 0;
     dispatch(uploadDocumentRedux(data)).then(() => {
       enqueueSnackbar('Tạo tài liệu thành công');
-      push(PATH_DASHBOARD.folder.root);
+      push(PATH_DASHBOARD.folder.link(folderId));
     });
 
   };

@@ -38,7 +38,7 @@ export default function ClassBanner({
     setOpenPopover(null);
   };
   const handleClassDetails = useCallback((class_id) => {
-    router.push(PATH_DASHBOARD.class.detail(class_id));
+    router.push(PATH_DASHBOARD.myclass.classdetail(class_id));
   }, []);
   return (
     <Card
@@ -64,22 +64,6 @@ export default function ClassBanner({
         </IconButton>
       </Stack>
 
-      {/* <Iconify
-        icon={'ant-design:android-filled'}
-        sx={{
-          mb: 3,
-          p: 2.5,
-          width: 64,
-          height: 64,
-          borderRadius: '50%',
-          color: (theme) => theme.palette[color].dark,
-          ...bgGradient({
-            direction: '135deg',
-            startColor: `${alpha(theme.palette[color].dark, 0)} 0%`,
-            endColor: `${alpha(theme.palette[color].dark, 0.24)} 100%`,
-          }),
-        }}
-      /> */}
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
         <MenuItem
         // onClick={() => {

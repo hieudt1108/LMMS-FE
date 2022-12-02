@@ -45,15 +45,21 @@ const navConfig = [
       // { title: 'ecommerce--Template', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
       // { title: 'analytics--Template', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
       { title: 'Chương trình học', path: PATH_DASHBOARD.program.choose, icon: ICONS.kanban },
-      // BLOG
+      // CLASS
+      {
+        title: 'Lớp học của tôi',
+        path: PATH_DASHBOARD.myclass.root,
+        icon: ICONS.class,
+      },
+      // DOCUMENT
       {
         title: 'Tài liệu',
         path: PATH_DASHBOARD.documents.root,
         icon: ICONS.blog,
         children: [
           { title: 'Danh sách', path: PATH_DASHBOARD.documents.posts },
-          { title: 'Chi tiết', path: PATH_DASHBOARD.documents.demoView },
-          { title: 'Tạo mới', path: PATH_DASHBOARD.documents.new },
+          // { title: 'Chi tiết', path: PATH_DASHBOARD.documents.demoView },
+          // { title: 'Tạo mới', path: PATH_DASHBOARD.documents.new },
         ],
       },
       { title: 'Học liệu', path: PATH_DASHBOARD.general.file, icon: ICONS.file },

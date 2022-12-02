@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from '../../utils/axios';
 //
 import { dispatch } from '../store';
-import { getAllClass, getClassById } from 'src/dataProvider/agent';
+import { getAllMyClass, getClassById } from 'src/dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ export function getClassesRedux(params) {
         return dispatch(slice.actions.getClassesSuccess([]));
       }
       dispatch(slice.actions.startLoading());
-      const response = await getAllClass(params);
+      const response = await getAllMyClass(params);
       dispatch(slice.actions.getClassesSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

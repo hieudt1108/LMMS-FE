@@ -6,6 +6,7 @@ const instance = axios.create({
 });
 import { PATH_AUTH } from '../routes/paths';
 import { useRouter } from 'next/router';
+import { idID } from '@mui/material/locale';
 
 // INTERCEPTORS CONFIG START
 instance.interceptors.response.use(responseOnSuccessMiddleware, responseOnErrorMiddleware);
@@ -64,9 +65,18 @@ async function getApi(url, params) {
 }
 
 // CLASS
+//class ADMIN
 function getAllClass(params) {
   return getApi('/Class/getAll', params);
 }
+//class USER
+function getAllMyClass(params) {
+  return getApi('/Class/myClass/getAll', params);
+}
+function getMyClassGetOne(id) {
+  return getApi(`/Class/myClass/getOne/${id}`);
+}
+
 function getClassById(id) {
   return getApi(`/Class/getOne/${id}`);
 }
@@ -232,8 +242,6 @@ const createPermission = (payload) => {
   return postApi('Permission', payload);
 };
 
-
-
 // UPLOAD FILE
 const uploadFile = (payload) => {
   return postApi('File/uploadFile', payload);
@@ -344,7 +352,7 @@ const updateSubject = (id, payload) => {
 
 // SLOT
 const updateSlot = (id, payload) => {
-  return putApi(`Slot/${id}`,payload);
+  return putApi(`Slot/${id}`, payload);
 };
 
 // TYPE_DOCUMENT
@@ -370,7 +378,6 @@ const updateRole = (id, payload) => {
 const updatePermission = (id, payload) => {
   return putApi(`Permission/${id}`, payload);
 };
-
 
 //export api here
 
@@ -443,4 +450,6 @@ export {
   createPermission,
   updatePermission,
   deletePermission,
+  getAllMyClass,
+  getMyClassGetOne,
 };

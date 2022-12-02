@@ -1,4 +1,3 @@
-// next
 import React, { useCallback, useEffect } from 'react';
 import { useSettingsContext } from '../../../components/settings';
 import { alpha } from '@mui/material/styles';
@@ -31,8 +30,9 @@ import { getClassesRedux } from 'src/redux/slices/class';
 import { getProgramsRedux } from 'src/redux/slices/program';
 import { getGradesRedux } from 'src/redux/slices/grade';
 
-Classes.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-export default function Classes() {
+MyClass.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+export default function MyClass() {
   const dispatch = useDispatch();
 
   const { classes } = useSelector((state) => state.class);

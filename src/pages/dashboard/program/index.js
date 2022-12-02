@@ -1,7 +1,7 @@
 // next
 import React, { useEffect, useState } from 'react';
 import { useSettingsContext } from '../../../components/settings';
-import { Box, Container, Grid, Stack } from '@mui/material';
+import { Box, Container, Grid, Alert } from '@mui/material';
 import DashboardLayout from '../../../layouts/dashboard';
 import Head from 'next/head';
 import { useDispatch } from 'react-redux';
@@ -26,7 +26,9 @@ export default function Program() {
     if (res.status < 400) {
       setListPrograms(res.data.data);
     } else {
-      console.log(res.message);
+      <Alert severity="info" sx={{ mb: 3 }}>
+        {res.message}
+      </Alert>;
     }
   }
 

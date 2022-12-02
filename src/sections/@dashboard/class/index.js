@@ -8,3 +8,4 @@ export { default as ClassRoomAvailable } from './detail/ClassRoomAvailable';
 export { default as ClassTotalIncomes } from './detail/ClassTotalIncomes';
 export { default as ClassWidgetSummary } from './detail/ClassWidgetSummary';
 export { default as ClassBookedRoom } from './detail/ClassBookedRoom';
+export { default as ClassTeacher } from './detail/ClassTeacher';

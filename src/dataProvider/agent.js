@@ -6,6 +6,7 @@ const instance = axios.create({
 });
 import { PATH_AUTH } from '../routes/paths';
 import { useRouter } from 'next/router';
+import { idID } from '@mui/material/locale';
 
 // INTERCEPTORS CONFIG START
 instance.interceptors.response.use(responseOnSuccessMiddleware, responseOnErrorMiddleware);
@@ -64,9 +65,18 @@ async function getApi(url, params) {
 }
 
 // CLASS
+//class ADMIN
 function getAllClass(params) {
   return getApi('/Class/getAll', params);
 }
+//class USER
+function getAllMyClass(params) {
+  return getApi('/Class/myClass/getAll', params);
+}
+function getMyClassGetOne(id) {
+  return getApi(`/Class/myClass/getOne/${id}`);
+}
+
 function getClassById(id) {
   return getApi(`/Class/getOne/${id}`);
 }
@@ -114,6 +124,9 @@ function getProgramById(id) {
 // DOCUMENT
 function getAllDocument(params) {
   return getApi('/Document/getAllDocumentsPublic', params);
+}
+function getDocumentShareWithMe(params) {
+  return getApi('Document/getAllMyDocumentsShareWithMe', params);
 }
 
 // TYPE DOCUMENT
@@ -450,4 +463,7 @@ export {
   createPermission,
   updatePermission,
   deletePermission,
+  getAllMyClass,
+  getMyClassGetOne,
+  getDocumentShareWithMe,
 };

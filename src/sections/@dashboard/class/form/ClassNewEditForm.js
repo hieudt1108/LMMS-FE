@@ -67,8 +67,8 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
       code: currentClass?.code || '',
       size: currentClass?.size || 0,
       schoolYear: currentClass?.schoolYear || `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`,
-      gradeId: currentClass?.gradeId || grades[0].id,
-      programId: currentClass?.programId || programs[0].id,
+      gradeId: currentClass?.gradeId + '' || (grades && grades.length) ? grades[0].id + '' : '',
+      programId: currentClass?.programId + '' || (programs && programs.length) ? programs[0].id + '' : '',
       teachers: currentClass?.teachers || [],
       students: currentClass?.students || [],
     }),
@@ -200,7 +200,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
 
               <RHFSelect name="programId" label="Chương trình" placeholder="Chương trình">
                 {programs.map((option, index) => (
-                  <option key={index} value={option.id}>
+                  <option key={index} value={option.id + ''}>
                     {option.name}
                   </option>
                 ))}
@@ -208,7 +208,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
 
               <RHFSelect name="gradeId" label="Khối" placeholder="Khối">
                 {grades.map((option, index) => (
-                  <option key={index} value={option.id}>
+                  <option key={index} value={option.id + ''}>
                     {option.name}
                   </option>
                 ))}

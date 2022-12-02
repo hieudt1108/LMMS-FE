@@ -49,13 +49,13 @@ export default function FilePanel({ title, subTitle, link, onOpen, collapse, onC
         </Typography>
       </Stack>
 
-      {link && (
+      {/* {link && (
         <NextLink href={link} passHref>
           <Button size="small" color="inherit" endIcon={<Iconify icon="eva:chevron-right-fill" />}>
             View All
           </Button>
         </NextLink>
-      )}
+      )} */}
 
       {onCollapse && (
         <IconButton onClick={onCollapse}>

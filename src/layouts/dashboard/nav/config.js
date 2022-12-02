@@ -42,8 +42,6 @@ const navConfig = [
     subheader: 'Chung',
     items: [
       { title: 'Trang Chủ', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
-      // { title: 'ecommerce--Template', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.ecommerce },
-      // { title: 'analytics--Template', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
       { title: 'Chương trình học', path: PATH_DASHBOARD.program.choose, icon: ICONS.kanban },
       // CLASS
       {
@@ -62,7 +60,7 @@ const navConfig = [
           // { title: 'Tạo mới', path: PATH_DASHBOARD.documents.new },
         ],
       },
-      { title: 'Học liệu', path: PATH_DASHBOARD.general.file, icon: ICONS.file },
+      { title: 'Học liệu', path: PATH_DASHBOARD.folder.root, icon: ICONS.file },
     ],
   },
 
@@ -126,17 +124,10 @@ const navConfig = [
         icon: ICONS.disabled,
       },
 
-      // BLOG
       {
-        title: 'Tài liệu',
-        path: PATH_DASHBOARD.documents.root,
-        icon: ICONS.blog,
-        children: [
-          { title: 'Danh sách loại tài liệu', path: PATH_DASHBOARD.type_documents.root },
-          { title: 'Danh sách tài liệu', path: PATH_DASHBOARD.documents.posts },
-          { title: 'Chi tiết', path: PATH_DASHBOARD.documents.demoView },
-          { title: 'Tạo mới', path: PATH_DASHBOARD.documents.new },
-        ],
+        title: 'Loại tài liệu',
+        path: PATH_DASHBOARD.type_documents.list,
+        icon: ICONS.folder,
       },
       {
         title: 'Quản lý tài liệu',

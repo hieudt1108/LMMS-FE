@@ -158,6 +158,10 @@ function getAllPermission(params) {
   return getApi('/Permission/getAll', params);
 }
 
+// Folder
+function getFolderByID(id) {
+  return getApi(`/Folder/getOne/${id}`);
+}
 function getPermissionById(id) {
   return getApi(`/Permission/getOne/${id}`);
 }
@@ -249,6 +253,10 @@ const uploadFile = (payload) => {
 // DOCUMENT
 const postDocument = (payload) => {
   return postApi('Document', payload);
+};
+// Folder
+const postFolder = (payload) => {
+  return postApi('Folder', payload);
 };
 
 // TYPE_DOCUMENT
@@ -446,6 +454,8 @@ export {
   postDocument,
   postLevel,
   getAllPermission,
+  getFolderByID,
+  postFolder,
   getPermissionById,
   createPermission,
   updatePermission,

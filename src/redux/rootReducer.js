@@ -10,6 +10,7 @@ import kanbanReducer from './slices/kanban';
 import classReducer from './slices/class';
 import programReducer from './slices/program';
 import gradeReducer from './slices/grade';
+import folderReducer from './slices/folder';
 
 // ----------------------------------------------------------------------
 
@@ -50,6 +51,7 @@ const rootReducer = combineReducers({
   class: classReducer,
   program: programReducer,
   grade: gradeReducer,
+  folder: folderReducer,
 });
 
 export { rootPersistConfig, rootReducer };

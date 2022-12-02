@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 // next
 import Head from 'next/head';
 // @mui
@@ -20,6 +20,10 @@ import { useSettingsContext } from '../../../../components/settings';
 // sections
 import { FileGeneralRecentCard, FileGeneralStorageOverview } from '../../../../sections/@dashboard/general/file';
 import { FilePanel, FileFolderCard, FileNewFolderDialog } from '../../../../sections/@dashboard/file';
+import { useRouter } from 'next/router';
+import { dispatch } from 'src/redux/store';
+import { useSelector } from 'react-redux';
+import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +43,19 @@ GeneralFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function GeneralFilePage() {
   const theme = useTheme();
+
+  const {
+    query: { folder_id: folderID },
+    push,
+  } = useRouter();
+  const { folder } = useSelector((state) => state.folder);
+
+  const { id, listFolders, listDocuments } = folder;
+  console.log('GeneralFilePage', folderID, folder, id);
+
+  useEffect(() => {
+    dispatch(getFolderRedux(folderID));
+  }, [dispatch, folderID]);
 
   const smDown = useResponsive('down', 'sm');
 
@@ -61,21 +78,28 @@ export default function GeneralFilePage() {
   };
 
   const handleOpenUploadFile = () => {
-    setOpenUploadFile(true);
+    push(PATH_DASHBOARD.folder.newDocument(Number.parseInt(id)));
+    // setOpenUploadFile(true);
   };
 
   const handleCloseUploadFile = () => {
     setOpenUploadFile(false);
   };
 
-  const handleChangeFolderName = (event) => {
+  const handleChangeFolderName = useCallback((event) => {
     setFolderName(event.target.value);
-  };
+  }, []);
 
   const handleCreateNewFolder = () => {
-    handleCloseNewFolder();
-    setFolderName('');
     console.log('CREATE NEW FOLDER', folderName);
+    setFolderName('');
+    dispatch(
+      createFolderRedux({
+        name: folderName,
+        parentId: Number.parseInt(id),
+      })
+    );
+    handleCloseNewFolder();
   };
 
   const handleDrop = useCallback(
@@ -90,6 +114,11 @@ export default function GeneralFilePage() {
     },
     [files]
   );
+
+  const handleOnClickFileFolderCard = useCallback((folder_id) => {
+    console.log('handleOnClickFileFolderCard', folder_id);
+    push(PATH_DASHBOARD.folder.link(folder_id));
+  }, []);
 
   const renderStorageOverview = (
     <FileGeneralStorageOverview
@@ -150,18 +179,21 @@ export default function GeneralFilePage() {
               />
               <Scrollbar>
                 <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
-                  {_folders.map((folder) => (
-                    <FileFolderCard
-                      key={folder.id}
-                      folder={folder}
-                      onDelete={() => console.log('DELETE', folder.id)}
-                      sx={{
-                        ...(_folders.length > 3 && {
-                          minWidth: 222,
-                        }),
-                      }}
-                    />
-                  ))}
+                  {listFolders && listFolders.length
+                    ? listFolders.map((folder, index) => (
+                        <FileFolderCard
+                          key={index}
+                          folder={folder}
+                          onClick={() => handleOnClickFileFolderCard(folder.id)}
+                          onDelete={() => console.log('DELETE', folder.id)}
+                          sx={{
+                            ...(_folders.length > 3 && {
+                              minWidth: 222,
+                            }),
+                          }}
+                        />
+                      ))
+                    : ''}
                 </Stack>
               </Scrollbar>
 
@@ -173,15 +205,21 @@ export default function GeneralFilePage() {
               />
 
               <Stack spacing={2}>
-                {_files.slice(0, 5).map((file) => (
-                  <FileGeneralRecentCard key={file.id} file={file} onDelete={() => console.log('DELETE', file.id)} />
-                ))}
+                {listDocuments && listDocuments.length
+                  ? listDocuments.map((file) => (
+                      <FileGeneralRecentCard
+                        key={file.id}
+                        file={file}
+                        onDelete={() => console.log('DELETE', file.id)}
+                      />
+                    ))
+                  : ''}
               </Stack>
             </div>
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <UploadBox
+            {/* <UploadBox
               onDrop={handleDrop}
               placeholder={
                 <Stack spacing={0.5} alignItems="center" sx={{ color: 'text.disabled' }}>
@@ -196,7 +234,7 @@ export default function GeneralFilePage() {
                 height: 'auto',
                 borderRadius: 1.5,
               }}
-            />
+            /> */}
 
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>{renderStorageOverview}</Box>
 

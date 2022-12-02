@@ -308,15 +308,6 @@ export default function DocumentNewPostForm() {
           </Grid>
         </Grid>
       </FormProvider>
-
-      {/* <DocumentNewPostPreview
-        values={values}
-        open={openPreview}
-        isValid={isValid}
-        isSubmitting={isSubmitting}
-        onClose={handleClosePreview}
-        onSubmit={handleSubmit(onSubmit)}
-      /> */}
     </>
   );
 }

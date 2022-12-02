@@ -50,10 +50,17 @@ export const PATH_DASHBOARD = {
     classdetail: (myclass_id) => path(ROOTS_DASHBOARD, `/myclass/${myclass_id}`),
     classsubject: (myclass_id, mysubject_id) => path(ROOTS_DASHBOARD, `/myclass/${myclass_id}/${mysubject_id}`),
   },
+
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
-    file: path(ROOTS_DASHBOARD, '/file/root'),
   },
+
+  folder: {
+    root: path(ROOTS_DASHBOARD, `/folder/0`),
+    link: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}`),
+    newDocument: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}/new`),
+  },
+
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
     new: path(ROOTS_DASHBOARD, '/user/new'),
@@ -104,6 +111,8 @@ export const PATH_DASHBOARD = {
     view: (id) => path(ROOTS_DASHBOARD, `/documents/document/post/${id}`),
     demoView: path(ROOTS_DASHBOARD, '/documents/document/post/apply-these-7-secret-techniques-to-improve-event'),
   },
+
+
   type_documents: {
     root: path(ROOTS_DASHBOARD, '/typeDocs'),
     new: path(ROOTS_DASHBOARD, '/typeDocs/new'),

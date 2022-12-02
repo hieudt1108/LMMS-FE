@@ -1,4 +1,3 @@
-import keyBy from 'lodash/keyBy';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';

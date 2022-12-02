@@ -1,22 +1,23 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://lmms.site:9090/api/',
+  baseURL: 'https://localhost:7287/api/',
   timeout: 3000,
 });
-import { PATH_AUTH } from '../routes/paths';
-import { useRouter } from 'next/router';
-import { idID } from '@mui/material/locale';
+import {PATH_AUTH} from '../routes/paths';
+import {useRouter} from 'next/router';
+import {idID} from '@mui/material/locale';
 
 // INTERCEPTORS CONFIG START
-instance.interceptors.response.use(responseOnSuccessMiddleware, responseOnErrorMiddleware);
+instance.interceptors.response.use(responseOnSuccessMiddleware,
+    responseOnErrorMiddleware);
 
 function responseOnSuccessMiddleware(res) {
   return res;
 }
 
 function responseOnErrorMiddleware(error) {
-  const { status } = error.response;
+  const {status} = error.response;
   if (status === 401) {
     localStorage.clear();
     window.location.href = PATH_AUTH.login;
@@ -43,12 +44,13 @@ const clearLocalStorage = () => {
 async function getApi(url, params) {
   // delete all params fail
   const paramObj = {};
-  if (params && Object.keys(params).length)
+  if (params && Object.keys(params).length) {
     Object.keys(params).forEach(function (key) {
       if (params[key]) {
         paramObj[key] = params[key];
       }
     });
+  }
 
   const token = getLocalStorage('access_token');
   try {
@@ -69,10 +71,12 @@ async function getApi(url, params) {
 function getAllClass(params) {
   return getApi('/Class/getAll', params);
 }
+
 //class USER
 function getAllMyClass(params) {
   return getApi('/Class/myClass/getAll', params);
 }
+
 function getMyClassGetOne(id) {
   return getApi(`/Class/myClass/getOne/${id}`);
 }
@@ -80,6 +84,7 @@ function getMyClassGetOne(id) {
 function getClassById(id) {
   return getApi(`/Class/getOne/${id}`);
 }
+
 // SUBJECT
 function getAllSubject(params) {
   return getApi('/Subject/getAll', params);
@@ -93,17 +98,25 @@ function getSubjectById(id) {
 function getAllGrade(params) {
   return getApi(`/Grade/getAll`, params);
 }
+
 function getGradeById(id) {
   return getApi(`/Grade/getOne/${id}`);
+}
+
+// LEVEL
+function getMenu() {
+  return getApi(`/Auth/getMenuItems`);
 }
 
 // LEVEL
 function getAllLevel(params) {
   return getApi(`/Level/getAll`, params);
 }
+
 function getLevelById(id) {
   return getApi(`/Level/getOne/${id}`);
 }
+
 // USERS
 function getAllUsers(params) {
   return getApi('/User/getAll', params);
@@ -112,6 +125,7 @@ function getAllUsers(params) {
 function getUserById(id) {
   return getApi(`/User/getOne/${id}`);
 }
+
 // PROGRAM
 function getAllProgram(params) {
   return getApi('/Program/getAll', params);
@@ -125,6 +139,7 @@ function getProgramById(id) {
 function getAllDocument(params) {
   return getApi('/Document/getAllDocumentsPublic', params);
 }
+
 function getDocumentShareWithMe(params) {
   return getApi('Document/getAllMyDocumentsShareWithMe', params);
 }
@@ -156,6 +171,7 @@ function getALlRoles(params) {
 function getRoleById(id) {
   return getApi(`/Role/getOne/${id}`);
 }
+
 // Permission
 function getAllPermission(params) {
   return getApi('/Permission/getAll', params);
@@ -165,6 +181,7 @@ function getAllPermission(params) {
 function getFolderByID(id) {
   return getApi(`/Folder/getOne/${id}`);
 }
+
 function getPermissionById(id) {
   return getApi(`/Permission/getOne/${id}`);
 }
@@ -176,7 +193,8 @@ async function postApi(url, payload, file) {
     const res = await instance.post(`/${url}`, payload, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no-author',
-        'Content-Type': file ? 'multipart/form-data' : 'application/json; charset=utf-8',
+        'Content-Type': file ? 'multipart/form-data'
+            : 'application/json; charset=utf-8',
       },
     });
     return res;
@@ -393,12 +411,13 @@ const updatePermission = (id, payload) => {
 //export api here
 
 function addParameter(url, params) {
-  if (url)
+  if (url) {
     Object.keys(params).forEach(function (key, index) {
       if (params[key]) {
         url = url.concat(`params[key]`);
       }
     });
+  }
 }
 
 export {
@@ -466,4 +485,5 @@ export {
   getAllMyClass,
   getMyClassGetOne,
   getDocumentShareWithMe,
+  getMenu,
 };

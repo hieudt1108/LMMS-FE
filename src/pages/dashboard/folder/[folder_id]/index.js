@@ -198,7 +198,7 @@ export default function GeneralFilePage() {
               </Scrollbar>
 
               <FilePanel
-                title="Recent Files"
+                title="Tài liệu gần đây"
                 link={PATH_DASHBOARD.fileManager}
                 onOpen={handleOpenUploadFile}
                 sx={{ mt: 2 }}

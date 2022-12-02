@@ -12,7 +12,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  Typography
+  Typography, Button
 } from '@mui/material';
 // components
 import {
@@ -28,6 +28,8 @@ import {useSnackbar} from "../../../components/snackbar";
 import {useSettingsContext} from "../../../components/settings";
 import Scrollbar from "../../../components/scrollbar";
 import {SlotTableToolbar} from "../slot/list";
+import {LoadingButton} from "@mui/lab";
+import Iconify from "../../../components/iconify";
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +43,7 @@ SlotListDialog.propTypes = {
   data: any,
 };
 
-export default function SlotListDialog({ open, onClose, data }) {
+export default function SlotListDialog({ open, onClose, onSelect, data }) {
   const {
     dense,
     page,
@@ -67,10 +69,11 @@ export default function SlotListDialog({ open, onClose, data }) {
 
   const {themeStretch} = useSettingsContext();
 
-
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterName, setFilterName] = useState('');
+
+  const [listSlotChecked, setListSlotChecked] = useState([]);
 
 
   const dataFiltered = applyFilter({
@@ -90,7 +93,6 @@ export default function SlotListDialog({ open, onClose, data }) {
     setOpenConfirm(true);
   };
 
-
   const handleResetFilter = () => {
     setFilterName('');
   };
@@ -103,15 +105,28 @@ export default function SlotListDialog({ open, onClose, data }) {
   const handleGetId = (event) => {
     setPage(0);
     onSelectRow(event)
-    console.log(event)
+    setListSlotChecked((prev) => ([...prev, event]))
+    console.log(listSlotChecked)
   };
+
+  const handleSelectSlots = (slot) => {
+    onSelect(slot);
+    setFilterName('');
+    onClose();
+  };
+
 
 
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ pt: 2.5, px: 3 }}>
         <Typography variant="h6"> Chọn tiết học </Typography>
-
+        <Button size="small"
+                startIcon={<Iconify icon="eva:plus-fill" />}
+                onClick={() => handleSelectSlots(listSlotChecked)}
+                sx={{ alignSelf: 'flex-end' }}>
+          Thêm
+        </Button>
       </Stack>
       <>
         <Card >
@@ -160,7 +175,9 @@ export default function SlotListDialog({ open, onClose, data }) {
 
                     <TableRow hover selected={selected.includes(slot.id)}>
                       <TableCell padding="checkbox">
-                      <Checkbox checked={selected.includes(slot.id)} onClick={() => handleGetId(slot.id)} />
+                      <Checkbox
+                          checked={selected.includes(slot.id)}
+                          onClick={() => handleGetId(slot.id)} />
                       </TableCell>
 
                       <TableCell align="left">{slot.name}</TableCell>
@@ -176,6 +193,7 @@ export default function SlotListDialog({ open, onClose, data }) {
               </Table>
             </Scrollbar>
           </TableContainer>
+
         </Card>
       </>
     </Dialog>

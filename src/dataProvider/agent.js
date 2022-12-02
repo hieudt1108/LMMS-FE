@@ -64,6 +64,11 @@ async function getApi(url, params) {
   }
 }
 
+// PERM NAV MENU
+function getMenuItems() {
+  return getApi('/Auth/getMenuItems');
+}
+
 // CLASS
 //class ADMIN
 function getAllClass(params) {
@@ -406,6 +411,7 @@ export {
   getLocalStorage,
   clearLocalStorage,
   loginAuth,
+  getMenuItems,
   getAllClass,
   getClassById,
   getAllSubject,

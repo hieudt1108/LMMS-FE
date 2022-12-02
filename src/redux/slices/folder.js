@@ -12,6 +12,10 @@ import {
   postFile,
   postFolder,
 } from 'src/dataProvider/agent';
+import {PATH_DASHBOARD} from "../../routes/paths";
+import {useSnackbar} from "../../components/snackbar";
+import {useRouter} from "next/router";
+
 
 // ----------------------------------------------------------------------
 
@@ -51,6 +55,8 @@ const initialState = {
     },
   },
 };
+
+
 
 const slice = createSlice({
   name: 'folder',
@@ -122,7 +128,6 @@ export function createFolderRedux(payload) {
       }
       dispatch(slice.actions.startLoading());
       const response = await postFolder(payload);
-      console.log('postFolder', response);
       dispatch(slice.actions.createFolderSuccess(payload));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -139,7 +144,6 @@ export function createDocumentInitialRedux(folderId) {
         pageSize: 100,
       };
       const response = await Promise.all([getAllProgram(params), getAllSubject(params), getAllTypeDocument(params)]);
-      console.log('createDocumentInitialRedux', response);
       dispatch(
         slice.actions.createDocumentInitialSuccess({
           programs: response[0].data.data,
@@ -155,11 +159,16 @@ export function createDocumentInitialRedux(folderId) {
 }
 
 export function uploadDocumentRedux(data) {
+
   return async () => {
     try {
       dispatch(slice.actions.startLoading());
       const response = await postDocument(data);
-      console.log('uploadDocumentRedux', response);
+      if (response.status < 400) {
+        console.log('uploadDocumentRedux', response);
+      } else {
+        console.log('Lỗi upload tài liệu', response.data.title);
+      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

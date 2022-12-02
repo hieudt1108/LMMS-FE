@@ -28,7 +28,7 @@ import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../../components/settings';
 // sections
 // api
-import { getAllDocument, getAllTypeDocument, getAllSubject } from '../../../../dataProvider/agent';
+import { getDocumentShareWithMe, getAllTypeDocument, getAllSubject } from '../../../../dataProvider/agent';
 import { DocumentPostCard } from '../../../../sections/@dashboard/documents';
 
 // ----------------------------------------------------------------------
@@ -45,7 +45,6 @@ export default function DocumentPostsPage() {
   const [filter, setFilter] = useState({
     pageIndex: 1,
     pageSize: 8,
-    programId: 6,
     searchByName: '',
     typeDocumentId: '',
     subjectId: '',
@@ -70,7 +69,7 @@ export default function DocumentPostsPage() {
   const [subjects, setSubject] = useState([]);
 
   async function fetchAllDocument() {
-    const res = await getAllDocument(filter);
+    const res = await getDocumentShareWithMe(filter);
     if (res.status < 400) {
       setDocuments(res.data.data);
     } else {
@@ -88,7 +87,7 @@ export default function DocumentPostsPage() {
       console.log(res.message);
     }
   }
-  console.log('test: ', typeDocs);
+  console.log('test doc share: ', documents);
 
   async function fetchAllSubject() {
     const res = await getAllSubject({
@@ -123,7 +122,7 @@ export default function DocumentPostsPage() {
     [filter]
   );
   const handlePageChange = useCallback(async (event, pageIndex) => {
-    let response = await getAllDocument({
+    let response = await getDocumentShareWithMe({
       ...filter,
       pageIndex: pageIndex,
     });

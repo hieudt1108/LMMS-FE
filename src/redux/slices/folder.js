@@ -12,6 +12,9 @@ import {
   postFile,
   postFolder,
 } from 'src/dataProvider/agent';
+import { PATH_DASHBOARD } from '../../routes/paths';
+import { useSnackbar } from '../../components/snackbar';
+import { useRouter } from 'next/router';
 
 // ----------------------------------------------------------------------
 
@@ -27,9 +30,9 @@ const initialState = {
   },
   newDocument: {
     data: {
-      code: 'NB-BCOF80-2',
-      name: 'Tài liệu môn toán',
-      description: 'Mô tả chi tiết về tài liệu',
+      code: '',
+      name: '',
+      description: '',
       file: '',
       programId: '',
       subjectId: '',
@@ -139,7 +142,6 @@ export function createDocumentInitialRedux(folderId) {
         pageSize: 100,
       };
       const response = await Promise.all([getAllProgram(params), getAllSubject(params), getAllTypeDocument(params)]);
-      console.log('createDocumentInitialRedux', response);
       dispatch(
         slice.actions.createDocumentInitialSuccess({
           programs: response[0].data.data,
@@ -159,7 +161,11 @@ export function uploadDocumentRedux(data) {
     try {
       dispatch(slice.actions.startLoading());
       const response = await postDocument(data);
-      console.log('uploadDocumentRedux', response);
+      if (response.status < 400) {
+        console.log('uploadDocumentRedux', response);
+      } else {
+        console.log('Lỗi upload tài liệu', response.data.title);
+      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -50,22 +50,6 @@ export default function LevelLayout() {
   const {
     query: { title },
   } = useRouter();
-  // console.log('test: ', title);
-
-  // const [currentTab, setCurrentTab] = useState('description');
-
-  // const TABS = [
-  //   {
-  //     value: 'description',
-  //     label: 'Tiểu học',
-  //     component: <LevelFirst title={title} />,
-  //   },
-  //   {
-  //     value: 'reviews',
-  //     label: `Trung học cơ sở`,
-  //     component: <LevelSecond title={title} />,
-  //   },
-  // ];
 
   const [filter, setFilter] = useState({
     pageIndex: 1,

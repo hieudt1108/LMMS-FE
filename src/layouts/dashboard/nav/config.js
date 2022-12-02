@@ -43,15 +43,21 @@ const navConfig = [
     items: [
       { title: 'Trang Chủ', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
       { title: 'Chương trình học', path: PATH_DASHBOARD.program.choose, icon: ICONS.kanban },
-      // BLOG
+      // CLASS
       {
-        title: 'Tài liệu',
+        title: 'Lớp học của tôi',
+        path: PATH_DASHBOARD.myclass.root,
+        icon: ICONS.class,
+      },
+      // DOCUMENT
+      {
+        title: 'Tài liệu của tôi',
         path: PATH_DASHBOARD.documents.root,
         icon: ICONS.blog,
         children: [
           { title: 'Danh sách', path: PATH_DASHBOARD.documents.posts },
-          { title: 'Chi tiết', path: PATH_DASHBOARD.documents.demoView },
-          { title: 'Tạo mới', path: PATH_DASHBOARD.documents.new },
+          // { title: 'Chi tiết', path: PATH_DASHBOARD.documents.demoView },
+          // { title: 'Tạo mới', path: PATH_DASHBOARD.documents.new },
         ],
       },
       { title: 'Học liệu', path: PATH_DASHBOARD.folder.root, icon: ICONS.file },

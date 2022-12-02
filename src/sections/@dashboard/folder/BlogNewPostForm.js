@@ -12,13 +12,13 @@ import { Grid, Card, Stack, Typography } from '@mui/material';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //components
 import { useSnackbar } from '../../../components/snackbar';
-import FormProvider, { RHFSwitch, RHFTextField, RHFSelect } from '../../../components/hook-form';
+import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload } from '../../../components/hook-form';
 // ----------------------------------------------------------------------
 import { postFile } from '../../../dataProvider/agent';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
 import { createDocumentInitialRedux, uploadDocumentRedux } from 'src/redux/slices/folder';
-import { UploadBox } from 'src/components/upload';
+import { Upload } from '../../../components/upload';
 import Iconify from 'src/components/iconify';
 const SORT_OPTIONS = [
   { id: 0, name: 'Chim cút' },
@@ -34,27 +34,26 @@ export default function BlogNewPostForm() {
     push,
   } = useRouter();
 
+  const validationSchema = (() => {
+    return Yup.object().shape({
+      file: Yup.array().min(1, 'Files is required'),
+    });
+  })();
+
   const { newDocument } = useSelector((state) => state.folder);
 
   const { id, programs, subjects, typeDocuments } = newDocument.init;
 
-  console.log('BlogNewPostForm', folderId, programs, subjects, typeDocuments, newDocument);
+  const [files, setFiles] = useState([]);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     dispatch(createDocumentInitialRedux(folderId));
   }, [dispatch, folderId]);
 
-  const validationSchema = (() => {
-    return Yup.object().shape({
-      title: Yup.string().required('Title is required'),
-      description: Yup.string().required('Description is required'),
-      content: Yup.string().required('Content is required'),
-      cover: Yup.mixed().required('Cover is required').nullable(true),
-    });
-  })();
-
   const methods = useForm({
-    // resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema),
     defaultValues: newDocument.data,
   });
 
@@ -69,23 +68,28 @@ export default function BlogNewPostForm() {
   } = methods;
 
   const values = watch();
-
+  const formData = new FormData();
   const handleDrop = useCallback(
     async (acceptedFiles) => {
       try {
-        const formData = new FormData();
-
         formData.append('File', acceptedFiles[0]);
         const response = await postFile(formData);
-        console.log('handleDrop', response);
         setValue('TypeFile', response.data.contentType);
         setValue('urlDocument', response.data.fileName);
         setValue('size', response.data.size);
+        const newFiles = acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        );
+        setFiles([...files, ...newFiles]);
+        setValue('file', [...files, ...newFiles]);
       } catch (error) {
         console.error('handleDrop', error);
       }
     },
-    [setValue]
+    [setValue],
+    [files]
   );
 
   const onSubmit = async (data) => {
@@ -100,8 +104,16 @@ export default function BlogNewPostForm() {
     }
     data.folderId = folderId;
     data.status = data.status ? 1 : 0;
-    console.log('onSubmit', data);
-    dispatch(uploadDocumentRedux(data));
+    dispatch(uploadDocumentRedux(data)).then(() => {
+      enqueueSnackbar('Tạo tài liệu thành công');
+      push(PATH_DASHBOARD.folder.link(folderId));
+    });
+  };
+
+  const handleRemoveFile = (inputFile) => {
+    const filtered = files.filter((file) => file !== inputFile);
+    setFiles(filtered);
+    setValue('file', []);
   };
 
   return (
@@ -111,28 +123,17 @@ export default function BlogNewPostForm() {
           <Grid item xs={12} md={7}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
-                <RHFTextField name="code" label="Code document" />
-                <RHFTextField name="name" label="Name document" />
+                <RHFTextField name="code" label="Mã tài liệu" />
+                <RHFTextField name="name" label="Tên tài liệu" />
 
-                <RHFTextField name="description" label="Description" multiline rows={3} />
+                <RHFTextField name="description" label="Mô tả" multiline rows={3} />
 
                 <Stack spacing={1}>
-                  <UploadBox
-                    onDrop={handleDrop}
-                    placeholder={
-                      <Stack spacing={0.5} alignItems="center" sx={{ color: 'text.disabled' }}>
-                        <Iconify icon="eva:cloud-upload-fill" width={40} />
-                        <Typography variant="body2">Upload file</Typography>
-                      </Stack>
-                    }
-                    sx={{
-                      mb: 3,
-                      py: 2.5,
-                      width: 'auto',
-                      height: 'auto',
-                      borderRadius: 1.5,
-                    }}
-                  />
+                  <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                    Tập tin
+                  </Typography>
+
+                  <Upload name="file" multiple files={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
                 </Stack>
               </Stack>
             </Card>
@@ -144,7 +145,7 @@ export default function BlogNewPostForm() {
                 <div>
                   <RHFSwitch
                     name="status"
-                    label="Public/Private"
+                    label="Tài liệu công khai/ riêng tư"
                     labelPlacement="start"
                     sx={{ mb: 1, mx: 0, width: 1, justifyContent: 'space-between' }}
                   />
@@ -197,7 +198,7 @@ export default function BlogNewPostForm() {
 
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
               <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting}>
-                Post
+                Đăng tải tài liệu
               </LoadingButton>
             </Stack>
           </Grid>

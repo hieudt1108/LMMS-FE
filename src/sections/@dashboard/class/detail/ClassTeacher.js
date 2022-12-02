@@ -32,14 +32,14 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
-CLassDetails.propTypes = {
+ClassTeacher.propTypes = {
   title: PropTypes.string,
   tableData: PropTypes.array,
   subheader: PropTypes.string,
   tableLabels: PropTypes.array,
 };
 
-export default function CLassDetails({ myClass, title, subheader, tableLabels, tableData, ...other }) {
+export default function ClassTeacher({ myClass, title, subheader, tableLabels, tableData, ...other }) {
   const {
     query: { class_id },
   } = useRouter();
@@ -107,7 +107,7 @@ function BookingDetailsRow({ row }) {
   return (
     <>
       {row?.roleInClasses?.map((role) =>
-        role.role === 'HOCSINH' ? (
+        role.role === 'GIAOVIEN' ? (
           <TableRow>
             <TableCell>
               <Stack direction="row" alignItems="center" spacing={2}>
@@ -119,7 +119,7 @@ function BookingDetailsRow({ row }) {
             <TableCell>
               {row.firstName} {row.lastName}
             </TableCell>
-            <TableCell>{format(new Date(row.birthDate), 'dd MMM yyyy')}</TableCell>
+            <TableCell>{role.subject}</TableCell>
             <TableCell>{row.email}</TableCell>
 
             <TableCell>

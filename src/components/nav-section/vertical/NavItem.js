@@ -12,6 +12,7 @@ import Iconify from '../../iconify';
 //
 import {StyledItem, StyledIcon, StyledDotIcon} from './styles';
 import SvgColor from "../../svg-color";
+import {PATH_DASHBOARD} from "../../../routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -32,16 +33,14 @@ export default function NavItem({
   ...other
 }) {
   const {translate} = useLocales();
-
+  const iconI = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`}
+                                    sx={{width: 1, height: 1}}/>;
   const {title, path, icon, info, children, disabled, caption, roles} = item;
-  const iconPath = (icon) => <SvgColor src={`/assets/icons/navbar/${icon}.svg`}
-                                       sx={{width: 1, height: 1}}/>;
   const subItem = depth !== 1;
-  console.log("check3" + icon)
   const renderContent = (
       <StyledItem depth={depth} active={active} disabled={disabled}
                   caption={!!caption} {...other}>
-        {iconPath && <StyledIcon>{iconPath}</StyledIcon>}
+        {iconI(icon) && <StyledIcon>{iconI(icon)}</StyledIcon>}
 
         {subItem && (
             <StyledIcon>
@@ -87,10 +86,12 @@ export default function NavItem({
   );
 
   const renderItem = () => {
+    console.log(PATH_DASHBOARD.root + path)
     // ExternalLink
     if (isExternalLink) {
       return (
-          <Link href={path} target="_blank" rel="noopener" underline="none">
+          <Link href={PATH_DASHBOARD.root + path} target="_blank" rel="noopener"
+                underline="none">
             {renderContent}
           </Link>
       );
@@ -103,7 +104,7 @@ export default function NavItem({
 
     // Default
     return (
-        <NextLink href={path} passHref>
+        <NextLink href={PATH_DASHBOARD.root + path} passHref>
           {renderContent}
         </NextLink>
     );

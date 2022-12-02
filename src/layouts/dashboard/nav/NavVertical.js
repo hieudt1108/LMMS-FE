@@ -74,8 +74,7 @@ export default function NavVertical({openNav, onCloseNav}) {
           {/*<NavAccount />*/}
         </Stack>
 
-        <NavSectionVertical data={navConfig}/>
-        {/*<NavSectionVertical data={listMenu}/>*/}
+        <NavSectionVertical data={listMenu}/>
 
         <Box sx={{flexGrow: 1}}/>
 

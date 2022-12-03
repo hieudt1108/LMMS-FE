@@ -4,27 +4,19 @@ const instance = axios.create({
   baseURL: 'http://lmms.site:9090/api/',
   timeout: 3000,
 });
-<<<<<<< HEAD
 import { PATH_AUTH } from '../routes/paths';
 import { useRouter } from 'next/router';
 import { idID } from '@mui/material/locale';
-import { func } from 'prop-types';
-=======
-import {PATH_AUTH} from '../routes/paths';
-import {useRouter} from 'next/router';
-import {idID} from '@mui/material/locale';
->>>>>>> feature/sprint4/main
 
 // INTERCEPTORS CONFIG START
-instance.interceptors.response.use(responseOnSuccessMiddleware,
-    responseOnErrorMiddleware);
+instance.interceptors.response.use(responseOnSuccessMiddleware, responseOnErrorMiddleware);
 
 function responseOnSuccessMiddleware(res) {
   return res;
 }
 
 function responseOnErrorMiddleware(error) {
-  const {status} = error.response;
+  const { status } = error.response;
   if (status === 401) {
     localStorage.clear();
     window.location.href = PATH_AUTH.login;
@@ -208,8 +200,7 @@ async function postApi(url, payload, file) {
     const res = await instance.post(`/${url}`, payload, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no-author',
-        'Content-Type': file ? 'multipart/form-data'
-            : 'application/json; charset=utf-8',
+        'Content-Type': file ? 'multipart/form-data' : 'application/json; charset=utf-8',
       },
     });
     return res;
@@ -501,9 +492,6 @@ export {
   getAllMyClass,
   getMyClassGetOne,
   getDocumentShareWithMe,
-<<<<<<< HEAD
   getDocInClass,
-=======
   getMenu,
->>>>>>> feature/sprint4/main
 };

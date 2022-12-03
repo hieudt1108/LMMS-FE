@@ -36,6 +36,7 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
         code: Yup.string().trim().required('Mã môn học không được trống'),
         name: Yup.string().trim().required('Tên môn học không được trống'),
         description: Yup.string().notRequired(),
+        listSlots: Yup.array().min(1, 'Hãy chọn vai trò'),
     })
 
     const defaultValues = useMemo(
@@ -43,6 +44,7 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
             code: currentSubject?.code || '',
             name: currentSubject?.name || '',
             description: currentSubject?.description || '',
+            listSlots: currentSubject?.listSlots || [],
         }),
         [currentSubject]
     );
@@ -52,12 +54,11 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
         defaultValues,
     });
 
-
-
     const {
         reset,
         watch,
         control,
+        getValues,
         setValue,
         handleSubmit,
         formState: {isSubmitting},
@@ -125,6 +126,8 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
         [setValue]
     );
 
+    console.log('new',getValues('listSlots'))
+
 
     return (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -185,7 +188,11 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
                                 id="description"
                                 multiline rows={5}
                             />
-                            <SubjectNewEditSlot/>
+                            <SubjectNewEditSlot
+                                name="listSlots"
+                                id="listSlots"
+                                onSelect={(slots) => setValue('listSlots', slots)}
+                            />
                         </Box>
                         <Stack alignItems="flex-end" sx={{mt: 3}}>
                             <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

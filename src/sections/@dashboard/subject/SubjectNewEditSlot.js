@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 // form
 import {useFormContext} from 'react-hook-form';
 // @mui
-import {Button, Divider, Stack, Typography} from '@mui/material';
+import {Button, Chip, Divider, Stack, Typography} from '@mui/material';
 // hooks
 // _mock
 // components
@@ -15,9 +15,10 @@ import Iconify from "../../../components/iconify";
 
 // ----------------------------------------------------------------------
 
-export default function SubjectNewEditSlot() {
+export default function SubjectNewEditSlot(onSelect) {
   const {
     watch,
+    getValues,
     setValue,
     formState: { errors },
   } = useFormContext();
@@ -26,7 +27,7 @@ export default function SubjectNewEditSlot() {
 
   const values = watch();
 
-  const { invoiceFrom, invoiceTo } = values;
+  const {slot} = values;
 
   const [openFrom, setOpenFrom] = useState(false);
 
@@ -56,6 +57,12 @@ export default function SubjectNewEditSlot() {
     }
   }
 
+  const handleSelectSlots = (slot) => {
+    onSelect(slot);
+  };
+
+  console.log(slot)
+
 
   return (
     <Stack
@@ -78,10 +85,22 @@ export default function SubjectNewEditSlot() {
             open={openFrom}
             onClose={handleCloseFrom}
             data={listSlots}
+            onSelect={(slots) => setValue('slot', slots)}
           />
         </Stack>
-
-
+        {slot &&
+            <Panel>
+              {slot.map((sl) => (
+                  <Chip
+                      key={sl}
+                      label={sl}
+                      onChange={handleSelectSlots}
+                      size="small"
+                      sx={{ m: 0.5 }}
+                  />
+              ))}
+            </Panel>
+        }
       </Stack>
     </Stack>
   );
@@ -89,14 +108,45 @@ export default function SubjectNewEditSlot() {
 
 // ----------------------------------------------------------------------
 
-SlotInfo.propTypes = {
-  name: PropTypes.string,
+
+Panel.propTypes = {
+  sx: PropTypes.object,
+  label: PropTypes.string,
+  children: PropTypes.node,
 };
 
-function SlotInfo({ name}) {
+function Panel({ label, children, sx }) {
   return (
-    <>
-      <Typography variant="subtitle2">{name}</Typography>
-    </>
+      <Stack
+          direction="row"
+          alignItems="stretch"
+          sx={{
+            m: 0.5,
+            borderRadius: 1,
+            overflow: 'hidden',
+            border: (theme) => `solid 1px ${theme.palette.divider}`,
+            ...sx,
+          }}
+      >
+        <Stack
+            component="span"
+            direction="row"
+            alignItems="center"
+            sx={{
+              px: 1,
+              typography: 'subtitle2',
+              color: 'text.secondary',
+              bgcolor: 'background.neutral',
+              borderRight: (theme) => `solid 1px ${theme.palette.divider}`,
+            }}
+        >
+          {label}
+        </Stack>
+
+        <Stack direction="row" flexWrap="wrap" sx={{ p: 0.75 }}>
+          {children}
+        </Stack>
+      </Stack>
   );
 }
+

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 // next
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // @mui
-import { Collapse } from '@mui/material';
+import {Collapse} from '@mui/material';
 // hooks
 import useActiveLink from '../../../hooks/useActiveLink';
 //
@@ -17,10 +17,9 @@ NavList.propTypes = {
   hasChild: PropTypes.bool,
 };
 
-export default function NavList({ data, depth, hasChild }) {
-  const { pathname } = useRouter();
-
-  const { active, isExternalLink } = useActiveLink(data.path);
+export default function NavList({data, depth, hasChild}) {
+  const {pathname} = useRouter();
+  const {active, isExternalLink} = useActiveLink(data.path);
 
   const [open, setOpen] = useState(active);
 
@@ -38,24 +37,24 @@ export default function NavList({ data, depth, hasChild }) {
   const handleClose = () => {
     setOpen(false);
   };
-
+  console.log('data', data, 'hasChild', hasChild)
   return (
-    <>
-      <NavItem
-        item={data}
-        depth={depth}
-        open={open}
-        active={active}
-        isExternalLink={isExternalLink}
-        onClick={handleToggle}
-      />
+      <>
+        <NavItem
+            item={data}
+            depth={depth}
+            open={open}
+            active={active}
+            isExternalLink={isExternalLink}
+            onClick={handleToggle}
+        />
 
-      {hasChild && (
-        <Collapse in={open} unmountOnExit>
-          <NavSubList data={data.children} depth={depth} />
-        </Collapse>
-      )}
-    </>
+        {hasChild && (
+            <Collapse in={open} unmountOnExit>
+              <NavSubList data={data.children} depth={depth}/>
+            </Collapse>
+        )}
+      </>
   );
 }
 
@@ -66,12 +65,13 @@ NavSubList.propTypes = {
   depth: PropTypes.number,
 };
 
-function NavSubList({ data, depth }) {
+function NavSubList({data, depth}) {
   return (
-    <>
-      {data.map((list) => (
-        <NavList key={list.title + list.path} data={list} depth={depth + 1} hasChild={!!list.children} />
-      ))}
-    </>
+      <>
+        {data.map((list) => (
+            <NavList key={list.title + list.path} data={list} depth={depth + 1}
+                     hasChild={false}/>
+        ))}
+      </>
   );
 }

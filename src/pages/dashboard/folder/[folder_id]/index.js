@@ -29,11 +29,7 @@ import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 
 const GB = 1000000000 * 24;
 
-const TIME_LABELS = {
-  week: ['Mon', 'Tue', 'Web', 'Thu', 'Fri', 'Sat', 'Sun'],
-  month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  year: ['2018', '2019', '2020', '2021', '2022'],
-};
+
 
 // ----------------------------------------------------------------------
 
@@ -49,9 +45,8 @@ export default function GeneralFilePage() {
     push,
   } = useRouter();
   const { folder } = useSelector((state) => state.folder);
-
   const { id, listFolders, listDocuments } = folder;
-  console.log('GeneralFilePage', folderID, folder, id);
+  console.log('list',listFolders)
 
   useEffect(() => {
     dispatch(getFolderRedux(folderID));
@@ -100,6 +95,7 @@ export default function GeneralFilePage() {
       })
     );
     handleCloseNewFolder();
+    window.location.reload();
   };
 
   const handleDrop = useCallback(
@@ -120,40 +116,6 @@ export default function GeneralFilePage() {
     push(PATH_DASHBOARD.folder.link(folder_id));
   }, []);
 
-  const renderStorageOverview = (
-    <FileGeneralStorageOverview
-      total={GB}
-      chart={{
-        series: 76,
-      }}
-      data={[
-        {
-          name: 'Images',
-          usedStorage: GB / 2,
-          filesCount: 223,
-          icon: <Box component="img" src="/assets/icons/files/ic_img.svg" />,
-        },
-        {
-          name: 'Media',
-          usedStorage: GB / 5,
-          filesCount: 223,
-          icon: <Box component="img" src="/assets/icons/files/ic_video.svg" />,
-        },
-        {
-          name: 'Documents',
-          usedStorage: GB / 5,
-          filesCount: 223,
-          icon: <Box component="img" src="/assets/icons/files/ic_document.svg" />,
-        },
-        {
-          name: 'Other',
-          usedStorage: GB / 10,
-          filesCount: 223,
-          icon: <Iconify icon="eva:file-fill" width={24} sx={{ color: 'text.disabled' }} />,
-        },
-      ]}
-    />
-  );
 
   return (
     <>
@@ -163,13 +125,7 @@ export default function GeneralFilePage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
-          {smDown && (
-            <Grid item xs={12}>
-              {renderStorageOverview}
-            </Grid>
-          )}
-
-          <Grid item xs={12} md={6} lg={8}>
+          <Grid item xs={12} md={12} lg={12}>
             <div>
               <FilePanel
                 title="Folders"
@@ -198,7 +154,7 @@ export default function GeneralFilePage() {
               </Scrollbar>
 
               <FilePanel
-                title="Recent Files"
+                title="Tài liệu gần đây"
                 link={PATH_DASHBOARD.fileManager}
                 onOpen={handleOpenUploadFile}
                 sx={{ mt: 2 }}
@@ -218,28 +174,6 @@ export default function GeneralFilePage() {
             </div>
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
-            {/* <UploadBox
-              onDrop={handleDrop}
-              placeholder={
-                <Stack spacing={0.5} alignItems="center" sx={{ color: 'text.disabled' }}>
-                  <Iconify icon="eva:cloud-upload-fill" width={40} />
-                  <Typography variant="body2">Upload file</Typography>
-                </Stack>
-              }
-              sx={{
-                mb: 3,
-                py: 2.5,
-                width: 'auto',
-                height: 'auto',
-                borderRadius: 1.5,
-              }}
-            /> */}
-
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>{renderStorageOverview}</Box>
-
-            {/* <FileGeneralUpgrade sx={{ mt: 3 }} /> */}
-          </Grid>
         </Grid>
       </Container>
 

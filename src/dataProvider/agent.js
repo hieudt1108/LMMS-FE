@@ -4,9 +4,16 @@ const instance = axios.create({
   baseURL: 'http://lmms.site:9090/api/',
   timeout: 3000,
 });
+<<<<<<< HEAD
+import { PATH_AUTH } from '../routes/paths';
+import { useRouter } from 'next/router';
+import { idID } from '@mui/material/locale';
+import { func } from 'prop-types';
+=======
 import {PATH_AUTH} from '../routes/paths';
 import {useRouter} from 'next/router';
 import {idID} from '@mui/material/locale';
+>>>>>>> feature/sprint4/main
 
 // INTERCEPTORS CONFIG START
 instance.interceptors.response.use(responseOnSuccessMiddleware,
@@ -157,7 +164,10 @@ function getAllTypeDocument(params) {
 function getTypeDocumentById(id) {
   return getApi(`/TypeDocument/getOne/${id}`);
 }
-
+// DOCUMENT IN CLASS
+function getDocInClass(params) {
+  return getApi('/Document/getDocumentsInClass', params);
+}
 // SLOT
 
 function getAllSlot(params) {
@@ -491,5 +501,9 @@ export {
   getAllMyClass,
   getMyClassGetOne,
   getDocumentShareWithMe,
+<<<<<<< HEAD
+  getDocInClass,
+=======
   getMenu,
+>>>>>>> feature/sprint4/main
 };

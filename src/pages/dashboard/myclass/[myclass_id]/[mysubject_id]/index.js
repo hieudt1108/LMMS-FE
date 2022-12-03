@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import DashboardLayout from '../../../../../layouts/dashboard';
-import { Container, Grid, Stack, Alert } from '@mui/material';
+import { Container, Grid, Stack, Alert, Typography } from '@mui/material';
 import { useSettingsContext } from '../../../../../components/settings';
 import CustomBreadcrumbs from '../../../../../components/custom-breadcrumbs';
 import { PATH_DASHBOARD } from '../../../../../routes/paths';
@@ -11,7 +11,7 @@ import DocumentLocal from '../../../../../sections/@dashboard/class/subject/Docu
 import Head from 'next/head';
 
 // API
-import { getSubjectById } from '../../../../../dataProvider/agent';
+import { getSubjectById, getDocInClass } from '../../../../../dataProvider/agent';
 
 index.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -24,8 +24,11 @@ export default function index() {
 
   const [subject, setSubject] = useState();
 
+  const [docs, setDocs] = useState([]);
+
   useEffect(() => {
     fethOneSubject();
+    fetchDocumentInClass();
   }, [mysubject_id]);
 
   async function fethOneSubject() {
@@ -38,7 +41,21 @@ export default function index() {
       </Alert>;
     }
   }
-  console.log('checked sys', myclass_id, mysubject_id, subject);
+
+  console.log('docs: ', docs);
+  async function fetchDocumentInClass() {
+    const res = await getDocInClass({
+      classId: myclass_id,
+      subjectId: mysubject_id,
+    });
+    if (res.status < 400) {
+      setDocs(res.data.data);
+    } else {
+      <Alert severity="info" sx={{ mb: 3 }}>
+        {res.message}
+      </Alert>;
+    }
+  }
   return (
     <>
       <Head>
@@ -50,27 +67,21 @@ export default function index() {
           heading="Khung chương trình"
           links={[
             { name: 'Trang chủ', href: PATH_DASHBOARD.root },
-            { name: 'Môn học', href: PATH_DASHBOARD.user.root },
+            { name: 'Môn học', href: PATH_DASHBOARD.myclass.classdetail(myclass_id) },
             { name: 'Khung chương trình' },
           ]}
         />
         <Grid container spacing={5}>
           <Grid item xs={12} md={12}>
-            <DocumentLocal />
+            <DocumentLocal docs={docs} />
           </Grid>
+
           <Grid item xs={12} md={12}>
             <Stack spacing={1}>
+              <Typography variant="h5"> Tài liệu từng slot</Typography>
               {subject?.listSlots?.map((data) => (
-                <SysllabusSubject data={data} />
+                <SysllabusSubject data={data} key={data.id} docs={docs} />
               ))}
-
-              <SysllabusSubject />
-              <SysllabusSubject />
-              <SysllabusSubject />
-              <SysllabusSubject />
-              <SysllabusSubject />
-              <SysllabusSubject />
-              <SysllabusSubject />
             </Stack>
           </Grid>
         </Grid>

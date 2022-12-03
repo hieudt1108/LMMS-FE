@@ -41,11 +41,11 @@ ClassTeacher.propTypes = {
 
 export default function ClassTeacher({ myClass, title, subheader, tableLabels, tableData, ...other }) {
   const {
-    query: { class_id },
+    query: { myclass_id },
   } = useRouter();
   const { push } = useRouter();
   const handleOnClickSubject = () => {
-    push(PATH_DASHBOARD.class.addStudent(class_id));
+    push(PATH_DASHBOARD.myclass.addMember(myclass_id));
   };
 
   return (
@@ -53,7 +53,7 @@ export default function ClassTeacher({ myClass, title, subheader, tableLabels, t
       <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
         <CardHeader sx={{ display: 'contents' }} title={title} subheader={subheader} />
         <Button onClick={handleOnClickSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-          Add Student
+          Add Teacher
         </Button>
       </Box>
 

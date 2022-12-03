@@ -108,29 +108,25 @@ export function AuthProvider({ children }) {
 
   // LOGIN
   const login = async (username, password) => {
-    try {
-      const response = await loginAuth({ username, password });
-      if (!response.status || response.status !== 200) {
-        throw new Error('Tên đăng nhập hoặc mật khẩu sai !');
-      }
-      const { accessToken } = response.data;
-      clearLocalStorage();
-      setupLocalStorage(accessToken);
-
-      const decoded = jwtDecode(accessToken);
-      const responseUser = await getUserById(decoded.nameid);
-      dispatch({
-        type: 'LOGIN',
-        payload: {
-          user: {
-            ...responseUser.data.data,
-          },
-        },
-      });
-    } catch (error) {
-      console.log('login Error', error);
-      throw new Error('Có gì đó sai sai!!!');
+    const responseLogin = await loginAuth({ username, password });
+    const { response } = responseLogin;
+    if (response) {
+      throw new Error(response.data.title);
     }
+    const { accessToken } = responseLogin.data;
+    clearLocalStorage();
+    setupLocalStorage(accessToken);
+
+    const decoded = jwtDecode(accessToken);
+    const responseUser = await getUserById(decoded.nameid);
+    dispatch({
+      type: 'LOGIN',
+      payload: {
+        user: {
+          ...responseUser.data.data,
+        },
+      },
+    });
   };
 
   // REGISTER

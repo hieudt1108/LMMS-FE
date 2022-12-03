@@ -4,20 +4,19 @@ const instance = axios.create({
   baseURL: 'http://lmms.site:9090/api/',
   timeout: 3000,
 });
-import {PATH_AUTH} from '../routes/paths';
-import {useRouter} from 'next/router';
-import {idID} from '@mui/material/locale';
+import { PATH_AUTH } from '../routes/paths';
+import { useRouter } from 'next/router';
+import { idID } from '@mui/material/locale';
 
 // INTERCEPTORS CONFIG START
-instance.interceptors.response.use(responseOnSuccessMiddleware,
-    responseOnErrorMiddleware);
+instance.interceptors.response.use(responseOnSuccessMiddleware, responseOnErrorMiddleware);
 
 function responseOnSuccessMiddleware(res) {
   return res;
 }
 
 function responseOnErrorMiddleware(error) {
-  const {status} = error.response;
+  const { status } = error.response;
   if (status === 401) {
     localStorage.clear();
     window.location.href = PATH_AUTH.login;
@@ -198,8 +197,11 @@ async function postApi(url, payload, file) {
     const res = await instance.post(`/${url}`, payload, {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no-author',
-        'Content-Type': file ? 'multipart/form-data'
-            : 'application/json; charset=utf-8',
+        'Content-Type': file ? 'multipart/form-data' : 'application/json; charset=utf-8',
+        'Access-Control-Allow-Headers':
+          'Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version, X-File-Name',
+        'Access-Control-Allow-Methods': 'POST',
+        'Access-Control-Allow-Origin': '*',
       },
     });
     return res;

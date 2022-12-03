@@ -7,6 +7,7 @@ const instance = axios.create({
 import { PATH_AUTH } from '../routes/paths';
 import { useRouter } from 'next/router';
 import { idID } from '@mui/material/locale';
+import { func } from 'prop-types';
 
 // INTERCEPTORS CONFIG START
 instance.interceptors.response.use(responseOnSuccessMiddleware, responseOnErrorMiddleware);
@@ -137,7 +138,10 @@ function getAllTypeDocument(params) {
 function getTypeDocumentById(id) {
   return getApi(`/TypeDocument/getOne/${id}`);
 }
-
+// DOCUMENT IN CLASS
+function getDocInClass(params) {
+  return getApi('/Document/getDocumentsInClass', params);
+}
 // SLOT
 
 function getAllSlot(params) {
@@ -466,4 +470,5 @@ export {
   getAllMyClass,
   getMyClassGetOne,
   getDocumentShareWithMe,
+  getDocInClass,
 };

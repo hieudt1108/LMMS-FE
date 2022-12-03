@@ -39,28 +39,38 @@ const data = [
   },
 ];
 
-export default function DocumentLocal() {
+export default function DocumentLocal({ docs }) {
   const isDesktop = useResponsive('up', 'sm');
 
   return (
     <Card sx={{ p: 3, cursor: 'pointer' }}>
+      <Typography sx={{ mb: 2 }} variant="h5">
+        Tài liệu chung
+      </Typography>
       <Stack spacing={2}>
-        {data.map((category) => (
-          <Stack key={category.name} spacing={2} direction="row" alignItems="center">
-            <Avatar variant="rounded" sx={{ bgcolor: 'background.neutral', width: 48, height: 48, borderRadius: 1.5 }}>
-              {category.icon}
-            </Avatar>
+        {docs?.map((doc) =>
+          doc.slotId === null ? (
+            <Stack key={doc.code} spacing={2} direction="row" alignItems="center">
+              <Avatar
+                variant="rounded"
+                sx={{ bgcolor: 'background.neutral', width: 48, height: 48, borderRadius: 1.5 }}
+              >
+                <Box component="img" src="/assets/icons/files/ic_img.svg" />
+              </Avatar>
 
-            <Stack spacing={0.5} flexGrow={1}>
-              <Typography variant="subtitle2"> {category.name} </Typography>
-              <Typography variant="caption" sx={{ color: 'text.disabled' }}>
-                {category.filesCount} files
-              </Typography>
+              <Stack spacing={0.5} flexGrow={1}>
+                <Typography variant="subtitle2"> {doc.name} </Typography>
+                <Typography variant="caption" sx={{ color: 'text.disabled' }}>
+                  TypeFile: {doc.typeFile}
+                </Typography>
+              </Stack>
+
+              <Typography variant="subtitle2"> {fData(doc.size)} </Typography>
             </Stack>
-
-            <Typography variant="subtitle2"> {fData(category.usedStorage)} </Typography>
-          </Stack>
-        ))}
+          ) : (
+            <div></div>
+          )
+        )}
       </Stack>
     </Card>
   );

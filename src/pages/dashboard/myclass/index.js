@@ -38,7 +38,6 @@ export default function MyClass() {
   const { classes } = useSelector((state) => state.class);
   const { programs } = useSelector((state) => state.program);
   const { grades } = useSelector((state) => state.grade);
-  console.log('Classes', classes);
 
   const [pagingClass, setPagingClass] = React.useState({
     pageIndex: 1,

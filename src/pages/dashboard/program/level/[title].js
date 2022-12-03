@@ -97,7 +97,6 @@ export default function LevelLayout() {
       console.log(res.message);
     }
   }
-  console.log('test: ', typeDocs);
 
   async function fetchAllSubject() {
     const res = await getAllSubject({
@@ -154,7 +153,7 @@ export default function LevelLayout() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Khối học"
+          heading="Tài liệu tổng hợp"
           links={[
             {
               name: 'Trang chủ',
@@ -217,33 +216,6 @@ export default function LevelLayout() {
             color="primary"
           />
         </Stack>
-        {/* <Card>
-          <Tabs
-            value={currentTab}
-            onChange={(event, newValue) => setCurrentTab(newValue)}
-            sx={{ px: 3, bgcolor: 'background.neutral' }}
-          >
-            {TABS.map((tab) => (
-              <Tab key={tab.value} value={tab.value} label={tab.label} />
-            ))}
-          </Tabs>
-
-          <Divider />
-
-          {TABS.map(
-            (tab) =>
-              tab.value === currentTab && (
-                <Box
-                  key={tab.value}
-                  sx={{
-                    ...(currentTab === 'description'),
-                  }}
-                >
-                  {tab.component}
-                </Box>
-              )
-          )}
-        </Card> */}
       </Container>
     </>
   );

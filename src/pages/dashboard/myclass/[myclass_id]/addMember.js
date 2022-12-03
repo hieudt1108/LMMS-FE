@@ -21,11 +21,8 @@ import ClassAddStudentXls from '../../../../sections/@dashboard/class/form/Class
 
 // ----------------------------------------------------------------------
 
-addStudent.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-
-// ----------------------------------------------------------------------
-
-export default function addStudent() {
+addMember.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+export default function addMember() {
   const {
     query: { myclass_id },
   } = useRouter();
@@ -33,6 +30,8 @@ export default function addStudent() {
   const [currentTab, setCurrentTab] = useState('description');
 
   const { themeStretch } = useSettingsContext();
+
+  console.log('class ID: ', myclass_id);
 
   const TABS = [
     {

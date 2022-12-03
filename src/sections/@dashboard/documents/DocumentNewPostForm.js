@@ -68,7 +68,6 @@ export default function DocumentNewPostForm() {
       console.log(res.message);
     }
   }
-  console.log('test: ', typeDocs);
   useEffect(() => {
     fetchApiGet();
   }, []);

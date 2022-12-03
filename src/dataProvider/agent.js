@@ -156,7 +156,10 @@ function getAllTypeDocument(params) {
 function getTypeDocumentById(id) {
   return getApi(`/TypeDocument/getOne/${id}`);
 }
-
+// DOCUMENT IN CLASS
+function getDocInClass(params) {
+  return getApi('/Document/getDocumentsInClass', params);
+}
 // SLOT
 
 function getAllSlot(params) {
@@ -493,5 +496,6 @@ export {
   getAllMyClass,
   getMyClassGetOne,
   getDocumentShareWithMe,
+  getDocInClass,
   getMenu,
 };

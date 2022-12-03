@@ -41,11 +41,11 @@ CLassDetails.propTypes = {
 
 export default function CLassDetails({ myClass, title, subheader, tableLabels, tableData, ...other }) {
   const {
-    query: { class_id },
+    query: { myclass_id },
   } = useRouter();
   const { push } = useRouter();
   const handleOnClickSubject = () => {
-    push(PATH_DASHBOARD.class.addStudent(class_id));
+    push(PATH_DASHBOARD.myclass.addMember(myclass_id));
   };
 
   return (

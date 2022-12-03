@@ -39,7 +39,7 @@ export const PATH_DASHBOARD = {
   blank: path(ROOTS_DASHBOARD, '/blank'),
   class: {
     root: path(ROOTS_DASHBOARD, '/class'),
-    // detail: (class_id) => path(ROOTS_DASHBOARD, `/class/${class_id}`),
+    detail: (class_id) => path(ROOTS_DASHBOARD, `/class/${class_id}`),
     new: path(ROOTS_DASHBOARD, '/class/new'),
     edit: (class_id) => path(ROOTS_DASHBOARD, `/class/${class_id}/edit`),
     addStudent: (class_id) => path(ROOTS_DASHBOARD, `/class/${class_id}/addStudent`),
@@ -49,6 +49,7 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/myclass'),
     classdetail: (myclass_id) => path(ROOTS_DASHBOARD, `/myclass/${myclass_id}`),
     classsubject: (myclass_id, mysubject_id) => path(ROOTS_DASHBOARD, `/myclass/${myclass_id}/${mysubject_id}`),
+    addMember: (myclass_id) => path(ROOTS_DASHBOARD, `/myclass/${myclass_id}/addMember`),
   },
 
   general: {
@@ -111,7 +112,6 @@ export const PATH_DASHBOARD = {
     view: (id) => path(ROOTS_DASHBOARD, `/documents/document/post/${id}`),
     demoView: path(ROOTS_DASHBOARD, '/documents/document/post/apply-these-7-secret-techniques-to-improve-event'),
   },
-
 
   type_documents: {
     root: path(ROOTS_DASHBOARD, '/typeDocs'),

@@ -56,7 +56,7 @@ function BookingItem({ item }) {
   const {
     query: { myclass_id },
   } = useRouter();
-  console.log('test: ', myclass_id);
+
   const { push } = useRouter();
   const handleOnClickSubject = () => {
     push(PATH_DASHBOARD.myclass.classsubject(myclass_id, subjectId));

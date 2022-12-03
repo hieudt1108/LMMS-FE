@@ -148,6 +148,10 @@ function getDocumentShareWithMe(params) {
   return getApi('Document/getAllMyDocumentsShareWithMe', params);
 }
 
+function getDocumentById(id) {
+  return getApi(`/Document/getOne/${id}`);
+}
+
 // TYPE DOCUMENT
 function getAllTypeDocument(params) {
   return getApi('/TypeDocument/getAll', params);
@@ -496,6 +500,7 @@ export {
   getAllMyClass,
   getMyClassGetOne,
   getDocumentShareWithMe,
+  getDocumentById,
   getDocInClass,
   getMenu,
 };

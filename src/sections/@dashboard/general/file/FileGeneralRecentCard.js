@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 // @mui
 import {Box, Checkbox, Divider, IconButton, MenuItem, Stack, Typography} from '@mui/material';
 // hooks
@@ -15,7 +15,8 @@ import MenuPopover from '../../../../components/menu-popover';
 import FileThumbnail from '../../../../components/file-thumbnail';
 //
 import {FileShareDialog} from '../../file';
-import FilePreview from '../../documents/DocumentPreview';
+import DocumentPreview from '../../documents/DocumentPreview';
+import {getDocumentById} from "../../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -85,9 +86,12 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
     setOpenPreview(true);
   };
 
+
   const handleClosePreview = () => {
     setOpenPreview(false);
   };
+
+
 
   return (
     <>
@@ -189,13 +193,13 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
         <MenuItem
           onClick={() => {
-            handleClosePopover();
             handleOpenPreview();
           }}
         >
           <Iconify icon="eva:link-2-fill" />
-          Open file
+          Xem trước
         </MenuItem>
+        <DocumentPreview document={file.id} open={openPreview} onClose={handleClosePreview} />
         <MenuItem
           onClick={() => {
             handleClosePopover();
@@ -203,7 +207,7 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
           }}
         >
           <Iconify icon="eva:link-2-fill" />
-          Copy Link
+          Tải xuống
         </MenuItem>
 
         <MenuItem
@@ -213,7 +217,7 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
           }}
         >
           <Iconify icon="eva:share-fill" />
-          Share
+          Chia sẻ
         </MenuItem>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
@@ -226,7 +230,7 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="eva:trash-2-outline" />
-          Delete
+          Xóa
         </MenuItem>
       </MenuPopover>
 
@@ -254,7 +258,7 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
           setInviteEmail('');
         }}
       />
-      <FilePreview open={openPreview} onClose={handleClosePreview} />
+
     </>
   );
 }

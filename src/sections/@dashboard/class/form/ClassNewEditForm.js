@@ -22,6 +22,9 @@ import { useDispatch } from 'react-redux';
 import { getProgramsRedux } from 'src/redux/slices/program';
 import { getGradesRedux } from 'src/redux/slices/grade';
 
+// API
+import { postClass } from '../../../../dataProvider/agent';
+
 // ----------------------------------------------------------------------
 
 ClassNewEditForm.propTypes = {
@@ -67,8 +70,8 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
       schoolYear: currentClass?.schoolYear || `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`,
       gradeId: currentClass?.gradeId + '' || (grades && grades.length) ? grades[0]?.id + '' : '',
       programId: currentClass?.programId + '' || (programs && programs.length) ? programs[0]?.id + '' : '',
-      teachers: currentClass?.teachers || [],
-      students: currentClass?.students || [],
+      // teachers: currentClass?.teachers || [],
+      // students: currentClass?.students || [],
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentClass]
@@ -76,7 +79,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
   console.log('data : ', defaultValues);
 
   const methods = useForm({
-    resolver: yupResolver(NewClassSchema),
+    // resolver: yupResolver(NewClassSchema),
     defaultValues,
   });
 
@@ -104,14 +107,29 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
   const onSubmit = async (data) => {
     if (!isEdit) {
       try {
-        console.log('onSubmit', data, methods);
-        // await new Promise((resolve) => setTimeout(resolve, 500));
-        reset();
-        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+        const dataCreate = {
+          name: data?.name,
+          code: data?.code,
+          size: data?.size,
+          schoolYear: data?.schoolYear,
+          gradeId: data?.gradeId,
+          programId: data?.programId,
+        };
+        const res = await postClass(dataCreate);
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Tạo chương trình học thành công');
+          push(PATH_DASHBOARD.class.root);
+        } else {
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+        }
+        // console.log('onSubmit', data, methods);
+        // // await new Promise((resolve) => setTimeout(resolve, 500));
+        // reset();
+        // enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       } catch (error) {
-        console.error(error);
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
       }
-    } else {
     }
   };
 
@@ -188,11 +206,11 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="code" label="Mã lớp" />
-              <RHFTextField name="name" label="Tên lớp" />
-              <RHFTextField name="size" label="Sĩ số" type="number" />
+              <RHFTextField name="code" label="Mã lớp" id="code" />
+              <RHFTextField name="name" label="Tên lớp" id="name" />
+              <RHFTextField name="size" label="Sĩ số" type="number" id="size" />
 
-              <RHFSelect name="schoolYear" label="Năm học" placeholder="Năm học">
+              <RHFSelect name="schoolYear" label="Năm học" placeholder="Năm học" id="schoolYear">
                 {renderYearPicker().map((option, index) => (
                   <option key={index} value={option}>
                     {option}
@@ -200,7 +218,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
                 ))}
               </RHFSelect>
 
-              <RHFSelect name="programId" label="Chương trình" placeholder="Chương trình">
+              <RHFSelect name="programId" label="Chương trình" placeholder="Chương trình" id="programId">
                 {programs.map((option, index) => (
                   <option key={index} value={option.id + ''}>
                     {option.name}
@@ -208,7 +226,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
                 ))}
               </RHFSelect>
 
-              <RHFSelect name="gradeId" label="Khối" placeholder="Khối">
+              <RHFSelect name="gradeId" label="Khối" placeholder="Khối" id="gradeId">
                 {grades.map((option, index) => (
                   <option key={index} value={option.id + ''}>
                     {option.name}

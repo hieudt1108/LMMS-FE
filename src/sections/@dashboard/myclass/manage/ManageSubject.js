@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { ClassNewestBooking } from '../../class';
+import { ClassNewestBooking } from '../../myclass';
 import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../../../../_mock/arrays';
 export default function ManageSubject({ myClass }) {
   return (

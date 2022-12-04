@@ -26,6 +26,7 @@ export default function index() {
 
   const [docs, setDocs] = useState([]);
 
+  console.log('data query: ', myclass_id, mysubject_id);
   useEffect(() => {
     fethOneSubject();
     fetchDocumentInClass();

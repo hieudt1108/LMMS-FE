@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSettingsContext } from '../../../components/settings';
-import { alpha } from '@mui/material/styles';
+import NextLink from 'next/link';
+
 import {
   Alert,
   Button,
@@ -29,6 +30,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getClassesRedux } from 'src/redux/slices/myclass';
 import { getProgramsRedux } from 'src/redux/slices/program';
 import { getGradesRedux } from 'src/redux/slices/grade';
+// PATH
+import { PATH_DASHBOARD } from '../../../routes/paths';
 
 MyClass.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -136,7 +139,13 @@ export default function MyClass() {
                   }}
                 />
               }
-              action={<Button variant="contained">Thêm lớp</Button>}
+              action={
+                <NextLink href={PATH_DASHBOARD.class.new} passHref>
+                  <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                    Thêm lớp học
+                  </Button>
+                </NextLink>
+              }
             />
           </Grid>
 

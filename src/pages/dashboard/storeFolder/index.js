@@ -5,23 +5,23 @@ import Head from 'next/head';
 import {useTheme} from '@mui/material/styles';
 import {Container, Grid, Stack} from '@mui/material';
 // routes
-import {PATH_DASHBOARD} from '../../../../routes/paths';
+import {PATH_DASHBOARD} from '../../../routes/paths';
 // hooks
-import useResponsive from '../../../../hooks/useResponsive';
+import useResponsive from '../../../hooks/useResponsive';
 // _mock
-import {_folders} from '../../../../_mock/arrays';
+import {_storeFolders} from '../../../_mock/arrays';
 // layouts
-import DashboardLayout from '../../../../layouts/dashboard';
+import DashboardLayout from '../../../layouts/dashboard';
 // components
-import Scrollbar from '../../../../components/scrollbar';
-import {useSettingsContext} from '../../../../components/settings';
+import Scrollbar from '../../../components/scrollbar';
+import {useSettingsContext} from '../../../components/settings';
 // sections
-import {FileGeneralRecentCard} from '../../../../sections/@dashboard/general/file';
-import {FileFolderCard, FileNewFolderDialog, FilePanel} from '../../../../sections/@dashboard/file';
+import {FileGeneralRecentCard} from '../../../sections/@dashboard/general/file';
+import {FileFolderCard, FileNewFolderDialog, FilePanel} from '../../../sections/@dashboard/file';
 import {useRouter} from 'next/router';
 import {dispatch} from 'src/redux/store';
 import {useSelector} from 'react-redux';
-import {createFolderRedux, getFolderRedux} from 'src/redux/slices/folder';
+import {createStoreFolderRedux, getStoreFolderRootRedux} from "../../../redux/slices/storeFolder";
 
 // ----------------------------------------------------------------------
 
@@ -29,47 +29,45 @@ const GB = 1000000000 * 24;
 
 // ----------------------------------------------------------------------
 
-GeneralFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+StoreFileRootPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function GeneralFilePage() {
+export default function StoreFileRootPage() {
   const theme = useTheme();
 
-  const {
-    query: { folder_id: folderID },
-    push,
-  } = useRouter();
-  const { folder } = useSelector((state) => state.folder);
-  const { id, listFolders, listDocuments } = folder;
-  console.log('GeneralFilePage', listFolders, listDocuments);
+  const { push } = useRouter();
+
+  const { storeFolder } = useSelector((state) => state.storeFolder);
+  const { id, listFolders, listDocuments } = storeFolder;
 
   useEffect(() => {
-    dispatch(getFolderRedux(folderID));
-  }, [dispatch, folderID]);
+    dispatch(getStoreFolderRootRedux());
+  }, [dispatch]);
+
 
   const smDown = useResponsive('down', 'sm');
 
   const { themeStretch } = useSettingsContext();
 
-  const [folderName, setFolderName] = useState('');
+  const [storeFolderName, setStoreFolderName] = useState('');
 
   const [files, setFiles] = useState([]);
 
-  const [openNewFolder, setOpenNewFolder] = useState(false);
+  const [openNewStoreFolder, setOpenNewStoreFolder] = useState(false);
 
   const [openUploadFile, setOpenUploadFile] = useState(false);
 
-  const handleOpenNewFolder = () => {
-    setOpenNewFolder(true);
+  const handleOpenNewStoreFolder = () => {
+    setOpenNewStoreFolder(true);
   };
 
-  const handleCloseNewFolder = () => {
-    setOpenNewFolder(false);
+  const handleCloseNewStoreFolder = () => {
+    setOpenNewStoreFolder(false);
   };
 
   const handleOpenUploadFile = () => {
-    push(PATH_DASHBOARD.folder.newDocument(Number.parseInt(id)));
+    push(PATH_DASHBOARD.storeFolder.newDocument(Number.parseInt(id)));
     // setOpenUploadFile(true);
   };
 
@@ -77,20 +75,20 @@ export default function GeneralFilePage() {
     setOpenUploadFile(false);
   };
 
-  const handleChangeFolderName = useCallback((event) => {
-    setFolderName(event.target.value);
+  const handleChangeStoreFolderName = useCallback((event) => {
+    setStoreFolderName(event.target.value);
   }, []);
 
-  const handleCreateNewFolder = () => {
-    console.log('CREATE NEW FOLDER', folderName);
-    setFolderName('');
+  const handleCreateNewStoreFolder = () => {
+    console.log('CREATE NEW FOLDER', storeFolderName);
+    setStoreFolderName('');
     dispatch(
-      createFolderRedux({
-        name: folderName,
+      createStoreFolderRedux({
+        name: storeFolderName,
         parentId: Number.parseInt(id),
       })
     );
-    handleCloseNewFolder();
+    handleCloseNewStoreFolder();
     window.location.reload();
   };
 
@@ -107,9 +105,9 @@ export default function GeneralFilePage() {
     [files]
   );
 
-  const handleOnClickFileFolderCard = useCallback((folder_id) => {
-    console.log('handleOnClickFileFolderCard', folder_id);
-    push(PATH_DASHBOARD.folder.link(folder_id));
+  const handleOnClickFileFolderCard = useCallback((storeFolder_id) => {
+    console.log('handleOnClickFileFolderCard', storeFolder_id);
+    push(PATH_DASHBOARD.storeFolder.link(storeFolder_id));
   }, []);
 
   return (
@@ -125,20 +123,20 @@ export default function GeneralFilePage() {
               <FilePanel
                 title="Folders"
                 link={PATH_DASHBOARD.fileManager}
-                onOpen={handleOpenNewFolder}
+                onOpen={handleOpenNewStoreFolder}
                 sx={{ mt: 5 }}
               />
               <Scrollbar>
                 <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
                   {listFolders && listFolders.length
-                    ? listFolders.map((folder, index) => (
+                    ? listFolders.map((storeFolder, index) => (
                         <FileFolderCard
                           key={index}
-                          folder={folder}
-                          onClick={() => handleOnClickFileFolderCard(folder.id)}
-                          onDelete={() => console.log('DELETE', folder.id)}
+                          folder={storeFolder}
+                          onClick={() => handleOnClickFileFolderCard(storeFolder.id)}
+                          onDelete={() => console.log('DELETE', storeFolder.id)}
                           sx={{
-                            ...(_folders.length > 3 && {
+                            ...(_storeFolders.length > 3 && {
                               minWidth: 222,
                             }),
                           }}
@@ -174,12 +172,12 @@ export default function GeneralFilePage() {
       <FileNewFolderDialog open={openUploadFile} onClose={handleCloseUploadFile} />
 
       <FileNewFolderDialog
-        open={openNewFolder}
-        onClose={handleCloseNewFolder}
+        open={openNewStoreFolder}
+        onClose={handleCloseNewStoreFolder}
         title="New Folder"
-        folderName={folderName}
-        onChangeFolderName={handleChangeFolderName}
-        onCreate={handleCreateNewFolder}
+        folderName={storeFolderName}
+        onChangeFolderName={handleChangeStoreFolderName}
+        onCreate={handleCreateNewStoreFolder}
       />
     </>
   );

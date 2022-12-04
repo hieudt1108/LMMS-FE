@@ -11,7 +11,7 @@ import classReducer from './slices/class';
 import programReducer from './slices/program';
 import gradeReducer from './slices/grade';
 import folderReducer from './slices/folder';
-
+import storeFolderReducer from './slices/storeFolder';
 // ----------------------------------------------------------------------
 
 const createNoopStorage = () => ({
@@ -52,6 +52,7 @@ const rootReducer = combineReducers({
   program: programReducer,
   grade: gradeReducer,
   folder: folderReducer,
+  storeFolder: storeFolderReducer
 });
 
 export { rootPersistConfig, rootReducer };

@@ -382,6 +382,11 @@ const updateProgram = (id, payload) => {
   return putApi(`Program/${id}`, payload);
 };
 
+// CLASS
+const updateClass = (id, payload) => {
+  return putApi(`Class/updateInfor/${id}`, payload);
+};
+
 // LEVEL
 const updateLevel = (id, payload) => {
   return putApi(`Level/${id}`, payload);
@@ -452,6 +457,7 @@ export {
   updateSubject,
   deleteSubject,
   postClass,
+  updateClass,
   getAllGrade,
   getALlRoles,
   getRoleById,

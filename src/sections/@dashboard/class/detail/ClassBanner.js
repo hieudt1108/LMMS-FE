@@ -40,6 +40,11 @@ export default function ClassBanner({
   const handleClassDetails = useCallback((class_id) => {
     router.push(PATH_DASHBOARD.class.detail(class_id));
   }, []);
+
+  const handleEditClass = useCallback((class_id) => {
+    router.push(PATH_DASHBOARD.class.edit(class_id));
+  }, []);
+
   return (
     <Card
       sx={{
@@ -66,13 +71,13 @@ export default function ClassBanner({
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
         <MenuItem
-        // onClick={() => {
-        //   handleClosePopover();
-        //   handleCopy();
-        // }}
+        onClick={() => {
+          handleClosePopover();
+          handleEditClass(data.id);
+        }}
         >
           <Iconify icon="eva:link-2-fill" />
-          Edit
+          Cập nhật
         </MenuItem>
 
         {/* <MenuItem

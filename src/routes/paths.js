@@ -62,6 +62,12 @@ export const PATH_DASHBOARD = {
     newDocument: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}/new`),
   },
 
+  storeFolder: {
+    root: path(ROOTS_DASHBOARD, `/storeFolder/0`),
+    link: (storeFolder_id) => path(ROOTS_DASHBOARD, `/storeFolder/${storeFolder_id ? storeFolder_id : 0}`),
+    newDocument: (storeFolder_id) => path(ROOTS_DASHBOARD, `/storeFolder/${storeFolder_id ? storeFolder_id : 0}/new`),
+  },
+
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
     new: path(ROOTS_DASHBOARD, '/user/new'),

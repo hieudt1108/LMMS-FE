@@ -27,7 +27,7 @@ addStudent.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function addStudent() {
   const {
-    query: { myclass_id },
+    query: { class_id },
   } = useRouter();
 
   const [currentTab, setCurrentTab] = useState('description');
@@ -63,7 +63,7 @@ export default function addStudent() {
             },
             {
               name: 'Class',
-              href: PATH_DASHBOARD.myclass.classdetail(myclass_id),
+              href: PATH_DASHBOARD.class.detail(class_id),
             },
             {
               name: 'New Student',

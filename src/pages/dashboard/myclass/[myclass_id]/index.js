@@ -4,13 +4,14 @@ import Head from 'next/head';
 import { useTheme } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 
-import { Grid, Container, Tab, Tabs, Card, Divider, Box, Alert } from '@mui/material';
+import { Grid, Container, Tab, Tabs, Card, Divider, Box, Alert, Button } from '@mui/material';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // _mock_
 import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../../../../_mock/arrays';
 // components
 import { useSettingsContext } from '../../../../components/settings';
+import Iconify from '../../../../components/iconify';
 // sections
 import { ClassWidgetSummary } from '../../../../sections/@dashboard/class';
 // assets
@@ -19,7 +20,8 @@ import ManageUser from '../../../../sections/@dashboard/class/manage/ManageUser'
 
 import { BookingIllustration, CheckInIllustration, CheckOutIllustration } from '../../../../assets/illustrations';
 import { useRouter } from 'next/router';
-
+// Dash_board
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 //API
 import { getMyClassGetOne } from '../../../../dataProvider/agent';
 
@@ -67,6 +69,10 @@ export default function MyClassDetail() {
 
   const { themeStretch } = useSettingsContext();
 
+  const { push } = useRouter();
+  const handleOnClickSubject = () => {
+    push(PATH_DASHBOARD.myclass.addMember(myclass_id));
+  };
   return (
     <>
       <Head>
@@ -86,63 +92,19 @@ export default function MyClassDetail() {
           <Grid item xs={12} md={4}>
             <ClassWidgetSummary title="Tài liệu" total={124000} icon={<CheckOutIllustration />} />
           </Grid>
-
-          {/* <Grid item xs={12} md={8}>
-           <ClassReservationStats
-             title="Thống kê tài liệu"
-             subheader="Tiên học lễ. Hậu học văn"
-             chart={{
-               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-               series: [
-                 {
-                   type: 'Week',
-                   data: [
-                     { name: 'Tải lên', data: [10, 41, 35, 151, 49, 62, 69, 91, 48] },
-                     { name: 'Tải xuống', data: [10, 34, 13, 56, 77, 88, 99, 77, 45] },
-                   ],
-                 },
-                 {
-                   type: 'Month',
-                   data: [
-                     { name: 'Tải lên', data: [148, 91, 69, 62, 49, 51, 35, 41, 10] },
-                     { name: 'Tải xuống', data: [45, 77, 99, 88, 77, 56, 13, 34, 10] },
-                   ],
-                 },
-                 {
-                   type: 'Year',
-                   data: [
-                     { name: 'Tải lên', data: [76, 42, 29, 41, 27, 138, 117, 86, 63] },
-                     { name: 'Tải xuống', data: [80, 55, 34, 114, 80, 130, 15, 28, 55] },
-                   ],
-                 },
-               ],
-             }}
-           />
-         </Grid>
-
-         // <Grid item xs={12} md={4}>
-         //   <ClassCustomerReviews title="Thông tin giáo viên" list={_subjectReview} />
-         // </Grid> */}
-
-          {/* <Grid item xs={12}>
-           <ClassNewestBooking title="Môn học" subheader="12 môn học" list={_subjectNew} />
-         </Grid>
-
-         <Grid item xs={12}>
-           <CLassDetails
-             title="Thông tin học sinh"
-             tableData={_subjects}
-             tableLabels={[
-               { id: 'STT', label: 'STT' },
-               { id: 'name', label: 'Họ và tên' },
-               { id: 'email', label: 'E-mail' },
-               { id: 'enable', label: 'Trạng thái' },
-               { id: 'gender', label: 'Giới tính' },
-               { id: '' },
-             ]}
-           />
-         </Grid> */}
         </Grid>
+
+        {currentTab === 'reviews' ? (
+          <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button onClick={handleOnClickSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+              Add User
+            </Button>
+            <div></div>
+          </Box>
+        ) : (
+          ''
+        )}
+
         <Card>
           <Tabs
             value={currentTab}

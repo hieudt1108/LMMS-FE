@@ -65,7 +65,7 @@ export default function addMember() {
               href: PATH_DASHBOARD.myclass.classdetail(myclass_id),
             },
             {
-              name: 'New Student',
+              name: 'Thêm người dùng',
             },
           ]}
         />

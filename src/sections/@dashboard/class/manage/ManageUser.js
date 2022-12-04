@@ -1,10 +1,18 @@
 import React from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Button, Box } from '@mui/material';
 import { CLassDetails, ClassTeacher } from '../../class';
 import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../../../../_mock/arrays';
+import { useRouter } from 'next/router';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
+import Iconify from '../../../../components/iconify';
 
 export default function ManageUser({ myClass }) {
   console.log('my class: ', myClass);
+  const {
+    query: { myclass_id },
+  } = useRouter();
+  const { push } = useRouter();
+
   return (
     <>
       <Grid container spacing={3}>

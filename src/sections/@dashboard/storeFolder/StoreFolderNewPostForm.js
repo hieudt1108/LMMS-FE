@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Grid, Card, Stack, Typography, Divider, Button } from '@mui/material';
+import { Grid, Card, Stack, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //components
@@ -17,23 +17,30 @@ import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload } from '../
 import { postFile } from '../../../dataProvider/agent';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { createDocumentInitialRedux, uploadDocumentRedux } from 'src/redux/slices/folder';
 import { Upload } from '../../../components/upload';
 import Iconify from 'src/components/iconify';
+import {
+  createStoreDocumentInitialRedux,
+  getStoreFolderRedux,
+  uploadStoreDocumentRedux
+} from "../../../redux/slices/storeFolder";
+const SORT_OPTIONS = [
+  { id: 0, name: 'Chim cút' },
+  { id: 1, name: 'Được View' },
+  { id: 2, name: 'Được Share' },
+];
 
 // ----------------------------------------------------------------------
 
-export default function BlogNewPostForm() {
+export default function StoreFolderNewPostForm() {
   const {
-    query: { folder_id: folderId },
+    query: { storeFolder_id: storeFolderId },
     push,
   } = useRouter();
 
   const validationSchema = (() => {
     return Yup.object().shape({
-      name: Yup.string().required('Name is require!'),
-      code: Yup.string().required('Code is require!'),
-      description: Yup.string().required('Description is require!'),
+      file: Yup.array().min(1, 'Files is required'),
     });
   })();
 
@@ -46,8 +53,8 @@ export default function BlogNewPostForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    dispatch(createDocumentInitialRedux(folderId));
-  }, [dispatch, folderId]);
+    dispatch(createStoreDocumentInitialRedux(storeFolderId));
+  }, [dispatch, storeFolderId]);
 
   const methods = useForm({
     resolver: yupResolver(validationSchema),
@@ -99,11 +106,11 @@ export default function BlogNewPostForm() {
     if (!data.typeDocumentId) {
       data.typeDocumentId = typeDocuments[0].id;
     }
-    data.folderId = folderId;
+    data.folderId = storeFolderId;
     data.status = data.status ? 1 : 0;
-    dispatch(uploadDocumentRedux(data)).then(() => {
+    dispatch(uploadStoreDocumentRedux(data)).then(() => {
       enqueueSnackbar('Tạo tài liệu thành công');
-      push(PATH_DASHBOARD.folder.link(folderId));
+      push(PATH_DASHBOARD.storeFolder.link(storeFolderId));
     });
   };
 
@@ -130,14 +137,7 @@ export default function BlogNewPostForm() {
                     Tập tin
                   </Typography>
 
-                  <Upload
-                    error={true}
-                    name="file"
-                    multiple
-                    files={files}
-                    onDrop={handleDrop}
-                    onRemove={handleRemoveFile}
-                  />
+                  <Upload name="file" multiple files={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
                 </Stack>
               </Stack>
             </Card>
@@ -201,35 +201,12 @@ export default function BlogNewPostForm() {
             </Card>
 
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-              <LoadingButton type="" variant="contained" size="large" loading={isSubmitting}>
+              <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting}>
                 Đăng tải tài liệu
               </LoadingButton>
             </Stack>
           </Grid>
         </Grid>
-
-        <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
-
-        <Stack
-          spacing={2}
-          direction={{ xs: 'column-reverse', md: 'row' }}
-          alignItems={{ xs: 'flex-start', md: 'center' }}
-        >
-          <Button
-            size="small"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-            // onClick={handleAdd}
-            sx={{ flexShrink: 0 }}
-          >
-            Add Item
-          </Button>
-
-          <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
-            <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-              Đăng tải tài liệu
-            </LoadingButton>
-          </Stack>
-        </Stack>
       </FormProvider>
     </>
   );

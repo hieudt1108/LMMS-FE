@@ -36,7 +36,6 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
         code: Yup.string().trim().required('Mã môn học không được trống'),
         name: Yup.string().trim().required('Tên môn học không được trống'),
         description: Yup.string().notRequired(),
-        listSlots: Yup.array().min(1, 'Hãy chọn vai trò'),
     })
 
     const defaultValues = useMemo(
@@ -77,7 +76,7 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
 
 
     const onSubmit = async (data) => {
-        if(!isEdit){
+        if (!isEdit) {
             try {
                 const res = await createSubject(data)
                 if (res.status < 400) {
@@ -85,14 +84,14 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
                     enqueueSnackbar('Tạo môn học thành công');
                     push(PATH_DASHBOARD.subject.list);
                 } else {
-                    enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+                    enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
                 }
             } catch (error) {
-                enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+                enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
             }
-        }else{
+        } else {
             try {
-                const res = await updateSubject(currentSubject.id,{
+                const res = await updateSubject(currentSubject.id, {
                     code: data.code,
                     name: data.name,
                     description: data.description
@@ -126,19 +125,27 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
         [setValue]
     );
 
-    console.log('new',getValues('listSlots'))
+
+    const handleSelectedSlot = (data) => {
+        console.log("Parent", data)
+        const listSlotId = [];
+        data.map((slot) => {
+            listSlotId.push(slot.id);
+        })
+        setValue('listSlots', listSlotId)
+    }
 
 
     return (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={4}>
-                    <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-                        <Typography variant="h6" sx={{color: 'text.disabled',mt:-7,mb:5}}>
+                    <Card sx={{pt: 10, pb: 5, px: 3}}>
+                        <Typography variant="h6" sx={{color: 'text.disabled', mt: -7, mb: 5}}>
                             Ảnh môn học
                         </Typography>
                         <div></div>
-                        <Box sx={{ mb: 5 }}>
+                        <Box sx={{mb: 5}}>
                             <RHFUploadAvatar
                                 name="avatarUrl"
                                 maxSize={3145728}
@@ -155,7 +162,7 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
                                         }}
                                     >
                                         Cho phép *.jpeg, *.jpg, *.png
-                                        <br /> kích thước tối đa là {fData(3145728)}
+                                        <br/> kích thước tối đa là {fData(3145728)}
                                     </Typography>
                                 }
                             />
@@ -163,7 +170,7 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
                     </Card>
                 </Grid>
                 <Grid item xs={12} md={8}>
-                    <Card sx={{ p: 3 }}>
+                    <Card sx={{p: 3}}>
                         <Box
                             rowGap={3}
                             columnGap={2}
@@ -189,9 +196,13 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
                                 multiline rows={5}
                             />
                             <SubjectNewEditSlot
+                                listSlotSelected={getValues('listSlots')}
                                 name="listSlots"
                                 id="listSlots"
-                                onSelect={(slots) => setValue('listSlots', slots)}
+                                handleSelectedSlot={handleSelectedSlot}
+                                onSelect={(slots) => {
+                                    // console.log("Parent", slots)
+                                }}
                             />
                         </Box>
                         <Stack alignItems="flex-end" sx={{mt: 3}}>

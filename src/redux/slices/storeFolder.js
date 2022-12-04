@@ -1,27 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 // utils
-import axios from '../../utils/axios';
 //
-import { dispatch } from '../store';
+import {dispatch} from '../store';
 import {
   getAllProgram,
   getAllSubject,
   getAllTypeDocument,
   getFolderByID,
+  getStoreFolder,
   postDocument,
-  postFile,
   postFolder,
 } from 'src/dataProvider/agent';
-import { PATH_DASHBOARD } from '../../routes/paths';
-import { useSnackbar } from '../../components/snackbar';
-import { useRouter } from 'next/router';
 
 // ----------------------------------------------------------------------
 
 const initialState = {
   isLoading: false,
   error: null,
-  folder: {
+  storeFolder: {
     id: '',
     name: '',
     parentId: 0,
@@ -40,7 +36,7 @@ const initialState = {
       urlDocument: '',
       size: 0,
       TypeFile: '',
-      status: true,
+      status: 0,
       folderId: 1,
       shareUser: [],
       shareClass: [],
@@ -56,7 +52,7 @@ const initialState = {
 };
 
 const slice = createSlice({
-  name: 'folder',
+  name: 'storeFolder',
   initialState,
   reducers: {
     // START LOADING
@@ -71,19 +67,24 @@ const slice = createSlice({
       state.error = action.payload;
     },
 
-    getFolderSuccess(state, action) {
+    getStoreFolderSuccess(state, action) {
       state.isLoading = false;
-      state.folder = { ...state.folder, ...action.payload };
+      state.storeFolder = { ...state.storeFolder, ...action.payload };
     },
 
-    createFolderSuccess(state, action) {
-      console.log('createFolderSuccess', action);
+    getStoreFolderRootSuccess(state, action) {
       state.isLoading = false;
-      state.folder.listFolders = [...state.folder.listFolders, action.payload];
+      state.storeFolder = { ...state.storeFolder, ...action.payload };
     },
 
-    createDocumentInitialSuccess(state, action) {
-      console.log('createDocumentInitialSuccess', action);
+    createStoreFolderSuccess(state, action) {
+      console.log('createStoreFolderSuccess', action);
+      state.isLoading = false;
+      state.storeFolder.listFolders = [...state.storeFolder.listFolders, action.payload];
+    },
+
+    createStoreDocumentInitialSuccess(state, action) {
+      console.log('createStoreDocumentInitialSuccess', action);
       const { programs, subjects, typeDocuments, folderId } = action.payload;
       state.isLoading = false;
       state.newDocument.init = { ...state.newDocument.init, ...action.payload };
@@ -101,7 +102,7 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
-export function getFolderRedux(params) {
+export function getStoreFolderRedux(params) {
   return async () => {
     try {
       if (!params) {
@@ -110,14 +111,27 @@ export function getFolderRedux(params) {
       dispatch(slice.actions.startLoading());
       const response = await getFolderByID(params);
       console.log('getFolderByID', response);
-      dispatch(slice.actions.getFolderSuccess(response.data.data));
+      dispatch(slice.actions.getStoreFolderSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };
 }
 
-export function createFolderRedux(payload) {
+export function getStoreFolderRootRedux() {
+  return async () => {
+    try {
+      dispatch(slice.actions.startLoading());
+      const response = await getStoreFolder();
+      console.log('getStoreFolder', response);
+      dispatch(slice.actions.getStoreFolderRootSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function createStoreFolderRedux(payload) {
   return async () => {
     try {
       if (!payload) {
@@ -126,14 +140,15 @@ export function createFolderRedux(payload) {
       dispatch(slice.actions.startLoading());
       const response = await postFolder(payload);
       console.log('postFolder', response);
-      dispatch(slice.actions.createFolderSuccess(response.data.data));
+      dispatch(slice.actions.createStoreFolderSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };
 }
 
-export function createDocumentInitialRedux(folderId) {
+
+export function createStoreDocumentInitialRedux(folderId) {
   return async () => {
     try {
       dispatch(slice.actions.startLoading());
@@ -143,7 +158,7 @@ export function createDocumentInitialRedux(folderId) {
       };
       const response = await Promise.all([getAllProgram(params), getAllSubject(params), getAllTypeDocument(params)]);
       dispatch(
-        slice.actions.createDocumentInitialSuccess({
+        slice.actions.createStoreDocumentInitialSuccess({
           programs: response[0].data.data,
           subjects: response[1].data.data,
           typeDocuments: response[2].data,
@@ -156,13 +171,13 @@ export function createDocumentInitialRedux(folderId) {
   };
 }
 
-export function uploadDocumentRedux(data) {
+export function uploadStoreDocumentRedux(data) {
   return async () => {
     try {
       dispatch(slice.actions.startLoading());
       const response = await postDocument(data);
       if (response.status < 400) {
-        console.log('uploadDocumentRedux', response);
+        console.log('uploadStoreDocumentRedux', response);
       } else {
         console.log('Lỗi upload tài liệu', response.data.title);
       }

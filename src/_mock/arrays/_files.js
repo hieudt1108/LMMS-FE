@@ -110,6 +110,20 @@ export const _folders = FOLDER_NAME.map((folder, index) => ({
   dateModified: _mock.time(index),
 }));
 
+export const _storeFolders = FOLDER_NAME.map((folder, index) => ({
+  id: `${_mock.id(index)}_folders`,
+  name: folder,
+  size: GB / ((index + 1) * 10),
+  type: 'folder',
+  totalFiles: (index + 1) * 100,
+  isFavorited: _mock.boolean(index + 1),
+  shared: SHARED_PERSON.slice(index, 5),
+  url: FILE_URL[index],
+  tags: ['Docs', 'Projects', 'Work', 'Training', 'Sport', 'Foods'],
+  dateCreated: _mock.time(index),
+  dateModified: _mock.time(index),
+}));
+
 // ----------------------------------------------------------------------
 
 export const _files = FILE_NAME.map((file, index) => ({

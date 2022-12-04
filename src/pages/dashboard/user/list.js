@@ -46,7 +46,7 @@ import { deleteUser, getALlRoles, getAllUsers } from '../../../dataProvider/agen
 import { useSnackbar } from '../../../components/snackbar';
 import error from 'eslint-plugin-react/lib/util/error';
 import Label from '../../../components/label';
-import FileNewUserDialog from "../../../sections/@dashboard/file/portal/FileNewUsersDialog";
+import FileNewUserDialog from '../../../sections/@dashboard/file/portal/FileNewUsersDialog';
 
 // ----------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ const TABLE_HEAD = [
   { id: 'address', label: 'Địa chỉ', align: 'left' },
   { id: 'role', label: 'Vai trò', align: 'left' },
   { id: 'status', label: 'Trạng thái', align: 'left' },
-  {id: ''}
+  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -149,8 +149,6 @@ export default function UserListPage() {
       console.log(res.message);
     }
   }
-
-
 
   const handleOpenUploadFile = () => {
     setOpenUploadFile(true);
@@ -273,9 +271,9 @@ export default function UserListPage() {
           }
           action2={
             <Button
-                variant="contained"
-                startIcon={<Iconify icon="eva:cloud-upload-fill" />}
-                onClick={handleOpenUploadFile}
+              variant="contained"
+              startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+              onClick={handleOpenUploadFile}
             >
               Import danh sách
             </Button>
@@ -387,7 +385,7 @@ export default function UserListPage() {
           />
         </Card>
       </Container>
-      <FileNewUserDialog open={openUploadFile} onClose={handleCloseUploadFile}  />
+      <FileNewUserDialog open={openUploadFile} onClose={handleCloseUploadFile} />
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
@@ -406,7 +404,6 @@ export default function UserListPage() {
           </Button>
         }
       />
-
     </>
   );
 }

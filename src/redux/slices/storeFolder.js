@@ -1,20 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 // utils
-import axios from '../../utils/axios';
 //
-import { dispatch } from '../store';
+import {dispatch} from '../store';
 import {
   getAllProgram,
   getAllSubject,
   getAllTypeDocument,
   getFolderByID,
+  getStoreFolder,
   postDocument,
-  postFile,
   postFolder,
 } from 'src/dataProvider/agent';
-import { PATH_DASHBOARD } from '../../routes/paths';
-import { useSnackbar } from '../../components/snackbar';
-import { useRouter } from 'next/router';
 
 // ----------------------------------------------------------------------
 
@@ -76,6 +72,11 @@ const slice = createSlice({
       state.storeFolder = { ...state.storeFolder, ...action.payload };
     },
 
+    getStoreFolderRootSuccess(state, action) {
+      state.isLoading = false;
+      state.storeFolder = { ...state.storeFolder, ...action.payload };
+    },
+
     createStoreFolderSuccess(state, action) {
       console.log('createStoreFolderSuccess', action);
       state.isLoading = false;
@@ -117,6 +118,19 @@ export function getStoreFolderRedux(params) {
   };
 }
 
+export function getStoreFolderRootRedux() {
+  return async () => {
+    try {
+      dispatch(slice.actions.startLoading());
+      const response = await getStoreFolder();
+      console.log('getStoreFolder', response);
+      dispatch(slice.actions.getStoreFolderRootSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
 export function createStoreFolderRedux(payload) {
   return async () => {
     try {
@@ -132,6 +146,7 @@ export function createStoreFolderRedux(payload) {
     }
   };
 }
+
 
 export function createStoreDocumentInitialRedux(folderId) {
   return async () => {

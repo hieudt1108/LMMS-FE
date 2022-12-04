@@ -63,10 +63,11 @@ export const PATH_DASHBOARD = {
   },
 
   storeFolder: {
-    root: path(ROOTS_DASHBOARD, `/storeFolder/0`),
+    root: path(ROOTS_DASHBOARD, `/storeFolder`),
     link: (storeFolder_id) => path(ROOTS_DASHBOARD, `/storeFolder/${storeFolder_id ? storeFolder_id : 0}`),
     newDocument: (storeFolder_id) => path(ROOTS_DASHBOARD, `/storeFolder/${storeFolder_id ? storeFolder_id : 0}/new`),
   },
+
 
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),

@@ -193,6 +193,10 @@ function getFolderByID(id) {
   return getApi(`/Folder/getOne/${id}`);
 }
 
+function getStoreFolder(params) {
+  return getApi('/Folder/getStoreFolder', params);
+}
+
 function getPermissionById(id) {
   return getApi(`/Permission/getOne/${id}`);
 }
@@ -492,6 +496,7 @@ export {
   postLevel,
   getAllPermission,
   getFolderByID,
+  getStoreFolder,
   postFolder,
   getPermissionById,
   createPermission,

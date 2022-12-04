@@ -5,23 +5,23 @@ import Head from 'next/head';
 import {useTheme} from '@mui/material/styles';
 import {Container, Grid, Stack} from '@mui/material';
 // routes
-import {PATH_DASHBOARD} from '../../../../routes/paths';
+import {PATH_DASHBOARD} from '../../../routes/paths';
 // hooks
-import useResponsive from '../../../../hooks/useResponsive';
+import useResponsive from '../../../hooks/useResponsive';
 // _mock
-import {_storeFolders} from '../../../../_mock/arrays';
+import {_storeFolders} from '../../../_mock/arrays';
 // layouts
-import DashboardLayout from '../../../../layouts/dashboard';
+import DashboardLayout from '../../../layouts/dashboard';
 // components
-import Scrollbar from '../../../../components/scrollbar';
-import {useSettingsContext} from '../../../../components/settings';
+import Scrollbar from '../../../components/scrollbar';
+import {useSettingsContext} from '../../../components/settings';
 // sections
-import {FileGeneralRecentCard} from '../../../../sections/@dashboard/general/file';
-import {FileFolderCard, FileNewFolderDialog, FilePanel} from '../../../../sections/@dashboard/file';
+import {FileGeneralRecentCard} from '../../../sections/@dashboard/general/file';
+import {FileFolderCard, FileNewFolderDialog, FilePanel} from '../../../sections/@dashboard/file';
 import {useRouter} from 'next/router';
 import {dispatch} from 'src/redux/store';
 import {useSelector} from 'react-redux';
-import {createStoreFolderRedux, getStoreFolderRedux} from "../../../../redux/slices/storeFolder";
+import {createStoreFolderRedux, getStoreFolderRootRedux} from "../../../redux/slices/storeFolder";
 
 // ----------------------------------------------------------------------
 
@@ -29,26 +29,22 @@ const GB = 1000000000 * 24;
 
 // ----------------------------------------------------------------------
 
-StoreFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+StoreFileRootPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function StoreFilePage() {
+export default function StoreFileRootPage() {
   const theme = useTheme();
 
-  const {
-    query: { storeFolder_id: storeFolderID },
-    push,
-  } = useRouter();
+  const { push } = useRouter();
+
   const { storeFolder } = useSelector((state) => state.storeFolder);
   const { id, listFolders, listDocuments } = storeFolder;
 
-
-  console.log('GeneralFilePage2', listFolders, listDocuments);
-
   useEffect(() => {
-    dispatch(getStoreFolderRedux(storeFolderID));
-  }, [dispatch, storeFolderID]);
+    dispatch(getStoreFolderRootRedux());
+  }, [dispatch]);
+
 
   const smDown = useResponsive('down', 'sm');
 

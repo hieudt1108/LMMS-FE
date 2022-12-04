@@ -17,7 +17,7 @@ import {
   styled,
   TextField,
 } from '@mui/material';
-import { ClassBanner } from '../../../sections/@dashboard/class';
+import { ClassBanner } from '../../../sections/@dashboard/myclass';
 import DashboardLayout from '../../../layouts/dashboard';
 import { getAllClass } from 'src/dataProvider/agent';
 import { AppFeatured, AppWelcome } from 'src/sections/@dashboard/general/app';
@@ -26,7 +26,7 @@ import { _appFeatured } from 'src/_mock/arrays';
 import Iconify from 'src/components/iconify';
 import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
-import { getClassesRedux } from 'src/redux/slices/class';
+import { getClassesRedux } from 'src/redux/slices/myclass';
 import { getProgramsRedux } from 'src/redux/slices/program';
 import { getGradesRedux } from 'src/redux/slices/grade';
 

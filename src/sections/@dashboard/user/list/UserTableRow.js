@@ -128,8 +128,8 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
         <ConfirmDialog
             open={openConfirm}
             onClose={handleCloseConfirm}
-            title="Delete"
-            content="Are you sure want to delete?"
+            title="Vô hiệu hóa"
+            content="Bạn có chắc chắn vô hiệu hóa người dùng này?"
             action={
               <Button
                   variant="contained"
@@ -139,7 +139,7 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
                     handleCloseConfirm();
                   }}
               >
-                Delete
+                Vô hiệu hóa
               </Button>
             }
         />

@@ -1,27 +1,27 @@
-import {useCallback, useEffect, useState} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
 // @mui
-import {useTheme} from '@mui/material/styles';
-import {Container, Grid, Stack} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { Container, Grid, Stack } from '@mui/material';
 // routes
-import {PATH_DASHBOARD} from '../../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
 // _mock
-import {_folders} from '../../../../_mock/arrays';
+import { _folders } from '../../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard';
 // components
 import Scrollbar from '../../../../components/scrollbar';
-import {useSettingsContext} from '../../../../components/settings';
+import { useSettingsContext } from '../../../../components/settings';
 // sections
-import {FileGeneralRecentCard} from '../../../../sections/@dashboard/general/file';
-import {FileFolderCard, FileNewFolderDialog, FilePanel} from '../../../../sections/@dashboard/file';
-import {useRouter} from 'next/router';
-import {dispatch} from 'src/redux/store';
-import {useSelector} from 'react-redux';
-import {createFolderRedux, getFolderRedux} from 'src/redux/slices/folder';
+import { FileGeneralRecentCard } from '../../../../sections/@dashboard/general/file';
+import { FileFolderCard, FileNewFolderDialog, FilePanel } from '../../../../sections/@dashboard/file';
+import { useRouter } from 'next/router';
+import { dispatch } from 'src/redux/store';
+import { useSelector } from 'react-redux';
+import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 
 // ----------------------------------------------------------------------
 
@@ -91,7 +91,6 @@ export default function GeneralFilePage() {
       })
     );
     handleCloseNewFolder();
-    window.location.reload();
   };
 
   const handleDrop = useCallback(

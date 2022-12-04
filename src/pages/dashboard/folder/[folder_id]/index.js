@@ -29,8 +29,6 @@ import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 
 const GB = 1000000000 * 24;
 
-
-
 // ----------------------------------------------------------------------
 
 GeneralFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -46,7 +44,7 @@ export default function GeneralFilePage() {
   } = useRouter();
   const { folder } = useSelector((state) => state.folder);
   const { id, listFolders, listDocuments } = folder;
-  console.log('list',listFolders)
+  console.log('GeneralFilePage', listFolders, listDocuments);
 
   useEffect(() => {
     dispatch(getFolderRedux(folderID));
@@ -116,7 +114,6 @@ export default function GeneralFilePage() {
     push(PATH_DASHBOARD.folder.link(folder_id));
   }, []);
 
-
   return (
     <>
       <Head>
@@ -173,7 +170,6 @@ export default function GeneralFilePage() {
               </Stack>
             </div>
           </Grid>
-
         </Grid>
       </Container>
 

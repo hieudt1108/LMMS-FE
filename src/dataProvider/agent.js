@@ -148,6 +148,10 @@ function getDocumentShareWithMe(params) {
   return getApi('Document/getAllMyDocumentsShareWithMe', params);
 }
 
+function getDocumentById(id) {
+  return getApi(`/Document/getOne/${id}`);
+}
+
 // TYPE DOCUMENT
 function getAllTypeDocument(params) {
   return getApi('/TypeDocument/getAll', params);
@@ -201,6 +205,10 @@ async function postApi(url, payload, file) {
       headers: {
         Authorization: token ? `Bearer ${token}` : 'no-author',
         'Content-Type': file ? 'multipart/form-data' : 'application/json; charset=utf-8',
+        'Access-Control-Allow-Headers':
+          'Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version, X-File-Name',
+        'Access-Control-Allow-Methods': 'POST',
+        'Access-Control-Allow-Origin': '*',
       },
     });
     return res;
@@ -492,6 +500,7 @@ export {
   getAllMyClass,
   getMyClassGetOne,
   getDocumentShareWithMe,
+  getDocumentById,
   getDocInClass,
   getMenu,
 };

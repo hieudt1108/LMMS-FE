@@ -5,7 +5,7 @@ import { Box, Card, Button, Typography, Stack, Divider, MenuItem } from '@mui/ma
 // components
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
-import FilePreview from '../../documents/DocumentPreview';
+import DocumentPreview from '../../documents/DocumentPreview';
 // DATE
 import { format } from 'date-fns';
 
@@ -83,7 +83,7 @@ export default function SysllabusSubject({ data, docs }) {
           </Stack>
         </Stack>
       </Card>
-      <FilePreview open={openPreview} onClose={handleClosePreview} />
+      <DocumentPreview open={openPreview} onClose={handleClosePreview} />
     </>
   );
 }

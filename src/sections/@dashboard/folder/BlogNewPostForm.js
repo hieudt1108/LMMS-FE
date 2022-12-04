@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Grid, Card, Stack, Typography } from '@mui/material';
+import { Grid, Card, Stack, Typography, Divider, Button } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //components
@@ -20,11 +20,6 @@ import { dispatch } from 'src/redux/store';
 import { createDocumentInitialRedux, uploadDocumentRedux } from 'src/redux/slices/folder';
 import { Upload } from '../../../components/upload';
 import Iconify from 'src/components/iconify';
-const SORT_OPTIONS = [
-  { id: 0, name: 'Chim cút' },
-  { id: 1, name: 'Được View' },
-  { id: 2, name: 'Được Share' },
-];
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +31,9 @@ export default function BlogNewPostForm() {
 
   const validationSchema = (() => {
     return Yup.object().shape({
-      file: Yup.array().min(1, 'Files is required'),
+      name: Yup.string().required('Name is require!'),
+      code: Yup.string().required('Code is require!'),
+      description: Yup.string().required('Description is require!'),
     });
   })();
 
@@ -133,7 +130,14 @@ export default function BlogNewPostForm() {
                     Tập tin
                   </Typography>
 
-                  <Upload name="file" multiple files={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
+                  <Upload
+                    error={true}
+                    name="file"
+                    multiple
+                    files={files}
+                    onDrop={handleDrop}
+                    onRemove={handleRemoveFile}
+                  />
                 </Stack>
               </Stack>
             </Card>
@@ -197,12 +201,35 @@ export default function BlogNewPostForm() {
             </Card>
 
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-              <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting}>
+              <LoadingButton type="" variant="contained" size="large" loading={isSubmitting}>
                 Đăng tải tài liệu
               </LoadingButton>
             </Stack>
           </Grid>
         </Grid>
+
+        <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+
+        <Stack
+          spacing={2}
+          direction={{ xs: 'column-reverse', md: 'row' }}
+          alignItems={{ xs: 'flex-start', md: 'center' }}
+        >
+          <Button
+            size="small"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            // onClick={handleAdd}
+            sx={{ flexShrink: 0 }}
+          >
+            Add Item
+          </Button>
+
+          <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
+            <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
+              Đăng tải tài liệu
+            </LoadingButton>
+          </Stack>
+        </Stack>
       </FormProvider>
     </>
   );

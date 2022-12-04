@@ -10,3 +10,4 @@ export { default as BlogPostsSearch } from './filter/BlogPostsSearch';
 export { default as BlogPostCommentForm } from './comment/BlogPostCommentForm';
 export { default as BlogPostCommentItem } from './comment/BlogPostCommentItem';
 export { default as BlogPostCommentList } from './comment/BlogPostCommentList';
+export { default as FolderUserSearch } from './FolderUserSearch';

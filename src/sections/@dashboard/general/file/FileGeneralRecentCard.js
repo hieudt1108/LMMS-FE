@@ -1,22 +1,22 @@
 import PropTypes from 'prop-types';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 // @mui
-import {Box, Checkbox, Divider, IconButton, MenuItem, Stack, Typography} from '@mui/material';
+import { AvatarGroup, Box, Checkbox, Divider, IconButton, MenuItem, Stack, Typography } from '@mui/material';
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
 import useCopyToClipboard from '../../../../hooks/useCopyToClipboard';
 // utils
-import {fData} from '../../../../utils/formatNumber';
-import {fDateTime} from '../../../../utils/formatTime';
+import { fData } from '../../../../utils/formatNumber';
+import { fDateTime } from '../../../../utils/formatTime';
 // components
 import Iconify from '../../../../components/iconify';
-import {useSnackbar} from '../../../../components/snackbar';
+import { useSnackbar } from '../../../../components/snackbar';
 import MenuPopover from '../../../../components/menu-popover';
 import FileThumbnail from '../../../../components/file-thumbnail';
 //
-import {FileShareDialog} from '../../file';
+import { FileShareDialog } from '../../file';
 import DocumentPreview from '../../documents/DocumentPreview';
-import {getDocumentById} from "../../../../dataProvider/agent";
+import { getDocumentById } from '../../../../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -75,23 +75,15 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
     setInviteEmail(event.target.value);
   };
 
-  const handleCopy = () => {
-    enqueueSnackbar('Copied!');
-    copy(file.url);
-  };
-
   const [openPreview, setOpenPreview] = useState(false);
 
   const handleOpenPreview = () => {
     setOpenPreview(true);
   };
 
-
   const handleClosePreview = () => {
     setOpenPreview(false);
   };
-
-
 
   return (
     <>
@@ -144,25 +136,25 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
           </Stack>
         </Stack>
 
-        {/* {isDesktop && (
-                    <AvatarGroup
-                        max={4}
-                        sx={{
-                            mx: 1.5,
-                            '& .MuiAvatarGroup-avatar': {
-                                width: 24,
-                                height: 24,
-                                '&:first-of-type': {
-                                    fontSize: 12,
-                                },
-                            },
-                        }}
-                    >
-                        {file?.shared?.map((person) => (
-                            <Avatar key={person.id} alt={person.name} src={person.avatar}/>
-                        ))}
-                    </AvatarGroup>
-                )} */}
+        {isDesktop && (
+          <AvatarGroup
+            max={4}
+            sx={{
+              mx: 1.5,
+              '& .MuiAvatarGroup-avatar': {
+                width: 24,
+                height: 24,
+                '&:first-of-type': {
+                  fontSize: 12,
+                },
+              },
+            }}
+          >
+            {file?.shared?.map((person) => (
+              <Avatar key={person.id} alt={person.name} src={person.avatar} />
+            ))}
+          </AvatarGroup>
+        )}
 
         <Box
           sx={{
@@ -252,13 +244,11 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
         shared={file.shared}
         inviteEmail={inviteEmail}
         onChangeInvite={handleChangeInvite}
-        onCopyLink={handleCopy}
         onClose={() => {
           handleCloseShare();
           setInviteEmail('');
         }}
       />
-
     </>
   );
 }

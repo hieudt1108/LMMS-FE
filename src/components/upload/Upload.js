@@ -11,7 +11,7 @@ import Iconify from '../iconify';
 import RejectionFiles from './errors/RejectionFiles';
 import MultiFilePreview from './preview/MultiFilePreview';
 import SingleFilePreview from './preview/SingleFilePreview';
-import {UsersExcelTemple} from "./index";
+import { UsersExcelTemple } from './index';
 
 // ----------------------------------------------------------------------
 
@@ -78,7 +78,6 @@ export default function Upload({
 
   const isError = isDragReject || !!error;
 
-
   return (
     <Box sx={{ width: 1, position: 'relative', ...sx }}>
       <StyledDropZone
@@ -104,6 +103,7 @@ export default function Upload({
         <input {...getInputProps()} />
 
         <Placeholder
+          isError
           sx={{
             ...(hasFile && {
               opacity: 0,
@@ -136,11 +136,11 @@ export default function Upload({
         </IconButton>
       )}
       {hasDefault && (
-          <>
+        <>
           <Box sx={{ my: 3 }}>
             <UsersExcelTemple files={defaultFile} />
           </Box>
-          </>
+        </>
       )}
 
       {hasFiles && (
@@ -174,9 +174,10 @@ export default function Upload({
 
 Placeholder.propTypes = {
   sx: PropTypes.object,
+  isError: PropTypes.bool,
 };
 
-function Placeholder({ sx, ...other }) {
+function Placeholder({ sx, isError, ...other }) {
   return (
     <Stack
       spacing={2}
@@ -200,7 +201,7 @@ function Placeholder({ sx, ...other }) {
 
       <Box sx={{ p: 3 }}>
         <Typography gutterBottom variant="h5">
-          Kéo & Thả hoặc Chọn tệp
+          {isError ? 'Vui lòng đăng tải file' : `Kéo & Thả hoặc Chọn tệp`}
         </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>

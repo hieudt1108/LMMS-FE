@@ -40,7 +40,7 @@ const initialState = {
       urlDocument: '',
       size: 0,
       TypeFile: '',
-      status: 0,
+      status: true,
       folderId: 1,
       shareUser: [],
       shareClass: [],

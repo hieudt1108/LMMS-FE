@@ -6,6 +6,7 @@ import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 //
 import FileInvitedItem from '../FileInvitedItem';
+import { FolderUserSearch } from '../../folder';
 
 // ----------------------------------------------------------------------
 
@@ -13,7 +14,6 @@ FileShareDialog.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   shared: PropTypes.array,
-  onCopyLink: PropTypes.func,
   inviteEmail: PropTypes.string,
   onChangeInvite: PropTypes.func,
 };
@@ -21,7 +21,6 @@ FileShareDialog.propTypes = {
 export default function FileShareDialog({
   shared,
   inviteEmail,
-  onCopyLink,
   onChangeInvite,
   //
   open,
@@ -38,7 +37,7 @@ export default function FileShareDialog({
         <DialogContent sx={{ overflow: 'unset' }}>
           {onChangeInvite && (
             <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
-              <TextField fullWidth size="small" value={inviteEmail} placeholder="Email" onChange={onChangeInvite} />
+              <FolderUserSearch />
               <Button disabled={!inviteEmail} variant="contained" sx={{ flexShrink: 0 }}>
                 Send Invite
               </Button>
@@ -57,12 +56,6 @@ export default function FileShareDialog({
         </DialogContent>
 
         <DialogActions sx={{ justifyContent: 'space-between' }}>
-          {onCopyLink && (
-            <Button startIcon={<Iconify icon="eva:link-2-fill" />} onClick={onCopyLink}>
-              Copy link
-            </Button>
-          )}
-
           {onClose && (
             <Button variant="outlined" color="inherit" onClick={onClose}>
               Close

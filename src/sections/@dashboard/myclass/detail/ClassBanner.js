@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Card, Typography, MenuItem, IconButton } from '@mui/material';
 // utils
-import { bgGradient } from '../../../../utils/cssStyles';
 // components
 import Iconify from '../../../../components/iconify';
 import { useCallback, useState } from 'react';
@@ -38,7 +37,7 @@ export default function ClassBanner({
     setOpenPopover(null);
   };
   const handleClassDetails = useCallback((class_id) => {
-    router.push(PATH_DASHBOARD.class.detail(class_id));
+    router.push(PATH_DASHBOARD.myclass.classdetail(class_id));
   }, []);
   return (
     <Card

@@ -16,8 +16,8 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 // import { getClassRedux } from 'src/redux/slices/class';
-import ClassAddStudentForm from '../../../../sections/@dashboard/class/form/ClassAddStudentForm';
-import ClassAddStudentXls from '../../../../sections/@dashboard/class/form/ClassAddStudentXls';
+import ClassAddStudentForm from '../../../../sections/@dashboard/myclass/form/ClassAddStudentForm';
+import ClassAddStudentXls from '../../../../sections/@dashboard/myclass/form/ClassAddStudentXls';
 
 // ----------------------------------------------------------------------
 

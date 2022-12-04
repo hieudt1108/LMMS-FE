@@ -13,10 +13,10 @@ import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../..
 import { useSettingsContext } from '../../../../components/settings';
 import Iconify from '../../../../components/iconify';
 // sections
-import { ClassWidgetSummary } from '../../../../sections/@dashboard/class';
+import { ClassWidgetSummary } from '../../../../sections/@dashboard/myclass';
 // assets
-import ManageSubject from '../../../../sections/@dashboard/class/manage/ManageSubject';
-import ManageUser from '../../../../sections/@dashboard/class/manage/ManageUser';
+import ManageSubject from '../../../../sections/@dashboard/myclass/manage/ManageSubject';
+import ManageUser from '../../../../sections/@dashboard/myclass/manage/ManageUser';
 
 import { BookingIllustration, CheckInIllustration, CheckOutIllustration } from '../../../../assets/illustrations';
 import { useRouter } from 'next/router';
@@ -47,7 +47,6 @@ export default function MyClassDetail() {
       </Alert>;
     }
   }
-  console.log('data: ', myClass);
 
   useEffect(() => {
     fetchMyClass();

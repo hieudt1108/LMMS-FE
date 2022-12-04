@@ -6,8 +6,8 @@ import { useSettingsContext } from '../../../../../components/settings';
 import CustomBreadcrumbs from '../../../../../components/custom-breadcrumbs';
 import { PATH_DASHBOARD } from '../../../../../routes/paths';
 // component subject
-import SysllabusSubject from '../../../../../sections/@dashboard/class/subject/SysllabusSubject';
-import DocumentLocal from '../../../../../sections/@dashboard/class/subject/DocumentLocal';
+import SysllabusSubject from '../../../../../sections/@dashboard/myclass/subject/SysllabusSubject';
+import DocumentLocal from '../../../../../sections/@dashboard/myclass/subject/DocumentLocal';
 import Head from 'next/head';
 
 // API

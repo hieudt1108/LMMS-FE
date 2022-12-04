@@ -204,7 +204,7 @@ export default function Classes() {
           <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
             <Pagination
               size="small"
-              count={classes?.length / 2}
+              count={classes?.length}
               rowsperpage={pagingClass.pageSize}
               onChange={handlePageChange}
               color="primary"

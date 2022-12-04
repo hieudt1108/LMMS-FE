@@ -13,6 +13,8 @@ import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@m
 import { fData } from '../../../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+// assets
+import { countries } from '../../../../assets/data';
 // components
 import Label from '../../../../components/label';
 import { useSnackbar } from '../../../../components/snackbar';
@@ -65,15 +67,14 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
       code: currentClass?.code || '',
       size: currentClass?.size || 0,
       schoolYear: currentClass?.schoolYear || `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`,
-      gradeId: currentClass?.gradeId + '' || (grades && grades.length) ? grades[0]?.id + '' : '',
-      programId: currentClass?.programId + '' || (programs && programs.length) ? programs[0]?.id + '' : '',
+      gradeId: currentClass?.gradeId + '' || (grades && grades.length) ? grades[0].id + '' : '',
+      programId: currentClass?.programId + '' || (programs && programs.length) ? programs[0].id + '' : '',
       teachers: currentClass?.teachers || [],
       students: currentClass?.students || [],
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentClass]
   );
-  console.log('data : ', defaultValues);
 
   const methods = useForm({
     resolver: yupResolver(NewClassSchema),
@@ -102,16 +103,13 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
   }, [isEdit, currentClass]);
 
   const onSubmit = async (data) => {
-    if (!isEdit) {
-      try {
-        console.log('onSubmit', data, methods);
-        // await new Promise((resolve) => setTimeout(resolve, 500));
-        reset();
-        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
+    try {
+      console.log('onSubmit', data, methods);
+      // await new Promise((resolve) => setTimeout(resolve, 500));
+      reset();
+      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+    } catch (error) {
+      console.error(error);
     }
   };
 

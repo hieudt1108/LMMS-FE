@@ -1,5 +1,5 @@
 // next
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSettingsContext } from '../../../components/settings';
 import { alpha } from '@mui/material/styles';
 import {
@@ -50,7 +50,19 @@ export default function Classes() {
 
   const [grade, setGrade] = React.useState('');
   const [program, setProgram] = React.useState('');
+  const [allclasses, setallclasses] = useState([]);
 
+  async function fethAllClasses() {
+    const res = await getAllClass({ pageIndex: 1, pageSize: 100 });
+    if (res.status < 400) {
+      setallclasses(res.data.data);
+    } else {
+      console.log(res.message);
+    }
+  }
+  useEffect(() => {
+    fethAllClasses();
+  }, []);
   useEffect(() => {
     dispatch(getClassesRedux(pagingClass));
     dispatch(getProgramsRedux({ pageIndex: 1, pageSize: 15 }));
@@ -204,7 +216,7 @@ export default function Classes() {
           <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
             <Pagination
               size="small"
-              count={classes?.length}
+              count={allclasses?.length % 2 === 0 ? allclasses?.length / 8 : Math.ceil(allclasses?.length / 8)}
               rowsperpage={pagingClass.pageSize}
               onChange={handlePageChange}
               color="primary"

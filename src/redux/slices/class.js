@@ -95,3 +95,18 @@ export function getClassRedux(params) {
     }
   };
 }
+
+export function getAllClassesRedux(params) {
+  return async () => {
+    try {
+      if (!params) {
+        return dispatch(slice.actions.getClassesSuccess([]));
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await getAllClass(params);
+      dispatch(slice.actions.getClassesSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}

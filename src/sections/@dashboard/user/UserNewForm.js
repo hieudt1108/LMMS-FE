@@ -172,12 +172,13 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
           roles: roles,
         };
         const res = await createUserAuth(dataCreate);
+        console.log(res)
         if (res.status < 400) {
           reset();
           enqueueSnackbar('Tạo người dùng thành công');
           push(PATH_DASHBOARD.user.list);
         } else {
-          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
         }
       } catch (error) {
         enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });

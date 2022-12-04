@@ -14,8 +14,9 @@ import ClassNewEditForm from '../../../../sections/@dashboard/class/form/ClassNe
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import { getClassRedux } from 'src/redux/slices/class';
+import {getClassById, getGradeById} from "../../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -24,20 +25,27 @@ ClassCreatePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 // ----------------------------------------------------------------------
 
 export default function ClassCreatePage() {
-  const { themeStretch } = useSettingsContext();
-  const dispatch = useDispatch();
+    const { themeStretch } = useSettingsContext();
 
-  const { classObj } = useSelector((state) => state.class);
+    const {
+        query: { class_id },
+    } = useRouter();
 
-  const {
-    query: { class_id },
-  } = useRouter();
+    const [classData, setClassData] = useState([]);
 
-  useEffect(() => {
-    dispatch(getClassRedux(class_id));
-  }, [dispatch, class_id]);
+    useEffect(() => {
+        fetchClass();
+    }, []);
 
-  console.log('ClassCreatePage', class_id, classObj);
+    async function fetchClass() {
+        const res = await getClassById(class_id);
+        if (res.status < 400) {
+            setClassData(res.data.data);
+        } else {
+            console.log(res.respon.data.title);
+        }
+    }
+
   return (
     <>
       <Head>
@@ -46,22 +54,22 @@ export default function ClassCreatePage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new class"
+          heading="Cập nhật lớp học"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Class',
+              name: 'Danh sách lớp học',
               href: PATH_DASHBOARD.class.root,
             },
             {
-              name: 'New class',
+              name: 'Cập nhật',
             },
           ]}
         />
-        <ClassNewEditForm isEdit currentClass={classObj} />
+        <ClassNewEditForm isEdit currentClass={classData} />
       </Container>
     </>
   );

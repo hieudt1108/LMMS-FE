@@ -83,7 +83,7 @@ function BookingItem({ item }) {
         <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
           <Stack direction="row" alignItems="center" spacing={1}>
             {/* <Iconify icon="fluent:text-number-list-ltr-24-filled" width={16} /> */}
-            <Typography variant="caption">Slot {30}</Typography>
+            <Typography variant="caption">{30} Slot</Typography>
           </Stack>
 
           <Stack direction="row" alignItems="center" spacing={1}>

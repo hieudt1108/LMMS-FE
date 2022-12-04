@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 // next
 import { useRouter } from 'next/router';
 // form
@@ -8,7 +8,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import {Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, MenuItem} from '@mui/material';
 // utils
 import { fData } from '../../../../utils/formatNumber';
 // routes
@@ -21,6 +21,9 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { getProgramsRedux } from 'src/redux/slices/program';
 import { getGradesRedux } from 'src/redux/slices/grade';
+
+// API
+import {createGrade, postClass, updateClass, updateGrade} from '../../../../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -41,42 +44,39 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
     dispatch(getGradesRedux({ pageIndex: 1, pageSize: 15 }));
   }, [dispatch]);
 
+
   const { enqueueSnackbar } = useSnackbar();
 
-  const NewClassSchema = Yup.object().shape({
+  const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     code: Yup.string().required('Code is required'),
     size: Yup.number()
-      .required('ERROR: The number is required!')
-      .test('Is positive?', 'ERROR: The number must be greater than 0!', (value) => value > 0),
+        .required('ERROR: The number is required!')
+        .test('Is positive?', 'ERROR: The number must be greater than 0!', (value) => value > 0),
     schoolYear: Yup.string().required('School Year is required'),
     gradeId: Yup.number()
-      .required('ERROR: The number is required!')
-      .test('Is positive?', 'ERROR: The number must be greater than 0!', (value) => value > 0),
+        .required('ERROR: The number is required!')
+        .test('Is positive?', 'ERROR: The number must be greater than 0!', (value) => value > 0),
     programId: Yup.number()
-      .required('ERROR: The number is required!')
-      .test('Is positive?', 'ERROR: The number must be greater than 0!', (value) => value > 0),
-    member: Yup.array().required('member is array'),
-  });
+        .required('ERROR: The number is required!')
+        .test('Is positive?', 'ERROR: The number must be greater than 0!', (value) => value > 0),
+
+  })
 
   const defaultValues = useMemo(
-    () => ({
-      name: currentClass?.name || '',
-      code: currentClass?.code || '',
-      size: currentClass?.size || 0,
-      schoolYear: currentClass?.schoolYear || `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`,
-      gradeId: currentClass?.gradeId + '' || (grades && grades.length) ? grades[0]?.id + '' : '',
-      programId: currentClass?.programId + '' || (programs && programs.length) ? programs[0]?.id + '' : '',
-      teachers: currentClass?.teachers || [],
-      students: currentClass?.students || [],
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentClass]
+      () => ({
+        name: currentClass?.name || '',
+        code: currentClass?.code || '',
+        size: currentClass?.size || 0,
+        schoolYear: currentClass?.schoolYear || `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`,
+        gradeId: currentClass?.gradeId + '' || (grades && grades.length) ? grades[0]?.id + '' : '',
+        programId: currentClass?.programId + '' || (programs && programs.length) ? programs[0]?.id + '' : '',
+      }),
+      [currentClass]
   );
-  console.log('data : ', defaultValues);
 
   const methods = useForm({
-    resolver: yupResolver(NewClassSchema),
+    resolver: yupResolver(validationSchema),
     defaultValues,
   });
 
@@ -89,7 +89,6 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   useEffect(() => {
     if (isEdit && currentClass) {
@@ -98,37 +97,48 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
     if (!isEdit) {
       reset(defaultValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentClass]);
 
+
   const onSubmit = async (data) => {
-    if (!isEdit) {
+    console.log('data class',data)
+    if(!isEdit){
       try {
-        console.log('onSubmit', data, methods);
-        // await new Promise((resolve) => setTimeout(resolve, 500));
-        reset();
-        enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+        const res = await postClass(data)
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Tạo lớp học thành công');
+          push(PATH_DASHBOARD.class.root);
+        } else {
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+        }
       } catch (error) {
-        console.error(error);
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
       }
-    } else {
+    }else{
+      try {
+        const res = await updateClass(currentClass.id,{
+          name: data.name,
+          code: data.code,
+          size: data.size,
+          schoolYear: data.schoolYear,
+          gradeId: data.gradeId,
+          programId: data.programId,
+        })
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Cập nhật lớp học thành công');
+          push(PATH_DASHBOARD.class.root);
+        } else {
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+        }
+      } catch (error) {
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+      }
     }
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
 
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('avatarUrl', newFile);
-      }
-    },
-    [setValue]
-  );
 
   const renderYearPicker = useCallback(() => {
     let years = [];
@@ -141,43 +151,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-            {isEdit && (
-              <Label
-                color={values.status === 'active' ? 'success' : 'error'}
-                sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
-              >
-                {values.status}
-              </Label>
-            )}
-
-            <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="avatarUrl"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 2,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
-            </Box>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} >
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
@@ -188,33 +162,114 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="code" label="Mã lớp" />
-              <RHFTextField name="name" label="Tên lớp" />
-              <RHFTextField name="size" label="Sĩ số" type="number" />
-
-              <RHFSelect name="schoolYear" label="Năm học" placeholder="Năm học">
+              <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                Thông tin lớp học
+              </Typography>
+              <div></div>
+              <RHFTextField name="code" label="Mã lớp" id="code" />
+              <RHFTextField name="name" label="Tên lớp" id="name" />
+              <RHFTextField name="size" label="Sĩ số" type="number" id="size" />
+              <RHFSelect
+                  id="schoolYear"
+                  name="schoolYear"
+                  label="Năm học"
+                  InputLabelProps={{ shrink: true }}
+                  SelectProps={{
+                    native: false,
+                    MenuProps: {
+                      PaperProps: {
+                        sx: { maxHeight: 220 },
+                      },
+                    },
+                    sx: { textTransform: 'capitalize' },
+                  }}
+              >
                 {renderYearPicker().map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
+                    <MenuItem key={index}
+                              value={option}
+                              sx={{
+                                mx: 1,
+                                my: 0.5,
+                                borderRadius: 0.75,
+                                typography: 'body2',
+                                textTransform: 'capitalize',
+                                '&:first-of-type': { mt: 0 },
+                                '&:last-of-type': { mb: 0 },
+                              }}
+                    >
+                      {option}
+                    </MenuItem>
                 ))}
               </RHFSelect>
-
-              <RHFSelect name="programId" label="Chương trình" placeholder="Chương trình">
+              <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                Cài đặt lớp học
+              </Typography>
+              <div></div>
+              <RHFSelect
+                  id="programId"
+                  name="programId"
+                  label="Chương trình học"
+                  InputLabelProps={{ shrink: true }}
+                  SelectProps={{
+                    native: false,
+                    MenuProps: {
+                      PaperProps: {
+                        sx: { maxHeight: 220 },
+                      },
+                    },
+                    sx: { textTransform: 'capitalize' },
+                  }}
+              >
                 {programs.map((option, index) => (
-                  <option key={index} value={option.id + ''}>
-                    {option.name}
-                  </option>
+                    <MenuItem key={index}
+                              value={option.id}
+                              sx={{
+                                mx: 1,
+                                my: 0.5,
+                                borderRadius: 0.75,
+                                typography: 'body2',
+                                textTransform: 'capitalize',
+                                '&:first-of-type': { mt: 0 },
+                                '&:last-of-type': { mb: 0 },
+                              }}
+                    >
+                      {option.name}
+                    </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect
+                  id="gradeId"
+                  name="gradeId"
+                  label="Khối học"
+                  InputLabelProps={{ shrink: true }}
+                  SelectProps={{
+                    native: false,
+                    MenuProps: {
+                      PaperProps: {
+                        sx: { maxHeight: 220 },
+                      },
+                    },
+                    sx: { textTransform: 'capitalize' },
+                  }}
+              >
+                {grades.map((option, index) => (
+                    <MenuItem key={index}
+                              value={option.id}
+                              sx={{
+                                mx: 1,
+                                my: 0.5,
+                                borderRadius: 0.75,
+                                typography: 'body2',
+                                textTransform: 'capitalize',
+                                '&:first-of-type': { mt: 0 },
+                                '&:last-of-type': { mb: 0 },
+                              }}
+                    >
+                      {option.name}
+                    </MenuItem>
                 ))}
               </RHFSelect>
 
-              <RHFSelect name="gradeId" label="Khối" placeholder="Khối">
-                {grades.map((option, index) => (
-                  <option key={index} value={option.id + ''}>
-                    {option.name}
-                  </option>
-                ))}
-              </RHFSelect>
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

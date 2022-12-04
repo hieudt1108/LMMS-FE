@@ -29,18 +29,18 @@ export default function ClassCreatePage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new invoice"
+          heading="Tạo lớp học"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Class',
+              name: 'Danh sách lớp học',
               href: PATH_DASHBOARD.class.root,
             },
             {
-              name: 'New class',
+              name: 'Tạo mới',
             },
           ]}
         />

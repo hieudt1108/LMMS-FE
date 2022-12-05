@@ -32,6 +32,8 @@ import { getProgramsRedux } from 'src/redux/slices/program';
 import { getGradesRedux } from 'src/redux/slices/grade';
 // PATH
 import { PATH_DASHBOARD } from '../../../routes/paths';
+// CONTEXT
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 MyClass.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -41,6 +43,9 @@ export default function MyClass() {
   const { classes } = useSelector((state) => state.class);
   const { programs } = useSelector((state) => state.program);
   const { grades } = useSelector((state) => state.grade);
+
+  const { ROLES, SUBJECTS } = useAuthContext();
+  console.log('test user context: ', ROLES, '\n', SUBJECTS);
 
   const [pagingClass, setPagingClass] = React.useState({
     pageIndex: 1,

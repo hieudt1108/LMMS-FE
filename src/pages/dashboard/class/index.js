@@ -66,6 +66,7 @@ export default function Classes() {
   useEffect(() => {
     fethAllClasses();
   }, []);
+
   useEffect(() => {
     dispatch(getClassesRedux(pagingClass));
     dispatch(getProgramsRedux({ pageIndex: 1, pageSize: 15 }));

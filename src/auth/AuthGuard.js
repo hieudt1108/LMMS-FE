@@ -15,7 +15,7 @@ AuthGuard.propTypes = {
 };
 
 export default function AuthGuard({ children }) {
-  const { isAuthenticated, isInitialized } = useAuthContext();
+  const { isAuthenticated, isInitialized, ROLES, SUBJECTS } = useAuthContext();
 
   const { pathname, push } = useRouter();
 

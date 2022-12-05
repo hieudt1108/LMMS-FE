@@ -154,7 +154,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
           } else {
             roles.push({
               roleId: data.tagsId[i],
-              subjectId: [0],
+              subjectId: [],
             });
           }
         }

@@ -38,7 +38,7 @@ export default function addStudent() {
     {
       value: 'description',
       label: 'Thêm thành viên vào class',
-      component: <ClassAddStudentForm isEdit />,
+      component: <ClassAddStudentForm/>,
     },
     {
       value: 'reviews',

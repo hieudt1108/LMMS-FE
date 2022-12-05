@@ -9,7 +9,7 @@ export function fDate(date, newFormat) {
 }
 
 export function fDateTime(date, newFormat) {
-  const fm = newFormat || 'dd MMM yyyy p';
+  const fm = newFormat || 'dd/MM/yyyy';
 
   return date ? format(new Date(date), fm) : '';
 }

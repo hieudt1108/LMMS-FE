@@ -14,7 +14,7 @@ import { useSnackbar } from '../../../../components/snackbar';
 import MenuPopover from '../../../../components/menu-popover';
 import FileThumbnail from '../../../../components/file-thumbnail';
 //
-import { FileShareDialog } from '../../file';
+import {FileDetailsDrawer, FileShareDialog} from '../../file';
 import DocumentPreview from '../../documents/DocumentPreview';
 import { getDocumentById } from '../../../../dataProvider/agent';
 import { dispatch } from 'src/redux/store';
@@ -224,18 +224,17 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
         </MenuItem>
       </MenuPopover>
 
-      {/* <FileDetailsDrawer
+      <FileDetailsDrawer
         item={file}
-        favorited={favorited}
+        favorited={false}
         onFavorite={handleFavorite}
-        onCopyLink={handleCopy}
         open={openDetails}
         onClose={handleCloseDetails}
         onDelete={() => {
           handleCloseDetails();
           onDelete();
         }}
-      /> */}
+      />
       {openShare && (
         <FileShareDialog
           open={openShare}

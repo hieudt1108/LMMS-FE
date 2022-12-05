@@ -108,52 +108,16 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
           Vô hiệu hóa
         </MenuItem>
 
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            handleClosePopover();
-          }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Cập nhật
-        </MenuItem>
-      </MenuPopover>
-
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              onDeleteRow();
-              handleCloseConfirm();
-            }}
-          >
-<<<<<<< HEAD
-            Delete
-          </Button>
-        }
-      />
-    </>
-=======
-            <Iconify icon="eva:alert-circle-outline" />
-            Vô hiệu hóa
-          </MenuItem>
-
           <MenuItem
               onClick={() => {
-                onEditRow();
-                handleClosePopover();
+                  onEditRow();
+                  handleClosePopover();
               }}
           >
-            <Iconify icon="eva:edit-fill" />
-            Cập nhật
+              <Iconify icon="eva:edit-fill" />
+              Cập nhật
           </MenuItem>
-        </MenuPopover>
+      </MenuPopover>
 
         <ConfirmDialog
             open={openConfirm}
@@ -161,19 +125,19 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
             title="Vô hiệu hóa"
             content="Bạn có chắc chắn vô hiệu hóa người dùng này?"
             action={
-              <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => {
-                    onDeleteRow();
-                    handleCloseConfirm();
-                  }}
-              >
-                Vô hiệu hóa
-              </Button>
+                <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => {
+                        onDeleteRow();
+                        handleCloseConfirm();
+                    }}
+                >
+                    Vô hiệu hóa
+                </Button>
             }
         />
-      </>
->>>>>>> 18858e8b362248e8ecafd6bc141a052f6402c5a9
+    </>
   );
 }
+

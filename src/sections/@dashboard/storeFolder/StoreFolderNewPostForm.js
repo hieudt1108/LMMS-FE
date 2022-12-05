@@ -44,7 +44,7 @@ export default function StoreFolderNewPostForm() {
     });
   })();
 
-  const { newDocument } = useSelector((state) => state.folder);
+  const { newDocument } = useSelector((state) => state.storeFolder);
 
   const { id, programs, subjects, typeDocuments } = newDocument.init;
 

@@ -193,6 +193,11 @@ function getFolderByID(id) {
   return getApi(`/Folder/getOne/${id}`);
 }
 
+// FILE
+function downloadFile(params) {
+  return getApi('/File/downloadFile', params);
+}
+
 function getStoreFolder(params) {
   return getApi('/Folder/getStoreFolder', params);
 }
@@ -200,6 +205,7 @@ function getStoreFolder(params) {
 function getPermissionById(id) {
   return getApi(`/Permission/getOne/${id}`);
 }
+
 
 // POST API AREA ============================>
 async function postApi(url, payload, file) {
@@ -241,6 +247,7 @@ const postLevel = () => {
   return postApi('Level');
 };
 
+// FILE
 const postFile = (payload) => {
   return postApi('File/UploadFile', payload, 1);
 };
@@ -493,6 +500,7 @@ export {
   createProgram,
   getAllDocument,
   uploadFile,
+  downloadFile,
   postFile,
   getAllSlot,
   getSlotById,

@@ -133,9 +133,9 @@ export default function TypeDocsListPage() {
         if (response.status < 400) {
             setSelected([]);
             await fetchTypeDocs();
-            enqueueSnackbar('Xóa cấp học thành công');
+            enqueueSnackbar('Xóa loại tài liệu thành công');
         } else {
-            enqueueSnackbar('Xóa cấp học thất bại');
+            enqueueSnackbar('Xóa loại tài liệu thất bại', { variant: 'error' });
         }
 
         if (page > 0) {
@@ -150,9 +150,9 @@ export default function TypeDocsListPage() {
         if (response.status < 400) {
             setSelected([]);
             await fetchTypeDocs();
-            enqueueSnackbar('Xóa cấp học thành công');
+            enqueueSnackbar('Xóa loại tài liệu thành công');
         } else {
-            enqueueSnackbar('Xóa cấp học thất bại');
+            enqueueSnackbar('Xóa loại tài liệu thất bại', { variant: 'error' });
         }
 
         if (page > 0) {

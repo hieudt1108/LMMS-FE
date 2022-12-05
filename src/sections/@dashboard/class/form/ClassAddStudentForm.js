@@ -10,7 +10,7 @@ import {PATH_DASHBOARD} from '../../../../routes/paths';
 import {useRouter} from 'next/router';
 import ClassNewEditMemberDetails from './ClassNewEditMemberDetails';
 
-export default function ClassAddStudentForm({ isEdit = false, currentMember }) {
+export default function ClassAddStudentForm({ isEdit = false, classID }) {
 
   const { push } = useRouter();
 
@@ -19,10 +19,10 @@ export default function ClassAddStudentForm({ isEdit = false, currentMember }) {
 
   const defaultValues = useMemo(
       () => ({
-        items: currentMember?.items || [{ title: '', description: '', service: '', quantity: 1, price: 0, total: 0 }],
+        items: [{ title: '', description: '', service: '', quantity: 1, price: 0, total: 0 }],
 
       }),
-      [currentMember]
+      []
   );
 
   const methods = useForm({
@@ -36,14 +36,12 @@ export default function ClassAddStudentForm({ isEdit = false, currentMember }) {
   } = methods;
 
   useEffect(() => {
-    if (isEdit && currentMember) {
-      reset(defaultValues);
-    }
+
     if (!isEdit) {
       reset(defaultValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit, currentMember]);
+  }, [isEdit]);
 
 
 
@@ -53,7 +51,7 @@ export default function ClassAddStudentForm({ isEdit = false, currentMember }) {
   return (
       <FormProvider methods={methods}>
 
-          <ClassNewEditMemberDetails />
+          <ClassNewEditMemberDetails data={classID} />
 
 
         <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>

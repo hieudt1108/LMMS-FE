@@ -35,7 +35,7 @@ const SERVICE_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function ClassNewEditMemberDetails() {
+export default function ClassNewEditMemberDetails(data) {
   const { control, setValue,getValues, watch, resetField } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -137,7 +137,6 @@ export default function ClassNewEditMemberDetails() {
             </Alert>;
         }
     }
-    console.log('user: ', userRole);
 
     async function fetchSubject() {
         const res = await getAllSubject({ pageIndex: 1, pageSize: 100 });

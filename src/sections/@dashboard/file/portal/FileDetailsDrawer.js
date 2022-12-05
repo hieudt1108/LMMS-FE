@@ -52,7 +52,7 @@ export default function FileDetailsDrawer({
 }) {
   const { shared } = item;
 
-  const hasShared = shared && !!shared.length;
+  const [listShare, setListShare] = useState(0);
 
   const [openShare, setOpenShare] = useState(false);
 
@@ -83,6 +83,7 @@ export default function FileDetailsDrawer({
       setDocumentData(resDocument.data.data);
       setSubjectData(resSubject.data.data);
       setProgramData(resProgram.data.data);
+      setListShare(resDocument.data.data.listShare)
     } catch (error) {
       console.log(error);
     }
@@ -107,6 +108,8 @@ export default function FileDetailsDrawer({
   const handleChangeInvite = (event) => {
     setInviteEmail(event.target.value);
   };
+
+  console.log('listShare',listShare)
 
   return (
     <>
@@ -186,10 +189,11 @@ export default function FileDetailsDrawer({
             <Typography variant="subtitle2"> Được chia sẻ với </Typography>
           </Stack>
 
-          {hasShared && (
+          {listShare.length > 0 && (
+
             <List disablePadding sx={{ pl: 2.5, pr: 1 }}>
-              {shared.map((person) => (
-                <FileInvitedItem key={person.id} person={person} />
+              {listShare.map(({ user, permission }, index) => (
+                  <FileInvitedItem key={user.id} user={user} permissionDefault={permission} index={index} />
               ))}
             </List>
           )}

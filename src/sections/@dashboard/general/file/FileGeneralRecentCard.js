@@ -16,7 +16,7 @@ import FileThumbnail from '../../../../components/file-thumbnail';
 //
 import {FileDetailsDrawer, FileShareDialog} from '../../file';
 import DocumentPreview from '../../documents/DocumentPreview';
-import {getDocumentById} from '../../../../dataProvider/agent';
+import {downloadFile, getAllLevel, getDocumentById, getGradeById} from '../../../../dataProvider/agent';
 import {dispatch} from 'src/redux/store';
 import {getOneDocumentRedux} from 'src/redux/slices/document';
 
@@ -43,6 +43,22 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
     const [openShare, setOpenShare] = useState(false);
 
     const [openDetails, setOpenDetails] = useState(false);
+
+    const [documentData, setDocumentData] = useState([]);
+
+    useEffect(() => {
+        fetchDocument();
+    }, []);
+
+    async function fetchDocument() {
+        const res = await getDocumentById(file.id);
+        if (res.status < 400) {
+            console.log('download',res);
+            setDocumentData(res.data.data);
+        } else {
+            console.log('error');
+        }
+    }
 
     const handleFavorite = () => {
         setFavorited(!favorited);
@@ -74,8 +90,22 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
         setOpenPopover(null);
     };
 
-    const handleDownloadFile = (fileId) => {
-
+    const handleDownloadFile = async (file, type) => {
+        try {
+            console.log('filename',file)
+            console.log('typefile',type)
+            const res = await downloadFile({fileName: file, contentType: type});
+            console.log('resdata',res.data)
+            const url = URL.createObjectURL(new Blob([res.data]));
+            console.log('url',url)
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", file);
+            document.body.appendChild(link);
+            link.click();
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const [openPreview, setOpenPreview] = useState(false);
@@ -198,10 +228,10 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
                 <MenuItem
                     onClick={() => {
                         handleClosePopover();
-
+                        handleDownloadFile(documentData.urlDocument,documentData.typeFile)
                     }}
                 >
-                    <Iconify icon="eva:link-2-fill"/>
+                    <Iconify icon="eva:download-outline"/>
                     Tải xuống
                 </MenuItem>
 

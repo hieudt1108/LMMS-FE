@@ -28,6 +28,8 @@ const reducer = (state, action) => {
       isInitialized: true,
       isAuthenticated: action.payload.isAuthenticated,
       user: action.payload.user,
+      ROLES: action.payload.user?.roles,
+      SUBJECTS: action.payload.user?.subjects,
     };
   }
   if (action.type === 'LOGIN') {
@@ -35,8 +37,8 @@ const reducer = (state, action) => {
       ...state,
       isAuthenticated: true,
       user: action.payload.user,
-      ROLES: action.payload.user.roles,
-      SUBJECTS: action.payload.user.subjects,
+      ROLES: action.payload.user?.roles,
+      SUBJECTS: action.payload.user?.subjects,
     };
   }
   if (action.type === 'REGISTER') {
@@ -83,6 +85,12 @@ export function AuthProvider({ children }) {
           payload: {
             isAuthenticated: true,
             user: { ...responseUser.data.data },
+            ROLES: {
+              ...responseUser.data.data.roles,
+            },
+            SUBJECTS: {
+              ...responseUser.data.data.subjects,
+            },
           },
         });
       } else {

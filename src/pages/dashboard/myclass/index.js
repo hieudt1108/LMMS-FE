@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSettingsContext } from '../../../components/settings';
-import { alpha } from '@mui/material/styles';
+import NextLink from 'next/link';
+
 import {
   Alert,
   Button,
@@ -29,6 +30,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getClassesRedux } from 'src/redux/slices/myclass';
 import { getProgramsRedux } from 'src/redux/slices/program';
 import { getGradesRedux } from 'src/redux/slices/grade';
+// PATH
+import { PATH_DASHBOARD } from '../../../routes/paths';
+// CONTEXT
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 MyClass.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -38,6 +43,9 @@ export default function MyClass() {
   const { classes } = useSelector((state) => state.class);
   const { programs } = useSelector((state) => state.program);
   const { grades } = useSelector((state) => state.grade);
+
+  const { ROLES, SUBJECTS } = useAuthContext();
+  console.log('test user context: ', ROLES, '\n', SUBJECTS);
 
   const [pagingClass, setPagingClass] = React.useState({
     pageIndex: 1,
@@ -136,7 +144,13 @@ export default function MyClass() {
                   }}
                 />
               }
-              action={<Button variant="contained">Thêm lớp</Button>}
+              action={
+                <NextLink href={PATH_DASHBOARD.class.new} passHref>
+                  <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                    Thêm lớp học
+                  </Button>
+                </NextLink>
+              }
             />
           </Grid>
 

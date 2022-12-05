@@ -38,6 +38,7 @@ import Iconify from '../../../../components/iconify';
 import { getAllDocument, getAllTypeDocument, getAllSubject } from '../../../../dataProvider/agent';
 import { DocumentPostCard } from '../../../../sections/@dashboard/documents';
 
+import { useAuthContext } from 'src/auth/useAuthContext';
 // ----------------------------------------------------------------------
 
 LevelLayout.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -47,6 +48,7 @@ LevelLayout.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function LevelLayout() {
   const { themeStretch } = useSettingsContext();
 
+  const { SUBJECTS } = useAuthContext();
   const {
     query: { title },
   } = useRouter();
@@ -199,7 +201,7 @@ export default function LevelLayout() {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {renderMenuItem(subjects)}
+                {renderMenuItem(SUBJECTS)}
               </Select>
             </FormControl>
           </Box>

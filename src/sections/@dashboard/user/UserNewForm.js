@@ -71,7 +71,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       roleID: [],
       tagsId: [],
       subjectId: [],
-      suId: [0],
+      suId: [],
       birthDate: currentUser?.birthDate || new Date(),
       enable: currentUser?.enable || 0,
     }),
@@ -172,7 +172,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
           roles: roles,
         };
         const res = await createUserAuth(dataCreate);
-        console.log(res)
+        console.log(res);
         if (res.status < 400) {
           reset();
           enqueueSnackbar('Tạo người dùng thành công');

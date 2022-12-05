@@ -12,6 +12,7 @@ import RejectionFiles from './errors/RejectionFiles';
 import MultiFilePreview from './preview/MultiFilePreview';
 import SingleFilePreview from './preview/SingleFilePreview';
 import { UsersExcelTemple } from './index';
+import { useFormContext } from 'react-hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -32,46 +33,35 @@ const StyledDropZone = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-Upload.propTypes = {
-  sx: PropTypes.object,
-  error: PropTypes.bool,
-  files: PropTypes.array,
-  file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  disabled: PropTypes.bool,
-  multiple: PropTypes.bool,
-  onDelete: PropTypes.func,
-  onRemove: PropTypes.func,
-  onUpload: PropTypes.func,
-  thumbnail: PropTypes.bool,
-  helperText: PropTypes.node,
-  onRemoveAll: PropTypes.func,
-};
-
 export default function Upload({
+  indexLocal,
   disabled,
   multiple = false,
   error,
   helperText,
+  files,
   //
   hasDefault = false,
   defaultFile,
-  file,
   onDelete,
   //
-  files,
   thumbnail,
+  file,
   onUpload,
   onRemove,
   onRemoveAll,
+  handleDrop,
   sx,
   ...other
 }) {
-  const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
+  const { acceptedFiles, getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
     multiple,
     disabled,
+    onDrop: (droppedFiles) => {
+      handleDrop(droppedFiles, indexLocal);
+    },
     ...other,
   });
-
   const hasFile = !!file && !multiple;
 
   const hasFiles = files && multiple && files.length > 0;
@@ -110,8 +100,6 @@ export default function Upload({
             }),
           }}
         />
-
-        {hasFile && <SingleFilePreview file={file} />}
       </StyledDropZone>
 
       <RejectionFiles fileRejections={fileRejections} />
@@ -146,7 +134,7 @@ export default function Upload({
       {hasFiles && (
         <>
           <Box sx={{ my: 3 }}>
-            <MultiFilePreview files={files} thumbnail={thumbnail} onRemove={onRemove} />
+            <MultiFilePreview files={files} thumbnail={thumbnail} onRemove={() => onRemove(indexLocal)} />
           </Box>
 
           <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
@@ -201,7 +189,7 @@ function Placeholder({ sx, isError, ...other }) {
 
       <Box sx={{ p: 3 }}>
         <Typography gutterBottom variant="h5">
-          {isError ? 'Vui lòng đăng tải file' : `Kéo & Thả hoặc Chọn tệp`}
+          {isError === true ? 'Vui lòng đăng tải file' : `Kéo & Thả hoặc Chọn tệp`}
         </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>

@@ -88,8 +88,8 @@ export default function StoreFileRootPage() {
         parentId: Number.parseInt(id),
       })
     );
+    console.log('parentid',Number.parseInt(id))
     handleCloseNewStoreFolder();
-    window.location.reload();
   };
 
   const handleDrop = useCallback(

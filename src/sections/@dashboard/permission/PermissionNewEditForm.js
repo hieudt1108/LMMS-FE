@@ -159,10 +159,15 @@ export default function PermissionNewEditForm({ isEdit = false, currentPermissio
 
                 />
                 <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
-                  Cài đặt vai trò
+                  Cài đặt quyền
                 </Typography>
                 <div></div>
+                <RHFTextField
+                    name="path"
+                    label="Đường dẫn"
+                    id="path"
 
+                />
 
               </Box>
 

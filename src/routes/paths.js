@@ -37,6 +37,7 @@ export const PATH_DASHBOARD = {
   fileManager: path(ROOTS_DASHBOARD, '/files-manager'),
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   blank: path(ROOTS_DASHBOARD, '/blank'),
+
   class: {
     root: path(ROOTS_DASHBOARD, '/class'),
     detail: (class_id) => path(ROOTS_DASHBOARD, `/class/${class_id}`),

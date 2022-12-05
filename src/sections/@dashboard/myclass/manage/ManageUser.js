@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Button, Box } from '@mui/material';
-import { CLassDetails, ClassTeacher } from '../../class';
+import { CLassDetails, ClassTeacher } from '../../myclass';
 import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../../../../_mock/arrays';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';

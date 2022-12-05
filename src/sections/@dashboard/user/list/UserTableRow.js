@@ -133,10 +133,47 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
               handleCloseConfirm();
             }}
           >
+<<<<<<< HEAD
             Delete
           </Button>
         }
       />
     </>
+=======
+            <Iconify icon="eva:alert-circle-outline" />
+            Vô hiệu hóa
+          </MenuItem>
+
+          <MenuItem
+              onClick={() => {
+                onEditRow();
+                handleClosePopover();
+              }}
+          >
+            <Iconify icon="eva:edit-fill" />
+            Cập nhật
+          </MenuItem>
+        </MenuPopover>
+
+        <ConfirmDialog
+            open={openConfirm}
+            onClose={handleCloseConfirm}
+            title="Vô hiệu hóa"
+            content="Bạn có chắc chắn vô hiệu hóa người dùng này?"
+            action={
+              <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => {
+                    onDeleteRow();
+                    handleCloseConfirm();
+                  }}
+              >
+                Vô hiệu hóa
+              </Button>
+            }
+        />
+      </>
+>>>>>>> 18858e8b362248e8ecafd6bc141a052f6402c5a9
   );
 }

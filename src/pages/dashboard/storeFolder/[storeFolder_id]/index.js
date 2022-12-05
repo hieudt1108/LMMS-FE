@@ -93,7 +93,6 @@ export default function StoreFilePage() {
       })
     );
     handleCloseNewStoreFolder();
-    window.location.reload();
   };
 
   const handleDrop = useCallback(

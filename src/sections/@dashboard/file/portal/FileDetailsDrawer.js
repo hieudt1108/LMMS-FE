@@ -1,33 +1,18 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 // @mui
-import {
-  Box,
-  Chip,
-  List,
-  Stack,
-  Drawer,
-  Button,
-  Divider,
-  Checkbox,
-  TextField,
-  Typography,
-  IconButton,
-  Autocomplete,
-  MenuItem,
-} from '@mui/material';
+import {Box, Button, Checkbox, Divider, Drawer, IconButton, List, Stack, Typography,} from '@mui/material';
 // utils
-import { fData } from '../../../../utils/formatNumber';
-import { fDateTime } from '../../../../utils/formatTime';
+import {fData} from '../../../../utils/formatNumber';
+import {fDateTime} from '../../../../utils/formatTime';
 // components
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
-import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail';
+import FileThumbnail, {fileFormat} from '../../../../components/file-thumbnail';
 //
-import FileShareDialog from './FileShareDialog';
 import FileInvitedItem from '../FileInvitedItem';
-import { getAllLevel, getDocumentById, getProgramById, getSubjectById } from '../../../../dataProvider/agent';
-import { RHFSelect } from '../../../../components/hook-form';
+import {getDocumentById, getProgramById, getSubjectById} from '../../../../dataProvider/agent';
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +26,7 @@ FileDetailsDrawer.propTypes = {
 };
 
 export default function FileDetailsDrawer({
-  item,
+  data,
   open,
   favorited,
   //
@@ -50,44 +35,42 @@ export default function FileDetailsDrawer({
   onDelete,
   ...other
 }) {
-  const { shared } = item;
+  const { getOne } = useSelector((state) => state.document);
+
+  const hasShared = getOne && !!getOne.listShare.length;
 
   const [listShare, setListShare] = useState(0);
 
   const [openShare, setOpenShare] = useState(false);
 
-  const [toggleTags, setToggleTags] = useState(true);
-
   const [inviteEmail, setInviteEmail] = useState('');
 
-  const [tags, setTags] = useState('');
 
   const [toggleProperties, setToggleProperties] = useState(true);
 
   const [toggleCategories, setToggleCategories] = useState(true);
 
-  const [documentData, setDocumentData] = useState([]);
-
   const [subjectData, setSubjectData] = useState([]);
 
   const [programData, setProgramData] = useState([]);
+
+
   useEffect(() => {
     fetchDocumentProgramSubject();
   }, []);
 
   async function fetchDocumentProgramSubject() {
     try {
-      const resDocument = await getDocumentById(item.id);
+      const resDocument = await getDocumentById(data.id);
       const resSubject = await getSubjectById(resDocument.data.data.subjectId);
       const resProgram = await getProgramById(resDocument.data.data.programId);
-      setDocumentData(resDocument.data.data);
       setSubjectData(resSubject.data.data);
       setProgramData(resProgram.data.data);
-      setListShare(resDocument.data.data.listShare)
     } catch (error) {
       console.log(error);
     }
   }
+
 
   const handleToggleProperties = () => {
     setToggleProperties(!toggleProperties);
@@ -97,19 +80,8 @@ export default function FileDetailsDrawer({
     setToggleCategories(!toggleCategories);
   };
 
-  const handleOpenShare = () => {
-    setOpenShare(true);
-  };
 
-  const handleCloseShare = () => {
-    setOpenShare(false);
-  };
 
-  const handleChangeInvite = (event) => {
-    setInviteEmail(event.target.value);
-  };
-
-  console.log('listShare',listShare)
 
   return (
     <>
@@ -140,14 +112,14 @@ export default function FileDetailsDrawer({
           </Stack>
 
           <Stack spacing={2.5} justifyContent="center" sx={{ p: 2.5, bgcolor: 'background.neutral' }}>
-            <FileThumbnail file={documentData.urlDocument} sx={{ width: 64, height: 64 }} imgSx={{ borderRadius: 1 }} />
+            <FileThumbnail file={getOne.urlDocument} sx={{ width: 64, height: 64 }} imgSx={{ borderRadius: 1 }} />
 
             <Typography variant="h6" sx={{ wordBreak: 'break-all' }}>
-              {`Tài liệu: ${documentData.name}`}
+              {`Tài liệu: ${getOne.name}`}
             </Typography>
 
             <Typography variant="h7" sx={{ wordBreak: 'break-all' }}>
-              {`Tệp đính kèm: ${documentData.urlDocument}`}
+              {`Tệp đính kèm: ${getOne.urlDocument}`}
             </Typography>
 
             <Divider sx={{ borderStyle: 'dashed' }} />
@@ -174,11 +146,11 @@ export default function FileDetailsDrawer({
               {toggleProperties && (
                 <>
                   <Stack spacing={1.5}>
-                    <Row label="Kích thước" value={fData(documentData.size)} />
+                    <Row label="Kích thước" value={fData(getOne.size)} />
 
-                    <Row label="Ngày tạo" value={fDateTime(documentData.createDate)} />
+                    <Row label="Ngày tạo" value={fDateTime(getOne.createDate)} />
 
-                    <Row label="Loại" value={fileFormat(documentData.typeFile)} />
+                    <Row label="Loại" value={fileFormat(getOne.typeFile)} />
                   </Stack>
                 </>
               )}
@@ -189,10 +161,9 @@ export default function FileDetailsDrawer({
             <Typography variant="subtitle2"> Được chia sẻ với </Typography>
           </Stack>
 
-          {listShare.length > 0 && (
-
+          {hasShared && (
             <List disablePadding sx={{ pl: 2.5, pr: 1 }}>
-              {listShare.map(({ user, permission }, index) => (
+              {getOne.listShare.map(({ user, permission }, index) => (
                   <FileInvitedItem key={user.id} user={user} permissionDefault={permission} index={index} />
               ))}
             </List>
@@ -213,16 +184,6 @@ export default function FileDetailsDrawer({
         </Box>
       </Drawer>
 
-      <FileShareDialog
-        open={openShare}
-        shared={shared}
-        inviteEmail={inviteEmail}
-        onChangeInvite={handleChangeInvite}
-        onClose={() => {
-          handleCloseShare();
-          setInviteEmail('');
-        }}
-      />
     </>
   );
 }

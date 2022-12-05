@@ -58,6 +58,7 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
     };
 
     const handleOpenDetails = () => {
+        dispatch(getOneDocumentRedux(file.id));
         setOpenDetails(true);
     };
 
@@ -229,7 +230,7 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
             </MenuPopover>
 
             <FileDetailsDrawer
-                item={file}
+                data={file}
                 favorited={false}
                 onFavorite={handleFavorite}
                 open={openDetails}

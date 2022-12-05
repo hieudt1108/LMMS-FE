@@ -293,6 +293,9 @@ const uploadFile = (payload) => {
 const postDocument = (payload) => {
   return postApi('Document', payload);
 };
+const addShareDoc = (id, payload) => {
+  return postApi(`Document/addShareDocs?docsId=${id}`, payload);
+};
 // Folder
 const postFolder = (payload) => {
   return postApi('Folder', payload);
@@ -421,6 +424,9 @@ const changePasswordUserAuth = (payload) => {
   return putApi('Auth/resetPassword', payload);
 };
 
+const updateShareDocs = (id, payload) => {
+  return putApi(`Document/updateShareDocs/${id}`, payload);
+};
 // ROLE
 const updateRole = (id, payload) => {
   return putApi(`Role/${id}`, payload);
@@ -514,4 +520,6 @@ export {
   getDocumentById,
   getDocInClass,
   getMenu,
+  addShareDoc,
+  updateShareDocs,
 };

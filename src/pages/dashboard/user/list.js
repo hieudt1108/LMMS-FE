@@ -142,7 +142,7 @@ export default function UserListPage() {
   }, []);
 
   async function fetchUsers() {
-    const res = await getAllUsers(filter);
+    const res = await getAllUsers({ pageIndex: 1, pageSize: 100 });
     if (res.status < 400) {
       setListUsers(res.data.data);
     } else {
@@ -176,20 +176,10 @@ export default function UserListPage() {
     setFilterName(event.target.value);
   };
 
-  const handleFilterRole = async (event, value) => {
+  const handleFilterRole = (event) => {
     setPage(0);
-    // const res = await getAllUsers({ pageIndex: 1, pageSize: 100, roleId: value.props.value });
-    // // setFilterRole(event.target.value);
-    // if (res.status < 400) {
-    //   setListUsers(res.data.data);
-    // } else {
-    //   console.log(res.message);
-    // }
-    // console.log('filter: ', event.target.value);
-    setFilterRole(value.props.value);
+    setFilterRole(event.target.value);
   };
-  console.log('filterRole: ', filterRole);
-  const [filter, setFilter] = useState({ pageIndex: 1, pageSize: 100, roleId: '' });
 
   const handleDeleteRow = async (id) => {
     const res = await deleteUser(id);
@@ -444,7 +434,7 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   }
 
   if (filterRole !== 'all') {
-    inputData = inputData?.filter((user) => user.roles.id === filterRole);
+    inputData = inputData?.filter((user) => user.roles === filterRole);
   }
 
   return inputData;

@@ -5,21 +5,16 @@ import { Avatar, Button, Divider, Tooltip, ListItem, MenuItem, ListItemText, Lis
 // components
 import Iconify from '../../../components/iconify';
 import MenuPopover from '../../../components/menu-popover';
+import { useSelector } from 'react-redux';
+import { dispatch } from 'src/redux/store';
+import { handleChangePermissionRedux } from 'src/redux/slices/document';
 
 // ----------------------------------------------------------------------
 
-FileInvitedItem.propTypes = {
-  person: PropTypes.shape({
-    name: PropTypes.string,
-    email: PropTypes.string,
-    avatar: PropTypes.string,
-    permission: PropTypes.string,
-  }),
-};
-
-export default function FileInvitedItem({ person }) {
-  const [permission, setPermission] = useState(person.permission);
-
+export default function FileInvitedItem({ index }) {
+  const { getOne } = useSelector((state) => state.document);
+  console.log('FileInvitedItem', getOne, index);
+  const { user, permission: permissionDefault } = getOne.listShare[index];
   const [openPopover, setOpenPopover] = useState(null);
 
   const handleOpenPopover = (event) => {
@@ -30,22 +25,27 @@ export default function FileInvitedItem({ person }) {
     setOpenPopover(null);
   };
 
-  const handleChangePermission = (newPermission) => {
-    setPermission(newPermission);
+  const handleChangePermission = (permissionId) => {
+    dispatch(handleChangePermissionRedux(getOne, user, index, permissionId));
   };
 
   return (
     <>
       <ListItem disableGutters>
         <ListItemAvatar>
-          <Avatar alt={person.name} src={person.avatar} />
+          <Avatar
+            src={`http://lmms.site:7070/assets/images/avatars/avatar_${
+              (1 - user.gender) * 10 + (user.id % 10) + 1
+            }.jpg`}
+            alt={user.firstName + user.lastName}
+          />
         </ListItemAvatar>
 
         <ListItemText
-          primary={person.name}
+          primary={user.firstName + ' ' + user.lastName}
           secondary={
-            <Tooltip title={person.email}>
-              <span>{person.email}</span>
+            <Tooltip title={user.email}>
+              <span>{user.email}</span>
             </Tooltip>
           }
           primaryTypographyProps={{ noWrap: true, typography: 'subtitle2' }}
@@ -70,7 +70,7 @@ export default function FileInvitedItem({ person }) {
             }),
           }}
         >
-          Can {permission}
+          Can {permissionDefault ? 'Edit' : 'View'}
         </Button>
       </ListItem>
 
@@ -79,10 +79,10 @@ export default function FileInvitedItem({ person }) {
           <MenuItem
             onClick={() => {
               handleClosePopover();
-              handleChangePermission('view');
+              handleChangePermission(0);
             }}
             sx={{
-              ...(permission === 'view' && {
+              ...(permissionDefault === 0 && {
                 bgcolor: 'action.selected',
               }),
             }}
@@ -94,10 +94,10 @@ export default function FileInvitedItem({ person }) {
           <MenuItem
             onClick={() => {
               handleClosePopover();
-              handleChangePermission('edit');
+              handleChangePermission(1);
             }}
             sx={{
-              ...(permission === 'edit' && {
+              ...(permissionDefault === 1 && {
                 bgcolor: 'action.selected',
               }),
             }}
@@ -108,15 +108,16 @@ export default function FileInvitedItem({ person }) {
 
           <Divider sx={{ borderStyle: 'dashed' }} />
 
-          <MenuItem
+          {/* <MenuItem
             onClick={() => {
               handleClosePopover();
+              handleChangePermission(2);
             }}
             sx={{ color: 'error.main' }}
           >
             <Iconify icon="eva:trash-2-outline" />
             Remove
-          </MenuItem>
+          </MenuItem> */}
         </>
       </MenuPopover>
     </>

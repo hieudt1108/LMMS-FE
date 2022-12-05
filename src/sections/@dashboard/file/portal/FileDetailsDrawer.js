@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // @mui
 import {
   Box,
@@ -14,6 +14,7 @@ import {
   Typography,
   IconButton,
   Autocomplete,
+  MenuItem,
 } from '@mui/material';
 // utils
 import { fData } from '../../../../utils/formatNumber';
@@ -25,6 +26,8 @@ import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail
 //
 import FileShareDialog from './FileShareDialog';
 import FileInvitedItem from '../FileInvitedItem';
+import { getAllLevel, getDocumentById, getProgramById, getSubjectById } from '../../../../dataProvider/agent';
+import { RHFSelect } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +37,6 @@ FileDetailsDrawer.propTypes = {
   onClose: PropTypes.func,
   onDelete: PropTypes.func,
   favorited: PropTypes.bool,
-  onCopyLink: PropTypes.func,
   onFavorite: PropTypes.func,
 };
 
@@ -44,12 +46,11 @@ export default function FileDetailsDrawer({
   favorited,
   //
   onFavorite,
-  onCopyLink,
   onClose,
   onDelete,
   ...other
 }) {
-  const { name, size, url, type, shared, dateModified } = item;
+  const { shared } = item;
 
   const hasShared = shared && !!shared.length;
 
@@ -59,16 +60,40 @@ export default function FileDetailsDrawer({
 
   const [inviteEmail, setInviteEmail] = useState('');
 
-  const [tags, setTags] = useState(item.tags.slice(0, 3));
+  const [tags, setTags] = useState('');
 
   const [toggleProperties, setToggleProperties] = useState(true);
 
-  const handleToggleTags = () => {
-    setToggleTags(!toggleTags);
-  };
+  const [toggleCategories, setToggleCategories] = useState(true);
+
+  const [documentData, setDocumentData] = useState([]);
+
+  const [subjectData, setSubjectData] = useState([]);
+
+  const [programData, setProgramData] = useState([]);
+  useEffect(() => {
+    fetchDocumentProgramSubject();
+  }, []);
+
+  async function fetchDocumentProgramSubject() {
+    try {
+      const resDocument = await getDocumentById(item.id);
+      const resSubject = await getSubjectById(resDocument.data.data.subjectId);
+      const resProgram = await getProgramById(resDocument.data.data.programId);
+      setDocumentData(resDocument.data.data);
+      setSubjectData(resSubject.data.data);
+      setProgramData(resProgram.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleToggleProperties = () => {
     setToggleProperties(!toggleProperties);
+  };
+
+  const handleToggleCategories = () => {
+    setToggleCategories(!toggleCategories);
   };
 
   const handleOpenShare = () => {
@@ -93,13 +118,13 @@ export default function FileDetailsDrawer({
           invisible: true,
         }}
         PaperProps={{
-          sx: { width: 320 },
+          sx: { width: 370 },
         }}
         {...other}
       >
         <Scrollbar sx={{ height: 1 }}>
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 2.5 }}>
-            <Typography variant="h6"> Info </Typography>
+            <Typography variant="h6"> Thông tin chi tiết </Typography>
 
             <Checkbox
               color="warning"
@@ -112,55 +137,45 @@ export default function FileDetailsDrawer({
           </Stack>
 
           <Stack spacing={2.5} justifyContent="center" sx={{ p: 2.5, bgcolor: 'background.neutral' }}>
-            <FileThumbnail
-              imageView
-              file={type === 'folder' ? type : url}
-              sx={{ width: 64, height: 64 }}
-              imgSx={{ borderRadius: 1 }}
-            />
+            <FileThumbnail file={documentData.urlDocument} sx={{ width: 64, height: 64 }} imgSx={{ borderRadius: 1 }} />
 
             <Typography variant="h6" sx={{ wordBreak: 'break-all' }}>
-              {name}
+              {`Tài liệu: ${documentData.name}`}
+            </Typography>
+
+            <Typography variant="h7" sx={{ wordBreak: 'break-all' }}>
+              {`Tệp đính kèm: ${documentData.urlDocument}`}
             </Typography>
 
             <Divider sx={{ borderStyle: 'dashed' }} />
 
-            <Stack spacing={1}>
-              <Panel label="Tags" toggle={toggleTags} onToggle={handleToggleTags} />
+            <Stack spacing={1.5}>
+              <Panel label="Danh mục" toggle={toggleCategories} onToggle={handleToggleCategories} />
 
-              {toggleTags && (
+              {toggleCategories && (
                 <>
-                  <Autocomplete
-                    multiple
-                    freeSolo
-                    limitTags={2}
-                    options={item.tags.map((option) => option)}
-                    value={tags}
-                    onChange={(event, newValue) => {
-                      setTags([...tags, ...newValue.filter((option) => tags.indexOf(option) === -1)]);
-                    }}
-                    renderTags={(value, getTagProps) =>
-                      value.map((option, index) => (
-                        <Chip {...getTagProps({ index })} size="small" variant="soft" label={option} key={option} />
-                      ))
-                    }
-                    renderInput={(params) => <TextField {...params} placeholder="#Add a tags" />}
-                  />
+                  <Stack spacing={1.5}>
+                    <Row label="Chương trình học" value={programData.name} />
+
+                    <Row label="Môn học" value={subjectData.name} />
+                  </Stack>
                 </>
               )}
             </Stack>
 
+            <Divider sx={{ borderStyle: 'dashed' }} />
+
             <Stack spacing={1.5}>
-              <Panel label="Properties" toggle={toggleProperties} onToggle={handleToggleProperties} />
+              <Panel label="Thuộc tính" toggle={toggleProperties} onToggle={handleToggleProperties} />
 
               {toggleProperties && (
                 <>
                   <Stack spacing={1.5}>
-                    <Row label="Size" value={fData(size)} />
+                    <Row label="Kích thước" value={fData(documentData.size)} />
 
-                    <Row label="Modified" value={fDateTime(dateModified)} />
+                    <Row label="Ngày tạo" value={fDateTime(documentData.createDate)} />
 
-                    <Row label="Type" value={fileFormat(type)} />
+                    <Row label="Loại" value={fileFormat(documentData.typeFile)} />
                   </Stack>
                 </>
               )}
@@ -168,25 +183,7 @@ export default function FileDetailsDrawer({
           </Stack>
 
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 2.5 }}>
-            <Typography variant="subtitle2"> File Share With </Typography>
-
-            <IconButton
-              size="small"
-              color="success"
-              onClick={handleOpenShare}
-              sx={{
-                p: 0,
-                width: 24,
-                height: 24,
-                color: 'common.white',
-                bgcolor: 'success.main',
-                '&:hover': {
-                  bgcolor: 'success.main',
-                },
-              }}
-            >
-              <Iconify icon="eva:plus-fill" />
-            </IconButton>
+            <Typography variant="subtitle2"> Được chia sẻ với </Typography>
           </Stack>
 
           {hasShared && (
@@ -204,10 +201,10 @@ export default function FileDetailsDrawer({
             variant="soft"
             color="error"
             size="large"
-            startIcon={<Iconify icon="eva:trash-2-outline" />}
+            startIcon={<Iconify icon="eva:arrow-back-fill" />}
             onClick={onDelete}
           >
-            Delete
+            Thoát
           </Button>
         </Box>
       </Drawer>
@@ -217,7 +214,6 @@ export default function FileDetailsDrawer({
         shared={shared}
         inviteEmail={inviteEmail}
         onChangeInvite={handleChangeInvite}
-        onCopyLink={onCopyLink}
         onClose={() => {
           handleCloseShare();
           setInviteEmail('');
@@ -257,7 +253,7 @@ Row.propTypes = {
 function Row({ label, value = '' }) {
   return (
     <Stack direction="row" sx={{ typography: 'caption', textTransform: 'capitalize' }}>
-      <Box component="span" sx={{ width: 80, color: 'text.secondary', mr: 2 }}>
+      <Box component="span" sx={{ width: 120, color: 'text.secondary', mr: 2 }}>
         {label}
       </Box>
 

@@ -7,48 +7,45 @@ import Scrollbar from '../../../../components/scrollbar';
 //
 import FileInvitedItem from '../FileInvitedItem';
 import { FolderUserSearch } from '../../folder';
+import { useCallback, useEffect } from 'react';
+import { dispatch } from 'src/redux/store';
+import { getOneDocumentRedux, handleSendInviteRedux } from 'src/redux/slices/document';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 FileShareDialog.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  shared: PropTypes.array,
-  inviteEmail: PropTypes.string,
-  onChangeInvite: PropTypes.func,
 };
 
-export default function FileShareDialog({
-  shared,
-  inviteEmail,
-  onChangeInvite,
-  //
-  open,
-  onClose,
-  ...other
-}) {
-  const hasShared = shared && !!shared.length;
+export default function FileShareDialog({ open, onClose, ...other }) {
+  const { getOne } = useSelector((state) => state.document);
+  const hasShared = getOne && !!getOne.listShare.length;
+  console.log('FileShareDialog', getOne);
 
+  const handleSendInvite = useCallback(() => {
+    console.log('handleSendInvite');
+    dispatch(handleSendInviteRedux(getOne));
+  }, [getOne]);
   return (
     <>
       <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
         <DialogTitle> Invite </DialogTitle>
 
         <DialogContent sx={{ overflow: 'unset' }}>
-          {onChangeInvite && (
-            <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
-              <FolderUserSearch />
-              <Button disabled={!inviteEmail} variant="contained" sx={{ flexShrink: 0 }}>
-                Send Invite
-              </Button>
-            </Stack>
-          )}
+          <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
+            <FolderUserSearch />
+            <Button variant="contained" sx={{ flexShrink: 0 }} onClick={handleSendInvite}>
+              Send Invite
+            </Button>
+          </Stack>
 
           {hasShared && (
             <Scrollbar sx={{ maxHeight: 60 * 6 }}>
               <List disablePadding>
-                {shared.map((person) => (
-                  <FileInvitedItem key={person.id} person={person} />
+                {getOne.listShare.map(({ user, permission }, index) => (
+                  <FileInvitedItem key={user.id} user={user} permissionDefault={permission} index={index} />
                 ))}
               </List>
             </Scrollbar>

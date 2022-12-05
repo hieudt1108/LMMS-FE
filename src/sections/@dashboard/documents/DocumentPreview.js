@@ -30,8 +30,6 @@ export default function DocumentPreview({ open, onClose, document }) {
     }
   }
 
-  console.log(documentData.urlDocument);
-
   return (
     <Dialog fullScreen open={open} onClose={onClose}>
       <DialogActions sx={{ py: 2, px: 3 }}>

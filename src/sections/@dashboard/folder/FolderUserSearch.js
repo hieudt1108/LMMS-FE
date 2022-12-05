@@ -5,7 +5,7 @@ import match from 'autosuggest-highlight/match';
 // next
 import { useRouter } from 'next/router';
 // @mui
-import { Link, Typography, Autocomplete, InputAdornment } from '@mui/material';
+import { Link, Typography, Autocomplete, InputAdornment, Avatar } from '@mui/material';
 // utils
 // routes
 // components
@@ -14,12 +14,12 @@ import Iconify from '../../../components/iconify';
 import { CustomTextField } from '../../../components/custom-input';
 import SearchNotFound from '../../../components/search-not-found';
 import { getAllUsers } from 'src/dataProvider/agent';
+import { dispatch } from 'src/redux/store';
+import { handleSearchUserRedux } from 'src/redux/slices/document';
 
 // ----------------------------------------------------------------------
 
 export default function FolderUserSearch() {
-  const { push } = useRouter();
-
   const [searchProducts, setSearchProducts] = useState('');
 
   const [searchResults, setSearchResults] = useState([]);
@@ -33,7 +33,7 @@ export default function FolderUserSearch() {
           pageSize: 5,
           searchByName: value,
         });
-        console.log('handleChangeSearch', value, response);
+        console.log('handleChangeSearch', value, response.data.data);
         setSearchResults(response.data.data);
       }
     } catch (error) {
@@ -41,7 +41,10 @@ export default function FolderUserSearch() {
     }
   };
 
-  const handleGotoProduct = (email) => {};
+  const handleGotoProduct = (user) => {
+    console.log('handleGotoProduct', user);
+    dispatch(handleSearchUserRedux(user));
+  };
 
   const handleKeyUp = (event) => {
     if (event.key === 'Enter') {
@@ -90,15 +93,17 @@ export default function FolderUserSearch() {
         />
       )}
       renderOption={(props, user, { inputValue }) => {
-        const { email, cover } = user;
+        const { email, cover, gender, id } = user;
         const matches = match(email, inputValue);
         const parts = parse(email, matches);
 
         return (
           <li {...props}>
-            <Image alt={cover} src={cover} sx={{ width: 48, height: 48, borderRadius: 1, flexShrink: 0, mr: 1.5 }} />
+            <Avatar
+              src={`http://lmms.site:7070/assets/images/avatars/avatar_${(1 - gender) * 10 + (id % 10) + 1}.jpg`}
+            />
 
-            <Link underline="none" onClick={() => handleGotoProduct(email)}>
+            <Link underline="none" onClick={() => handleGotoProduct(user)}>
               {parts.map((part, index) => (
                 <Typography
                   key={index}

@@ -17,6 +17,8 @@ import FileThumbnail from '../../../../components/file-thumbnail';
 import { FileShareDialog } from '../../file';
 import DocumentPreview from '../../documents/DocumentPreview';
 import { getDocumentById } from '../../../../dataProvider/agent';
+import { dispatch } from 'src/redux/store';
+import { getOneDocumentRedux } from 'src/redux/slices/document';
 
 // ----------------------------------------------------------------------
 
@@ -27,13 +29,12 @@ FileGeneralRecentCard.propTypes = {
 };
 
 export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) {
+  console.log('FileGeneralRecentCard');
   const { enqueueSnackbar } = useSnackbar();
 
   const { copy } = useCopyToClipboard();
 
   const isDesktop = useResponsive('up', 'sm');
-
-  const [inviteEmail, setInviteEmail] = useState('');
 
   const [openPopover, setOpenPopover] = useState(null);
 
@@ -48,6 +49,7 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
   };
 
   const handleOpenShare = () => {
+    dispatch(getOneDocumentRedux(file.id));
     setOpenShare(true);
   };
 
@@ -69,10 +71,6 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
 
   const handleClosePopover = () => {
     setOpenPopover(null);
-  };
-
-  const handleChangeInvite = (event) => {
-    setInviteEmail(event.target.value);
   };
 
   const [openPreview, setOpenPreview] = useState(false);
@@ -238,17 +236,15 @@ export default function FileGeneralRecentCard({ file, onDelete, sx, ...other }) 
           onDelete();
         }}
       /> */}
-
-      <FileShareDialog
-        open={openShare}
-        shared={file.shared}
-        inviteEmail={inviteEmail}
-        onChangeInvite={handleChangeInvite}
-        onClose={() => {
-          handleCloseShare();
-          setInviteEmail('');
-        }}
-      />
+      {openShare && (
+        <FileShareDialog
+          open={openShare}
+          data={file}
+          onClose={() => {
+            handleCloseShare();
+          }}
+        />
+      )}
     </>
   );
 }

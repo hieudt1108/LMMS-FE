@@ -83,7 +83,7 @@ export default function AccountPopover() {
       >
         <CustomAvatar
           src={`http://lmms.site:7070/assets/images/avatars/avatar_${
-            user ? user.gender * 10 + (user.id % 10) + 1 + 1 : 1
+            user ? (1 - user.gender) * 10 + (user.id % 10) + 1 : 1
           }.jpg`}
           alt={`${user?.firstName} ${user?.lastName}`}
           name={`${user?.firstName} ${user?.lastName}`}
@@ -92,9 +92,9 @@ export default function AccountPopover() {
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 200, p: 0 }}>
         <Box sx={{ my: 1.5, px: 2.5 }}>
-            <Typography variant="subtitle2" noWrap>
-              {`${user?.firstName} ${user?.lastName}`}
-            </Typography>
+          <Typography variant="subtitle2" noWrap>
+            {`${user?.firstName} ${user?.lastName}`}
+          </Typography>
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />

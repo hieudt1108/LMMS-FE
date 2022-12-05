@@ -94,17 +94,18 @@ export default function SubjectNewEditForm({isEdit = false, currentSubject}) {
                 const res = await updateSubject(currentSubject.id, {
                     code: data.code,
                     name: data.name,
-                    description: data.description
+                    description: data.description,
+                    listSlots: data.listSlots
                 })
                 if (res.status < 400) {
                     reset();
                     enqueueSnackbar('Cập nhật môn học thành công!');
                     push(PATH_DASHBOARD.subject.list);
                 } else {
-                    enqueueSnackbar('Cập nhật môn học thất bại');
+                    enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
                 }
             } catch (error) {
-                enqueueSnackbar('Cập nhật môn học thất bại');
+                enqueueSnackbar('Đã có lỗi xảy ra !', { variant: 'error' });
             }
         }
 

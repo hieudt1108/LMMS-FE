@@ -3,7 +3,19 @@ import {useCallback, useEffect, useState} from 'react';
 // form
 import { useFormContext, useFieldArray } from 'react-hook-form';
 // @mui
-import {Box, Stack, Button, Divider, Typography, InputAdornment, MenuItem, Alert, Chip, TextField} from '@mui/material';
+import {
+    Box,
+    Stack,
+    Button,
+    Divider,
+    Typography,
+    InputAdornment,
+    MenuItem,
+    Alert,
+    Chip,
+    TextField,
+    Grid
+} from '@mui/material';
 // utils
 import { fNumber, fCurrency } from '../../../../utils/formatNumber';
 // components
@@ -23,7 +35,7 @@ const SERVICE_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function ClassNewEditMemberDetails() {
+export default function ClassNewEditMemberDetails(data) {
   const { control, setValue,getValues, watch, resetField } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -125,7 +137,6 @@ export default function ClassNewEditMemberDetails() {
             </Alert>;
         }
     }
-    console.log('user: ', userRole);
 
     async function fetchSubject() {
         const res = await getAllSubject({ pageIndex: 1, pageSize: 100 });
@@ -154,100 +165,66 @@ export default function ClassNewEditMemberDetails() {
       <Stack divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
         {fields.map((item, index) => (
           <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
-                <RHFTextField
-                    size="small"
-                    name={`items[${index}].title`}
-                    label="Title"
-                    InputLabelProps={{ shrink: true }}
-                />
-
-                <RHFTextField
-                    size="small"
-                    name={`items[${index}].description`}
-                    label="Description"
-                    InputLabelProps={{ shrink: true }}
-                />
-
-                <RHFSelect
-                    name={`items[${index}].service`}
-                    size="small"
-                    label="Service"
-                    InputLabelProps={{ shrink: true }}
-                    SelectProps={{
-                        native: false,
-                        MenuProps: {
-                            PaperProps: {
-                                sx: { maxHeight: 220 },
-                            },
-                        },
-                        sx: { textTransform: 'capitalize' },
-                    }}
-                    sx={{
-                        maxWidth: { md: 160 },
-                    }}
-                >
-                    <MenuItem
-                        value=""
-                        onClick={() => handleClearService(index)}
-                        sx={{
-                            mx: 1,
-                            borderRadius: 0.75,
-                            typography: 'body2',
-                            fontStyle: 'italic',
-                            color: 'text.secondary',
-                        }}
-                    >
-                        None
-                    </MenuItem>
-
-                    <Divider />
-
-                    {SERVICE_OPTIONS.map((option) => (
-                        <MenuItem
-                            key={option.id}
-                            value={option.name}
-                            onClick={() => handleSelectService(index, option.name)}
-                            sx={{
-                                mx: 1,
-                                my: 0.5,
-                                borderRadius: 0.75,
-                                typography: 'body2',
-                                textTransform: 'capitalize',
-                                '&:first-of-type': { mt: 0 },
-                                '&:last-of-type': { mb: 0 },
+            <Stack direction={{ xs: 'column' }} spacing={2} sx={{ width: 1 }}>
+                <Grid item container md={12} spacing={2}>
+                    <Grid item md={4} xs={12}>
+                        <RHFAutocomplete
+                            name="tags"
+                            multiple
+                            freeSolo
+                            onChange={(event, newValue) => setValue('tags', newValue)}
+                            options={users.map((option) => option.email)}
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
+                                ))
+                            }
+                            renderInput={(params) => <TextField label="Danh sách người dùng" {...params} />}
+                        />
+                    </Grid>
+                    <Grid item md={4} xs={12}>
+                        <RHFAutocomplete
+                            name="roleID"
+                            multiple
+                            onChange={(event, newValue) => {
+                                setValue('roleID', newValue);
+                                const tagsId = newValue.map((tag) => tag.id);
+                                setValue('tagsId', tagsId);
+                                setRole(tagsId);
+                                if (!getValues('tagsId').includes(11)) {
+                                    setValue('subjectId', []);
+                                }
                             }}
-                        >
-                            {option.name}
-                        </MenuItem>
-                    ))}
-                </RHFSelect>
-                <RHFAutocomplete
-                    name="tags"
-                    multiple
-                    freeSolo
-                    InputLabelProps={{ shrink: true }}
-                    SelectProps={{
-                        native: false,
-                        MenuProps: {
-                            PaperProps: {
-                                sx: { maxHeight: 220 },
-                            },
-                        },
-                        sx: { textTransform: 'capitalize' },
-                    }}
-                    sx={{
-                        maxWidth: { md: 160 },
-                    }}
-                    onChange={(event, newValue) => setValue('tags', newValue)}
-                    options={users.map((option) => option.email)}
-                    renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                            <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                        ))
-                    }
-                    renderInput={(params) => <TextField label="Danh sách người dùng" {...params} />}
-                />
+                            options={userRole}
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
+                                ))
+                            }
+                            renderInput={(params) => <TextField label="Vai trò" {...params} />}
+                        />
+                    </Grid>
+                    <Grid item md={4} xs={12}>
+                        <RHFAutocomplete
+                            name="subjectId"
+                            multiple
+                            onChange={(event, newValue) => {
+                                setValue('subjectId', newValue);
+                                const suId = newValue.map((su) => su.id);
+                                setValue('suId', suId);
+                            }}
+
+                            options={userSubjects}
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
+                                ))
+                            }
+                            renderInput={(params) => <TextField label="Môn dạy" {...params} />}
+                        />
+                    </Grid>
+                </Grid>
+
             </Stack>
 
             <Button

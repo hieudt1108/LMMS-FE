@@ -97,7 +97,7 @@ export default function TypeDocsTableRow({ row, selected, onEditRow, onSelectRow
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Xóa cấp học"
+        title="Xóa loại tài liệu"
         content="Bạn có chắc chắn muốn xóa?"
         action={
           <Button variant="contained" color="error" onClick={onDeleteRow}>

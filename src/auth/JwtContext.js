@@ -4,7 +4,7 @@ import { createContext, useEffect, useReducer, useCallback } from 'react';
 import axios from '../utils/axios';
 //
 import { isValidToken, jwtDecode, setupLocalStorage } from './utils';
-import { clearLocalStorage, loginAuth, getUserById, getLocalStorage } from '../dataProvider/agent';
+import { clearLocalStorage, loginAuth, getUserById, getLocalStorage, setLocalStorage } from '../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +18,8 @@ const initialState = {
   isInitialized: false,
   isAuthenticated: false,
   user: null,
+  ROLES: null,
+  SUBJECTS: null,
 };
 
 const reducer = (state, action) => {
@@ -26,6 +28,8 @@ const reducer = (state, action) => {
       isInitialized: true,
       isAuthenticated: action.payload.isAuthenticated,
       user: action.payload.user,
+      ROLES: action.payload.user?.roles,
+      SUBJECTS: action.payload.user?.subjects,
     };
   }
   if (action.type === 'LOGIN') {
@@ -33,6 +37,8 @@ const reducer = (state, action) => {
       ...state,
       isAuthenticated: true,
       user: action.payload.user,
+      ROLES: action.payload.user?.roles,
+      SUBJECTS: action.payload.user?.subjects,
     };
   }
   if (action.type === 'REGISTER') {
@@ -79,6 +85,12 @@ export function AuthProvider({ children }) {
           payload: {
             isAuthenticated: true,
             user: { ...responseUser.data.data },
+            ROLES: {
+              ...responseUser.data.data.roles,
+            },
+            SUBJECTS: {
+              ...responseUser.data.data.subjects,
+            },
           },
         });
       } else {
@@ -119,11 +131,18 @@ export function AuthProvider({ children }) {
 
     const decoded = jwtDecode(accessToken);
     const responseUser = await getUserById(decoded.nameid);
+
     dispatch({
       type: 'LOGIN',
       payload: {
         user: {
           ...responseUser.data.data,
+        },
+        ROLES: {
+          ...responseUser.data.data.roles,
+        },
+        SUBJECTS: {
+          ...responseUser.data.data.subjects,
         },
       },
     });

@@ -13,6 +13,9 @@ import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail
 import FileInvitedItem from '../FileInvitedItem';
 import { getDocumentById, getProgramById, getSubjectById } from '../../../../dataProvider/agent';
 import { useSelector } from 'react-redux';
+import { dispatch } from '../../../../redux/store';
+import { createDocumentInitialRedux } from '../../../../redux/slices/folder';
+import { getProgramRedux } from '../../../../redux/slices/program';
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +39,9 @@ export default function FileDetailsDrawer({
   ...other
 }) {
   const { getOne } = useSelector((state) => state.document);
+  const { getProgram } = useSelector((state) => state.program);
+
+  console.log('data', getProgram);
 
   const hasShared = getOne && !!getOne.listShare.length;
 
@@ -54,20 +60,8 @@ export default function FileDetailsDrawer({
   const [programData, setProgramData] = useState([]);
 
   useEffect(() => {
-    fetchDocumentProgramSubject();
-  }, []);
-
-  async function fetchDocumentProgramSubject() {
-    try {
-      const resDocument = await getDocumentById(data.id);
-      const resSubject = await getSubjectById(resDocument.data.data.subjectId);
-      const resProgram = await getProgramById(resDocument.data.data.programId);
-      setSubjectData(resSubject.data.data);
-      setProgramData(resProgram.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+    dispatch(getProgramRedux(getOne.programId));
+  }, [getOne.programId]);
 
   const handleToggleProperties = () => {
     setToggleProperties(!toggleProperties);
@@ -124,9 +118,9 @@ export default function FileDetailsDrawer({
               {toggleCategories && (
                 <>
                   <Stack spacing={1.5}>
-                    <Row label="Chương trình học" value={programData.name} />
+                    {/*<Row label="Chương trình học" value={getProgram.name} />*/}
 
-                    <Row label="Môn học" value={subjectData.name} />
+                    {/*<Row label="Môn học" value={subjectData.name} />*/}
                   </Stack>
                 </>
               )}

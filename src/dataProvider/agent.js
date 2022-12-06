@@ -195,7 +195,7 @@ function getFolderByID(id) {
 
 // FILE
 function downloadFile(params) {
-  return getApi('/File/downloadFile', params);
+  return getApi('/File/downloadFile', { params }, { responseType: 'blob' });
 }
 
 function getStoreFolder(params) {
@@ -337,6 +337,12 @@ async function deleteApi(url) {
 const deleteProgram = (id) => {
   return deleteApi(`Program/${id}`);
 };
+
+// DOCUMENT
+const deleteDocument = (id) => {
+  return deleteApi(`Document/${id}`);
+};
+
 // USER
 const deleteUser = (id) => {
   return deleteApi(`User/${id}`);
@@ -399,6 +405,10 @@ const updateProgram = (id, payload) => {
 // CLASS
 const updateClass = (id, payload) => {
   return putApi(`Class/updateInfor/${id}`, payload);
+};
+
+const updateClassMember = (id, payload) => {
+  return putApi(`Class/updateMember/${id}`, payload);
 };
 
 // LEVEL
@@ -503,6 +513,7 @@ export {
   updateProgram,
   createProgram,
   getAllDocument,
+  deleteDocument,
   uploadFile,
   downloadFile,
   postFile,
@@ -535,4 +546,5 @@ export {
   addShareDoc,
   updateShareDocs,
   postCopyDocsToFolder,
+  updateClassMember,
 };

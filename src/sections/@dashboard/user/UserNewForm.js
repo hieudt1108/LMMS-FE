@@ -70,6 +70,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
       isTeacher: 0,
       roleID: [],
       tagsId: [],
+      tagsName: '',
       subjectId: [],
       suId: [],
       birthDate: currentUser?.birthDate || new Date(),
@@ -270,9 +271,11 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                   onChange={(event, newValue) => {
                     setValue('roleID', newValue);
                     const tagsId = newValue.map((tag) => tag.id);
+                    const tagsName = newValue.map((tag) => tag.label);
                     setValue('tagsId', tagsId);
+                    setValue('tagsName', tagsName);
                     setRole(tagsId);
-                    if (!getValues('tagsId').includes(11)) {
+                    if (!getValues('tagsName').includes('GIAOVIEN')) {
                       setValue('subjectId', []);
                     }
                   }}
@@ -295,7 +298,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                     const suId = newValue.map((su) => su.id);
                     setValue('suId', suId);
                   }}
-                  disabled={getValues('tagsId').includes(11) ? false : true}
+                  disabled={getValues('tagsName').includes('GIAOVIEN') ? false : true}
                   options={userSubjects}
                   renderTags={(value, getTagProps) =>
                     value.map((option, index) => (

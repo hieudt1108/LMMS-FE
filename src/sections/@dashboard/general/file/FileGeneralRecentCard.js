@@ -12,13 +12,24 @@ import { fDateTime } from '../../../../utils/formatTime';
 import Iconify from '../../../../components/iconify';
 import { useSnackbar } from '../../../../components/snackbar';
 import MenuPopover from '../../../../components/menu-popover';
-import FileThumbnail from '../../../../components/file-thumbnail';
+import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail';
 //
 import { FileDetailsDrawer, FileShareDialog } from '../../file';
 import DocumentPreview from '../../documents/DocumentPreview';
-import { downloadFile, getAllLevel, getDocumentById, getGradeById } from '../../../../dataProvider/agent';
+import {
+  deleteDocument,
+  deleteUser,
+  downloadFile,
+  getAllLevel,
+  getDocumentById,
+  getGradeById,
+  getLocalStorage,
+} from '../../../../dataProvider/agent';
 import { dispatch } from 'src/redux/store';
 import { getOneDocumentRedux } from 'src/redux/slices/document';
+import axios from 'axios';
+import { createFolderRedux } from '../../../../redux/slices/folder';
+import { useSelector } from 'react-redux';
 import ConfirmDialog from 'src/components/confirm-dialog';
 
 // ----------------------------------------------------------------------
@@ -29,8 +40,9 @@ import ConfirmDialog from 'src/components/confirm-dialog';
 //   onDelete: PropTypes.func,
 // };
 
-export default function FileGeneralRecentCard({ dataGeneralFolder, namePage, file, onDelete, sx, ...other }) {
+export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelete, sx, ...other }) {
   const { enqueueSnackbar } = useSnackbar();
+  const { getOne } = useSelector((state) => state.document);
 
   const { copy } = useCopyToClipboard();
 
@@ -271,7 +283,6 @@ export default function FileGeneralRecentCard({ dataGeneralFolder, namePage, fil
       </MenuPopover>
 
       <FileDetailsDrawer
-        namePage={namePage}
         data={file}
         favorite={false}
         onFavorite={handleFavorite}

@@ -3,13 +3,12 @@ import { useCallback, useRef } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Box, Stack, Paper, Avatar, Typography, CardHeader } from '@mui/material';
+import { Math } from '../../../../assets/Subjects/mathLogo.png';
 // utils
 import { fDateTime } from '../../../../utils/formatTime';
 // components
-import Label from '../../../../components/label';
-import Image from '../../../../components/image';
-import Iconify from '../../../../components/iconify';
-import Carousel, { CarouselArrows } from '../../../../components/carousel';
+
+import { SubjectImage } from '../../../../utils';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // ----------------------------------------------------------------------
@@ -70,6 +69,9 @@ function BookingItem({ item }) {
       <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
         <Stack direction="row" alignItems="center" spacing={2}>
           <Avatar alt={name} src={avatar} />
+          {/* <div>
+            <img src={Math} style={{ maxWidth: 50, maxHeight: 50 }} alt="Math" />
+          </div> */}
 
           <div>
             <Typography variant="subtitle2">{name}</Typography>

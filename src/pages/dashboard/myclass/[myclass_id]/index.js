@@ -23,7 +23,7 @@ import { useRouter } from 'next/router';
 // Dash_board
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 //API
-import { getMyClassGetOne } from '../../../../dataProvider/agent';
+import { getClassById } from '../../../../dataProvider/agent';
 
 MyClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -38,7 +38,7 @@ export default function MyClassDetail() {
   const [currentTab, setCurrentTab] = useState('description');
 
   async function fetchMyClass() {
-    const res = await getMyClassGetOne(myclass_id);
+    const res = await getClassById(myclass_id);
     if (res.status < 400) {
       setmyClass(res.data.data);
     } else {

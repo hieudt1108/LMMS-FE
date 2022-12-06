@@ -45,7 +45,7 @@ export default function Classes() {
 
   const [pagingClass, setPagingClass] = React.useState({
     pageIndex: 1,
-    pageSize: 8,
+    pageSize: '',
     searchByName: '',
     gradeId: '',
     programId: '',
@@ -53,19 +53,19 @@ export default function Classes() {
 
   const [grade, setGrade] = React.useState('');
   const [program, setProgram] = React.useState('');
-  const [allclasses, setallclasses] = useState([]);
+  // const [allclasses, setallclasses] = useState([]);
 
-  async function fethAllClasses() {
-    const res = await getAllClass({ pageIndex: 1, pageSize: 100 });
-    if (res.status < 400) {
-      setallclasses(res.data.data);
-    } else {
-      console.log(res.message);
-    }
-  }
-  useEffect(() => {
-    fethAllClasses();
-  }, []);
+  // async function fethAllClasses() {
+  //   const res = await getAllClass({ pageIndex: 1, pageSize: 100 });
+  //   if (res.status < 400) {
+  //     setallclasses(res.data.data);
+  //   } else {
+  //     console.log(res.message);
+  //   }
+  // }
+  // useEffect(() => {
+  //   fethAllClasses();
+  // }, []);
 
   useEffect(() => {
     dispatch(getClassesRedux(pagingClass));
@@ -73,6 +73,7 @@ export default function Classes() {
     dispatch(getGradesRedux({ pageIndex: 1, pageSize: 15 }));
   }, [dispatch]);
 
+  // const datalength = classes.headers.get('X-Pagination');
   const renderMenuItem = useCallback((item) => {
     if (item && item.length) {
       return item.map((obj, index) => (
@@ -226,8 +227,8 @@ export default function Classes() {
           <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
             <Pagination
               size="small"
-              count={allclasses?.length % 2 === 0 ? allclasses?.length / 8 : Math.ceil(allclasses?.length / 8)}
-              rowsperpage={pagingClass.pageSize}
+              count={classes?.length % 2 === 0 ? classes?.length / 8 : Math.ceil(classes?.length / 8)}
+              rowsperpage={pagingClass.pageSize == '8'}
               onChange={handlePageChange}
               color="primary"
             />

@@ -8,6 +8,8 @@ import History from '../Assets/Subjects/history.png';
 import Biology from '../Assets/Subjects/biology.png';
 import Geography from '../Assets/Subjects/geography.png';
 import MsOffice from '../Assets/Subjects/msoffice.png';
+import { Image } from '@mui/material';
+
 const SubjectImage = ({ subject, width, height }) => {
   switch (subject) {
     case 'Toán học': {

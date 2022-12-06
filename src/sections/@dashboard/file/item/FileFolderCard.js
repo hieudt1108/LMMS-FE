@@ -29,7 +29,7 @@ FileFolderCard.propTypes = {
   selected: PropTypes.bool,
 };
 
-export default function FileFolderCard({ folder, selected, onSelect, onDelete, sx, ...other }) {
+export default function FileFolderCard({ dataGeneralFolder, folder, selected, onSelect, onDelete, sx, ...other }) {
   const router = useRouter();
   const {
     query: { pid },
@@ -133,6 +133,11 @@ export default function FileFolderCard({ folder, selected, onSelect, onDelete, s
           maxWidth: 222,
           boxShadow: 0,
           bgcolor: 'background.default',
+          '&:hover': {
+            bgcolor: 'background.paper',
+            boxShadow: (theme) => theme.customShadows.z20,
+            cursor: 'pointer',
+          },
           border: (theme) => `solid 1px ${theme.palette.divider}`,
           ...((showCheckbox || selected) && {
             borderColor: 'transparent',
@@ -152,10 +157,11 @@ export default function FileFolderCard({ folder, selected, onSelect, onDelete, s
             onChange={handleFavorite}
             sx={{ p: 0.75 }}
           />
-
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+          {!dataGeneralFolder && (
+            <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton>
+          )}
         </Stack>
 
         {(showCheckbox || selected) && onSelect ? (
@@ -186,7 +192,6 @@ export default function FileFolderCard({ folder, selected, onSelect, onDelete, s
            <Box> {folder.totalFiles} files </Box> 
         </Stack> */}
       </Card>
-
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
         <MenuItem
           onClick={() => {

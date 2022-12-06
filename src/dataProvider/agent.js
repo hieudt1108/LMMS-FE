@@ -206,7 +206,6 @@ function getPermissionById(id) {
   return getApi(`/Permission/getOne/${id}`);
 }
 
-
 // POST API AREA ============================>
 async function postApi(url, payload, file) {
   const token = getLocalStorage('access_token');
@@ -311,6 +310,11 @@ const postFolder = (payload) => {
 // TYPE_DOCUMENT
 const postTypeDocument = (payload) => {
   return postApi('TypeDocument', payload);
+};
+
+// TYPE_DOCUMENT
+const postCopyDocsToFolder = (folderId, docsId) => {
+  return postApi(`Document/copyDocsToFolder?folderId=${folderId}&docsId=${docsId}`, {});
 };
 
 // DELETE API AREA ============================>
@@ -530,4 +534,5 @@ export {
   getMenu,
   addShareDoc,
   updateShareDocs,
+  postCopyDocsToFolder,
 };

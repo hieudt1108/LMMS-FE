@@ -1,16 +1,18 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 // utils
 //
-import {dispatch} from '../store';
+import { dispatch } from '../store';
 import {
   getAllProgram,
   getAllSubject,
   getAllTypeDocument,
   getFolderByID,
   getStoreFolder,
+  postCopyDocsToFolder,
   postDocument,
   postFolder,
 } from 'src/dataProvider/agent';
+import { AxiosError } from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -96,6 +98,16 @@ const slice = createSlice({
         folderId: folderId,
       };
     },
+
+    removeErrorSuccess(state, action) {
+      state.error = action.payload;
+    },
+
+    postCopyDocsToFolderSuccess(state, action) {
+      console.log('postCopyDocsToFolderSuccess', action);
+      state.isLoading = false;
+      state.storeFolder.listDocuments = [...state.storeFolder.listDocuments, action.payload];
+    },
   },
 });
 
@@ -139,14 +151,16 @@ export function createStoreFolderRedux(payload) {
       }
       dispatch(slice.actions.startLoading());
       const response = await postFolder(payload);
-      console.log('postFolder', response);
-      dispatch(slice.actions.createStoreFolderSuccess(response.data.data));
+      console.log('postFolder', response, response instanceof Error);
+      if (response instanceof Error) {
+        return dispatch(slice.actions.hasError(response.response.data.title));
+      }
+      dispatch(slice.actions.createFolderSuccess(response.data.data));
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      dispatch(slice.actions.hasError(error.message));
     }
   };
 }
-
 
 export function createStoreDocumentInitialRedux(folderId) {
   return async () => {
@@ -181,6 +195,32 @@ export function uploadStoreDocumentRedux(data) {
       } else {
         console.log('Lỗi upload tài liệu', response.data.title);
       }
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function copyDocsToFolderRedux(folderId, docsId) {
+  return async () => {
+    try {
+      if (!folderId || !docsId) {
+        return dispatch(slice.actions.hasError());
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await postCopyDocsToFolder(folderId, docsId);
+      console.log('copyDocsToFolderRedux', response);
+      dispatch(slice.actions.postCopyDocsToFolderSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function removeError(mess) {
+  return async () => {
+    try {
+      dispatch(slice.actions.removeErrorSuccess(mess));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

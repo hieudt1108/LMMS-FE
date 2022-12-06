@@ -1,34 +1,34 @@
 import PropTypes from 'prop-types';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 // @mui
-import {Box, Button, Checkbox, Divider, Drawer, IconButton, List, Stack, Typography,} from '@mui/material';
+import { Box, Button, Checkbox, Divider, Drawer, IconButton, List, Stack, Typography } from '@mui/material';
 // utils
-import {fData} from '../../../../utils/formatNumber';
-import {fDateTime} from '../../../../utils/formatTime';
+import { fData } from '../../../../utils/formatNumber';
+import { fDateTime } from '../../../../utils/formatTime';
 // components
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
-import FileThumbnail, {fileFormat} from '../../../../components/file-thumbnail';
+import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail';
 //
 import FileInvitedItem from '../FileInvitedItem';
-import {getDocumentById, getProgramById, getSubjectById} from '../../../../dataProvider/agent';
-import {useSelector} from "react-redux";
+import { getDocumentById, getProgramById, getSubjectById } from '../../../../dataProvider/agent';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
-FileDetailsDrawer.propTypes = {
-  open: PropTypes.bool,
-  item: PropTypes.object,
-  onClose: PropTypes.func,
-  onDelete: PropTypes.func,
-  favorited: PropTypes.bool,
-  onFavorite: PropTypes.func,
-};
+// FileDetailsDrawer.propTypes = {
+//   open: PropTypes.bool,
+//   item: PropTypes.object,
+//   onClose: PropTypes.func,
+//   onDelete: PropTypes.func,
+//   favorite: PropTypes.bool,
+//   onFavorite: PropTypes.func,
+// };
 
 export default function FileDetailsDrawer({
   data,
   open,
-  favorited,
+  favorite,
   //
   onFavorite,
   onClose,
@@ -45,7 +45,6 @@ export default function FileDetailsDrawer({
 
   const [inviteEmail, setInviteEmail] = useState('');
 
-
   const [toggleProperties, setToggleProperties] = useState(true);
 
   const [toggleCategories, setToggleCategories] = useState(true);
@@ -53,7 +52,6 @@ export default function FileDetailsDrawer({
   const [subjectData, setSubjectData] = useState([]);
 
   const [programData, setProgramData] = useState([]);
-
 
   useEffect(() => {
     fetchDocumentProgramSubject();
@@ -71,7 +69,6 @@ export default function FileDetailsDrawer({
     }
   }
 
-
   const handleToggleProperties = () => {
     setToggleProperties(!toggleProperties);
   };
@@ -79,9 +76,6 @@ export default function FileDetailsDrawer({
   const handleToggleCategories = () => {
     setToggleCategories(!toggleCategories);
   };
-
-
-
 
   return (
     <>
@@ -105,7 +99,7 @@ export default function FileDetailsDrawer({
               color="warning"
               icon={<Iconify icon="eva:star-outline" />}
               checkedIcon={<Iconify icon="eva:star-fill" />}
-              checked={favorited}
+              checked={favorite}
               onChange={onFavorite}
               sx={{ p: 0.75 }}
             />
@@ -164,26 +158,27 @@ export default function FileDetailsDrawer({
           {hasShared && (
             <List disablePadding sx={{ pl: 2.5, pr: 1 }}>
               {getOne.listShare.map(({ user, permission }, index) => (
-                  <FileInvitedItem key={user.id} user={user} permissionDefault={permission} index={index} />
+                <FileInvitedItem key={user.id} user={user} permissionDefault={permission} index={index} />
               ))}
             </List>
           )}
         </Scrollbar>
 
         <Box sx={{ p: 2.5 }}>
-          <Button
-            fullWidth
-            variant="soft"
-            color="error"
-            size="large"
-            startIcon={<Iconify icon="eva:arrow-back-fill" />}
-            onClick={onDelete}
-          >
-            Thoát
-          </Button>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Button
+              fullWidth
+              variant="soft"
+              color="error"
+              size="large"
+              startIcon={<Iconify icon="eva:arrow-back-fill" />}
+              onClick={onClose}
+            >
+              Thoát
+            </Button>
+          </Stack>
         </Box>
       </Drawer>
-
     </>
   );
 }

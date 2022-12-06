@@ -403,6 +403,10 @@ const updateClass = (id, payload) => {
   return putApi(`Class/updateInfor/${id}`, payload);
 };
 
+const updateClassMember = (id, payload) => {
+  return putApi(`Class/updateMember/${id}`, payload);
+};
+
 // LEVEL
 const updateLevel = (id, payload) => {
   return putApi(`Level/${id}`, payload);
@@ -537,4 +541,5 @@ export {
   getMenu,
   addShareDoc,
   updateShareDocs,
+  updateClassMember,
 };

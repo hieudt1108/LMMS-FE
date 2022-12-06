@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from '../../utils/axios';
 //
 import { dispatch } from '../store';
-import { getAllClass, getAllProgram } from 'src/dataProvider/agent';
+import {getAllClass, getAllProgram, getProgramById} from 'src/dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ const initialState = {
   isLoading: false,
   error: null,
   programs: [],
+  program: '',
 };
 
 const slice = createSlice({
@@ -35,6 +36,10 @@ const slice = createSlice({
       state.isLoading = false;
       state.programs = action.payload;
     },
+    getProgramSuccess(state, action) {
+      state.isLoading = false;
+      state.program = action.payload;
+    },
   },
 });
 
@@ -49,6 +54,18 @@ export function getProgramsRedux(params) {
     try {
       const response = await getAllProgram(params);
       dispatch(slice.actions.getProgramsSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getProgramRedux(id) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await getProgramById(id);
+      dispatch(slice.actions.getProgramSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

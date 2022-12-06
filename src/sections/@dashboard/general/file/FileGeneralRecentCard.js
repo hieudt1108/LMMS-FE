@@ -28,6 +28,8 @@ import {
 import {dispatch} from 'src/redux/store';
 import {getOneDocumentRedux} from 'src/redux/slices/document';
 import axios from "axios";
+import {createFolderRedux} from "../../../../redux/slices/folder";
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +41,8 @@ FileGeneralRecentCard.propTypes = {
 
 export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
 
+    const { getOne } = useSelector((state) => state.document);
+    console.log('getone',getOne)
 
     const {enqueueSnackbar} = useSnackbar();
 
@@ -54,20 +58,6 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
 
     const [openDetails, setOpenDetails] = useState(false);
 
-    const [documentData, setDocumentData] = useState([]);
-
-    useEffect(() => {
-        fetchDocument();
-    }, []);
-
-    async function fetchDocument() {
-        const res = await getDocumentById(file.id);
-        if (res.status < 400) {
-            setDocumentData(res.data.data);
-        } else {
-            console.log('error');
-        }
-    }
 
     const handleFavorite = () => {
         setFavorited(!favorited);
@@ -92,6 +82,9 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
     };
 
     const handleOpenPopover = (event) => {
+        dispatch(
+            getOneDocumentRedux(file.id)
+        );
         setOpenPopover(event.currentTarget);
     };
 
@@ -235,50 +228,50 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
             </Stack>
 
             <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{width: 160}}>
-                {documentData.typeFile == 'image/jpeg'  && (
+                {getOne.typeFile == 'image/jpeg'  && (
                     <MenuItem
                         onClick={() => {
-                            handlePreviewFile(documentData.urlDocument);
+                            handlePreviewFile(getOne.urlDocument);
                         }}
                     >
                         <Iconify icon="eva:link-2-fill"/>
                         Xem trước
                     </MenuItem>
                 )}
-                { documentData.typeFile == 'image/png' && (
+                { getOne.typeFile == 'image/png' && (
                     <MenuItem
                         onClick={() => {
-                            handlePreviewFile(documentData.urlDocument);
+                            handlePreviewFile(getOne.urlDocument);
                         }}
                     >
                         <Iconify icon="eva:link-2-fill"/>
                         Xem trước
                     </MenuItem>
                 )}
-                { documentData.typeFile == 'application/pdf' && (
+                { getOne.typeFile == 'application/pdf' && (
                     <MenuItem
                         onClick={() => {
-                            handlePreviewFile(documentData.urlDocument);
+                            handlePreviewFile(getOne.urlDocument);
                         }}
                     >
                         <Iconify icon="eva:link-2-fill"/>
                         Xem trước
                     </MenuItem>
                 )}
-                { documentData.typeFile == 'video/mp4' && (
+                { getOne.typeFile == 'video/mp4' && (
                     <MenuItem
                         onClick={() => {
-                            handlePreviewFile(documentData.urlDocument);
+                            handlePreviewFile(getOne.urlDocument);
                         }}
                     >
                         <Iconify icon="eva:link-2-fill"/>
                         Xem trước
                     </MenuItem>
                 )}
-                { documentData.typeFile == 'audio/mpeg' && (
+                { getOne.typeFile == 'audio/mpeg' && (
                     <MenuItem
                         onClick={() => {
-                            handlePreviewFile(documentData.urlDocument);
+                            handlePreviewFile(getOne.urlDocument);
                         }}
                     >
                         <Iconify icon="eva:link-2-fill"/>
@@ -290,7 +283,7 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
                 <MenuItem
                     onClick={() => {
                         handleClosePopover();
-                        handleDownloadFile('http://lmms.site:9090/api/File/downloadFile?',{fileName: documentData.urlDocument, contentType: documentData.typeFile})
+                        handleDownloadFile('http://lmms.site:9090/api/File/downloadFile?',{fileName: getOne.urlDocument, contentType: getOne.typeFile})
                     }}
                 >
                     <Iconify icon="eva:download-outline"/>

@@ -96,12 +96,17 @@ export default function MyClassDetail() {
         {currentTab === 'reviews' ? (
           <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
             <Button onClick={handleOnClickSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-              Add User
+              Thêm người dùng
             </Button>
             <div></div>
           </Box>
         ) : (
-          ''
+          <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button onClick={handleOnClickSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+              Thêm môn học
+            </Button>
+            <div></div>
+          </Box>
         )}
 
         <Card>

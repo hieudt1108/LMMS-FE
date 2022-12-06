@@ -25,8 +25,8 @@ export default function FileInvitedItem({ index }) {
     setOpenPopover(null);
   };
 
-  const handleChangePermission = (permissionId) => {
-    dispatch(handleChangePermissionRedux(getOne, user, index, permissionId));
+  const handleChangePermission = (permission) => {
+    dispatch(handleChangePermissionRedux(getOne, user, index, permission));
   };
 
   return (
@@ -108,7 +108,7 @@ export default function FileInvitedItem({ index }) {
 
           <Divider sx={{ borderStyle: 'dashed' }} />
 
-          {/* <MenuItem
+          <MenuItem
             onClick={() => {
               handleClosePopover();
               handleChangePermission(2);
@@ -117,7 +117,7 @@ export default function FileInvitedItem({ index }) {
           >
             <Iconify icon="eva:trash-2-outline" />
             Remove
-          </MenuItem> */}
+          </MenuItem>
         </>
       </MenuPopover>
     </>

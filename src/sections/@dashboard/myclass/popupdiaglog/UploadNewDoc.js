@@ -8,26 +8,22 @@ import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { Grid, Card, Stack, Typography } from '@mui/material';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
-//components
-import { useSnackbar } from '../../../components/snackbar';
-import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload } from '../../../components/hook-form';
+import { useSnackbar } from '../../../../components/snackbar';
+import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload } from '../../../../components/hook-form';
 // ----------------------------------------------------------------------
-import { postFile } from '../../../dataProvider/agent';
+import { postFile } from '../../../../dataProvider/agent';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { Upload } from '../../../components/upload';
-import Iconify from 'src/components/iconify';
+import { Upload } from '../../../../components/upload';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 import {
   createStoreDocumentInitialRedux,
   getStoreFolderRedux,
   uploadStoreDocumentRedux,
-} from '../../../redux/slices/storeFolder';
+} from '../../../../redux/slices/storeFolder';
 
-// ----------------------------------------------------------------------
-
-export default function StoreFolderNewPostForm() {
+export default function UploadNewDoc({ slotId }) {
+  console.log('slotId: ', slotId);
   const {
     query: { storeFolder_id: storeFolderId },
     push,

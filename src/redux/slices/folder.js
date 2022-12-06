@@ -15,6 +15,7 @@ import {
 import { PATH_DASHBOARD } from '../../routes/paths';
 import { useSnackbar } from '../../components/snackbar';
 import { useRouter } from 'next/router';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -29,22 +30,7 @@ const initialState = {
     listDocuments: [],
   },
   newDocument: {
-    data: {
-      code: '',
-      name: '',
-      description: '',
-      file: '',
-      programId: '',
-      subjectId: '',
-      typeDocumentId: '',
-      urlDocument: '',
-      size: 0,
-      TypeFile: '',
-      status: true,
-      folderId: 1,
-      shareUser: [],
-      shareClass: [],
-    },
+    data: [],
     init: {
       typeDocuments: [],
       programs: [],
@@ -156,18 +142,18 @@ export function createDocumentInitialRedux(folderId) {
   };
 }
 
-export function uploadDocumentRedux(data) {
-  return async () => {
-    try {
-      dispatch(slice.actions.startLoading());
-      const response = await postDocument(data);
-      if (response.status < 400) {
-        console.log('uploadDocumentRedux', response);
-      } else {
-        console.log('Lỗi upload tài liệu', response.data.title);
-      }
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
+// export function uploadDocumentRedux(data) {
+//   return async () => {
+//     try {
+//       dispatch(slice.actions.startLoading());
+//       const response = await postDocument(data);
+//       if (response.status < 400) {
+//         console.log('uploadDocumentRedux', response);
+//       } else {
+//         console.log('Lỗi upload tài liệu', response.data.title);
+//       }
+//     } catch (error) {
+//       dispatch(slice.actions.hasError(error));
+//     }
+//   };
+// }

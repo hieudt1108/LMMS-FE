@@ -4,31 +4,44 @@ import PropTypes from 'prop-types';
 import { Box, Card, Button, Typography, Stack, Divider, MenuItem } from '@mui/material';
 // components
 import Iconify from '../../../../components/iconify';
-import MenuPopover from '../../../../components/menu-popover';
-import DocumentPreview from '../../documents/DocumentPreview';
-// DATE
+// import MenuPopover from '../../../../components/menu-popover';
+// import DocumentPreview from '../../documents/DocumentPreview';
+
+// UPLOAD STORAGE
+import UploadDocToSlot from '../popupdiaglog/UploadDocToSlot'; // DATE
 import { format } from 'date-fns';
+import { identifier } from 'stylis';
 
 export default function SysllabusSubject({ data, docs }) {
   const { createBy, createDate, id, isDeleted, name, updateBy, updateDate } = data;
-  const [openPreview, setOpenPreview] = useState(false);
-  const [openPopover, setOpenPopover] = useState(null);
+  // const [openPreview, setOpenPreview] = useState(false);
+  // const [openPopover, setOpenPopover] = useState(null);
 
-  const handleOpenPopover = (event) => {
-    setOpenPopover(event.currentTarget);
+  // const handleOpenPopover = (event) => {
+  //   setOpenPopover(event.currentTarget);
+  // };
+
+  // const handleClosePopover = () => {
+  //   setOpenPopover(null);
+  // };
+
+  const [openFrom, setOpenFrom] = useState(false);
+
+  const handleOpenFrom = () => {
+    console.log('slotID:', id);
+    setOpenFrom(true);
   };
 
-  const handleClosePopover = () => {
-    setOpenPopover(null);
+  const handleCloseFrom = () => {
+    setOpenFrom(false);
   };
+  // const handleOpenPreview = () => {
+  //   setOpenPreview(true);
+  // };
 
-  const handleOpenPreview = () => {
-    setOpenPreview(true);
-  };
-
-  const handleClosePreview = () => {
-    setOpenPreview(false);
-  };
+  // const handleClosePreview = () => {
+  //   setOpenPreview(false);
+  // };
 
   return (
     <>
@@ -38,10 +51,12 @@ export default function SysllabusSubject({ data, docs }) {
             {name}
           </Typography>
 
-          <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button size="small" onClick={handleOpenFrom} startIcon={<Iconify icon="eva:plus-fill" />}>
             Thêm tài liệu
           </Button>
         </Stack>
+        {/* Upload doc to slot */}
+        <UploadDocToSlot slotId={id} open={openFrom} onClose={handleCloseFrom} />
 
         <Stack spacing={3}>
           <Stack key={''} spacing={1}>
@@ -56,15 +71,7 @@ export default function SysllabusSubject({ data, docs }) {
               doc?.slotId === id ? (
                 <Box variant="body2" sx={{ display: 'flex' }}>
                   <Box component="img" src="/assets/icons/files/ic_document.svg" sx={{ ml: 1 }} />
-                  <Button
-                    variant="text"
-                    onClick={() => {
-                      handleClosePopover();
-                      handleOpenPreview();
-                    }}
-                  >
-                    {doc.name}
-                  </Button>
+                  <Button variant="text">{doc.name}</Button>
                 </Box>
               ) : (
                 ''
@@ -83,7 +90,7 @@ export default function SysllabusSubject({ data, docs }) {
           </Stack>
         </Stack>
       </Card>
-      <DocumentPreview open={openPreview} onClose={handleClosePreview} />
+      {/* <DocumentPreview open={openPreview} onClose={handleClosePreview} /> */}
     </>
   );
 }

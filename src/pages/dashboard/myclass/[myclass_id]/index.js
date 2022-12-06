@@ -23,7 +23,7 @@ import { useRouter } from 'next/router';
 // Dash_board
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 //API
-import { getMyClassGetOne } from '../../../../dataProvider/agent';
+import { getClassById } from '../../../../dataProvider/agent';
 
 MyClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -38,7 +38,7 @@ export default function MyClassDetail() {
   const [currentTab, setCurrentTab] = useState('description');
 
   async function fetchMyClass() {
-    const res = await getMyClassGetOne(myclass_id);
+    const res = await getClassById(myclass_id);
     if (res.status < 400) {
       setmyClass(res.data.data);
     } else {
@@ -96,12 +96,17 @@ export default function MyClassDetail() {
         {currentTab === 'reviews' ? (
           <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
             <Button onClick={handleOnClickSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-              Add User
+              Thêm người dùng
             </Button>
             <div></div>
           </Box>
         ) : (
-          ''
+          <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button onClick={handleOnClickSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+              Thêm môn học
+            </Button>
+            <div></div>
+          </Box>
         )}
 
         <Card>

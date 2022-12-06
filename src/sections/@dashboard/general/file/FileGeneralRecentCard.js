@@ -12,13 +12,22 @@ import {fDateTime} from '../../../../utils/formatTime';
 import Iconify from '../../../../components/iconify';
 import {useSnackbar} from '../../../../components/snackbar';
 import MenuPopover from '../../../../components/menu-popover';
-import FileThumbnail from '../../../../components/file-thumbnail';
+import FileThumbnail, {fileFormat} from '../../../../components/file-thumbnail';
 //
 import {FileDetailsDrawer, FileShareDialog} from '../../file';
 import DocumentPreview from '../../documents/DocumentPreview';
-import {downloadFile, getAllLevel, getDocumentById, getGradeById} from '../../../../dataProvider/agent';
+import {
+    deleteDocument,
+    deleteUser,
+    downloadFile,
+    getAllLevel,
+    getDocumentById,
+    getGradeById,
+    getLocalStorage
+} from '../../../../dataProvider/agent';
 import {dispatch} from 'src/redux/store';
 import {getOneDocumentRedux} from 'src/redux/slices/document';
+import axios from "axios";
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +38,8 @@ FileGeneralRecentCard.propTypes = {
 };
 
 export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
-    console.log('FileGeneralRecentCard');
+
+
     const {enqueueSnackbar} = useSnackbar();
 
     const {copy} = useCopyToClipboard();
@@ -53,7 +63,6 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
     async function fetchDocument() {
         const res = await getDocumentById(file.id);
         if (res.status < 400) {
-            console.log('download',res);
             setDocumentData(res.data.data);
         } else {
             console.log('error');
@@ -90,32 +99,45 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
         setOpenPopover(null);
     };
 
-    const handleDownloadFile = async (file, type) => {
+    const handleDownloadFile = async (url,params) => {
         try {
-            console.log('filename',file)
-            console.log('typefile',type)
-            const res = await downloadFile({fileName: file, contentType: type});
-            console.log('resdata',res.data)
-            const url = URL.createObjectURL(new Blob([res.data]));
-            console.log('url',url)
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", file);
-            document.body.appendChild(link);
-            link.click();
+            const token = getLocalStorage("access_token");
+            axios({
+                url: `${url}fileName=${params.fileName}&contentType=${params.contentType}`, //your url
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                method: 'GET',
+                responseType: 'blob', // important
+            }).then((response) => {
+                if(response.status < 400){
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', params.fileName); //or any other extension
+                    document.body.appendChild(link);
+                    link.click();
+                }else{
+                    enqueueSnackbar('Thư mục không còn tồn tại', { variant: 'error' });
+                }
+            });
         } catch (error) {
-            console.log(error);
+            enqueueSnackbar('Thư mục không còn tồn tại', { variant: 'error' });
         }
     };
 
-    const [openPreview, setOpenPreview] = useState(false);
-
-    const handleOpenPreview = () => {
-        setOpenPreview(true);
+    const handleDeleteDocument = async (id) => {
+        const res = await deleteDocument(id);
+        if (res.status < 400) {
+            enqueueSnackbar('Xóa tài liệu thành công');
+        } else {
+            enqueueSnackbar('Xóa tài liệu thất bại', { variant: 'error' });
+        }
     };
 
-    const handleClosePreview = () => {
-        setOpenPreview(false);
+
+    const handlePreviewFile = (urlDocument) => {
+        window.open(`http://lmms.site:8000/${urlDocument}`, '_blank', 'noopener,noreferrer');
     };
 
     return (
@@ -141,7 +163,7 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
                 }}
                 {...other}
             >
-                <FileThumbnail file={file.typeFile}/>
+                <FileThumbnail file={file.typeFile} sx={{ width: 50, height: 50 }} imgSx={{ borderRadius: 1 }} />
 
                 <Stack
                     onClick={handleOpenDetails}
@@ -161,11 +183,8 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
                         alignItems="center"
                         sx={{typography: 'caption', color: 'text.disabled', mt: 0.5}}
                     >
-                        <Box> {fData(file.size)} </Box>
+                        <Box> {fileFormat(file.typeFile)} </Box>
 
-                        <Box sx={{width: 2, height: 2, borderRadius: '50%', bgcolor: 'currentColor'}}/>
-
-                        <Box> {fDateTime(file.dateModified)} </Box>
                     </Stack>
                 </Stack>
 
@@ -216,19 +235,62 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
             </Stack>
 
             <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{width: 160}}>
-                <MenuItem
-                    onClick={() => {
-                        handleOpenPreview();
-                    }}
-                >
-                    <Iconify icon="eva:link-2-fill"/>
-                    Xem trước
-                </MenuItem>
-                <DocumentPreview document={file.id} open={openPreview} onClose={handleClosePreview}/>
+                {documentData.typeFile == 'image/jpeg'  && (
+                    <MenuItem
+                        onClick={() => {
+                            handlePreviewFile(documentData.urlDocument);
+                        }}
+                    >
+                        <Iconify icon="eva:link-2-fill"/>
+                        Xem trước
+                    </MenuItem>
+                )}
+                { documentData.typeFile == 'image/png' && (
+                    <MenuItem
+                        onClick={() => {
+                            handlePreviewFile(documentData.urlDocument);
+                        }}
+                    >
+                        <Iconify icon="eva:link-2-fill"/>
+                        Xem trước
+                    </MenuItem>
+                )}
+                { documentData.typeFile == 'application/pdf' && (
+                    <MenuItem
+                        onClick={() => {
+                            handlePreviewFile(documentData.urlDocument);
+                        }}
+                    >
+                        <Iconify icon="eva:link-2-fill"/>
+                        Xem trước
+                    </MenuItem>
+                )}
+                { documentData.typeFile == 'video/mp4' && (
+                    <MenuItem
+                        onClick={() => {
+                            handlePreviewFile(documentData.urlDocument);
+                        }}
+                    >
+                        <Iconify icon="eva:link-2-fill"/>
+                        Xem trước
+                    </MenuItem>
+                )}
+                { documentData.typeFile == 'audio/mpeg' && (
+                    <MenuItem
+                        onClick={() => {
+                            handlePreviewFile(documentData.urlDocument);
+                        }}
+                    >
+                        <Iconify icon="eva:link-2-fill"/>
+                        Xem trước
+                    </MenuItem>
+                )}
+
+
                 <MenuItem
                     onClick={() => {
                         handleClosePopover();
-                        handleDownloadFile(documentData.urlDocument,documentData.typeFile)
+                        handleDownloadFile('http://lmms.site:9090/api/File/downloadFile?',{fileName: documentData.urlDocument, contentType: documentData.typeFile})
                     }}
                 >
                     <Iconify icon="eva:download-outline"/>
@@ -250,7 +312,7 @@ export default function FileGeneralRecentCard({file, onDelete, sx, ...other}) {
                 <MenuItem
                     onClick={() => {
                         handleClosePopover();
-                        onDelete();
+                        handleDeleteDocument(file.id)
                     }}
                     sx={{color: 'error.main'}}
                 >

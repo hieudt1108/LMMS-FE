@@ -62,6 +62,7 @@ export default function UploadMyDocumentDialog({ open, onClose}) {
       </DialogActions>
 
       <Divider />
+        <Container maxWidth={'xl'}>
 
               <Tabs
                   value={currentTab}
@@ -92,6 +93,7 @@ export default function UploadMyDocumentDialog({ open, onClose}) {
               )}
 
 
+        </Container>
     </Dialog>
   );
 }

@@ -195,7 +195,7 @@ function getFolderByID(id) {
 
 // FILE
 function downloadFile(params) {
-  return getApi('/File/downloadFile', params);
+  return getApi('/File/downloadFile', { params }, { responseType: 'blob' });
 }
 
 function getStoreFolder(params) {
@@ -333,6 +333,12 @@ async function deleteApi(url) {
 const deleteProgram = (id) => {
   return deleteApi(`Program/${id}`);
 };
+
+// DOCUMENT
+const deleteDocument = (id) => {
+  return deleteApi(`Document/${id}`);
+};
+
 // USER
 const deleteUser = (id) => {
   return deleteApi(`User/${id}`);
@@ -499,6 +505,7 @@ export {
   updateProgram,
   createProgram,
   getAllDocument,
+  deleteDocument,
   uploadFile,
   downloadFile,
   postFile,

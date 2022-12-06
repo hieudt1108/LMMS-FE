@@ -61,34 +61,19 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
       </DialogActions>
 
       <Divider />
+      <Container maxWidth={'xl'}>
+        <Tabs
+          value={currentTab}
+          onChange={(event, newValue) => setCurrentTab(newValue)}
+          sx={{ px: 3, bgcolor: 'background.neutral' }}
+        >
+          {TABS.map((tab) => (
+            <Tab key={tab.id} value={tab.value} label={tab.label} />
+          ))}
+        </Tabs>
 
-      <Tabs
-        value={currentTab}
-        onChange={(event, newValue) => setCurrentTab(newValue)}
-        sx={{ px: 3, bgcolor: 'background.neutral' }}
-      >
-        {TABS.map((tab) => (
-          <Tab key={tab.id} value={tab.value} label={tab.label} />
-        ))}
-      </Tabs>
-
-      <Divider />
-
-      {TABS.map(
-        (tab) =>
-          tab.value === currentTab && (
-            <Box
-              key={tab.id}
-              sx={{
-                ...(currentTab === 'description' && {
-                  p: 3,
-                }),
-              }}
-            >
-              {tab.component}
-            </Box>
-          )
-      )}
+        <Divider />
+      </Container>
     </Dialog>
   );
 }

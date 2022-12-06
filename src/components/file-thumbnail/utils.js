@@ -73,25 +73,46 @@ export function fileThumb(fileUrl) {
     case 'txt':
       thumb = iconUrl('ic_txt');
       break;
+    case 'text/plain':
+      thumb = iconUrl('ic_txt');
+      break;
     case 'zip':
       thumb = iconUrl('ic_zip');
       break;
     case 'audio':
       thumb = iconUrl('ic_audio');
       break;
+    case 'audio/mpeg':
+      thumb = iconUrl('ic_audio');
+      break;
     case 'video':
+      thumb = iconUrl('ic_video');
+      break;
+    case 'video/mp4':
       thumb = iconUrl('ic_video');
       break;
     case 'word':
       thumb = iconUrl('ic_word');
       break;
+    case 'document':
+      thumb = iconUrl('ic_word');
+      break;
     case 'excel':
+      thumb = iconUrl('ic_excel');
+      break;
+    case 'sheet':
+      thumb = iconUrl('ic_excel');
+      break;
+    case 'ms-excel':
       thumb = iconUrl('ic_excel');
       break;
     case 'powerpoint':
       thumb = iconUrl('ic_power_point');
       break;
     case 'pdf':
+      thumb = iconUrl('ic_pdf');
+      break;
+    case 'application/pdf':
       thumb = iconUrl('ic_pdf');
       break;
     case 'photoshop':
@@ -101,6 +122,12 @@ export function fileThumb(fileUrl) {
       thumb = iconUrl('ic_ai');
       break;
     case 'image':
+      thumb = iconUrl('ic_img');
+      break;
+    case 'image/png':
+      thumb = iconUrl('ic_img');
+      break;
+    case 'image/jpeg':
       thumb = iconUrl('ic_img');
       break;
     default:

@@ -74,7 +74,7 @@ export default function FileNewUserDialog({
           <TextField fullWidth label="Folder name" value={folderName} onChange={onChangeFolderName} sx={{ mb: 3 }} />
         )}
 
-        <Upload multiple hasDefault defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportManyUser.xlsx'} files={files} onDrop={handleDrop} onRemove={handleRemoveFile} />
+        <Upload multiple hasDefault defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportManyUser.xlsx'} files={files} onDrop={handleDrop} onRemove={handleRemoveFile} onDelete={handleRemoveFile} />
 
       </DialogContent>
 

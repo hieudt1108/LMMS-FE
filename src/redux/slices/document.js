@@ -70,7 +70,7 @@ const slice = createSlice({
     handleSearchUserSuccess(state, action) {
       console.log('handleSearchUserSuccess', action);
       state.isLoading = false;
-      state.getOne.initShare = [{ user: action.payload, permissionId: 0 }];
+      state.getOne.initShare = [{ user: action.payload, permission: 0 }];
     },
 
     handleSendInviteSuccess(state, action) {
@@ -78,18 +78,26 @@ const slice = createSlice({
       state.isLoading = false;
       state.getOne.listShare = [
         ...state.getOne.listShare,
-        { user: action.payload[0].user, permission: action.payload[0].permissionId },
+        { user: action.payload[0].user, permission: action.payload[0].permission },
       ];
     },
     handleChangePermissionSuccess(state, action) {
-      const { user, permissionId } = action.payload[0];
-      console.log('handleChangePermissionSuccess', user, permissionId, action.payload.index);
+      const { user, permission } = action.payload[0];
+      console.log('handleChangePermissionSuccess', user, permission, action.payload.index);
       state.isLoading = false;
-      state.getOne.listShare = [
-        ...state.getOne.listShare.slice(0, action.payload.index),
-        { user, permissionId },
-        ...state.getOne.listShare.slice(action.payload.index + 1),
-      ];
+      // delete user in list share if permission ==2
+      if (permission === 2) {
+        state.getOne.listShare = [
+          ...state.getOne.listShare.slice(0, action.payload.index),
+          ...state.getOne.listShare.slice(action.payload.index + 1),
+        ];
+      } else {
+        state.getOne.listShare = [
+          ...state.getOne.listShare.slice(0, action.payload.index),
+          { user, permission },
+          ...state.getOne.listShare.slice(action.payload.index + 1),
+        ];
+      }
       // state.getOne.listShare.map((item, indexListShare) => {
       //   if (action.payload.index !== indexListShare) {
       //     // This isn't the item we care about - keep it as-is
@@ -100,7 +108,7 @@ const slice = createSlice({
       //   return {
       //     ...item,
       //     user,
-      //     permissionId,
+      //     permission,
       //   };
       // });
     },
@@ -156,15 +164,15 @@ export function handleSendInviteRedux(getOne) {
   };
 }
 
-export function handleChangePermissionRedux(getOne, user, index, permissionId) {
+export function handleChangePermissionRedux(getOne, user, index, permission) {
   return async () => {
     try {
-      console.log('handleChangePermissionRedux', getOne, user, index, permissionId);
+      console.log('handleChangePermissionRedux', getOne, user, index, permission);
       if (!getOne) {
         return;
       }
       dispatch(slice.actions.startLoading());
-      const response = await updateShareDocs(getOne.id, [{ user, permissionId }]);
+      const response = await updateShareDocs(getOne.id, [{ user, permission }]);
       dispatch(slice.actions.handleChangePermissionSuccess({ ...response.data.data, index }));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

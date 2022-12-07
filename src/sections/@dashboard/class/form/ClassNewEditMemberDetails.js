@@ -1,7 +1,7 @@
 import sum from 'lodash/sum';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 // form
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFormContext, useFieldArray, useForm, FormProvider } from 'react-hook-form';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsersByRoleIdRedux, getUsersRedux } from 'src/redux/slices/user';
@@ -23,6 +23,7 @@ import {
   InputLabel,
   Select,
   FormControl,
+  Card,
 } from '@mui/material';
 // utils
 import { fNumber, fCurrency } from '../../../../utils/formatNumber';
@@ -30,15 +31,41 @@ import { fNumber, fCurrency } from '../../../../utils/formatNumber';
 import Iconify from '../../../../components/iconify';
 import { RHFAutocomplete, RHFSelect, RHFTextField } from '../../../../components/hook-form';
 import { getALlRoles, getAllSubject, getAllUsers } from '../../../../dataProvider/agent';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
 
 export default function ClassNewEditMemberDetails(data) {
-  const { control, setValue, getValues, watch, resetField } = useFormContext();
-
   const dispatch = useDispatch();
 
   const { pagination, users } = useSelector((state) => state.user);
   const { roles } = useSelector((state) => state.role);
 
+  console.log(users, roles);
+
+  const defaultValues = useMemo(() => ({
+    items: [
+      {
+        roleId: '',
+        userId: '',
+        // subjectId: '',
+      },
+    ],
+  }));
+
+  const methods = useForm({
+    // resolver: yupResolver(validationSchema),
+    defaultValues,
+  });
+
+  const {
+    reset,
+    watch,
+    control,
+    setValue,
+    getValues,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = methods;
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'items',
@@ -46,9 +73,9 @@ export default function ClassNewEditMemberDetails(data) {
 
   const handleAdd = () => {
     append({
-      nguoiDung: '',
-      vaiTro: '',
-      monDay: [],
+      roleId: '',
+      userId: '',
+      subjectId: '',
     });
   };
 
@@ -78,128 +105,154 @@ export default function ClassNewEditMemberDetails(data) {
     dispatch(getUsersByRoleIdRedux({ ...pagination, userId: value?.props.value }));
   }, []);
 
+  const onSubmit = async ({ items }) => {
+    console.log('onSubmit', items);
+    // for (let index = items.length - 1; index >= 0; --index) {
+    //   try {
+    //     const data = items[index];
+    //     if (!data.file) {
+    //       continue;
+    //     }
+    //     if (!data.programId) {
+    //       data.programId = programs[0].id;
+    //     }
+    //     if (!data.subjectId) {
+    //       data.subjectId = user.subjects[0].id;
+    //     }
+    //     if (!data.typeDocumentId) {
+    //       data.typeDocumentId = typeDocuments[0].id;
+    //     }
+    //     console.log('data', data);
+    //     data.folderId = folderId;
+
+    //     formData.append('File', getValues(`items[${index}].file`));
+    //     const response = await postFile(formData);
+    //     if (response.status !== 200) {
+    //       enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
+    //       continue;
+    //     }
+    //     console.log('response', response);
+    //     data.TypeFile = response.data.contentType;
+    //     data.urlDocument = response.data.fileName;
+    //     data.size = response.data.size;
+    //     const responsePostDocument = await postDocument(data);
+    //     if (responsePostDocument.status !== 200) {
+    //       enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
+    //       continue;
+    //     }
+    //     remove(index);
+    //     enqueueSnackbar(`Tạo tài liệu${data.code} thành công`);
+    //     console.log('responsePostDocument', responsePostDocument);
+    //   } catch (error) {
+    //     console.error(`onSubmit error at index: ${index}`, error);
+    //   }
+    // }
+    // items.map((data, index) => {
+    //   data.status = data.status ? 1 : 0;
+    //   dispatch(uploadDocumentRedux(data)).then(() => {
+    //     enqueueSnackbar('Tạo tài liệu thành công');
+    //     push(PATH_DASHBOARD.folder.link(folderId));
+    //   });
+    // });
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h6" sx={{ color: 'text.disabled', mb: 3 }}>
         Chi tiết:
       </Typography>
 
-      <Stack divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         {fields.map((item, index) => (
-          <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
-            <Stack direction={{ xs: 'column' }} spacing={2} sx={{ width: 1 }}>
-              <Grid item container md={12} spacing={2}>
-                <Grid item md={12} xs={12}>
-                  {/* <RHFSelect name={`items[${index}].vaiTro`} label="Vai trò">
-                    <option value=""></option>
-                    {roles.length > 0 &&
-                      roles
-                        .filter((role) => role.name == 'GIAOVIEN' || role.name == 'HOCSINH')
-                        .map((role) => (
-                          <option key={role.id} value={role.id}>
-                            {role.name}
+          <div key={index}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={5}>
+                <Card sx={{ p: 3 }}>
+                  <Stack spacing={3}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Quyền</span>
+                      <RHFSelect name={`items[${index}].roleId`} placeholder="Quyền">
+                        {roles.map((option, index) => (
+                          <option key={index} value={option.id}>
+                            {option.name}
                           </option>
                         ))}
-                  </RHFSelect> */}
-                  <FormControl fullWidth size="large">
-                    <InputLabel id="demo-simple-select-helper-label">Vai trò</InputLabel>
-                    <Select
-                      name={`items[${index}].vaiTro`}
-                      id="demo-simple-select-helper"
-                      value={listRoles}
-                      label="Vai trò"
-                      onChange={handlerRoleChange}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {roles &&
-                        roles?.map((obj) =>
-                          obj.name === 'HOCSINH' || obj.name === 'GIAOVIEN' ? (
-                            <MenuItem value={obj.id} key={obj.id}>
-                              {obj.name}
-                            </MenuItem>
-                          ) : (
-                            ''
-                          )
-                        )}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item md={8} xs={12}>
-                  <FormControl fullWidth size="large">
-                    <InputLabel id="demo-simple-select-helper-label">Vai trò</InputLabel>
-                    <Select
-                      name={`items[${index}].nguoiDung`}
-                      id="demo-simple-select-helper"
-                      value={oneUser}
-                      label="Vai trò"
-                      onChange={handlerUserChange}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {users &&
-                        users?.map((obj) => (
-                          <MenuItem value={obj.id} key={obj.id}>
-                            {obj.email} - {obj.firstName} {obj.lastName}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
-                  {/* <RHFAutocomplete
-                    name={`items[${index}].nguoiDung`}
-                    fullWidth
-                    onChange={handlerUserChange}
-                    options={users}
-                    getOptionLabel={(option) => option.email || ''}
-                    renderInput={(params) => <TextField label="Người dùng" {...params} />}
-                  /> */}
-                </Grid>
-                {users.length === 1 && (
-                  <Grid item md={4} xs={12}>
-                    <RHFAutocomplete
-                      name={`items[${index}].monDay`}
-                      multiple
-                      onChange={(event, newValue) => {
-                        setValue(`items[${index}].monDay`, newValue);
+                      </RHFSelect>
+                    </div>
+                    {/* <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
                       }}
-                      options={users[0].subjects}
-                      getOptionLabel={(option) => option.name}
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                          <Chip {...getTagProps({ index })} key={option.id} size="small" label={option.name} />
-                        ))
-                      }
-                      renderInput={(params) => <TextField label="Môn dạy" {...params} />}
-                    />
-                  </Grid>
-                )}
+                    >
+                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Người dùng</span>
+                      <RHFSelect name={`items[${index}].userId`} placeholder="Môn học">
+                        {users.map((option, index) => (
+                          <option key={index} value={option.id}>
+                            {option.email}
+                          </option>
+                        ))}
+                      </RHFSelect>
+                    </div> */}
+                    {/* <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
+                      <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
+                        {typeDocuments.map((option, index) => (
+                          <option key={index} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </RHFSelect>
+                    </div> */}
+                  </Stack>
+                </Card>
+
+                <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+                  <Button
+                    size="small"
+                    color="error"
+                    startIcon={<Iconify icon="eva:trash-2-outline" />}
+                    onClick={() => handleRemove(index)}
+                  >
+                    Remove
+                  </Button>
+                </Stack>
               </Grid>
-            </Stack>
-            <Button
-              size="small"
-              color="error"
-              startIcon={<Iconify icon="eva:trash-2-outline" />}
-              onClick={() => handleRemove(index)}
-            >
-              Gỡ
-            </Button>
-          </Stack>
+            </Grid>
+
+            <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+          </div>
         ))}
-      </Stack>
 
-      <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+        <Stack
+          spacing={2}
+          direction={{ xs: 'column-reverse', md: 'row' }}
+          alignItems={{ xs: 'flex-start', md: 'center' }}
+        >
+          <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
+            Thêm bản ghi
+          </Button>
 
-      <Stack
-        spacing={2}
-        direction={{ xs: 'column-reverse', md: 'row' }}
-        alignItems={{ xs: 'flex-start', md: 'center' }}
-      >
-        <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
-          Thêm mới
-        </Button>
-      </Stack>
+          <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
+            <LoadingButton
+              disabled={getValues('items').length === 0}
+              type="submit"
+              variant="contained"
+              size="large"
+              loading={isSubmitting}
+            >
+              Đăng tải tài liệu
+            </LoadingButton>
+          </Stack>
+        </Stack>
+      </FormProvider>
     </Box>
   );
 }

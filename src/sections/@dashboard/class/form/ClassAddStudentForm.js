@@ -14,66 +14,26 @@ import { updateClassMember } from 'src/dataProvider/agent';
 export default function ClassAddStudentForm({ isEdit = false, classID }) {
   const { push } = useRouter();
 
-  const [loadingSend, setLoadingSend] = useState(false);
-
-  const defaultValues = useMemo(
-    () => ({
-      items: [{ nguoiDung: '', vaiTro: '', monDay: [] }],
-    }),
-    []
-  );
-
-  const methods = useForm({
-    resolver: yupResolver(Yup.object().shape({})),
-    defaultValues,
-  });
-
-  const {
-    reset,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
-
   useEffect(() => {
-    if (!isEdit) {
-      reset(defaultValues);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit]);
-
-  const handleCreateAndSend = async (data) => {
-    let postData = [];
-    data.items.forEach((element) => {
-      let userId = element['nguoiDung'].id;
-      let roleId = element['vaiTro'];
-      let subjectIds = element['monDay'].map((item) => item.id);
-      postData.push({
-        userId: userId,
-        userRoleClass: {
-          roleId: roleId,
-          subjectId: subjectIds,
-        },
-      });
-    });
-    const response = await updateClassMember(classID, postData);
-    console.log('Create', response);
-  };
-  console.log('data: ', defaultValues);
+  }, []);
 
   return (
-    <FormProvider methods={methods}>
+    <>
       <ClassNewEditMemberDetails data={classID} />
+    </>
+    // <FormProvider methods={methods}>
 
-      <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-        <LoadingButton
-          size="large"
-          variant="contained"
-          loading={loadingSend && isSubmitting}
-          onClick={handleSubmit(handleCreateAndSend)}
-        >
-          {isEdit ? 'Cập nhật' : 'Tạo mới'}
-        </LoadingButton>
-      </Stack>
-    </FormProvider>
+    //   <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
+    //     <LoadingButton
+    //       size="large"
+    //       variant="contained"
+    //       loading={loadingSend && isSubmitting}
+    //       onClick={handleSubmit(handleCreateAndSend)}
+    //     >
+    //       {isEdit ? 'Cập nhật' : 'Tạo mới'}
+    //     </LoadingButton>
+    //   </Stack>
+    // </FormProvider>
   );
 }

@@ -20,7 +20,7 @@ export default function ClassAddStudentForm({ isEdit = false, classID }) {
 
   return (
     <div>
-      <ClassNewEditMemberDetails data={classID} />
+      <ClassNewEditMemberDetails classID={classID} />
     </div>
     // <FormProvider methods={methods}>
 

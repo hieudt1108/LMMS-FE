@@ -26,14 +26,12 @@ import {
 // import { useSnackbar } from '../../../components/snackbar';
 import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload, RHFAutocomplete } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
-import { postDocument, postFile } from 'src/dataProvider/agent';
+import { updateClassMember } from 'src/dataProvider/agent';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { createDocumentInitialRedux, uploadDocumentRedux } from 'src/redux/slices/folder';
 import { Upload } from 'src/components/upload';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/useAuthContext';
-import { useSnackbar } from 'notistack';
 import {
   createAddUserInCLassRedux,
   filterSubjectRedux,
@@ -41,20 +39,16 @@ import {
   getUsersRedux,
 } from 'src/redux/slices/user';
 import { getRolesRedux } from 'src/redux/slices/roles';
+import { object } from 'prop-types';
 
 // ----------------------------------------------------------------------
 const checkArray = (arrayName) => {
   return arrayName && arrayName.length;
 };
 
-export default function BlogNewPostForm() {
+export default function BlogNewPostForm({ classID }) {
   const { user } = useAuthContext();
   const formData = new FormData();
-  const {
-    query: { folder_id: folderId },
-    push,
-  } = useRouter();
-
   const { pagination, addUserInCLass } = useSelector((state) => state.user);
   const { roles } = useSelector((state) => state.role);
 
@@ -75,8 +69,8 @@ export default function BlogNewPostForm() {
   const defaultValues = useMemo(() => ({
     items: [
       {
-        roleId: '',
         userId: '',
+        roleId: '',
         subjectId: [],
       },
     ],
@@ -106,15 +100,54 @@ export default function BlogNewPostForm() {
   }, []);
 
   const onSubmit = async ({ items }) => {
-    console.log('onSubmit', items);
+    console.log('onSubmit: ', items, addUserInCLass);
+
+    const dataPayload = [];
+    for (let index = items.length - 1; index >= 0; --index) {
+      try {
+        const data = items[index];
+
+        if (!data.roleId) {
+          data.roleId = addUserInCLass[index].roles[0].id;
+        }
+        if (!data.userId) {
+          data.userId = addUserInCLass[index].users[0].id;
+        }
+        if (!data.subjectId) {
+          data.subjectId = addUserInCLass[index]?.subjects[0].id;
+        }
+        console.log('data.userId', data.userId);
+        const obj = {
+          userId: 0,
+          userRoleClass: {
+            roleId: 0,
+            subjectId: [0],
+          },
+        };
+        dataPayload.push(obj);
+
+        console.log('dataPayload: ', dataPayload);
+        // const response = await updateClassMember(classID, dataPayload);
+        // if (response.status !== 200) {
+        //   enqueueSnackbar(`Thêm người dùng${data.userId} thất bại`, { variant: 'error' });
+        //   continue;
+        // }
+        // remove(index);
+        // enqueueSnackbar(`Tạo tài liệu${data.userId} thành công`);
+        // console.log('responsePostDocument', response);
+        console.log('data apend: ', data);
+      } catch (error) {
+        console.error(`onSubmit error at index: ${index}`, error);
+      }
+    }
   };
 
   const handleAdd = (index) => {
     dispatch(createAddUserInCLassRedux());
     dispatch(getUsersRedux({ pageIndex: 1, pageSize: 100 }, index));
     append({
-      roleId: '',
       userId: '',
+      roleId: '',
       subjectId: [],
     });
   };
@@ -126,10 +159,7 @@ export default function BlogNewPostForm() {
   const handlerRoleChange = useCallback((event, index) => {
     console.log('handlerRoleChange', event.target.name, event.target.value);
     setValue(event.target.name, event.target.value);
-    // console.log('handlerRoleChange');
-    // console.log('handlerRoleChange', value.props.value);
-    // setListRoles(value.props.value);
-    // setvalue()
+
     dispatch(getUsersByRoleIdRedux({ ...pagination, roleId: event.target.value }, index));
   }, []);
 
@@ -137,8 +167,6 @@ export default function BlogNewPostForm() {
     console.log('handlerUserChange', event, index);
     setValue(event.target.name, event.target.value);
     dispatch(filterSubjectRedux({ users: addUserInCLass[index].users, userId: event.target.value, index }));
-    // console.log('handlerUserChange', value.id);
-    // setOneUser(value.props.value);
   };
   console.log('BlogNewPostForm', getValues('items'), addUserInCLass);
 
@@ -276,7 +304,7 @@ export default function BlogNewPostForm() {
               size="large"
               loading={isSubmitting}
             >
-              Gỡ
+              Thêm người dùng
             </LoadingButton>
           </Stack>
         </Stack>

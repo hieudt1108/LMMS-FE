@@ -1,36 +1,79 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import * as Yup from 'yup';
+import { useState, useCallback, useEffect, useMemo } from 'react';
+// next
+import { useRouter } from 'next/router';
 // form
-import { useFormContext, useFieldArray, useForm, FormProvider } from 'react-hook-form';
-// redux
-import { useDispatch, useSelector } from 'react-redux';
-import { getUsersByRoleIdRedux, getUsersRedux } from 'src/redux/slices/user';
-import { getRolesRedux } from 'src/redux/slices/roles';
-
-// @mui
-import { Box, Stack, Button, Divider, Typography, Grid, Card } from '@mui/material';
-// utils
-// components
-import Iconify from '../../../../components/iconify';
-import { RHFSelect } from '../../../../components/hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useFieldArray, useForm } from 'react-hook-form';
+// @mui
 import { LoadingButton } from '@mui/lab';
+import {
+  Grid,
+  Card,
+  Stack,
+  Typography,
+  Divider,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Chip,
+} from '@mui/material';
+// routes
+//components
+// import { useSnackbar } from '../../../components/snackbar';
+import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload, RHFAutocomplete } from 'src/components/hook-form';
+// ----------------------------------------------------------------------
+import { updateClassMember } from 'src/dataProvider/agent';
+import { useSelector } from 'react-redux';
+import { dispatch } from 'src/redux/store';
+import { Upload } from 'src/components/upload';
+import Iconify from 'src/components/iconify';
+import { useAuthContext } from 'src/auth/useAuthContext';
+import {
+  createAddUserInCLassRedux,
+  filterSubjectRedux,
+  getUsersByRoleIdRedux,
+  getUsersRedux,
+} from 'src/redux/slices/user';
+import { getRolesRedux } from 'src/redux/slices/roles';
+import { object } from 'prop-types';
+import { useSnackbar } from 'notistack';
 
-export default function ClassNewEditMemberDetails(data) {
-  const dispatch = useDispatch();
+// ----------------------------------------------------------------------
+const checkArray = (arrayName) => {
+  return arrayName && arrayName.length;
+};
 
+export default function BlogNewPostForm({ classID }) {
+  const { user } = useAuthContext();
   const formData = new FormData();
-
-  const { pagination, users } = useSelector((state) => state.user);
+  const { pagination, addUserInCLass } = useSelector((state) => state.user);
   const { roles } = useSelector((state) => state.role);
+  const { enqueueSnackbar } = useSnackbar();
 
-  console.log(users, roles);
+  const validationSchema = (() => {
+    return Yup.object().shape({
+      items: Yup.array().of(
+        Yup.object().shape({
+          name: Yup.string().required('Name is require!'),
+          code: Yup.string().required('Code is require!'),
+          description: Yup.string().required('Description is require!'),
+        })
+      ),
+    });
+  })();
+
+  const { newDocument } = useSelector((state) => state.folder);
 
   const defaultValues = useMemo(() => ({
     items: [
       {
-        roleId: '',
         userId: '',
-        subjectId: '',
+        roleId: '',
+        subjectId: [],
       },
     ],
   }));
@@ -54,11 +97,69 @@ export default function ClassNewEditMemberDetails(data) {
     name: 'items',
   });
 
-  const handleAdd = () => {
+  useEffect(() => {
+    dispatch(getUsersRedux({ pageIndex: 1, pageSize: 100 }, 0));
+  }, []);
+
+  const onSubmit = async ({ items }) => {
+    console.log('onSubmit: ', items, addUserInCLass);
+
+    const dataPayload = [];
+    for (let index = items.length - 1; index >= 0; --index) {
+      try {
+        const data = items[index];
+        // chuan bi
+        const obj = {
+          userId: 0,
+          userRoleClass: {
+            roleId: 0,
+            subjectId: [],
+          },
+        };
+
+        if (data.userId) {
+          obj.userId = data.userId;
+        } else {
+          obj.userId = addUserInCLass[index].users[0].id;
+        }
+
+        if (data.roleId) {
+          obj.userRoleClass.roleId = data.roleId;
+        } else {
+          obj.userRoleClass.roleId = addUserInCLass[index].roles[0].id;
+        }
+
+        if (data.subjectId.length !== 0) {
+          obj.userRoleClass.subjectId = data.subjectId.map((data) => data.id);
+        }
+
+        dataPayload.push(obj);
+
+        // remove(index);
+        // enqueueSnackbar(`Tạo tài liệu${data.userId} thành công`);
+        // console.log('responsePostDocument', response);
+        console.log('data apend: ', data);
+      } catch (error) {
+        console.error(`onSubmit error at index: ${index}`, error);
+      }
+    }
+    console.log('dataPayload: ', dataPayload);
+    const response = await updateClassMember(classID, dataPayload);
+    console.log('response: ', response);
+    if (response instanceof Error) {
+      enqueueSnackbar(`Thêm  thất bại`, { variant: 'error' });
+    } else {
+      enqueueSnackbar(`Thêm thành công `, { variant: 'error' });
+    }
+  };
+
+  const handleAdd = (index) => {
+    dispatch(createAddUserInCLassRedux());
+    dispatch(getUsersRedux({ pageIndex: 1, pageSize: 100 }, index));
     append({
-      roleId: '',
       userId: '',
-      subjectId: '',
+      roleId: '',
+      subjectId: [],
     });
   };
 
@@ -66,126 +167,159 @@ export default function ClassNewEditMemberDetails(data) {
     remove(index);
   };
 
-  useEffect(() => {
-    dispatch(getUsersRedux(pagination));
-    dispatch(getRolesRedux({ pageIndex: 1, pageSize: 100 }));
-  }, [dispatch]);
+  const handlerRoleChange = useCallback((event, index) => {
+    console.log('handlerRoleChange', event.target.name, event.target.value);
+    setValue(event.target.name, event.target.value);
 
-  const [listRoles, setListRoles] = useState([]);
-  const [listSubjects, setListSubjects] = useState([]);
-  const [roleID, setRoleID] = useState('');
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      if (roleID.length > 0) {
-        const response = await getAllUsers({ pageSize: 100, roleId: roleID });
-        console.log(response.data.data);
-        setUsers(response.data.data);
-      }
-    };
-
-    const fetchRoles = async () => {
-      const response = await getALlRoles({ pageSize: 100 });
-      setListRoles(response.data.data);
-    };
-
-    const onSubmit = async ({ items }) => {
-      console.log('onSubmit', items);
-    };
-
-    fetchUsers();
-    fetchRoles();
-    fetchSubjects();
+    dispatch(getUsersByRoleIdRedux({ ...pagination, roleId: event.target.value }, index));
   }, []);
 
-  const handlerRoleChange = useCallback((event, value) => {
-    console.log('handlerRoleChange', event.target.value);
-    setRoleID(event.target.value);
-  }, []);
+  const handlerUserChange = (event, index) => {
+    console.log('handlerUserChange', event, index);
+    setValue(event.target.name, event.target.value);
+    dispatch(filterSubjectRedux({ users: addUserInCLass[index].users, userId: event.target.value, index }));
+  };
+  console.log('BlogNewPostForm', getValues('items'), addUserInCLass);
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h6" sx={{ color: 'text.disabled', mb: 3 }}>
-        Chi tiết:
-      </Typography>
-
-      {/* <Stack divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
+    <>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         {fields.map((item, index) => (
-          <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
-            <Stack direction={{ xs: 'column' }} spacing={2} sx={{ width: 1 }}>
-              <Grid item container md={12} spacing={2}>
-                <Grid item md={4} xs={12}>
-                  <RHFSelect name={`items[${index}].vaiTro`} onChange={handlerRoleChange} label="Vai trò">
-                    <option value="" />
-                    {listRoles.length > 0 &&
-                      listRoles
-                        .filter((role) => role.name == 'GIAOVIEN' || role.name == 'HOCSINH')
-                        .map((role) => (
-                          <option key={role.id} value={role.id}>
-                            {role.name}
-                          </option>
-                        ))}
-                  </RHFSelect>
-                </Grid>
-                {roleID.length > 0 && (
-                  <Grid item md={4} xs={12}>
-                    <RHFAutocomplete
-                      name={`items[${index}].nguoiDung`}
-                      fullWidth
-                      onChange={(event, value) => {
-                        console.log(value);
-                        setValue(`items[${index}].nguoiDung`, value);
-                      }}
-                      options={users}
-                      getOptionLabel={(option) => option.email || ''}
-                      renderInput={(params) => <TextField label="Người dùng" {...params} />}
-                    />
-                  </Grid>
-                )}
-                <Grid item md={4} xs={12}>
-                  <RHFAutocomplete
-                    name={`items[${index}].monDay`}
-                    multiple
-                    onChange={(event, newValue) => {
-                      console.log(newValue);
-                      setValue(`items[${index}].monDay`, newValue);
-                    }}
-                    // options={LIST_SUBJECT}
-                    options={listSubjects}
-                    getOptionLabel={(option) => option.name}
-                    renderTags={(value, getTagProps) =>
-                      value.map((option, index) => (
-                        <Chip {...getTagProps({ index })} key={option.id} size="small" label={option.name} />
-                      ))
-                    }
-                    renderInput={(params) => <TextField label="Môn dạy" {...params} />}
-                  />
-                </Grid>
+          <div key={index}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12}>
+                <Card sx={{ p: 3 }}>
+                  <Stack spacing={3}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Người dùng</span>
+                      <RHFSelect
+                        name={`items[${index}].userId`}
+                        placeholder="nguoi"
+                        onChange={(event) => handlerUserChange(event, index)}
+                      >
+                        {checkArray(addUserInCLass) &&
+                          checkArray(addUserInCLass[index].users) &&
+                          addUserInCLass[index].users.map((option, index) => (
+                            <option key={index} value={option.id}>
+                              {option.email} - {option.firstName} {option.lastName}
+                            </option>
+                          ))}
+                      </RHFSelect>
+                    </div>
+                    {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Quyền</span>
+                        <RHFSelect
+                          name={`items[${index}].roleId`}
+                          placeholder="Quyền"
+                          onChange={(event) => handlerRoleChange(event, index)}
+                        >
+                          {addUserInCLass[index].roles.map((option, index) => (
+                            <option key={index} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </RHFSelect>
+                      </div>
+                    )}
+
+                    {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].subjects) && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
+                        <RHFAutocomplete
+                          sx={{ width: '856px' }}
+                          name={`items[${index}].subjectId`}
+                          multiple
+                          onChange={(event, newValue) => {
+                            console.log('RHFAutocomplete', newValue);
+                            setValue(`items[${index}].subjectId`, newValue);
+                          }}
+                          options={addUserInCLass[index].subjects.length ? addUserInCLass[index].subjects : []}
+                          renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                              <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
+                            ))
+                          }
+                          renderInput={(params) => {
+                            return <TextField {...params} />;
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    {/*
+                    
+                    // checkArray(addUserInCLass) && checkArray(addUserInCLass[index].subjects)
+                          //   ? addUserInCLass[index].subjects
+                          //   : []
+                    
+                    {subjects && subjects.length ? (
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
+                        <RHFSelect name={`items[${index}].subjectId`} placeholder="Môn học">
+                          {subjects.map((option, index) => (
+                            <option key={index} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </RHFSelect>
+                      </div>
+                    ) : (
+                      ''
+                    )} */}
+                  </Stack>
+                </Card>
+
+                <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+                  <Button
+                    size="small"
+                    color="error"
+                    startIcon={<Iconify icon="eva:trash-2-outline" />}
+                    onClick={() => handleRemove(index)}
+                  >
+                    Remove
+                  </Button>
+                </Stack>
               </Grid>
-            </Stack>
-            <Button
-              size="small"
-              color="error"
-              startIcon={<Iconify icon="eva:trash-2-outline" />}
-              onClick={() => handleRemove(index)}
-            >
-              Gỡ
-            </Button>
-          </Stack>
+            </Grid>
+
+            <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+          </div>
         ))}
-      </Stack> */}
 
-      <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+        <Stack
+          spacing={2}
+          direction={{ xs: 'column-reverse', md: 'row' }}
+          alignItems={{ xs: 'flex-start', md: 'center' }}
+        >
+          <Button
+            size="small"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={() => handleAdd(fields.length)}
+            sx={{ flexShrink: 0 }}
+          >
+            Thêm bản ghi
+          </Button>
 
-      <Stack
-        spacing={2}
-        direction={{ xs: 'column-reverse', md: 'row' }}
-        alignItems={{ xs: 'flex-start', md: 'center' }}
-      >
-        <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
-          Thêm mới
-        </Button>
-      </Stack>
-    </Box>
+          <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
+            <LoadingButton
+              disabled={getValues('items').length === 0}
+              type="submit"
+              variant="contained"
+              size="large"
+              loading={isSubmitting}
+            >
+              Thêm người dùng
+            </LoadingButton>
+          </Stack>
+        </Stack>
+      </FormProvider>
+    </>
   );
 }

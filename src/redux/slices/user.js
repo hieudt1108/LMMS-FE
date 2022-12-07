@@ -8,13 +8,19 @@ import { getAllUsers } from 'src/dataProvider/agent';
 const initialState = {
   isLoading: false,
   error: null,
-  users: [],
-  pagination: {
-    pageIndex: 1,
-    pageSize: 100,
-    roleId: '',
-    userId: '',
-  },
+  addUserInCLass: [
+    {
+      users: [],
+      subjects: [],
+      roles: [],
+      pagination: {
+        pageIndex: 1,
+        pageSize: 100,
+        roleId: '',
+        userId: '',
+      },
+    },
+  ],
   paginationHeader: {},
 };
 
@@ -37,16 +43,83 @@ const slice = createSlice({
     // GET class
     getUserSuccess(state, action) {
       console.log('getUserSuccess: ', action);
+      const { response, index, pagination } = action.payload;
       state.isLoading = false;
-      state.users = action.payload.data.data;
-      state.paginationHeader = JSON.parse(action.payload.headers['x-pagination']);
+      state.paginationHeader = JSON.parse(response.headers['x-pagination']);
+      state.addUserInCLass = state.addUserInCLass.map((item, indexItem) => {
+        if (indexItem !== index) {
+          return item;
+        }
+        return {
+          ...item,
+          users: response.data.data,
+          roles: response.data.data.roles,
+          subjects: response.data.data.subjects,
+          pagination,
+        };
+      });
     },
 
     getUserByRoleIdSuccess(state, action) {
-      const { users, pagination } = action.payload;
+      const { users, pagination, index } = action.payload;
+      console.log('getUserByRoleIdSuccess', index);
       state.isLoading = false;
-      state.users = users;
-      state.pagination = pagination;
+      // state.users = users;
+      // state.pagination = pagination;
+
+      state.addUserInCLass = state.addUserInCLass.map((item, indexItem) => {
+        if (indexItem !== index) {
+          return item;
+        }
+        return {
+          ...item,
+          users,
+          pagination,
+        };
+      });
+    },
+    filterSubjectSuccess(state, action) {
+      const { users, userId, index } = action.payload;
+      const user = users.filter((data) => data.id + '' === userId);
+      const userTransfer = user[0].subjects.map((data) => {
+        return { id: data.id, label: data.name };
+      });
+      console.log('filterSubjectSuccess', state.users, action.payload, userTransfer);
+      state.isLoading = false;
+      state.addUserInCLass = state.addUserInCLass.map((item, indexItem) => {
+        if (indexItem !== index) {
+          return item;
+        }
+        return {
+          ...item,
+          subjects: userTransfer,
+          roles: user[0].roles,
+        };
+      });
+      // state.addUserInCLass = [
+      //   ...state.addUserInCLass.slice(0, index),
+      //   { users, pagination },
+      //   ...state.addUserInCLass.slice(index + 1),
+      // ];
+      // state.subjects = [...state.subjects.slice(0, index), userTransfer, ...state.subjects.slice(index + 1)];
+    },
+
+    createAddUserInCLassSuccess(state, action) {
+      console.log('createAddUserInCLassSuccess');
+      state.isLoading = false;
+      state.addUserInCLass = [
+        ...state.addUserInCLass,
+        {
+          users: [],
+          subjects: [],
+          pagination: {
+            pageIndex: 1,
+            pageSize: 100,
+            roleId: '',
+            userId: '',
+          },
+        },
+      ];
     },
   },
 });
@@ -55,7 +128,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 //////
-export function getUsersRedux(params) {
+export function getUsersRedux(params, index) {
   return async () => {
     try {
       if (!params) {
@@ -64,13 +137,19 @@ export function getUsersRedux(params) {
       dispatch(slice.actions.startLoading());
       const response = await getAllUsers(params);
       // console.log("test redux: ", )
-      dispatch(slice.actions.getUserSuccess(response));
+      dispatch(
+        slice.actions.getUserSuccess({
+          pagination: params,
+          response: response,
+          index,
+        })
+      );
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };
 }
-export function getUsersByRoleIdRedux(params) {
+export function getUsersByRoleIdRedux(params, index) {
   return async () => {
     try {
       if (!params) {
@@ -83,8 +162,34 @@ export function getUsersByRoleIdRedux(params) {
         slice.actions.getUserByRoleIdSuccess({
           users: response.data.data,
           pagination: params,
+          index,
         })
       );
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function filterSubjectRedux(params) {
+  return async () => {
+    try {
+      if (!params) {
+        return dispatch(slice.actions.hasError('Không có userId'));
+      }
+      dispatch(slice.actions.startLoading());
+      dispatch(slice.actions.filterSubjectSuccess(params));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function createAddUserInCLassRedux() {
+  return async () => {
+    try {
+      dispatch(slice.actions.startLoading());
+      dispatch(slice.actions.createAddUserInCLassSuccess());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

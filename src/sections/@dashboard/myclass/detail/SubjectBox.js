@@ -11,6 +11,9 @@ import { fDateTime } from '../../../../utils/formatTime';
 import { SubjectImage } from '../../../../utils';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+import Image from '../../../../components/image';
+import Carousel, {CarouselArrows} from "../../../../components/carousel";
+import Iconify from "../../../../components/iconify";
 // ----------------------------------------------------------------------
 
 ClassNewestBooking.propTypes = {
@@ -23,27 +26,62 @@ ClassNewestBooking.propTypes = {
 export default function ClassNewestBooking({ myClass, title, subheader, sx, ...other }) {
   const theme = useTheme();
 
+  const carouselRef = useRef(null);
+
+  const carouselSettings = {
+    dots: false,
+    arrows: false,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    rtl: Boolean(theme.direction === 'rtl'),
+    responsive: [
+      {
+        breakpoint: theme.breakpoints.values.lg,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: theme.breakpoints.values.md,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: theme.breakpoints.values.sm,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
+  const handlePrev = () => {
+    carouselRef.current?.slickPrev();
+  };
+
+  const handleNext = () => {
+    carouselRef.current?.slickNext();
+  };
+
   return (
-    <Box sx={{ py: 2, ...sx }} {...other}>
-      <CardHeader
-        title={title}
-        subheader={subheader}
-        // action={<CarouselArrows onNext={handleNext} onPrevious={handlePrev} />}
-        sx={{
-          p: 0,
-          mb: 3,
-          '& .MuiCardHeader-action': { alignSelf: 'center' },
-        }}
-      />
-
-      {/* {list.map((item) => (
-          <BookingItem key={item.id} item={item} />
-        ))} */}
-
-      {myClass?.subjects?.map((item) => (
-        <BookingItem key={item.subjectId} item={item} />
-      ))}
-    </Box>
+      <Box sx={{ py: 2, ...sx }} {...other}>
+        <CardHeader
+            title={title}
+            subheader={subheader}
+            action={<CarouselArrows onNext={handleNext} onPrevious={handlePrev} />}
+            sx={{
+              p: 0,
+              mb: 3,
+              '& .MuiCardHeader-action': { alignSelf: 'center' },
+            }}
+        />
+        <Carousel ref={carouselRef} {...carouselSettings}>
+          {myClass?.subjects?.map((item) => (
+              <BookingItem key={item.subjectId} item={item} />
+          ))}
+        </Carousel>
+      </Box>
   );
 }
 
@@ -62,42 +100,30 @@ function BookingItem({ item }) {
   };
 
   return (
-    <Paper
-      onClick={handleOnClickSubject}
-      sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral', cursor: 'pointer' }}
-    >
-      <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar alt={name} src={avatar} />
-          {/* <div>
-            <img src={Math} style={{ maxWidth: 50, maxHeight: 50 }} alt="Math" />
-          </div> */}
-
-          <div>
-            <Typography variant="subtitle2">{name}</Typography>
-
-            {/* <Typography variant="caption" sx={{ color: 'text.disabled', mt: 0.5, display: 'block' }}>
-              {fDateTime(bookdAt)}
-            </Typography> */}
-          </div>
-        </Stack>
-
-        <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            {/* <Iconify icon="fluent:text-number-list-ltr-24-filled" width={16} /> */}
-            <Typography variant="caption">{30} Slot</Typography>
+      <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
+        <Stack alignItems="center" spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <div>
+              <Typography  variant="subtitle2">{name}</Typography>
+            </div>
           </Stack>
 
-          <Stack direction="row" alignItems="center" spacing={1}>
-            {/* <Iconify icon="carbon:document-attachment" width={16} /> */}
-            <Typography variant="caption">{50} Document</Typography>
+          <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Iconify icon="eva:layers-outline" width={16} />
+              <Typography variant="caption"> {50} Tiết học</Typography>
+            </Stack>
+
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Iconify icon="eva:file-outline" width={16} />
+              <Typography variant="caption">{50} Tài liệu</Typography>
+            </Stack>
           </Stack>
         </Stack>
-      </Stack>
 
-      {/* <Box sx={{ p: 1, cursor: 'pointer' }}>
-        <Image alt="cover" src={cover} sx={{ borderRadius: 1 }} />
-      </Box> */}
-    </Paper>
+        <Box onClick={handleOnClickSubject} sx={{ p: 1, position: 'relative' }}>
+          <Image alt="cover" src={'http://lmms.site:7070/assets/images/subjects/history.png'}  sx={{ borderRadius: 1.5 }} />
+        </Box>
+      </Paper>
   );
 }

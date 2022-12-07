@@ -36,27 +36,20 @@ export default function ClassAddSubjectDialog({ data, open, onClose }) {
     });
   })();
 
-  const defaultValues = useMemo(
-    () => ({
-      subjectId: [],
-      tagsId: [],
-    }),
-    []
-  );
-
-  const methods = useForm({
-    // resolver: yupResolver(validationSchema),
-    defaultValues,
-  });
-
   const {
     reset,
     watch,
     control,
     setValue,
+    getValues,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
+
+  const methods = useForm({
+    // resolver: yupResolver(validationSchema),
+    defaultValues,
+  });
 
   const [subjectsData, setSubjectsData] = useState([]);
 
@@ -80,9 +73,17 @@ export default function ClassAddSubjectDialog({ data, open, onClose }) {
   }
 
   const onSubmit = async (data) => {
-    console.log('est');
+    let postData = [];
+    for (let i = 0; i < data.tagsId.length; i++) {
+      postData.push({
+        subjectId: data.tagsId[i],
+      });
+    }
+    console.log('postData', postData);
+    console.log('defaultValues', defaultValues);
     try {
-      const res = await updateSubjectClass(data.tagsId);
+      const res = await updateSubjectClass(classID, { postData });
+      console.log(res);
       if (res.status < 400) {
         reset();
         enqueueSnackbar('Create success!');
@@ -96,26 +97,15 @@ export default function ClassAddSubjectDialog({ data, open, onClose }) {
   };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Dialog fullWidth maxWidth="xs" open={open}>
-        <DialogActions sx={{ py: 2, px: 3 }}>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Thêm môn học
-          </Typography>
+    <Dialog fullWidth maxWidth="sm" open={open}>
+      <DialogActions sx={{ py: 2, px: 3 }}>
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          Thêm môn học
+        </Typography>
+      </DialogActions>
 
-          <Button
-            variant="outlined"
-            color="inherit"
-            onClick={() => {
-              onClose();
-            }}
-          >
-            Quay lại
-          </Button>
-        </DialogActions>
-
-        <Divider />
-
+      <Divider />
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Card sx={{ p: 3 }}>
@@ -129,10 +119,10 @@ export default function ClassAddSubjectDialog({ data, open, onClose }) {
                 }}
               >
                 <RHFAutocomplete
-                  name="subjectId"
+                  name="subjectsId"
                   multiple
                   onChange={(event, newValue) => {
-                    setValue('subjectId', newValue);
+                    setValue('subjectsId', newValue);
                     const tagsId = newValue.map((tag) => tag.id);
                     setValue('tagsId', tagsId);
                   }}
@@ -145,9 +135,15 @@ export default function ClassAddSubjectDialog({ data, open, onClose }) {
                   renderInput={(params) => <TextField label="Môn học" {...params} />}
                 />
               </Box>
-              <Stack sx={{ mt: 3, display: 'flex' }}>
-                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  Thêm mới
+              <Stack justifyContent="flex-end" direction="row" spacing={1.5} sx={{ mt: 3 }}>
+                <LoadingButton
+                  variant="outlined"
+                  color="inherit"
+                  onClick={() => {
+                    onClose();
+                  }}
+                >
+                  Quay lại
                 </LoadingButton>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   Thêm mới
@@ -156,7 +152,7 @@ export default function ClassAddSubjectDialog({ data, open, onClose }) {
             </Card>
           </Grid>
         </Grid>
-      </Dialog>
-    </FormProvider>
+      </FormProvider>
+    </Dialog>
   );
 }

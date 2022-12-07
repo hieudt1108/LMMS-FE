@@ -9,7 +9,13 @@ const initialState = {
   isLoading: false,
   error: null,
   users: [],
-  pagging: {},
+  pagination: {
+    pageIndex: 1,
+    pageSize: 100,
+    roleId: '',
+    userId: '',
+  },
+  paginationHeader: {},
 };
 
 const slice = createSlice({
@@ -33,8 +39,14 @@ const slice = createSlice({
       console.log('getUserSuccess: ', action);
       state.isLoading = false;
       state.users = action.payload.data.data;
+      state.paginationHeader = JSON.parse(action.payload.headers['x-pagination']);
+    },
 
-      state.pagging = JSON.parse(action.payload.headers['x-pagination']);
+    getUserByRoleIdSuccess(state, action) {
+      const { users, pagination } = action.payload;
+      state.isLoading = false;
+      state.users = users;
+      state.pagination = pagination;
     },
   },
 });
@@ -53,6 +65,26 @@ export function getUsersRedux(params) {
       const response = await getAllUsers(params);
       // console.log("test redux: ", )
       dispatch(slice.actions.getUserSuccess(response));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+export function getUsersByRoleIdRedux(params) {
+  return async () => {
+    try {
+      if (!params) {
+        return dispatch(slice.actions.hasError('Không có params'));
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await getAllUsers(params);
+      console.log('getUsersByRoleIdRedux', response);
+      dispatch(
+        slice.actions.getUserByRoleIdSuccess({
+          users: response.data.data,
+          pagination: params,
+        })
+      );
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

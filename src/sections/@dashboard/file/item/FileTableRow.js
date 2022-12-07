@@ -236,7 +236,7 @@ export default function FileTableRow({ row, selected, onSelectRow, onDeleteRow }
 
       <FileDetailsDrawer
         item={row}
-        favorited={favorited}
+        favorite={favorited}
         onFavorite={handleFavorite}
         onCopyLink={handleCopy}
         open={openDetails}

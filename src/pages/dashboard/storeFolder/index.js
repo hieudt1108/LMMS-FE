@@ -24,6 +24,7 @@ import { useSelector } from 'react-redux';
 import { createStoreFolderRedux, getStoreFolderRootRedux } from '../../../redux/slices/storeFolder';
 import Iconify from '../../../components/iconify';
 import UploadMyDocumentDialog from '../../../sections/@dashboard/storeFolder/UploadMyDocumentDialog';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -37,10 +38,10 @@ StoreFileRootPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout
 
 export default function StoreFileRootPage() {
   const theme = useTheme();
-
+  const { enqueueSnackbar } = useSnackbar();
   const { push } = useRouter();
 
-  const { storeFolder } = useSelector((state) => state.storeFolder);
+  const { error, storeFolder } = useSelector((state) => state.storeFolder);
   const { id, listFolders, listDocuments } = storeFolder;
 
   useEffect(() => {
@@ -57,7 +58,7 @@ export default function StoreFileRootPage() {
 
   const [openNewStoreFolder, setOpenNewStoreFolder] = useState(false);
 
-  const [openUploadFile, setOpenUploadFile] = useState(false);
+  // const [openUploadFile, setOpenUploadFile] = useState(false);
 
   const [openFrom, setOpenFrom] = useState(false);
 
@@ -77,14 +78,14 @@ export default function StoreFileRootPage() {
     setOpenNewStoreFolder(false);
   };
 
-  const handleOpenUploadFile = () => {
-    push(PATH_DASHBOARD.storeFolder.newDocument(Number.parseInt(id)));
-    // setOpenUploadFile(true);
-  };
+  // const handleOpenUploadFile = () => {
+  //     push(PATH_DASHBOARD.storeFolder.newDocument(Number.parseInt(id)));
+  //     // setOpenUploadFile(true);
+  // };
 
-  const handleCloseUploadFile = () => {
-    setOpenUploadFile(false);
-  };
+  // const handleCloseUploadFile = () => {
+  //     setOpenUploadFile(false);
+  // };
 
   const handleChangeStoreFolderName = useCallback((event) => {
     setStoreFolderName(event.target.value);
@@ -101,6 +102,13 @@ export default function StoreFileRootPage() {
     );
     console.log('parentid', Number.parseInt(id));
     handleCloseNewStoreFolder();
+    console.log('hellooasd', error);
+    if (error) {
+      enqueueSnackbar(error, { variant: 'error' });
+    } else {
+      enqueueSnackbar('Tạo thư mục thành công');
+      dispatch(removeError('Tạo thư mục thành công'));
+    }
   };
 
   const handleDrop = useCallback(
@@ -200,7 +208,7 @@ export default function StoreFileRootPage() {
         </Grid>
       </Container>
 
-      <FileNewFolderDialog open={openUploadFile} onClose={handleCloseUploadFile} />
+      {/* <FileNewFolderDialog open={openUploadFile} onClose={handleCloseUploadFile}/> */}
 
       <FileNewFolderDialog
         open={openNewStoreFolder}

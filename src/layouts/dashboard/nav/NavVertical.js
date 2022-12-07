@@ -1,22 +1,22 @@
 import PropTypes from 'prop-types';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 // next
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 // @mui
-import {Box, Stack, Drawer} from '@mui/material';
+import { Box, Stack, Drawer } from '@mui/material';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // config
-import {NAV} from '../../../config';
+import { NAV } from '../../../config';
 // components
 import Logo from '../../../components/logo';
 import Scrollbar from '../../../components/scrollbar';
-import {NavSectionVertical} from '../../../components/nav-section';
+import { NavSectionVertical } from '../../../components/nav-section';
 //
 import navConfig from './config';
 import NavDocs from './NavDocs';
 import NavAccount from './NavAccount';
-import {getMenu} from "../../../dataProvider/agent";
+import { getMenu } from '../../../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -25,8 +25,8 @@ NavVertical.propTypes = {
   onCloseNav: PropTypes.func,
 };
 
-export default function NavVertical({openNav, onCloseNav}) {
-  const {pathname} = useRouter();
+export default function NavVertical({ openNav, onCloseNav }) {
+  const { pathname } = useRouter();
   const [listMenu, setListMenu] = useState([]);
   const isDesktop = useResponsive('up', 'lg');
 
@@ -38,7 +38,6 @@ export default function NavVertical({openNav, onCloseNav}) {
     } else {
       console.log(res.message);
     }
-    console.log(listMenu)
   }
 
   useEffect(() => {
@@ -50,77 +49,76 @@ export default function NavVertical({openNav, onCloseNav}) {
   }, [pathname]);
 
   const renderContent = (
-      <Scrollbar
-          sx={{
-            height: 1,
-            '& .simplebar-content': {
-              height: 1,
-              display: 'flex',
-              flexDirection: 'column',
-            },
-          }}
+    <Scrollbar
+      sx={{
+        height: 1,
+        '& .simplebar-content': {
+          height: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        },
+      }}
+    >
+      <Stack
+        spacing={3}
+        sx={{
+          pt: 3,
+          pb: 2,
+          px: 2.5,
+          flexShrink: 0,
+        }}
       >
-        <Stack
-            spacing={3}
-            sx={{
-              pt: 3,
-              pb: 2,
-              px: 2.5,
-              flexShrink: 0,
-            }}
-        >
+        <Logo width={100} height={100} />
 
-          <Logo width={100} height={100}/>
+        {/*<NavAccount />*/}
+      </Stack>
 
-          {/*<NavAccount />*/}
-        </Stack>
+      <NavSectionVertical data={listMenu} />
 
-        <NavSectionVertical data={listMenu}/>
+      <Box sx={{ flexGrow: 1 }} />
 
-        <Box sx={{flexGrow: 1}}/>
-
-        <NavDocs/>
-      </Scrollbar>
+      <NavDocs />
+    </Scrollbar>
   );
 
   return (
-      <Box
-          component="nav"
-          sx={{
-            flexShrink: {lg: 0},
-            width: {lg: NAV.W_DASHBOARD},
+    <Box
+      component="nav"
+      sx={{
+        flexShrink: { lg: 0 },
+        width: { lg: NAV.W_DASHBOARD },
+      }}
+    >
+      {isDesktop ? (
+        <Drawer
+          open
+          variant="permanent"
+          PaperProps={{
+            sx: {
+              width: NAV.W_DASHBOARD,
+              bgcolor: 'transparent',
+              borderRightStyle: 'dashed',
+            },
           }}
-      >
-        {isDesktop ? (
-            <Drawer
-                open
-                variant="permanent"
-                PaperProps={{
-                  sx: {
-                    width: NAV.W_DASHBOARD,
-                    bgcolor: 'transparent',
-                    borderRightStyle: 'dashed',
-                  },
-                }}
-            >
-              {renderContent}
-            </Drawer>
-        ) : (
-            <Drawer
-                open={openNav}
-                onClose={onCloseNav}
-                ModalProps={{
-                  keepMounted: true,
-                }}
-                PaperProps={{
-                  sx: {
-                    width: NAV.W_DASHBOARD,
-                  },
-                }}
-            >
-              {renderContent}
-            </Drawer>
-        )}
-      </Box>
+        >
+          {renderContent}
+        </Drawer>
+      ) : (
+        <Drawer
+          open={openNav}
+          onClose={onCloseNav}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          PaperProps={{
+            sx: {
+              width: NAV.W_DASHBOARD,
+            },
+          }}
+        >
+          {renderContent}
+        </Drawer>
+      )}
+    </Box>
   );
 }

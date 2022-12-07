@@ -277,7 +277,7 @@ export default function BlogNewPostForm() {
               loading={isSubmitting}
             >
               Gỡ
-            </Button>
+            </LoadingButton>
           </Stack>
         </Stack>
       </FormProvider>

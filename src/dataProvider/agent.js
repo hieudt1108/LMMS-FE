@@ -411,6 +411,10 @@ const updateClassMember = (id, payload) => {
   return putApi(`Class/updateMember/${id}`, payload);
 };
 
+const updateSubjectClass = (id, payload) => {
+  return putApi(`Class/addSubject/${id}`, payload);
+};
+
 // LEVEL
 const updateLevel = (id, payload) => {
   return putApi(`Level/${id}`, payload);
@@ -547,4 +551,5 @@ export {
   updateShareDocs,
   postCopyDocsToFolder,
   updateClassMember,
+  updateSubjectClass,
 };

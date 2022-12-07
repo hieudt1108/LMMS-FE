@@ -140,7 +140,7 @@ export default function GeneralFilePage({ dataGeneralFolder }) {
                           dataGeneralFolder={dataGeneralFolder}
                           key={index}
                           folder={folder}
-                          onClick={() => handleOnClickFileFolderCard(folder.id)}
+
                           onDelete={() => console.log('DELETE', folder.id)}
                           sx={{
                             ...(_folders.length > 3 && {

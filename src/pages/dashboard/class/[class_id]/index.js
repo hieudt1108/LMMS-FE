@@ -23,6 +23,7 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 //API
 import { getClassById } from '../../../../dataProvider/agent';
+import ClassAddSubjectDialog from "../../../../sections/@dashboard/class/form/ClassAddSubjectDialog";
 // ----------------------------------------------------------------------
 
 ClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -69,9 +70,20 @@ export default function ClassDetail() {
   const { themeStretch } = useSettingsContext();
 
   const { push } = useRouter();
-  const handleOnClickSubject = () => {
+  const handleOnClickAddMember = () => {
     push(PATH_DASHBOARD.class.addStudent(class_id));
   };
+
+  const [openAddSubject, setOpenAddSubject] = useState(false);
+
+  const handleOpenAddSubject = () => {
+    setOpenAddSubject(true);
+  };
+
+  const handleCloseAddSubject = () => {
+    setOpenAddSubject(false);
+  };
+
   return (
     <>
       <Head>
@@ -95,14 +107,21 @@ export default function ClassDetail() {
 
         {currentTab === 'reviews' ? (
           <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button onClick={handleOnClickSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-              Add User
+            <Button onClick={handleOnClickAddMember} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+              Thêm thành viên
             </Button>
             <div></div>
           </Box>
         ) : (
-          ''
+            <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
+              <Button onClick={handleOpenAddSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                Thêm môn học
+              </Button>
+              <div></div>
+            </Box>
         )}
+
+        <ClassAddSubjectDialog data={class_id} open={openAddSubject} onClose={handleCloseAddSubject}/>
 
         <Card>
           <Tabs

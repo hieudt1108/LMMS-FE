@@ -32,8 +32,10 @@ FileFolderCard.propTypes = {
 export default function FileFolderCard({ dataGeneralFolder, folder, selected, onSelect, onDelete, sx, ...other }) {
   const router = useRouter();
   const {
-    query: { pid },
+    query: { pid: pID },
+    push,
   } = useRouter();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const { copy } = useCopyToClipboard();
@@ -122,6 +124,13 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
     copy(folder.url);
   };
 
+    const handleOnClickFileFolderCard = (pid) => {
+        if (dataGeneralFolder) {
+            return dataGeneralFolder.setMyFolderId(pid);
+        }
+        push(PATH_DASHBOARD.folder.link(pid));
+    };
+
   return (
     <>
       <Card
@@ -172,7 +181,11 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
             checkedIcon={<Iconify icon="eva:checkmark-circle-2-fill" />}
           />
         ) : (
-          <Box component="img" src="/assets/icons/files/ic_folder.svg" sx={{ width: 40, height: 40 }} />
+          <Box
+              onClick={() => handleOnClickFileFolderCard(folder.id)}
+              component="img"
+              src="/assets/icons/files/ic_folder.svg"
+              sx={{ width: 40, height: 40 }} />
         )}
 
         <TextMaxLine variant="h6" onClick={handleOpenDetails} sx={{ mt: 1, mb: 0.5 }}>

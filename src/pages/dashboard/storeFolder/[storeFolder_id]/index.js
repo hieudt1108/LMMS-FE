@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Container, Grid, Stack } from '@mui/material';
+import {Container, Grid, IconButton, Stack, Typography} from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // hooks
@@ -22,6 +22,8 @@ import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import { createStoreFolderRedux, getStoreFolderRedux } from '../../../../redux/slices/storeFolder';
+import Iconify from "../../../../components/iconify";
+import UploadMyDocumentDialog from "../../../../sections/@dashboard/storeFolder/UploadMyDocumentDialog";
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +62,16 @@ export default function StoreFilePage() {
   const [openNewStoreFolder, setOpenNewStoreFolder] = useState(false);
 
   const [openUploadFile, setOpenUploadFile] = useState(false);
+
+  const [openFrom, setOpenFrom] = useState(false);
+
+  const handleOpenFrom = () => {
+    setOpenFrom(true);
+  };
+
+  const handleCloseFrom = () => {
+    setOpenFrom(false);
+  };
 
   const handleOpenNewStoreFolder = () => {
     setOpenNewStoreFolder(true);
@@ -148,12 +160,32 @@ export default function StoreFilePage() {
                 </Stack>
               </Scrollbar>
 
-              <FilePanel
-                title="Tài liệu gần đây"
-                link={PATH_DASHBOARD.fileManager}
-                onOpen={handleOpenUploadFile}
-                sx={{ mt: 2 }}
-              />
+              <Stack direction="row" alignItems="center" sx={{ mb: 3, mt: 2 }}>
+                <Stack flexGrow={1}>
+                  <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
+                    <Typography variant="h6"> Tài liệu gần đây </Typography>
+
+                    <IconButton
+                        size="small"
+                        color="success"
+                        onClick={handleOpenFrom}
+                        sx={{
+                          p: 0,
+                          width: 24,
+                          height: 24,
+                          color: 'common.white',
+                          bgcolor: 'success.main',
+                          '&:hover': {
+                            bgcolor: 'success.main',
+                          },
+                        }}
+                    >
+                      <Iconify icon="eva:plus-fill" />
+                    </IconButton>
+                  </Stack>
+                </Stack>
+              </Stack>
+              <UploadMyDocumentDialog open={openFrom} onClose={handleCloseFrom} />
 
               <Stack spacing={2}>
                 {listDocuments && listDocuments.length

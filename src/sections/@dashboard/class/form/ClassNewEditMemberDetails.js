@@ -49,8 +49,17 @@ export default function ClassNewEditMemberDetails(data) {
     const [users, setUsers] = useState([]);
     const [listRoles, setListRoles] = useState([]);
     const [listSubjects, setListSubjects] = useState([]);
+    const [roleID, setRoleID] = useState('');
 
     useEffect(() => {
+        const fetchUsers = async () => {
+            if(roleID.length  >0){
+                const response = await getAllUsers({ pageSize: 100, roleId: roleID});
+                console.log(response.data.data);
+                setUsers(response.data.data);
+            }
+        };
+
         const fetchRoles = async () => {
             const response = await getALlRoles({ pageSize: 100 });
             setListRoles(response.data.data);
@@ -62,8 +71,15 @@ export default function ClassNewEditMemberDetails(data) {
             setListSubjects(response.data.data);
         };
 
+
+        fetchUsers();
         fetchRoles();
         fetchSubjects();
+    }, []);
+
+    const handlerRoleChange = useCallback((event, value) => {
+        console.log('handlerRoleChange', event.target.value);
+        setRoleID(event.target.value)
     }, []);
 
     return (
@@ -78,30 +94,9 @@ export default function ClassNewEditMemberDetails(data) {
                         <Stack direction={{ xs: 'column' }} spacing={2} sx={{ width: 1 }}>
                             <Grid item container md={12} spacing={2}>
                                 <Grid item md={4} xs={12}>
-                                    <RHFAutocomplete
-                                        name={`items[${index}].nguoiDung`}
-                                        fullWidth
-                                        onChange={(event, value) => {
-                                            console.log(value);
-                                            setValue(`items[${index}].nguoiDung`, value);
-                                        }}
-                                        onInputChange={async (event, value, reason) => {
-                                            // if (reason === 'input') {
-                                            const response = await getAllUsers({
-                                                searchByEmail: value,
-                                                pageSize: 5,
-                                            });
-                                            console.log(response.data.data);
-                                            setUsers(response.data.data);
-                                            // }
-                                        }}
-                                        options={users}
-                                        getOptionLabel={(option) => option.email || ''}
-                                        renderInput={(params) => <TextField label="Người dùng" {...params} />}
-                                    />
-                                </Grid>
-                                <Grid item md={4} xs={12}>
-                                    <RHFSelect name={`items[${index}].vaiTro`} label="Vai trò">
+                                    <RHFSelect name={`items[${index}].vaiTro`}
+                                               onChange={handlerRoleChange}
+                                               label="Vai trò">
                                         <option value="" />
                                         {listRoles.length > 0 &&
                                             listRoles
@@ -113,6 +108,22 @@ export default function ClassNewEditMemberDetails(data) {
                                                 ))}
                                     </RHFSelect>
                                 </Grid>
+                                {roleID.length > 0 && (
+                                <Grid item md={4} xs={12}>
+                                    <RHFAutocomplete
+                                        name={`items[${index}].nguoiDung`}
+                                        fullWidth
+                                        onChange={(event, value) => {
+                                            console.log(value);
+                                            setValue(`items[${index}].nguoiDung`, value);
+                                        }}
+
+                                        options={users}
+                                        getOptionLabel={(option) => option.email || ''}
+                                        renderInput={(params) => <TextField label="Người dùng" {...params} />}
+                                    />
+                                </Grid>
+                                )}
                                 <Grid item md={4} xs={12}>
                                     <RHFAutocomplete
                                         name={`items[${index}].monDay`}

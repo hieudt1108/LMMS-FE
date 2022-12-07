@@ -39,17 +39,12 @@ export default function FileDetailsDrawer({
   ...other
 }) {
   const { getOne } = useSelector((state) => state.document);
-  const { getProgram } = useSelector((state) => state.program);
 
-  console.log('data', getProgram);
 
   const hasShared = getOne && !!getOne.listShare.length;
 
   const [listShare, setListShare] = useState(0);
 
-  const [openShare, setOpenShare] = useState(false);
-
-  const [inviteEmail, setInviteEmail] = useState('');
 
   const [toggleProperties, setToggleProperties] = useState(true);
 
@@ -59,9 +54,6 @@ export default function FileDetailsDrawer({
 
   const [programData, setProgramData] = useState([]);
 
-  useEffect(() => {
-    dispatch(getProgramRedux(getOne.programId));
-  }, [getOne.programId]);
 
   const handleToggleProperties = () => {
     setToggleProperties(!toggleProperties);

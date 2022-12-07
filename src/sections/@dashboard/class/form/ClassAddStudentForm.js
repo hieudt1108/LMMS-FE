@@ -14,14 +14,14 @@ import { updateClassMember } from 'src/dataProvider/agent';
 export default function ClassAddStudentForm({ isEdit = false, classID }) {
   const { push } = useRouter();
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
-    <>
+    <div>
       <ClassNewEditMemberDetails data={classID} />
-    </>
+    </div>
     // <FormProvider methods={methods}>
 
     //   <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>

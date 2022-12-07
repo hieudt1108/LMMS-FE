@@ -13,6 +13,10 @@ import gradeReducer from './slices/grade';
 import folderReducer from './slices/folder';
 import storeFolderReducer from './slices/storeFolder';
 import documentReducer from './slices/document';
+import userReducer from './slices/user';
+import myClassReducer from './slices/myclass';
+import roleReducer from './slices/roles';
+
 // ----------------------------------------------------------------------
 
 const createNoopStorage = () => ({
@@ -55,6 +59,9 @@ const rootReducer = combineReducers({
   folder: folderReducer,
   storeFolder: storeFolderReducer,
   document: documentReducer,
+  user: userReducer,
+  myclass: myClassReducer,
+  role: roleReducer,
 });
 
 export { rootPersistConfig, rootReducer };

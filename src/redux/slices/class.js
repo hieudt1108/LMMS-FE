@@ -11,6 +11,7 @@ const initialState = {
   isLoading: false,
   error: null,
   classes: [],
+  pagging: {},
   classObj: {
     code: '',
     name: '',
@@ -45,7 +46,8 @@ const slice = createSlice({
     // GET class
     getClassesSuccess(state, action) {
       state.isLoading = false;
-      state.classes = action.payload;
+      state.classes = action.payload.data.data;
+      state.pagging = JSON.parse(action.payload.headers['x-pagination']);
     },
 
     getClassSuccess(state, action) {
@@ -72,7 +74,8 @@ export function getClassesRedux(params) {
       }
       dispatch(slice.actions.startLoading());
       const response = await getAllClass(params);
-      dispatch(slice.actions.getClassesSuccess(response.data.data));
+      dispatch(slice.actions.getClassesSuccess(response));
+      // dispatch(slice.actions.getPagging(response.headers['x-pagination']));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -90,21 +93,6 @@ export function getClassRedux(params) {
       dispatch(slice.actions.startLoading());
       const response = await getClassById(params);
       dispatch(slice.actions.getClassSuccess(response.data.data));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
-
-export function getAllClassesRedux(params) {
-  return async () => {
-    try {
-      if (!params) {
-        return dispatch(slice.actions.getClassesSuccess([]));
-      }
-      dispatch(slice.actions.startLoading());
-      const response = await getAllClass(params);
-      dispatch(slice.actions.getClassesSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -11,6 +11,8 @@ const initialState = {
   isLoading: false,
   error: null,
   classes: [],
+  pagging: {},
+
   classObj: {
     code: '',
     name: '',
@@ -27,7 +29,7 @@ const initialState = {
 };
 
 const slice = createSlice({
-  name: 'class',
+  name: 'myclass',
   initialState,
   reducers: {
     // START LOADING
@@ -45,7 +47,8 @@ const slice = createSlice({
     // GET class
     getClassesSuccess(state, action) {
       state.isLoading = false;
-      state.classes = action.payload;
+      state.classes = action.payload.data.data;
+      state.pagging = JSON.parse(action.payload.headers['x-pagination']);
     },
 
     getClassSuccess(state, action) {
@@ -72,7 +75,7 @@ export function getClassesRedux(params) {
       }
       dispatch(slice.actions.startLoading());
       const response = await getAllMyClass(params);
-      dispatch(slice.actions.getClassesSuccess(response.data.data));
+      dispatch(slice.actions.getClassesSuccess(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -38,14 +38,14 @@ Classes.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function Classes() {
   const dispatch = useDispatch();
 
-  const { classes } = useSelector((state) => state.class);
+  const { pagging, classes } = useSelector((state) => state.class);
   const { programs } = useSelector((state) => state.program);
   const { grades } = useSelector((state) => state.grade);
-  console.log('Classes', classes);
+  console.log('Classes', pagging);
 
   const [pagingClass, setPagingClass] = React.useState({
     pageIndex: 1,
-    pageSize: '',
+    pageSize: '8',
     searchByName: '',
     gradeId: '',
     programId: '',
@@ -53,19 +53,6 @@ export default function Classes() {
 
   const [grade, setGrade] = React.useState('');
   const [program, setProgram] = React.useState('');
-  // const [allclasses, setallclasses] = useState([]);
-
-  // async function fethAllClasses() {
-  //   const res = await getAllClass({ pageIndex: 1, pageSize: 100 });
-  //   if (res.status < 400) {
-  //     setallclasses(res.data.data);
-  //   } else {
-  //     console.log(res.message);
-  //   }
-  // }
-  // useEffect(() => {
-  //   fethAllClasses();
-  // }, []);
 
   useEffect(() => {
     dispatch(getClassesRedux(pagingClass));
@@ -227,8 +214,8 @@ export default function Classes() {
           <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
             <Pagination
               size="small"
-              count={classes?.length % 2 === 0 ? classes?.length / 8 : Math.ceil(classes?.length / 8)}
-              rowsperpage={pagingClass.pageSize == '8'}
+              count={pagging.TotalPages}
+              rowsperpage={pagingClass.pageSize}
               onChange={handlePageChange}
               color="primary"
             />

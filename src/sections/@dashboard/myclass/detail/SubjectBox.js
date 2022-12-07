@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import { useCallback, useRef } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Box, Stack, Paper, Avatar, Typography, CardHeader } from '@mui/material';
-import { Math } from '../../../../assets/Subjects/mathLogo.png';
+import { Box, Stack, Paper, Avatar, Typography, CardHeader, Image, Grid, Item } from '@mui/material';
 // utils
 import { fDateTime } from '../../../../utils/formatTime';
 // components
@@ -11,6 +10,7 @@ import { fDateTime } from '../../../../utils/formatTime';
 import { SubjectImage } from '../../../../utils';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+import Iconify from '../../../../components/iconify';
 // ----------------------------------------------------------------------
 
 ClassNewestBooking.propTypes = {
@@ -36,13 +36,13 @@ export default function ClassNewestBooking({ myClass, title, subheader, sx, ...o
         }}
       />
 
-      {/* {list.map((item) => (
-          <BookingItem key={item.id} item={item} />
-        ))} */}
-
-      {myClass?.subjects?.map((item) => (
-        <BookingItem key={item.subjectId} item={item} />
-      ))}
+      <Grid container spacing={2}>
+        {myClass?.subjects?.map((item) => (
+          <Grid item xs={6} md={6}>
+            <BookingItem key={item.subjectId} item={item} />
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }
@@ -69,9 +69,6 @@ function BookingItem({ item }) {
       <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
         <Stack direction="row" alignItems="center" spacing={2}>
           <Avatar alt={name} src={avatar} />
-          {/* <div>
-            <img src={Math} style={{ maxWidth: 50, maxHeight: 50 }} alt="Math" />
-          </div> */}
 
           <div>
             <Typography variant="subtitle2">{name}</Typography>
@@ -84,13 +81,15 @@ function BookingItem({ item }) {
 
         <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            {/* <Iconify icon="fluent:text-number-list-ltr-24-filled" width={16} /> */}
-            <Typography variant="caption">{30} Slot</Typography>
+            <Iconify icon="ph:chalkboard-teacher-thin" width={20} />
+            <Typography variant="caption">
+              {teacherFirstName} {teacherLastName}
+            </Typography>
           </Stack>
 
           <Stack direction="row" alignItems="center" spacing={1}>
-            {/* <Iconify icon="carbon:document-attachment" width={16} /> */}
-            <Typography variant="caption">{50} Document</Typography>
+            <Iconify icon="carbon:document-attachment" width={20} />
+            <Typography variant="caption">{totalDocs} Document</Typography>
           </Stack>
         </Stack>
       </Stack>

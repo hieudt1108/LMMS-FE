@@ -1,13 +1,13 @@
 import React from 'react';
-import English from '../Assets/Subjects/englishLogo.png';
-import Physical from '../Assets/Subjects/physicsLogo.png';
-import Math from '../Assets/Subjects/mathLogo.png';
-import Chemistry from '../Assets/Subjects/chemistryLogo.png';
-import Philology from '../Assets/Subjects/philology.png';
-import History from '../Assets/Subjects/history.png';
-import Biology from '../Assets/Subjects/biology.png';
-import Geography from '../Assets/Subjects/geography.png';
-import MsOffice from '../Assets/Subjects/msoffice.png';
+import English from '../Assets/subjectlist/English.png';
+import Physical from '../Assets/subjectlist/Physics.png';
+import Math from '../Assets/subjectlist/Maths.png';
+// import Chemistry from '../Assets/Subjects/chemistryLogo.png';
+// import Philology from '../Assets/Subjects/philology.png';
+import History from '../Assets/subjectlist/History.png';
+import Biology from '../Assets/subjectlist/Biology.png';
+import Geography from '../Assets/subjectlist/Geography.png';
+// import MsOffice from '../Assets/Subjects/msoffice.png';
 import { Image } from '@mui/material';
 
 const SubjectImage = ({ subject, width, height }) => {

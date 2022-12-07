@@ -33,9 +33,13 @@ export default function ClassNewestBooking({ myClass, title, subheader, sx, ...o
         }}
       />
 
-      {myClass?.subjects?.map((item) => (
-        <BookingItem key={item.subjectId} item={item} />
-      ))}
+      <Grid container spacing={2}>
+        {myClass?.subjects?.map((item) => (
+          <Grid item xs={6} md={12}>
+            <BookingItem key={item.subjectId} item={item} />
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }

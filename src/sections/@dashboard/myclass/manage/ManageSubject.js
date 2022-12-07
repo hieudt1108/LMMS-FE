@@ -5,11 +5,7 @@ import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../..
 export default function ManageSubject({ myClass }) {
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
-          <ClassNewestBooking myClass={myClass} title="Môn học" subheader="12 môn học" />
-        </Grid>
-      </Grid>
+      <ClassNewestBooking myClass={myClass} title="Môn học" subheader="12 môn học" />
     </>
   );
 }

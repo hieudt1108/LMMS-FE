@@ -40,6 +40,7 @@ import {
 } from 'src/redux/slices/user';
 import { getRolesRedux } from 'src/redux/slices/roles';
 import { object } from 'prop-types';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 const checkArray = (arrayName) => {
@@ -51,6 +52,7 @@ export default function BlogNewPostForm({ classID }) {
   const formData = new FormData();
   const { pagination, addUserInCLass } = useSelector((state) => state.user);
   const { roles } = useSelector((state) => state.role);
+  const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = (() => {
     return Yup.object().shape({
@@ -106,32 +108,33 @@ export default function BlogNewPostForm({ classID }) {
     for (let index = items.length - 1; index >= 0; --index) {
       try {
         const data = items[index];
-
-        if (!data.roleId) {
-          data.roleId = addUserInCLass[index].roles[0].id;
-        }
-        if (!data.userId) {
-          data.userId = addUserInCLass[index].users[0].id;
-        }
-        if (!data.subjectId) {
-          data.subjectId = addUserInCLass[index]?.subjects[0].id;
-        }
-        console.log('data.userId', data.userId);
+        // chuan bi
         const obj = {
           userId: 0,
           userRoleClass: {
             roleId: 0,
-            subjectId: [0],
+            subjectId: [],
           },
         };
+
+        if (data.userId) {
+          obj.userId = data.userId;
+        } else {
+          obj.userId = addUserInCLass[index].users[0].id;
+        }
+
+        if (data.roleId) {
+          obj.userRoleClass.roleId = data.roleId;
+        } else {
+          obj.userRoleClass.roleId = addUserInCLass[index].roles[0].id;
+        }
+
+        if (data.subjectId.length !== 0) {
+          obj.userRoleClass.subjectId = data.subjectId.map((data) => data.id);
+        }
+
         dataPayload.push(obj);
 
-        console.log('dataPayload: ', dataPayload);
-        // const response = await updateClassMember(classID, dataPayload);
-        // if (response.status !== 200) {
-        //   enqueueSnackbar(`Thêm người dùng${data.userId} thất bại`, { variant: 'error' });
-        //   continue;
-        // }
         // remove(index);
         // enqueueSnackbar(`Tạo tài liệu${data.userId} thành công`);
         // console.log('responsePostDocument', response);
@@ -139,6 +142,14 @@ export default function BlogNewPostForm({ classID }) {
       } catch (error) {
         console.error(`onSubmit error at index: ${index}`, error);
       }
+    }
+    console.log('dataPayload: ', dataPayload);
+    const response = await updateClassMember(classID, dataPayload);
+    console.log('response: ', response);
+    if (response instanceof Error) {
+      enqueueSnackbar(`Thêm  thất bại`, { variant: 'error' });
+    } else {
+      enqueueSnackbar(`Thêm thành công `, { variant: 'error' });
     }
   };
 

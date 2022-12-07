@@ -1,53 +1,83 @@
-import sum from 'lodash/sum';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import * as Yup from 'yup';
+import { useState, useCallback, useEffect, useMemo } from 'react';
+// next
+import { useRouter } from 'next/router';
 // form
-import { useFormContext, useFieldArray, useForm, FormProvider } from 'react-hook-form';
-// redux
-import { useDispatch, useSelector } from 'react-redux';
-import { getUsersByRoleIdRedux, getUsersRedux } from 'src/redux/slices/user';
-import { getRolesRedux } from 'src/redux/slices/roles';
-
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useFieldArray, useForm } from 'react-hook-form';
 // @mui
+import { LoadingButton } from '@mui/lab';
 import {
-  Box,
-  Stack,
-  Button,
-  Divider,
-  Typography,
-  InputAdornment,
-  MenuItem,
-  Alert,
-  Chip,
-  TextField,
   Grid,
+  Card,
+  Stack,
+  Typography,
+  Divider,
+  Button,
+  FormControl,
   InputLabel,
   Select,
-  FormControl,
-  Card,
+  MenuItem,
+  TextField,
+  Chip,
 } from '@mui/material';
-// utils
-import { fNumber, fCurrency } from '../../../../utils/formatNumber';
-// components
-import Iconify from '../../../../components/iconify';
-import { RHFAutocomplete, RHFSelect, RHFTextField } from '../../../../components/hook-form';
-import { getALlRoles, getAllSubject, getAllUsers } from '../../../../dataProvider/agent';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { LoadingButton } from '@mui/lab';
+// routes
+//components
+// import { useSnackbar } from '../../../components/snackbar';
+import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload, RHFAutocomplete } from 'src/components/hook-form';
+// ----------------------------------------------------------------------
+import { postDocument, postFile } from 'src/dataProvider/agent';
+import { useSelector } from 'react-redux';
+import { dispatch } from 'src/redux/store';
+import { createDocumentInitialRedux, uploadDocumentRedux } from 'src/redux/slices/folder';
+import { Upload } from 'src/components/upload';
+import Iconify from 'src/components/iconify';
+import { useAuthContext } from 'src/auth/useAuthContext';
+import { useSnackbar } from 'notistack';
+import {
+  createAddUserInCLassRedux,
+  filterSubjectRedux,
+  getUsersByRoleIdRedux,
+  getUsersRedux,
+} from 'src/redux/slices/user';
+import { getRolesRedux } from 'src/redux/slices/roles';
 
-export default function ClassNewEditMemberDetails(data) {
-  const dispatch = useDispatch();
+// ----------------------------------------------------------------------
+const checkArray = (arrayName) => {
+  return arrayName && arrayName.length;
+};
 
-  const { pagination, users } = useSelector((state) => state.user);
+export default function BlogNewPostForm() {
+  const { user } = useAuthContext();
+  const formData = new FormData();
+  const {
+    query: { folder_id: folderId },
+    push,
+  } = useRouter();
+
+  const { pagination, addUserInCLass } = useSelector((state) => state.user);
   const { roles } = useSelector((state) => state.role);
 
-  console.log(users, roles);
+  const validationSchema = (() => {
+    return Yup.object().shape({
+      items: Yup.array().of(
+        Yup.object().shape({
+          name: Yup.string().required('Name is require!'),
+          code: Yup.string().required('Code is require!'),
+          description: Yup.string().required('Description is require!'),
+        })
+      ),
+    });
+  })();
+
+  const { newDocument } = useSelector((state) => state.folder);
 
   const defaultValues = useMemo(() => ({
     items: [
       {
         roleId: '',
         userId: '',
-        // subjectId: '',
+        subjectId: [],
       },
     ],
   }));
@@ -71,11 +101,21 @@ export default function ClassNewEditMemberDetails(data) {
     name: 'items',
   });
 
-  const handleAdd = () => {
+  useEffect(() => {
+    dispatch(getUsersRedux({ pageIndex: 1, pageSize: 100 }, 0));
+  }, []);
+
+  const onSubmit = async ({ items }) => {
+    console.log('onSubmit', items);
+  };
+
+  const handleAdd = (index) => {
+    dispatch(createAddUserInCLassRedux());
+    dispatch(getUsersRedux({ pageIndex: 1, pageSize: 100 }, index));
     append({
       roleId: '',
       userId: '',
-      subjectId: '',
+      subjectId: [],
     });
   };
 
@@ -83,134 +123,117 @@ export default function ClassNewEditMemberDetails(data) {
     remove(index);
   };
 
-  // const [users, setUsers] = useState([]);
-  const [listRoles, setListRoles] = useState('');
-  const [oneUser, setOneUser] = useState('');
-
-  useEffect(() => {
-    dispatch(getUsersRedux(pagination));
-    dispatch(getRolesRedux({ pageIndex: 1, pageSize: 100 }));
-  }, [dispatch]);
-  // console.log('role id', listRoles);
-
-  const handlerRoleChange = useCallback((event, value) => {
+  const handlerRoleChange = useCallback((event, index) => {
+    console.log('handlerRoleChange', event.target.name, event.target.value);
+    setValue(event.target.name, event.target.value);
+    // console.log('handlerRoleChange');
     // console.log('handlerRoleChange', value.props.value);
     // setListRoles(value.props.value);
-    dispatch(getUsersByRoleIdRedux({ ...pagination, roleId: value?.props.value }));
+    // setvalue()
+    dispatch(getUsersByRoleIdRedux({ ...pagination, roleId: event.target.value }, index));
   }, []);
 
-  const handlerUserChange = useCallback((event, value) => {
+  const handlerUserChange = (event, index) => {
+    console.log('handlerUserChange', event, index);
+    setValue(event.target.name, event.target.value);
+    dispatch(filterSubjectRedux({ users: addUserInCLass[index].users, userId: event.target.value, index }));
     // console.log('handlerUserChange', value.id);
     // setOneUser(value.props.value);
-    dispatch(getUsersByRoleIdRedux({ ...pagination, userId: value?.props.value }));
-  }, []);
-
-  const onSubmit = async ({ items }) => {
-    console.log('onSubmit', items);
-    // for (let index = items.length - 1; index >= 0; --index) {
-    //   try {
-    //     const data = items[index];
-    //     if (!data.file) {
-    //       continue;
-    //     }
-    //     if (!data.programId) {
-    //       data.programId = programs[0].id;
-    //     }
-    //     if (!data.subjectId) {
-    //       data.subjectId = user.subjects[0].id;
-    //     }
-    //     if (!data.typeDocumentId) {
-    //       data.typeDocumentId = typeDocuments[0].id;
-    //     }
-    //     console.log('data', data);
-    //     data.folderId = folderId;
-
-    //     formData.append('File', getValues(`items[${index}].file`));
-    //     const response = await postFile(formData);
-    //     if (response.status !== 200) {
-    //       enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
-    //       continue;
-    //     }
-    //     console.log('response', response);
-    //     data.TypeFile = response.data.contentType;
-    //     data.urlDocument = response.data.fileName;
-    //     data.size = response.data.size;
-    //     const responsePostDocument = await postDocument(data);
-    //     if (responsePostDocument.status !== 200) {
-    //       enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
-    //       continue;
-    //     }
-    //     remove(index);
-    //     enqueueSnackbar(`Tạo tài liệu${data.code} thành công`);
-    //     console.log('responsePostDocument', responsePostDocument);
-    //   } catch (error) {
-    //     console.error(`onSubmit error at index: ${index}`, error);
-    //   }
-    // }
-    // items.map((data, index) => {
-    //   data.status = data.status ? 1 : 0;
-    //   dispatch(uploadDocumentRedux(data)).then(() => {
-    //     enqueueSnackbar('Tạo tài liệu thành công');
-    //     push(PATH_DASHBOARD.folder.link(folderId));
-    //   });
-    // });
   };
+  console.log('BlogNewPostForm', getValues('items'), addUserInCLass);
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h6" sx={{ color: 'text.disabled', mb: 3 }}>
-        Chi tiết:
-      </Typography>
-
+    <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         {fields.map((item, index) => (
           <div key={index}>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={5}>
+              <Grid item xs={12} md={12}>
                 <Card sx={{ p: 3 }}>
                   <Stack spacing={3}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Quyền</span>
-                      <RHFSelect name={`items[${index}].roleId`} placeholder="Quyền">
-                        {roles.map((option, index) => (
-                          <option key={index} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
+                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Người dùng</span>
+                      <RHFSelect
+                        name={`items[${index}].userId`}
+                        placeholder="nguoi"
+                        onChange={(event) => handlerUserChange(event, index)}
+                      >
+                        {checkArray(addUserInCLass) &&
+                          checkArray(addUserInCLass[index].users) &&
+                          addUserInCLass[index].users.map((option, index) => (
+                            <option key={index} value={option.id}>
+                              {option.email} - {option.firstName} {option.lastName}
+                            </option>
+                          ))}
                       </RHFSelect>
                     </div>
-                    {/* <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Người dùng</span>
-                      <RHFSelect name={`items[${index}].userId`} placeholder="Môn học">
-                        {users.map((option, index) => (
-                          <option key={index} value={option.id}>
-                            {option.email}
-                          </option>
-                        ))}
-                      </RHFSelect>
-                    </div> */}
-                    {/* <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
-                      <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
-                        {typeDocuments.map((option, index) => (
-                          <option key={index} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </RHFSelect>
-                    </div> */}
+                    {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Quyền</span>
+                        <RHFSelect
+                          name={`items[${index}].roleId`}
+                          placeholder="Quyền"
+                          onChange={(event) => handlerRoleChange(event, index)}
+                        >
+                          {addUserInCLass[index].roles.map((option, index) => (
+                            <option key={index} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </RHFSelect>
+                      </div>
+                    )}
+
+                    {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].subjects) && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
+                        <RHFAutocomplete
+                          sx={{ width: '856px' }}
+                          name={`items[${index}].subjectId`}
+                          multiple
+                          onChange={(event, newValue) => {
+                            console.log('RHFAutocomplete', newValue);
+                            setValue(`items[${index}].subjectId`, newValue);
+                          }}
+                          options={addUserInCLass[index].subjects.length ? addUserInCLass[index].subjects : []}
+                          renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                              <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
+                            ))
+                          }
+                          renderInput={(params) => {
+                            return <TextField {...params} />;
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    {/*
+                    
+                    // checkArray(addUserInCLass) && checkArray(addUserInCLass[index].subjects)
+                          //   ? addUserInCLass[index].subjects
+                          //   : []
+                    
+                    {subjects && subjects.length ? (
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
+                        <RHFSelect name={`items[${index}].subjectId`} placeholder="Môn học">
+                          {subjects.map((option, index) => (
+                            <option key={index} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </RHFSelect>
+                      </div>
+                    ) : (
+                      ''
+                    )} */}
                   </Stack>
                 </Card>
 
@@ -236,7 +259,12 @@ export default function ClassNewEditMemberDetails(data) {
           direction={{ xs: 'column-reverse', md: 'row' }}
           alignItems={{ xs: 'flex-start', md: 'center' }}
         >
-          <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
+          <Button
+            size="small"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={() => handleAdd(fields.length)}
+            sx={{ flexShrink: 0 }}
+          >
             Thêm bản ghi
           </Button>
 
@@ -253,6 +281,6 @@ export default function ClassNewEditMemberDetails(data) {
           </Stack>
         </Stack>
       </FormProvider>
-    </Box>
+    </>
   );
 }

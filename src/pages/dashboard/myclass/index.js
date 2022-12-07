@@ -40,12 +40,12 @@ MyClass.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function MyClass() {
   const dispatch = useDispatch();
 
-  const { classes } = useSelector((state) => state.class);
+  const { pagging, classes } = useSelector((state) => state.myclass);
   const { programs } = useSelector((state) => state.program);
   const { grades } = useSelector((state) => state.grade);
 
   const { ROLES, SUBJECTS } = useAuthContext();
-  console.log('test user context: ', ROLES, '\n', SUBJECTS);
+  // console.log('test user context: ', ROLES, '\n', SUBJECTS);
 
   const [pagingClass, setPagingClass] = React.useState({
     pageIndex: 1,
@@ -217,7 +217,7 @@ export default function MyClass() {
           <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
             <Pagination
               size="small"
-              count={classes?.length / 2}
+              count={pagging.TotalPages}
               rowsperpage={pagingClass.pageSize}
               onChange={handlePageChange}
               color="primary"

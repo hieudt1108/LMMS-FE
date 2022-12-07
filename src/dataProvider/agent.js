@@ -412,7 +412,7 @@ const updateClassMember = (id, payload) => {
 };
 
 const updateSubjectClass = (id, payload) => {
-  return putApi(`Class/addSubject/${id}`, payload);
+  return putApi(`Class/updateSubject/${id}`, payload);
 };
 
 // LEVEL

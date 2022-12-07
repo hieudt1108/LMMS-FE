@@ -26,18 +26,20 @@ import {LoadingButton} from "@mui/lab";
 // ----------------------------------------------------------------------
 
 
-export default function ClassAddSubjectDialog({data, open, onClose}) {
+export default function ClassAddSubjectDialog({classID, open, onClose}) {
+    console.log(classID)
     const {enqueueSnackbar} = useSnackbar();
 
     const validationSchema = (() => {
         return Yup.object().shape({
-            rolesID: Yup.array().min(1, 'Hãy chọn vai trò'),
+            subjectId: Yup.array().min(1, 'Hãy chọn 1 môn học'),
         })
     })();
 
     const defaultValues = useMemo(
         () => ({
-            subjectId: [],
+            subjectId: '',
+            subjectsId: [],
             tagsId: [],
 
         }),
@@ -45,7 +47,7 @@ export default function ClassAddSubjectDialog({data, open, onClose}) {
     );
 
     const methods = useForm({
-        // resolver: yupResolver(validationSchema),
+        resolver: yupResolver(validationSchema),
         defaultValues,
     });
 
@@ -54,6 +56,7 @@ export default function ClassAddSubjectDialog({data, open, onClose}) {
         watch,
         control,
         setValue,
+        getValues,
         handleSubmit,
         formState: {isSubmitting, errors},
     } = methods;
@@ -83,9 +86,17 @@ export default function ClassAddSubjectDialog({data, open, onClose}) {
     }
 
     const onSubmit = async (data) => {
-        console.log('est')
+        let postData = [];
+        for (let i = 0; i < data.tagsId.length; i++) {
+            postData.push({
+                subjectId: data.tagsId[i],
+            });
+        }
+        console.log('postData', postData);
+        console.log('defaultValues', defaultValues);
         try {
-            const res = await updateSubjectClass(data.tagsId)
+            const res = await updateSubjectClass(classID, {postData})
+            console.log(res)
             if (res.status < 400) {
                 reset();
                 enqueueSnackbar('Create success!');
@@ -99,30 +110,22 @@ export default function ClassAddSubjectDialog({data, open, onClose}) {
     };
 
     return (
-        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-            <Dialog
-                fullWidth
-                maxWidth="xs"
-                open={open}
-            >
-                <DialogActions sx={{py: 2, px: 3}}>
-                    <Typography variant="h6" sx={{flexGrow: 1}}>
-                        Thêm môn học
-                    </Typography>
 
-                    <Button
-                        variant="outlined"
-                        color="inherit"
-                        onClick={() => {
-                            onClose();
-                        }}
-                    >
-                        Quay lại
-                    </Button>
-                </DialogActions>
+        <Dialog
+            fullWidth
+            maxWidth="sm"
+            open={open}
+        >
+            <DialogActions sx={{py: 2, px: 3}}>
+                <Typography variant="h6" sx={{flexGrow: 1}}>
+                    Thêm môn học
+                </Typography>
 
-                <Divider/>
 
+            </DialogActions>
+
+            <Divider/>
+            <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Card sx={{p: 3}}>
@@ -136,10 +139,10 @@ export default function ClassAddSubjectDialog({data, open, onClose}) {
                                 }}
                             >
                                 <RHFAutocomplete
-                                    name="subjectId"
+                                    name="subjectsId"
                                     multiple
                                     onChange={(event, newValue) => {
-                                        setValue('subjectId', newValue);
+                                        setValue('subjectsId', newValue);
                                         const tagsId = newValue.map((tag) => tag.id);
                                         setValue('tagsId', tagsId);
                                     }}
@@ -159,15 +162,24 @@ export default function ClassAddSubjectDialog({data, open, onClose}) {
                                     }
                                 />
                             </Box>
-                            <Stack alignItems="flex-end" sx={{mt: 3}}>
+                            <Stack justifyContent="flex-end" direction="row" spacing={1.5} sx={{ mt: 3 }}>
+                                <LoadingButton variant="outlined"
+                                               color="inherit"
+                                               onClick={() => {
+                                                   onClose();
+                                               }}>
+                                    Quay lại
+                                </LoadingButton>
                                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                                     Thêm mới
                                 </LoadingButton>
                             </Stack>
                         </Card>
+
                     </Grid>
                 </Grid>
-            </Dialog>
-        </FormProvider>
+            </FormProvider>
+        </Dialog>
+
     );
 }

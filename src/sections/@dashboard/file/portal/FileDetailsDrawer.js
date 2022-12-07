@@ -40,11 +40,9 @@ export default function FileDetailsDrawer({
 }) {
   const { getOne } = useSelector((state) => state.document);
 
-
   const hasShared = getOne && !!getOne.listShare.length;
 
   const [listShare, setListShare] = useState(0);
-
 
   const [toggleProperties, setToggleProperties] = useState(true);
 

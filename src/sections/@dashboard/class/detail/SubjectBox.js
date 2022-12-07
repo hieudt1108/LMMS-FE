@@ -1,93 +1,154 @@
 import PropTypes from 'prop-types';
-import { useCallback, useRef } from 'react';
+import {useCallback, useRef, useState} from 'react';
 // @mui
-import { useTheme } from '@mui/material/styles';
-import { Box, Stack, Paper, Avatar, Typography, CardHeader } from '@mui/material';
+import {useTheme} from '@mui/material/styles';
+import {
+    Box,
+    Stack,
+    Paper,
+    Avatar,
+    Typography,
+    CardHeader,
+    Checkbox,
+    IconButton,
+    AvatarGroup,
+    MenuItem, Divider, Button
+} from '@mui/material';
 // utils
-import { fDateTime } from '../../../../utils/formatTime';
+import {fDateTime} from '../../../../utils/formatTime';
 // components
-import { useRouter } from 'next/router';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import {useRouter} from 'next/router';
+import {PATH_DASHBOARD} from '../../../../routes/paths';
+import SubjectImage from "../../../../utils/SubjectImage";
+import MenuPopover from "../../../../components/menu-popover";
+import Iconify from "../../../../components/iconify";
+import useResponsive from "../../../../hooks/useResponsive";
+import FileThumbnail, {fileFormat} from "../../../../components/file-thumbnail";
+import {FileDetailsDrawer, FileShareDialog} from "../../file";
+import ConfirmDialog from "../../../../components/confirm-dialog";
+import Image from '../../../../components/image';
+import Carousel, {CarouselArrows} from "../../../../components/carousel";
 // ----------------------------------------------------------------------
 
 ClassNewestBooking.propTypes = {
-  sx: PropTypes.object,
-  list: PropTypes.array,
-  title: PropTypes.string,
-  subheader: PropTypes.string,
+    sx: PropTypes.object,
+    list: PropTypes.array,
+    title: PropTypes.string,
+    subheader: PropTypes.string,
 };
 
-export default function ClassNewestBooking({ myClass, title, subheader, sx, ...other }) {
-  const theme = useTheme();
+export default function ClassNewestBooking({myClass, title, subheader, sx, ...other}) {
+    const theme = useTheme();
 
-  return (
-    <Box sx={{ py: 2, ...sx }} {...other}>
-      <CardHeader
-        title={title}
-        subheader={subheader}
-        // action={<CarouselArrows onNext={handleNext} onPrevious={handlePrev} />}
-        sx={{
-          p: 0,
-          mb: 3,
-          '& .MuiCardHeader-action': { alignSelf: 'center' },
-        }}
-      />
+    const carouselRef = useRef(null);
 
-      {myClass?.subjects?.map((item) => (
-        <BookingItem key={item.subjectId} item={item} />
-      ))}
-    </Box>
-  );
+    const carouselSettings = {
+        dots: false,
+        arrows: false,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        rtl: Boolean(theme.direction === 'rtl'),
+        responsive: [
+            {
+                breakpoint: theme.breakpoints.values.lg,
+                settings: {
+                    slidesToShow: 3,
+                },
+            },
+            {
+                breakpoint: theme.breakpoints.values.md,
+                settings: {
+                    slidesToShow: 2,
+                },
+            },
+            {
+                breakpoint: theme.breakpoints.values.sm,
+                settings: {
+                    slidesToShow: 1,
+                },
+            },
+        ],
+    };
+
+    const handlePrev = () => {
+        carouselRef.current?.slickPrev();
+    };
+
+    const handleNext = () => {
+        carouselRef.current?.slickNext();
+    };
+
+    return (
+        <Box sx={{ py: 2, ...sx }} {...other}>
+            <CardHeader
+                title={title}
+                subheader={subheader}
+                action={<CarouselArrows onNext={handleNext} onPrevious={handlePrev} />}
+                sx={{
+                    p: 0,
+                    mb: 3,
+                    '& .MuiCardHeader-action': { alignSelf: 'center' },
+                }}
+            />
+            <Carousel ref={carouselRef} {...carouselSettings}>
+                {myClass?.subjects?.map((item) => (
+                    <BookingItem key={item.subjectId} item={item} />
+                ))}
+            </Carousel>
+        </Box>
+    );
 }
 
 // ----------------------------------------------------------------------
 
-function BookingItem({ item }) {
-  const { code, name, subjectId, teacherFirstName, teacherLastName, totalDocs, avatar } = item;
+function BookingItem({item}) {
+    const {code, name, subjectId, teacherFirstName, teacherLastName, totalDocs, avatar} = item;
 
-  const {
-    query: { class_id },
-  } = useRouter();
+    const {
+        query: {class_id},
+    } = useRouter();
 
-  const { push } = useRouter();
-  const handleOnClickSubject = () => {
-    push(PATH_DASHBOARD.class.subject(class_id, subjectId));
-  };
+    const {push} = useRouter();
+    const isDesktop = useResponsive('up', 'sm');
+    const [openPopover, setOpenPopover] = useState(null);
 
-  return (
-    <Paper
-      onClick={handleOnClickSubject}
-      sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral', cursor: 'pointer' }}
-    >
-      <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar alt={name} src={avatar} />
+    const handleOnClickSubject = () => {
+        push(PATH_DASHBOARD.class.subject(class_id, subjectId));
+    };
 
-          <div>
-            <Typography variant="subtitle2">{name}</Typography>
+    const handleOpenPopover = (event) => {
+        setOpenPopover(event.currentTarget);
+    };
 
-            {/* <Typography variant="caption" sx={{ color: 'text.disabled', mt: 0.5, display: 'block' }}>
-              {fDateTime(bookdAt)}
-            </Typography> */}
-          </div>
-        </Stack>
+    const handleClosePopover = () => {
+        setOpenPopover(null);
+    };
 
-        <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            {/* <Iconify icon="fluent:text-number-list-ltr-24-filled" width={16} /> */}
-            <Typography variant="caption">Slot {40}</Typography>
-          </Stack>
+    return (
+        <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
+            <Stack alignItems="center" spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                    <div>
+                        <Typography  variant="subtitle2">{name}</Typography>
+                    </div>
+                </Stack>
 
-          <Stack direction="row" alignItems="center" spacing={1}>
-            {/* <Iconify icon="carbon:document-attachment" width={16} /> */}
-            <Typography variant="caption">{50} Document</Typography>
-          </Stack>
-        </Stack>
-      </Stack>
+                <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                        <Iconify icon="eva:layers-outline" width={16} />
+                        <Typography variant="caption"> {50} Tiết học</Typography>
+                    </Stack>
 
-      {/* <Box sx={{ p: 1, cursor: 'pointer' }}>
-        <Image alt="cover" src={cover} sx={{ borderRadius: 1 }} />
-      </Box> */}
-    </Paper>
-  );
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                        <Iconify icon="eva:file-outline" width={16} />
+                        <Typography variant="caption">{50} Tài liệu</Typography>
+                    </Stack>
+                </Stack>
+            </Stack>
+
+            <Box onClick={handleOnClickSubject} sx={{ p: 1, position: 'relative' }}>
+                <Image alt="cover" src={'http://lmms.site:7070/assets/images/subjects/history.png'}  sx={{ borderRadius: 1.5 }} />
+            </Box>
+        </Paper>
+    );
 }

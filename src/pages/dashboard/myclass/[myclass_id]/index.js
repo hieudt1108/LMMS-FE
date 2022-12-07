@@ -83,6 +83,7 @@ export default function MyClassDetail() {
   const handleCloseAddSubject = () => {
     setOpenAddSubject(false);
   };
+
   return (
     <>
       <Head>
@@ -113,14 +114,14 @@ export default function MyClassDetail() {
           </Box>
         ) : (
           <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button onClick={handleOpenAddSubject}  variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+            <Button onClick={handleOpenAddSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
               Thêm môn học
             </Button>
             <div></div>
           </Box>
         )}
 
-        <ClassAddSubjectDialog open={openAddSubject} onClose={handleCloseAddSubject}/>
+        <ClassAddSubjectDialog classID={myclass_id} open={openAddSubject} onClose={handleCloseAddSubject}/>
 
         <Card>
           <Tabs

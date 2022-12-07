@@ -24,6 +24,7 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 //API
 import { getClassById } from '../../../../dataProvider/agent';
+import ClassAddSubjectDialog from "../../../../sections/@dashboard/class/form/ClassAddSubjectDialog";
 
 MyClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -72,6 +73,16 @@ export default function MyClassDetail() {
   const handleOnClickSubject = () => {
     push(PATH_DASHBOARD.myclass.addMember(myclass_id));
   };
+
+  const [openAddSubject, setOpenAddSubject] = useState(false);
+
+  const handleOpenAddSubject = () => {
+    setOpenAddSubject(true);
+  };
+
+  const handleCloseAddSubject = () => {
+    setOpenAddSubject(false);
+  };
   return (
     <>
       <Head>
@@ -102,12 +113,14 @@ export default function MyClassDetail() {
           </Box>
         ) : (
           <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button onClick={handleOnClickSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+            <Button onClick={handleOpenAddSubject}  variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
               Thêm môn học
             </Button>
             <div></div>
           </Box>
         )}
+
+        <ClassAddSubjectDialog open={openAddSubject} onClose={handleCloseAddSubject}/>
 
         <Card>
           <Tabs

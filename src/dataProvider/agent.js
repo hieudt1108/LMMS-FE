@@ -206,7 +206,6 @@ function getPermissionById(id) {
   return getApi(`/Permission/getOne/${id}`);
 }
 
-
 // POST API AREA ============================>
 async function postApi(url, payload, file) {
   const token = getLocalStorage('access_token');
@@ -313,6 +312,11 @@ const postTypeDocument = (payload) => {
   return postApi('TypeDocument', payload);
 };
 
+// TYPE_DOCUMENT
+const postCopyDocsToFolder = (folderId, docsId) => {
+  return postApi(`Document/copyDocsToFolder?folderId=${folderId}&docsId=${docsId}`, {});
+};
+
 // DELETE API AREA ============================>
 async function deleteApi(url) {
   const token = getLocalStorage('access_token');
@@ -405,6 +409,10 @@ const updateClass = (id, payload) => {
 
 const updateClassMember = (id, payload) => {
   return putApi(`Class/updateMember/${id}`, payload);
+};
+
+const updateSubjectClass = (id, payload) => {
+  return putApi(`Class/addSubject/${id}`, payload);
 };
 
 // LEVEL
@@ -541,5 +549,7 @@ export {
   getMenu,
   addShareDoc,
   updateShareDocs,
+  postCopyDocsToFolder,
   updateClassMember,
+  updateSubjectClass,
 };

@@ -22,7 +22,7 @@ FileShareDialog.propTypes = {
 export default function FileShareDialog({ open, onClose, ...other }) {
   const { getOne } = useSelector((state) => state.document);
   const hasShared = getOne && !!getOne.listShare.length;
-  console.log('FileShareDialog', getOne);
+  // console.log('FileShareDialog', getOne);
 
   const handleSendInvite = useCallback(() => {
     console.log('handleSendInvite');

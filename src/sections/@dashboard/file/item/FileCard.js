@@ -202,7 +202,7 @@ export default function FileCard({ file, selected, onSelect, onDelete, sx, ...ot
 
       <FileDetailsDrawer
         item={file}
-        favorited={favorited}
+        favorite={favorited}
         onFavorite={handleFavorite}
         onCopyLink={handleCopy}
         open={openDetails}

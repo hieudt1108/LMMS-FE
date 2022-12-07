@@ -22,6 +22,7 @@ import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -33,20 +34,20 @@ GeneralFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function GeneralFilePage() {
+export default function GeneralFilePage({ dataGeneralFolder }) {
   const theme = useTheme();
-
+  const { enqueueSnackbar } = useSnackbar();
   const {
     query: { folder_id: folderID },
     push,
   } = useRouter();
-  const { folder } = useSelector((state) => state.folder);
+  const { error, folder } = useSelector((state) => state.folder);
   const { id, listFolders, listDocuments } = folder;
-  console.log('GeneralFilePage', listFolders, listDocuments);
+  console.log('GeneralFilePage', listFolders, listDocuments, dataGeneralFolder);
 
   useEffect(() => {
-    dispatch(getFolderRedux(folderID));
-  }, [dispatch, folderID]);
+    dataGeneralFolder ? dispatch(getFolderRedux(dataGeneralFolder.myFolderId)) : dispatch(getFolderRedux(folderID));
+  }, [folderID, dataGeneralFolder]);
 
   const smDown = useResponsive('down', 'sm');
 
@@ -91,6 +92,7 @@ export default function GeneralFilePage() {
       })
     );
     handleCloseNewFolder();
+    enqueueSnackbar(error ? error : 'Tạo thư mục thành công', { variant: 'error' });
   };
 
   const handleDrop = useCallback(
@@ -106,10 +108,13 @@ export default function GeneralFilePage() {
     [files]
   );
 
-  const handleOnClickFileFolderCard = useCallback((folder_id) => {
-    console.log('handleOnClickFileFolderCard', folder_id);
+  const handleOnClickFileFolderCard = (folder_id) => {
+    console.log('handleOnClickFileFolderCard', folder_id, dataGeneralFolder);
+    if (dataGeneralFolder) {
+      return dataGeneralFolder.setMyFolderId(folder_id);
+    }
     push(PATH_DASHBOARD.folder.link(folder_id));
-  }, []);
+  };
 
   return (
     <>
@@ -124,7 +129,7 @@ export default function GeneralFilePage() {
               <FilePanel
                 title="Folders"
                 link={PATH_DASHBOARD.fileManager}
-                onOpen={handleOpenNewFolder}
+                onOpen={!dataGeneralFolder ? handleOpenNewFolder : ''}
                 sx={{ mt: 5 }}
               />
               <Scrollbar>
@@ -132,9 +137,10 @@ export default function GeneralFilePage() {
                   {listFolders && listFolders.length
                     ? listFolders.map((folder, index) => (
                         <FileFolderCard
+                          dataGeneralFolder={dataGeneralFolder}
                           key={index}
                           folder={folder}
-                          onClick={() => handleOnClickFileFolderCard(folder.id)}
+
                           onDelete={() => console.log('DELETE', folder.id)}
                           sx={{
                             ...(_folders.length > 3 && {
@@ -150,7 +156,7 @@ export default function GeneralFilePage() {
               <FilePanel
                 title="Tài liệu gần đây"
                 link={PATH_DASHBOARD.fileManager}
-                onOpen={handleOpenUploadFile}
+                onOpen={!dataGeneralFolder ? handleOpenUploadFile : ''}
                 sx={{ mt: 2 }}
               />
 
@@ -158,6 +164,7 @@ export default function GeneralFilePage() {
                 {listDocuments && listDocuments.length
                   ? listDocuments.map((file) => (
                       <FileGeneralRecentCard
+                        dataGeneralFolder={dataGeneralFolder}
                         key={file.id}
                         file={file}
                         onDelete={() => console.log('DELETE', file.id)}

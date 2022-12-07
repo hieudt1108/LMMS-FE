@@ -276,8 +276,8 @@ export default function BlogNewPostForm() {
               size="large"
               loading={isSubmitting}
             >
-              Đăng tải tài liệu
-            </LoadingButton>
+              Gỡ
+            </Button>
           </Stack>
         </Stack>
       </FormProvider>

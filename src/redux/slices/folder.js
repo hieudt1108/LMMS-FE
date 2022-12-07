@@ -90,7 +90,8 @@ export default slice.reducer;
 export function getFolderRedux(params) {
   return async () => {
     try {
-      if (!params) {
+      console.log('getFolderRedux', params);
+      if (!params && params !== 0) {
         return dispatch(slice.actions.hasError());
       }
       dispatch(slice.actions.startLoading());
@@ -112,6 +113,9 @@ export function createFolderRedux(payload) {
       dispatch(slice.actions.startLoading());
       const response = await postFolder(payload);
       console.log('postFolder', response);
+      if (response.status !== 200) {
+        return dispatch(slice.actions.hasError(response.data.title));
+      }
       dispatch(slice.actions.createFolderSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

@@ -40,7 +40,7 @@ function TextCode() {
   return result;
 }
 
-export default function BlogNewPostForm() {
+export default function BlogNewPostForm({ dataGeneralFolder }) {
   const { user } = useAuthContext();
   const formData = new FormData();
   const {
@@ -102,8 +102,10 @@ export default function BlogNewPostForm() {
   });
 
   useEffect(() => {
-    dispatch(createDocumentInitialRedux(folderId));
-  }, [folderId]);
+    dataGeneralFolder
+      ? dispatch(createDocumentInitialRedux(dataGeneralFolder.generalFolderId))
+      : dispatch(createDocumentInitialRedux(folderID));
+  }, [folderId, dataGeneralFolder]);
 
   console.log('BlogNewPostForm', getValues('items'));
   const handleDrop = (acceptedFiles, index) => {
@@ -122,6 +124,7 @@ export default function BlogNewPostForm() {
       try {
         const data = items[index];
         if (!data.file) {
+          enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
           continue;
         }
         if (!data.programId) {
@@ -134,7 +137,7 @@ export default function BlogNewPostForm() {
           data.typeDocumentId = typeDocuments[0].id;
         }
         console.log('data', data);
-        data.folderId = folderId;
+        data.folderId = dataGeneralFolder ? dataGeneralFolder.generalFolderId : folderId;
 
         formData.append('File', getValues(`items[${index}].file`));
         const response = await postFile(formData);
@@ -229,7 +232,7 @@ export default function BlogNewPostForm() {
                             : []
                         }
                         handleDrop={handleDrop}
-                        // onRemove={handleRemoveFile}
+                        onRemove={handleRemoveFile}
                       />
                     </Stack>
                   </Stack>
@@ -298,7 +301,7 @@ export default function BlogNewPostForm() {
                     size="small"
                     color="error"
                     startIcon={<Iconify icon="eva:trash-2-outline" />}
-                    onClick={() => handleRemove(index)}
+                    onClick={() => handleRemove(index - 1)}
                   >
                     Remove
                   </Button>

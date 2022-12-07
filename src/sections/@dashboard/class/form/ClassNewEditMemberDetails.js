@@ -39,8 +39,6 @@ export default function ClassNewEditMemberDetails(data) {
   const { pagination, users } = useSelector((state) => state.user);
   const { roles } = useSelector((state) => state.role);
 
-  console.log('ClassNewEditMemberDetails', users, roles, pagination);
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'items',
@@ -60,6 +58,7 @@ export default function ClassNewEditMemberDetails(data) {
 
   // const [users, setUsers] = useState([]);
   const [listRoles, setListRoles] = useState('');
+  const [oneUser, setOneUser] = useState('');
 
   useEffect(() => {
     dispatch(getUsersRedux(pagination));
@@ -68,13 +67,15 @@ export default function ClassNewEditMemberDetails(data) {
   // console.log('role id', listRoles);
 
   const handlerRoleChange = useCallback((event, value) => {
-    console.log('handlerRoleChange', value.props.value);
-    dispatch(getUsersByRoleIdRedux({ ...pagination, roleId: value.props.value }));
+    // console.log('handlerRoleChange', value.props.value);
+    // setListRoles(value.props.value);
+    dispatch(getUsersByRoleIdRedux({ ...pagination, roleId: value?.props.value }));
   }, []);
 
   const handlerUserChange = useCallback((event, value) => {
-    console.log('handlerUserChange', value.id);
-    dispatch(getUsersByRoleIdRedux({ ...pagination, userId: value.id }));
+    // console.log('handlerUserChange', value.id);
+    // setOneUser(value.props.value);
+    dispatch(getUsersByRoleIdRedux({ ...pagination, userId: value?.props.value }));
   }, []);
 
   return (
@@ -100,7 +101,7 @@ export default function ClassNewEditMemberDetails(data) {
                           </option>
                         ))}
                   </RHFSelect> */}
-                  <FormControl sx={{ minWidth: 240 }} size="large">
+                  <FormControl fullWidth size="large">
                     <InputLabel id="demo-simple-select-helper-label">Vai trò</InputLabel>
                     <Select
                       name={`items[${index}].vaiTro`}
@@ -126,14 +127,34 @@ export default function ClassNewEditMemberDetails(data) {
                   </FormControl>
                 </Grid>
                 <Grid item md={8} xs={12}>
-                  <RHFAutocomplete
+                  <FormControl fullWidth size="large">
+                    <InputLabel id="demo-simple-select-helper-label">Vai trò</InputLabel>
+                    <Select
+                      name={`items[${index}].nguoiDung`}
+                      id="demo-simple-select-helper"
+                      value={oneUser}
+                      label="Vai trò"
+                      onChange={handlerUserChange}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {users &&
+                        users?.map((obj) => (
+                          <MenuItem value={obj.id} key={obj.id}>
+                            {obj.email} - {obj.firstName} {obj.lastName}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                  {/* <RHFAutocomplete
                     name={`items[${index}].nguoiDung`}
                     fullWidth
                     onChange={handlerUserChange}
                     options={users}
                     getOptionLabel={(option) => option.email || ''}
                     renderInput={(params) => <TextField label="Người dùng" {...params} />}
-                  />
+                  /> */}
                 </Grid>
                 {users.length === 1 && (
                   <Grid item md={4} xs={12}>
@@ -141,10 +162,8 @@ export default function ClassNewEditMemberDetails(data) {
                       name={`items[${index}].monDay`}
                       multiple
                       onChange={(event, newValue) => {
-                        console.log(newValue);
                         setValue(`items[${index}].monDay`, newValue);
                       }}
-                      // options={LIST_SUBJECT}
                       options={users[0].subjects}
                       getOptionLabel={(option) => option.name}
                       renderTags={(value, getTagProps) =>

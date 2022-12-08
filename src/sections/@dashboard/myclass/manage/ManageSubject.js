@@ -5,12 +5,13 @@ import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../..
 import {useSettingsContext} from "../../../../components/settings";
 export default function ManageSubject({ myClass }) {
     const { themeStretch } = useSettingsContext();
+    const countSubject = myClass?.subjects.length
   return (
     <>
       <Container maxWidth={themeStretch ? false : 'xl'}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <ClassNewestBooking myClass={myClass} title="Môn học" subheader="12 môn học" />
+              <ClassNewestBooking myClass={myClass} title="Môn học hiện có trong lớp" subheader={countSubject} />
             </Grid>
           </Grid>
       </Container>

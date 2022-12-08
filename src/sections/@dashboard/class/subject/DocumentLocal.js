@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // @mui
-import { Card, Typography, Stack, Avatar, Box } from '@mui/material';
+import {Card, Typography, Stack, Avatar, Box, Button} from '@mui/material';
 
 import useResponsive from '../../../../hooks/useResponsive';
 // components
@@ -44,9 +44,15 @@ export default function DocumentLocal({ docs }) {
 
   return (
     <Card sx={{ p: 3, cursor: 'pointer' }}>
-      <Typography sx={{ mb: 2 }} variant="h5">
-        Tài liệu chung
-      </Typography>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3 }}>
+        <Typography sx={{ mb: 2 }} variant="h5">
+          Tài liệu chung
+        </Typography>
+
+        <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />}>
+          Thêm tài liệu chung
+        </Button>
+      </Stack>
       <Stack spacing={2}>
         {docs?.map((doc) =>
           doc.slotId === null ? (

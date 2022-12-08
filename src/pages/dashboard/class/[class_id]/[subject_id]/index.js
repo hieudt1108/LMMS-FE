@@ -78,7 +78,7 @@ export default function index() {
             <Stack spacing={1}>
               <Typography variant="h5"> Tài liệu từng slot</Typography>
               {subject?.listSlots?.map((data) => (
-                <SysllabusSubject data={data} key={data.id} docs={docs} />
+                <SysllabusSubject data={data} classId={class_id} subjectId={subject_id} key={data.id} docs={docs} />
               ))}
             </Stack>
           </Grid>

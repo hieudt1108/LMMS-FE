@@ -20,14 +20,12 @@ ClassNewestBooking.propTypes = {
   sx: PropTypes.object,
   list: PropTypes.array,
   title: PropTypes.string,
-  subheader: PropTypes.string,
+  subheader: PropTypes.number,
 };
 
 export default function ClassNewestBooking({ myClass, title, subheader, sx, ...other }) {
   const theme = useTheme();
-
   const carouselRef = useRef(null);
-
   const carouselSettings = {
     dots: false,
     arrows: false,
@@ -68,7 +66,7 @@ export default function ClassNewestBooking({ myClass, title, subheader, sx, ...o
       <Box sx={{ py: 2, ...sx }} {...other}>
         <CardHeader
             title={title}
-            subheader={subheader}
+            subheader={`${subheader} môn học`}
             action={<CarouselArrows onNext={handleNext} onPrevious={handlePrev} />}
             sx={{
               p: 0,
@@ -121,7 +119,7 @@ function BookingItem({ item }) {
           </Stack>
         </Stack>
 
-        <Box onClick={handleOnClickSubject} sx={{ p: 1, position: 'relative' }}>
+        <Box onClick={handleOnClickSubject} sx={{ p: 1, position: 'relative',cursor : 'pointer' }}>
           <Image alt="cover" src={'http://lmms.site:7070/assets/images/subjects/history.png'}  sx={{ borderRadius: 1.5 }} />
         </Box>
       </Paper>

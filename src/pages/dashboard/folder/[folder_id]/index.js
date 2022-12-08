@@ -95,19 +95,6 @@ export default function GeneralFilePage({ dataGeneralFolder }) {
     enqueueSnackbar(error ? error : 'Tạo thư mục thành công', { variant: 'error' });
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const newFiles = acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      );
-
-      setFiles([...files, ...newFiles]);
-    },
-    [files]
-  );
-
   const handleOnClickFileFolderCard = (folder_id) => {
     console.log('handleOnClickFileFolderCard', folder_id, dataGeneralFolder);
     if (dataGeneralFolder) {
@@ -140,7 +127,6 @@ export default function GeneralFilePage({ dataGeneralFolder }) {
                           dataGeneralFolder={dataGeneralFolder}
                           key={index}
                           folder={folder}
-
                           onDelete={() => console.log('DELETE', folder.id)}
                           sx={{
                             ...(_folders.length > 3 && {

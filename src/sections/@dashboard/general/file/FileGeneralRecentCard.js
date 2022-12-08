@@ -24,6 +24,8 @@ import {
   getDocumentById,
   getGradeById,
   getLocalStorage,
+  getProgramById,
+  getSubjectById,
 } from '../../../../dataProvider/agent';
 import { dispatch } from 'src/redux/store';
 import { getOneDocumentRedux } from 'src/redux/slices/document';
@@ -56,18 +58,28 @@ export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelet
 
   const [openDetails, setOpenDetails] = useState(false);
 
-  const [documentData, setDocumentData] = useState([]);
+  const [documentData, setDocumentData] = useState({});
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  useEffect(() => {
-    fetchDocument();
-  }, []);
+  // useEffect(() => {
+  //   console.log('useEffect FileGeneralRecentCard', file);
+  //   fetchDocument();
+  // }, []);
 
   async function fetchDocument() {
     const res = await getDocumentById(file.id);
     if (res.status < 400) {
+      const document = res.data.data;
+      const detailProgramAndSubject = await Promise.all([
+        getProgramById(document.programId),
+        getSubjectById(document.subjectId),
+      ]);
       //   console.log('download', res);
-      setDocumentData(res.data.data);
+      setDocumentData({
+        ...document,
+        programDetail: detailProgramAndSubject[0].data.data,
+        subjectDetail: detailProgramAndSubject[1].data.data,
+      });
     } else {
       console.log('error');
     }
@@ -86,13 +98,18 @@ export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelet
     setOpenShare(false);
   };
 
-  const handleOpenDetails = () => {
+  const handleOpenDetails = async () => {
+    // Chia sẻ lên thư mục chung
     if (dataGeneralFolder) {
       setOpenConfirm(true);
       return;
     }
-    dispatch(getOneDocumentRedux(file.id));
-    setOpenDetails(true);
+    // mở detail trong thư mục
+    else {
+      await fetchDocument();
+      dispatch(getOneDocumentRedux(file.id));
+      setOpenDetails(true);
+    }
   };
 
   const handleCloseDetails = () => {
@@ -107,47 +124,53 @@ export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelet
     setOpenPopover(null);
   };
 
-    const handleDownloadFile = async (url,params) => {
-        try {
-            const token = getLocalStorage("access_token");
-            axios({
-                url: `${url}fileName=${params.fileName}&contentType=${params.contentType}`, //your url
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                method: 'GET',
-                responseType: 'blob', // important
-            }).then((response) => {
-                if(response.status < 400){
-                    const url = window.URL.createObjectURL(new Blob([response.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', params.fileName); //or any other extension
-                    document.body.appendChild(link);
-                    link.click();
-                }else{
-                    enqueueSnackbar('Thư mục không còn tồn tại', { variant: 'error' });
-                }
-            });
-        } catch (error) {
-            enqueueSnackbar('Thư mục không còn tồn tại', { variant: 'error' });
-        }
-    };
-
-    const handleDeleteDocument = async (id) => {
-        const res = await deleteDocument(id);
-        if (res.status < 400) {
-            enqueueSnackbar('Xóa tài liệu thành công');
-            window.location.reload();
+  const handleDownloadFile = async (url) => {
+    try {
+      await fetchDocument();
+      console.log('handleDownloadFile', documentData);
+      const params = {
+        fileName: documentData.urlDocument,
+        contentType: documentData.typeFile,
+      };
+      const token = getLocalStorage('access_token');
+      axios({
+        url: `${url}fileName=${params.fileName}&contentType=${params.contentType}`, //your url
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        method: 'GET',
+        responseType: 'blob', // important
+      }).then((response) => {
+        if (response.status < 400) {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', params.fileName); //or any other extension
+          document.body.appendChild(link);
+          link.click();
         } else {
-            enqueueSnackbar('Xóa tài liệu thất bại', { variant: 'error' });
+          enqueueSnackbar('Thư mục không còn tồn tại', { variant: 'error' });
         }
-    };
+      });
+    } catch (error) {
+      enqueueSnackbar('Thư mục không còn tồn tại', { variant: 'error' });
+    }
+  };
 
+  const handleDeleteDocument = async (id) => {
+    const res = await deleteDocument(id);
+    if (res.status < 400) {
+      enqueueSnackbar('Xóa tài liệu thành công');
+      window.location.reload();
+    } else {
+      enqueueSnackbar('Xóa tài liệu thất bại', { variant: 'error' });
+    }
+  };
 
-    const handlePreviewFile = (urlDocument) => {
-        window.open(`http://lmms.site:8000/${urlDocument}`, '_blank', 'noopener,noreferrer');
-    };
+  const handlePreviewFile = async () => {
+    await fetchDocument();
+    window.open(`http://lmms.site:8000/${documentData.urlDocument}`, '_blank', 'noopener,noreferrer');
+  };
 
   const [openPreview, setOpenPreview] = useState(false);
 
@@ -187,30 +210,29 @@ export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelet
         }}
         {...other}
       >
-          <FileThumbnail file={file.typeFile} sx={{ width: 50, height: 50 }} imgSx={{ borderRadius: 1 }} />
+        <FileThumbnail file={file.typeFile} sx={{ width: 50, height: 50 }} imgSx={{ borderRadius: 1 }} />
+
+        <Stack
+          onClick={handleOpenDetails}
+          sx={{
+            width: 1,
+            flexGrow: { sm: 1 },
+            minWidth: { sm: '1px' },
+          }}
+        >
+          <Typography variant="subtitle2" noWrap>
+            {file.name}
+          </Typography>
 
           <Stack
-              onClick={handleOpenDetails}
-              sx={{
-                  width: 1,
-                  flexGrow: {sm: 1},
-                  minWidth: {sm: '1px'},
-              }}
+            spacing={0.75}
+            direction="row"
+            alignItems="center"
+            sx={{ typography: 'caption', color: 'text.disabled', mt: 0.5 }}
           >
-              <Typography variant="subtitle2" noWrap>
-                  {file.name}
-              </Typography>
-
-              <Stack
-                  spacing={0.75}
-                  direction="row"
-                  alignItems="center"
-                  sx={{typography: 'caption', color: 'text.disabled', mt: 0.5}}
-              >
-                  <Box> {fileFormat(file.typeFile)} </Box>
-
-              </Stack>
+            <Box> {fileFormat(file.typeFile)} </Box>
           </Stack>
+        </Stack>
 
         {isDesktop && (
           <AvatarGroup
@@ -259,67 +281,26 @@ export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelet
       </Stack>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
-          {documentData.typeFile == 'image/jpeg'  && (
-              <MenuItem
-                  onClick={() => {
-                      handlePreviewFile(documentData.urlDocument);
-                  }}
-              >
-                  <Iconify icon="eva:link-2-fill"/>
-                  Xem trước
-              </MenuItem>
-          )}
-          { documentData.typeFile == 'image/png' && (
-              <MenuItem
-                  onClick={() => {
-                      handlePreviewFile(documentData.urlDocument);
-                  }}
-              >
-                  <Iconify icon="eva:link-2-fill"/>
-                  Xem trước
-              </MenuItem>
-          )}
-          { documentData.typeFile == 'application/pdf' && (
-              <MenuItem
-                  onClick={() => {
-                      handlePreviewFile(documentData.urlDocument);
-                  }}
-              >
-                  <Iconify icon="eva:link-2-fill"/>
-                  Xem trước
-              </MenuItem>
-          )}
-          { documentData.typeFile == 'video/mp4' && (
-              <MenuItem
-                  onClick={() => {
-                      handlePreviewFile(documentData.urlDocument);
-                  }}
-              >
-                  <Iconify icon="eva:link-2-fill"/>
-                  Xem trước
-              </MenuItem>
-          )}
-          { documentData.typeFile == 'audio/mpeg' && (
-              <MenuItem
-                  onClick={() => {
-                      handlePreviewFile(documentData.urlDocument);
-                  }}
-              >
-                  <Iconify icon="eva:link-2-fill"/>
-                  Xem trước
-              </MenuItem>
-          )}
-
-
-          <MenuItem
-              onClick={() => {
-                  handleClosePopover();
-                  handleDownloadFile('http://lmms.site:9090/api/File/downloadFile?',{fileName: documentData.urlDocument, contentType: documentData.typeFile})
-              }}
-          >
-              <Iconify icon="eva:download-outline"/>
-              Tải xuống
+        {(file.typeFile == 'audio/mpeg' ||
+          file.typeFile == 'video/mp4' ||
+          file.typeFile == 'image/jpeg' ||
+          file.typeFile == 'image/png' ||
+          file.typeFile == 'application/pdf') && (
+          <MenuItem onClick={handlePreviewFile}>
+            <Iconify icon="eva:link-2-fill" />
+            Xem trước
           </MenuItem>
+        )}
+
+        <MenuItem
+          onClick={() => {
+            handleClosePopover();
+            handleDownloadFile('http://lmms.site:9090/api/File/downloadFile?');
+          }}
+        >
+          <Iconify icon="eva:download-outline" />
+          Tải xuống
+        </MenuItem>
 
         {!dataGeneralFolder && (
           <MenuItem
@@ -335,25 +316,27 @@ export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelet
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-          <MenuItem
-              onClick={() => {
-                  handleClosePopover();
-                  handleDeleteDocument(file.id)
-              }}
-              sx={{color: 'error.main'}}
-          >
-              <Iconify icon="eva:trash-2-outline"/>
-              Xóa
-          </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleClosePopover();
+            handleDeleteDocument(file.id);
+          }}
+          sx={{ color: 'error.main' }}
+        >
+          <Iconify icon="eva:trash-2-outline" />
+          Xóa
+        </MenuItem>
       </MenuPopover>
+      {openDetails && documentData && (
+        <FileDetailsDrawer
+          data={documentData}
+          favorite={false}
+          onFavorite={handleFavorite}
+          open={openDetails}
+          onClose={handleCloseDetails}
+        />
+      )}
 
-      <FileDetailsDrawer
-        data={file}
-        favorite={false}
-        onFavorite={handleFavorite}
-        open={openDetails}
-        onClose={handleCloseDetails}
-      />
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}

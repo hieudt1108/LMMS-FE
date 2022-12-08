@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 // @mui
-import {Box, Button, Card, Stack, Typography} from '@mui/material';
+import { Box, Button, Card, Stack, Typography } from '@mui/material';
 // components
 import Iconify from '../../../../components/iconify';
 // import MenuPopover from '../../../../components/menu-popover';
 // import DocumentPreview from '../../documents/DocumentPreview';
 // UPLOAD STORAGE
 import UploadDocToSlot from '../popupdiaglog/UploadDocToSlot'; // DATE
-import {format} from 'date-fns';
+import { format } from 'date-fns';
 
-export default function SysllabusSubject({ data,classId,subjectId, docs }) {
+export default function SysllabusSubject({ data, classId, subjectId, docs }) {
   const { createBy, createDate, id, isDeleted, name, updateBy, updateDate } = data;
 
   const [openFrom, setOpenFrom] = useState(false);
@@ -21,7 +21,6 @@ export default function SysllabusSubject({ data,classId,subjectId, docs }) {
   const handleCloseFrom = () => {
     setOpenFrom(false);
   };
-
 
   return (
     <>
@@ -36,7 +35,13 @@ export default function SysllabusSubject({ data,classId,subjectId, docs }) {
           </Button>
         </Stack>
         {/* Upload doc to slot */}
-        <UploadDocToSlot classId={classId} subjectId={subjectId} slotId={id} open={openFrom} onClose={handleCloseFrom} />
+        <UploadDocToSlot
+          classId={classId}
+          subjectId={subjectId}
+          slotId={id}
+          open={openFrom}
+          onClose={handleCloseFrom}
+        />
 
         <Stack spacing={3}>
           <Stack key={''} spacing={1}>

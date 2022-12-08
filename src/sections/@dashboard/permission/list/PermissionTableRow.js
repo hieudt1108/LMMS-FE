@@ -63,7 +63,7 @@ export default function PermissionTableRow({ row, selected, onEditRow, onSelectR
         <TableCell align="left">{name}</TableCell>
         <TableCell align="left">{description}</TableCell>
 
-        <TableCell align="left">{path === null || '' ? 'Không có' : `${path}`}</TableCell>
+
 
         <TableCell align="left">{new Date(createDate).toLocaleDateString()}</TableCell>
 

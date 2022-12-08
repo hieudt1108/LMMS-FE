@@ -27,7 +27,7 @@ import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 
-export default function ClassAddSubjectDialog({ data, open, onClose }) {
+export default function ClassAddSubjectDialog({ classID, open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = (() => {
@@ -35,6 +35,20 @@ export default function ClassAddSubjectDialog({ data, open, onClose }) {
       rolesID: Yup.array().min(1, 'Hãy chọn vai trò'),
     });
   })();
+
+
+  const defaultValues = useMemo(
+      () => ({
+        tagsId: [],
+        subjectsId: [],
+      }),
+      []
+  );
+
+  const methods = useForm({
+    // resolver: yupResolver(validationSchema),
+    defaultValues,
+  });
 
   const {
     reset,
@@ -46,10 +60,6 @@ export default function ClassAddSubjectDialog({ data, open, onClose }) {
     formState: { isSubmitting, errors },
   } = methods;
 
-  const methods = useForm({
-    // resolver: yupResolver(validationSchema),
-    defaultValues,
-  });
 
   const [subjectsData, setSubjectsData] = useState([]);
 
@@ -85,7 +95,6 @@ export default function ClassAddSubjectDialog({ data, open, onClose }) {
       const res = await updateSubjectClass(classID, { postData });
       console.log(res);
       if (res.status < 400) {
-        reset();
         enqueueSnackbar('Create success!');
         onClose();
       } else {

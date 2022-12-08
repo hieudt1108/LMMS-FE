@@ -174,21 +174,6 @@ export default function FileGeneralRecentCard({
     }
   };
 
-  const handlePreviewFile = async () => {
-    await fetchDocument();
-    window.open(`http://lmms.site:8000/${documentData.urlDocument}`, '_blank', 'noopener,noreferrer');
-  };
-
-  const handleDeleteDocument = async (id) => {
-    const res = await deleteDocument(id);
-    if (res.status < 400) {
-      enqueueSnackbar('Xóa tài liệu thành công');
-      window.location.reload();
-    } else {
-      enqueueSnackbar('Xóa tài liệu thất bại', { variant: 'error' });
-    }
-  };
-
   const handleAddDocumentToSlot = async (classId, documentId, slotId, subjectId) => {
     console.log('postData', classId, documentId, slotId, subjectId);
     const res = await postDocumentsInSlot(classId, documentId, slotId, subjectId);

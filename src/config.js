@@ -31,6 +31,11 @@ export const HEADER = {
   H_DASHBOARD_DESKTOP_OFFSET: 92 - 32,
 };
 
+export const URL_GLOBAL = {
+  DOWNLOAD_FILE: 'http://lmms.site:9090/api/File/downloadFile?',
+  VIEW_FILE: 'http://lmms.site:8000/',
+};
+
 export const NAV = {
   W_BASE: 260,
   W_DASHBOARD: 280,

@@ -34,6 +34,7 @@ import axios from 'axios';
 import { createFolderRedux } from '../../../../redux/slices/folder';
 import { useSelector } from 'react-redux';
 import ConfirmDialog from 'src/components/confirm-dialog';
+import { URL_GLOBAL } from '../../../../config';
 
 // ----------------------------------------------------------------------
 
@@ -134,7 +135,7 @@ export default function FileGeneralRecentCard({
   const handleDownloadFile = async (url) => {
     try {
       await fetchDocument();
-      console.log('handleDownloadFile', documentData);
+      console.log('documentData',documentData)
       const params = {
         fileName: documentData.urlDocument,
         contentType: documentData.typeFile,
@@ -186,8 +187,8 @@ export default function FileGeneralRecentCard({
     }
   };
 
-  const handlePreviewFile = (urlDocument) => {
-    window.open(`http://lmms.site:8000/${urlDocument}`, '_blank', 'noopener,noreferrer');
+  const handlePreviewFile = () => {
+    window.open(`${URL_GLOBAL.VIEW_FILE}${documentData.urlDocument}`, '_blank', 'noopener,noreferrer');
   };
 
   const handleCloseConfirm = () => {
@@ -303,7 +304,7 @@ export default function FileGeneralRecentCard({
         <MenuItem
           onClick={() => {
             handleClosePopover();
-            handleDownloadFile('http://lmms.site:9090/api/File/downloadFile?');
+            handleDownloadFile(URL_GLOBAL.DOWNLOAD_FILE);
           }}
         >
           <Iconify icon="eva:download-outline" />

@@ -38,6 +38,7 @@ ClassNewestBooking.propTypes = {
 };
 
 export default function ClassNewestBooking({myClass, title, subheader, sx, ...other}) {
+    console.log('myClass',myClass)
     const theme = useTheme();
 
     const carouselRef = useRef(null);
@@ -102,7 +103,7 @@ export default function ClassNewestBooking({myClass, title, subheader, sx, ...ot
 // ----------------------------------------------------------------------
 
 function BookingItem({item}) {
-    const {code, name, subjectId, teacherFirstName, teacherLastName, totalDocs, avatar} = item;
+    const {code, name, subjectId, teacherFirstName, teacherLastName, totalDocs} = item;
 
     const {
         query: {class_id},
@@ -126,22 +127,35 @@ function BookingItem({item}) {
 
     return (
         <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
-            <Stack alignItems="center" spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
+            <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
                 <Stack direction="row" alignItems="center" spacing={2}>
                     <div>
-                        <Typography  variant="subtitle2">{name}</Typography>
+                        <Typography variant="subtitle2">{name}</Typography>
                     </div>
                 </Stack>
-
+                {teacherFirstName && teacherLastName && (
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                        <Typography  variant="subtitle2">{`Giáo viên dạy:  ${teacherFirstName} ${teacherLastName}`}</Typography>
+                    </Stack>
+                )}
+                {!teacherFirstName && !teacherLastName && (
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                        <Typography  variant="subtitle2">{`Giáo viên dạy: Chưa có`}</Typography>
+                    </Stack>
+                )}
                 <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
+                    {/*<Stack direction="row" alignItems="center" spacing={1}>*/}
+                    {/*    <Typography  variant="subtitle2">{`Giáo viên dạy:  ${teacherFirstName} ${teacherLastName}`}</Typography>*/}
+                    {/*</Stack>*/}
+
                     <Stack direction="row" alignItems="center" spacing={1}>
-                        <Iconify icon="eva:layers-outline" width={16} />
-                        <Typography variant="caption"> {50} Tiết học</Typography>
+                        <Iconify icon="ic:round-vpn-key" width={16} />
+                        <Typography variant="caption">Số tiết học:  {50}</Typography>
                     </Stack>
 
                     <Stack direction="row" alignItems="center" spacing={1}>
-                        <Iconify icon="eva:file-outline" width={16} />
-                        <Typography variant="caption">{50} Tài liệu</Typography>
+                        <Iconify icon="eva:people-fill" width={16} />
+                        <Typography variant="caption">Số tài liệu: {totalDocs}</Typography>
                     </Stack>
                 </Stack>
             </Stack>

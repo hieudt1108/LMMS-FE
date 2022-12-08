@@ -2,14 +2,16 @@ import PropTypes from 'prop-types';
 import { useCallback, useRef } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Box, Stack, Paper, Avatar, Typography, CardHeader, Image, Grid, Item } from '@mui/material';
+import { Box, Stack, Paper, Avatar, Typography, CardHeader, Grid, Item } from '@mui/material';
 // utils
 import { fDateTime } from '../../../../utils/formatTime';
 // components
 
-import { SubjectImage } from '../../../../utils';
+// import { SubjectImage } from '../../../../utils';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+import Image from '../../../../components/image';
+import Carousel, { CarouselArrows } from '../../../../components/carousel';
 import Iconify from '../../../../components/iconify';
 // ----------------------------------------------------------------------
 
@@ -17,32 +19,65 @@ ClassNewestBooking.propTypes = {
   sx: PropTypes.object,
   list: PropTypes.array,
   title: PropTypes.string,
-  subheader: PropTypes.string,
+  subheader: PropTypes.number,
 };
 
 export default function ClassNewestBooking({ myClass, title, subheader, sx, ...other }) {
   const theme = useTheme();
+  const carouselRef = useRef(null);
+  const carouselSettings = {
+    dots: false,
+    arrows: false,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    rtl: Boolean(theme.direction === 'rtl'),
+    responsive: [
+      {
+        breakpoint: theme.breakpoints.values.lg,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: theme.breakpoints.values.md,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: theme.breakpoints.values.sm,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
+  const handlePrev = () => {
+    carouselRef.current?.slickPrev();
+  };
+
+  const handleNext = () => {
+    carouselRef.current?.slickNext();
+  };
 
   return (
     <Box sx={{ py: 2, ...sx }} {...other}>
       <CardHeader
         title={title}
-        subheader={subheader}
-        // action={<CarouselArrows onNext={handleNext} onPrevious={handlePrev} />}
+        subheader={`${subheader} môn học`}
+        action={<CarouselArrows onNext={handleNext} onPrevious={handlePrev} />}
         sx={{
           p: 0,
           mb: 3,
           '& .MuiCardHeader-action': { alignSelf: 'center' },
         }}
       />
-
-      <Grid container spacing={2}>
+      <Carousel ref={carouselRef} {...carouselSettings}>
         {myClass?.subjects?.map((item) => (
-          <Grid item xs={6} md={6}>
-            <BookingItem key={item.subjectId} item={item} />
-          </Grid>
+          <BookingItem key={item.subjectId} item={item} />
         ))}
-      </Grid>
+      </Carousel>
     </Box>
   );
 }
@@ -62,41 +97,34 @@ function BookingItem({ item }) {
   };
 
   return (
-    <Paper
-      onClick={handleOnClickSubject}
-      sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral', cursor: 'pointer' }}
-    >
-      <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
+    <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
+      <Stack alignItems="center" spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar alt={name} src={avatar} />
-
           <div>
             <Typography variant="subtitle2">{name}</Typography>
-
-            {/* <Typography variant="caption" sx={{ color: 'text.disabled', mt: 0.5, display: 'block' }}>
-              {fDateTime(bookdAt)}
-            </Typography> */}
           </div>
         </Stack>
 
         <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Iconify icon="ph:chalkboard-teacher-thin" width={20} />
-            <Typography variant="caption">
-              {teacherFirstName} {teacherLastName}
-            </Typography>
+            <Iconify icon="eva:layers-outline" width={16} />
+            <Typography variant="caption"> {50} Tiết học</Typography>
           </Stack>
 
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Iconify icon="carbon:document-attachment" width={20} />
-            <Typography variant="caption">{totalDocs} Document</Typography>
+            <Iconify icon="eva:file-outline" width={16} />
+            <Typography variant="caption">{50} Tài liệu</Typography>
           </Stack>
         </Stack>
       </Stack>
 
-      {/* <Box sx={{ p: 1, cursor: 'pointer' }}>
-        <Image alt="cover" src={cover} sx={{ borderRadius: 1 }} />
-      </Box> */}
+      <Box onClick={handleOnClickSubject} sx={{ p: 1, position: 'relative', cursor: 'pointer' }}>
+        <Image
+          alt="cover"
+          src={'http://lmms.site:7070/assets/images/subjects/history.png'}
+          sx={{ borderRadius: 1.5 }}
+        />
+      </Box>
     </Paper>
   );
 }

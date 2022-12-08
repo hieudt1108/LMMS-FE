@@ -51,7 +51,6 @@ import {useSnackbar} from "../../../components/snackbar";
 const TABLE_HEAD = [
     {id: 'name', label: 'Tên quyền', align: 'left'},
     {id: 'description', label: 'Mô tả', align: 'left'},
-    {id: 'path', label: 'Đường dẫn', align: 'left'},
     {id: 'createDate', label: 'Ngày tạo', align: 'left'},
     {id: ''},
 ];

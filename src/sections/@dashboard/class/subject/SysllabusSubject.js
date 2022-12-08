@@ -8,8 +8,9 @@ import MenuPopover from '../../../../components/menu-popover';
 import DocumentPreview from '../../documents/DocumentPreview';
 // DATE
 import { format } from 'date-fns';
+import UploadDocToSlot from "../../myclass/popupdiaglog/UploadDocToSlot";
 
-export default function SysllabusSubject({ data, docs }) {
+export default function SysllabusSubject({ data,classId,subjectId, docs }) {
   const { createBy, createDate, id, isDeleted, name, updateBy, updateDate } = data;
   const [openPreview, setOpenPreview] = useState(false);
   const [openPopover, setOpenPopover] = useState(null);
@@ -30,6 +31,16 @@ export default function SysllabusSubject({ data, docs }) {
     setOpenPreview(false);
   };
 
+  const [openFrom, setOpenFrom] = useState(false);
+
+  const handleOpenFrom = () => {
+    setOpenFrom(true);
+  };
+
+  const handleCloseFrom = () => {
+    setOpenFrom(false);
+  };
+
   return (
     <>
       <Card sx={{ p: 3 }}>
@@ -38,11 +49,11 @@ export default function SysllabusSubject({ data, docs }) {
             {name}
           </Typography>
 
-          <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button size="small" onClick={handleOpenFrom} startIcon={<Iconify icon="eva:plus-fill" />}>
             Thêm tài liệu
           </Button>
         </Stack>
-
+        <UploadDocToSlot classId={classId} subjectId={subjectId} slotId={id} open={openFrom} onClose={handleCloseFrom} />
         <Stack spacing={3}>
           <Stack key={''} spacing={1}>
             <Typography variant="body2">

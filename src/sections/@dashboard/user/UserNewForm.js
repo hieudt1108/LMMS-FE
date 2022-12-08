@@ -135,7 +135,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
           id: su.id,
         };
       });
-
+      console.log('transformDataSubject', transformDataSubject);
       setUserSubjects(transformDataSubject);
     } else {
       console.log('error fetch api');

@@ -41,6 +41,8 @@ function TextCode() {
 }
 
 export default function BlogNewPostForm({ dataGeneralFolder }) {
+
+
   const { user } = useAuthContext();
   const formData = new FormData();
   const {

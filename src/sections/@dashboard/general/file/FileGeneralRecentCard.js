@@ -26,6 +26,7 @@ import {
   getLocalStorage,
   getProgramById,
   getSubjectById,
+  postDocumentsInSlot,
 } from '../../../../dataProvider/agent';
 import { dispatch } from 'src/redux/store';
 import { getOneDocumentRedux } from 'src/redux/slices/document';
@@ -42,7 +43,14 @@ import ConfirmDialog from 'src/components/confirm-dialog';
 //   onDelete: PropTypes.func,
 // };
 
-export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelete, sx, ...other }) {
+export default function FileGeneralRecentCard({
+  dataGeneralFolder,
+  file,
+  dataUploadDocsToSlot,
+  onDelete,
+  sx,
+  ...other
+}) {
   const { enqueueSnackbar } = useSnackbar();
   const { getOne } = useSelector((state) => state.document);
 
@@ -107,7 +115,6 @@ export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelet
     // mở detail trong thư mục
     else {
       await fetchDocument();
-      dispatch(getOneDocumentRedux(file.id));
       setOpenDetails(true);
     }
   };
@@ -172,14 +179,30 @@ export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelet
     window.open(`http://lmms.site:8000/${documentData.urlDocument}`, '_blank', 'noopener,noreferrer');
   };
 
-  const [openPreview, setOpenPreview] = useState(false);
-
-  const handleOpenPreview = () => {
-    setOpenPreview(true);
+  const handleDeleteDocument = async (id) => {
+    const res = await deleteDocument(id);
+    if (res.status < 400) {
+      enqueueSnackbar('Xóa tài liệu thành công');
+      window.location.reload();
+    } else {
+      enqueueSnackbar('Xóa tài liệu thất bại', { variant: 'error' });
+    }
   };
 
-  const handleClosePreview = () => {
-    setOpenPreview(false);
+  const handleAddDocumentToSlot = async (classId, documentId, slotId, subjectId) => {
+    console.log('postData', classId, documentId, slotId, subjectId);
+    const res = await postDocumentsInSlot(classId, documentId, slotId, subjectId);
+    console.log('postData', res);
+    if (res.status < 400) {
+      enqueueSnackbar('Thêm tài liệu vào tiết học thành công');
+      window.location.reload();
+    } else {
+      enqueueSnackbar('Thêm tài liệu vào tiết học thất bại', { variant: 'error' });
+    }
+  };
+
+  const handlePreviewFile = (urlDocument) => {
+    window.open(`http://lmms.site:8000/${urlDocument}`, '_blank', 'noopener,noreferrer');
   };
 
   const handleCloseConfirm = () => {
@@ -347,7 +370,16 @@ export default function FileGeneralRecentCard({ dataGeneralFolder, file, onDelet
             variant="contained"
             color="success"
             onClick={() => {
-              dataGeneralFolder.handleUploadDocumentToStoreFolder(file.id);
+              if (dataGeneralFolder && dataUploadDocsToSlot == null) {
+                dataGeneralFolder.handleUploadDocumentToStoreFolder(file.id);
+              } else if (dataUploadDocsToSlot) {
+                handleAddDocumentToSlot(
+                  dataUploadDocsToSlot.classId,
+                  file.id,
+                  dataUploadDocsToSlot.slotId,
+                  dataUploadDocsToSlot.subjectId
+                );
+              }
               handleCloseConfirm();
             }}
           >

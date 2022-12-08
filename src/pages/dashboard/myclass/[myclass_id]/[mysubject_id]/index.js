@@ -26,7 +26,6 @@ export default function index() {
 
   const [docs, setDocs] = useState([]);
 
-  console.log('data query: ', myclass_id, mysubject_id);
   useEffect(() => {
     fethOneSubject();
     fetchDocumentInClass();
@@ -43,7 +42,6 @@ export default function index() {
     }
   }
 
-  console.log('docs: ', docs);
   async function fetchDocumentInClass() {
     const res = await getDocInClass({
       classId: myclass_id,
@@ -81,7 +79,7 @@ export default function index() {
             <Stack spacing={1}>
               <Typography variant="h5"> Tài liệu từng slot</Typography>
               {subject?.listSlots?.map((data) => (
-                <SysllabusSubject data={data} key={data.id} docs={docs} />
+                <SysllabusSubject data={data} classId={myclass_id} subjectId={mysubject_id}  key={data.id} docs={docs} />
               ))}
             </Stack>
           </Grid>

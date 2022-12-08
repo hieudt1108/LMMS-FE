@@ -236,6 +236,8 @@ const postClass = (payload) => {
   return postApi('Class', payload);
 };
 
+
+
 // GRADE
 const postGrade = () => {
   return postApi('Grade');
@@ -299,6 +301,11 @@ const uploadFile = (payload) => {
 const postDocument = (payload) => {
   return postApi('Document', payload);
 };
+
+const postDocumentsInSlot = (classId,documentId,slotId,subjectId) => {
+  return postApi(`Document/addDocumentsInSlot?classId=${classId}&documentId=${documentId}&slotId=${slotId}&subjectId=${subjectId}`);
+};
+
 const addShareDoc = (id, payload) => {
   return postApi(`Document/addShareDocs?docsId=${id}`, payload);
 };
@@ -552,4 +559,5 @@ export {
   postCopyDocsToFolder,
   updateClassMember,
   updateSubjectClass,
+  postDocumentsInSlot,
 };

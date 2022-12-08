@@ -34,13 +34,14 @@ GeneralFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function GeneralFilePage({ dataGeneralFolder }) {
+export default function GeneralFilePage({ dataGeneralFolder,dataUploadDocsToSlot }) {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const {
     query: { folder_id: folderID },
     push,
   } = useRouter();
+
   const { error, folder } = useSelector((state) => state.folder);
   const { id, listFolders, listDocuments } = folder;
   console.log('GeneralFilePage', listFolders, listDocuments, dataGeneralFolder);
@@ -164,6 +165,7 @@ export default function GeneralFilePage({ dataGeneralFolder }) {
                   ? listDocuments.map((file) => (
                       <FileGeneralRecentCard
                         dataGeneralFolder={dataGeneralFolder}
+                        dataUploadDocsToSlot={dataUploadDocsToSlot}
                         key={file.id}
                         file={file}
                         onDelete={() => console.log('DELETE', file.id)}

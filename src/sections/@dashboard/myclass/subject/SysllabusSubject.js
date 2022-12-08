@@ -4,26 +4,15 @@ import PropTypes from 'prop-types';
 import { Box, Card, Button, Typography, Stack, Divider, MenuItem } from '@mui/material';
 // components
 import Iconify from '../../../../components/iconify';
-// import MenuPopover from '../../../../components/menu-popover';
-// import DocumentPreview from '../../documents/DocumentPreview';
 
 // UPLOAD STORAGE
-import UploadDocToSlot from '../popupdiaglog/UploadDocToSlot'; // DATE
+import UploadDocToSlot from '../popupdiaglog/UploadDocToSlot';
+// DATE
 import { format } from 'date-fns';
 import { identifier } from 'stylis';
 
 export default function SysllabusSubject({ data, docs }) {
   const { createBy, createDate, id, isDeleted, name, updateBy, updateDate } = data;
-  // const [openPreview, setOpenPreview] = useState(false);
-  // const [openPopover, setOpenPopover] = useState(null);
-
-  // const handleOpenPopover = (event) => {
-  //   setOpenPopover(event.currentTarget);
-  // };
-
-  // const handleClosePopover = () => {
-  //   setOpenPopover(null);
-  // };
 
   const [openFrom, setOpenFrom] = useState(false);
 
@@ -35,13 +24,6 @@ export default function SysllabusSubject({ data, docs }) {
   const handleCloseFrom = () => {
     setOpenFrom(false);
   };
-  // const handleOpenPreview = () => {
-  //   setOpenPreview(true);
-  // };
-
-  // const handleClosePreview = () => {
-  //   setOpenPreview(false);
-  // };
 
   return (
     <>

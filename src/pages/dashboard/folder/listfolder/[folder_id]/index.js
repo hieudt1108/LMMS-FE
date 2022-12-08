@@ -5,19 +5,23 @@ import Head from 'next/head';
 import { useTheme } from '@mui/material/styles';
 import { Container, Grid, Stack } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../../../routes/paths';
 // hooks
-import useResponsive from '../../../../hooks/useResponsive';
+import useResponsive from '../../../../../hooks/useResponsive';
 // _mock
-import { _folders } from '../../../../_mock/arrays';
+import { _folders } from '../../../../../_mock/arrays';
 // layouts
-import DashboardLayout from '../../../../layouts/dashboard';
+import DashboardLayout from '../../../../../layouts/dashboard';
 // components
-import Scrollbar from '../../../../components/scrollbar';
-import { useSettingsContext } from '../../../../components/settings';
+import Scrollbar from '../../../../../components/scrollbar';
+import { useSettingsContext } from '../../../../../components/settings';
 // sections
-import { FileGeneralRecentCard } from '../../../../sections/@dashboard/general/file';
-import { FileFolderCard, FileNewFolderDialog, FilePanel } from '../../../../sections/@dashboard/file';
+import {
+  FileFolderCard,
+  FileNewFolderDialog,
+  FilePanel,
+  FolderGeneralData,
+} from '../../../../../sections/@dashboard/file';
 import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
@@ -30,11 +34,11 @@ const GB = 1000000000 * 24;
 
 // ----------------------------------------------------------------------
 
-GeneralFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+GeneralFileFolder.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-// ----------------------------------------------------------------------
+import React from 'react';
 
-export default function GeneralFilePage({ dataGeneralFolder }) {
+export default function GeneralFileFolder({ dataGeneralFolder }) {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -133,10 +137,10 @@ export default function GeneralFilePage({ dataGeneralFolder }) {
                 sx={{ mt: 5 }}
               />
               <Scrollbar>
-                <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
+                <Stack direction="column" spacing={3} sx={{ pb: 3 }}>
                   {listFolders && listFolders.length
                     ? listFolders.map((folder, index) => (
-                        <FileFolderCard
+                        <FolderGeneralData
                           dataGeneralFolder={dataGeneralFolder}
                           key={index}
                           folder={folder}
@@ -151,18 +155,18 @@ export default function GeneralFilePage({ dataGeneralFolder }) {
                     : ''}
                 </Stack>
               </Scrollbar>
-
+              {/* 
               <FilePanel
                 title="Tài liệu gần đây"
                 link={PATH_DASHBOARD.fileManager}
                 onOpen={!dataGeneralFolder ? handleOpenUploadFile : ''}
                 sx={{ mt: 2 }}
-              />
+              /> */}
 
-              <Stack spacing={2}>
+              {/* <Stack spacing={2} sx={{ mt: 3 }}>
                 {listDocuments && listDocuments.length
                   ? listDocuments.map((file) => (
-                      <FileGeneralRecentCard
+                      <FolderGeneralData
                         dataGeneralFolder={dataGeneralFolder}
                         key={file.id}
                         file={file}
@@ -170,7 +174,7 @@ export default function GeneralFilePage({ dataGeneralFolder }) {
                       />
                     ))
                   : ''}
-              </Stack>
+              </Stack> */}
             </div>
           </Grid>
         </Grid>

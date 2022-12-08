@@ -6,6 +6,10 @@ import { Box, Card, Stack, Button, Divider, MenuItem, Checkbox, IconButton } fro
 import useCopyToClipboard from '../../../../hooks/useCopyToClipboard';
 // utils
 import { fData } from '../../../../utils/formatNumber';
+
+// Date
+import { format } from 'date-fns';
+
 // components
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
@@ -20,9 +24,10 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 
 import useResponsive from '../../../../hooks/useResponsive';
+import Typography from 'src/theme/overrides/Typography';
 // ----------------------------------------------------------------------
 
-FileFolderCard.propTypes = {
+FolderGeneralData.propTypes = {
   sx: PropTypes.object,
   folder: PropTypes.object,
   onDelete: PropTypes.func,
@@ -30,13 +35,14 @@ FileFolderCard.propTypes = {
   selected: PropTypes.bool,
 };
 
-export default function FileFolderCard({ dataGeneralFolder, folder, selected, onSelect, onDelete, sx, ...other }) {
+export default function FolderGeneralData({ dataGeneralFolder, folder, selected, onSelect, onDelete, sx, ...other }) {
   const router = useRouter();
   const {
     query: { pid: pID },
     push,
   } = useRouter();
 
+  console.log('FolderGeneralData: ', folder);
   const isDesktop = useResponsive('up', 'sm');
 
   const { enqueueSnackbar } = useSnackbar();
@@ -141,8 +147,7 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
         onMouseLeave={handleHideCheckbox}
         sx={{
           p: 2.5,
-          width: 1,
-          maxWidth: 222,
+
           boxShadow: 0,
           bgcolor: 'background.default',
           '&:hover': {
@@ -160,8 +165,22 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
         }}
         {...other}
       >
-        <Stack direction="row" alignItems="center" sx={{ top: 8, right: 8, position: 'absolute' }}>
-          <Checkbox
+        <Stack sx={{ display: 'flex', alignItems: ' center', flexDirection: 'row' }}>
+          <Box
+            onClick={() => handleOnClickFileFolderCard(folder.id)}
+            component="img"
+            src="/assets/icons/files/ic_folder.svg"
+            sx={{ width: 60, height: 60, mr: 3 }}
+          />
+          <Box>
+            <TextMaxLine variant="h6" onClick={handleOpenDetails} sx={{ mt: 1 }}>
+              {folder.name}
+            </TextMaxLine>
+            <span>{format(new Date(folder.createDate), 'dd MMM yyyy')}</span>
+          </Box>
+          <Box></Box>
+        </Stack>
+        {/* <Checkbox
             color="warning"
             icon={<Iconify icon="eva:star-outline" />}
             checkedIcon={<Iconify icon="eva:star-fill" />}
@@ -169,14 +188,15 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
             onChange={handleFavorite}
             sx={{ p: 0.75 }}
           />
+
           {!dataGeneralFolder && (
             <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
           )}
-        </Stack>
+        </Stack> */}
 
-        {(showCheckbox || selected) && onSelect ? (
+        {/* {(showCheckbox || selected) && onSelect ? (
           <Checkbox
             checked={selected}
             onClick={onSelect}
@@ -190,14 +210,10 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
             src="/assets/icons/files/ic_folder.svg"
             sx={{ width: 40, height: 40 }}
           />
-        )}
-
-        <TextMaxLine variant="h6" onClick={handleOpenDetails} sx={{ mt: 1, mb: 0.5 }}>
-          {folder.name}
-        </TextMaxLine>
+        )} */}
       </Card>
 
-      <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
+      {/* <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
         <MenuItem
           onClick={() => {
             handleClosePopover();
@@ -240,7 +256,7 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
           <Iconify icon="eva:trash-2-outline" />
           Delete
         </MenuItem>
-      </MenuPopover>
+      </MenuPopover> */}
 
       {/* <FileDetailsDrawer
         item={folder}

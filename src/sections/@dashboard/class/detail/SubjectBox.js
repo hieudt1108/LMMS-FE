@@ -16,7 +16,7 @@ import useResponsive from '../../../../hooks/useResponsive';
 import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail';
 import { FileDetailsDrawer, FileShareDialog } from '../../file';
 import ConfirmDialog from '../../../../components/confirm-dialog';
-import Image from '../../../../components/image';
+// import Image from '../../../../components/image';
 import Carousel, { CarouselArrows } from '../../../../components/carousel';
 // ----------------------------------------------------------------------
 
@@ -82,14 +82,16 @@ function BookingItem({ item }) {
 
   return (
     <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
-      <Stack onClick={handleOnClickSubject} spacing={2.5} sx={{ p: 3, pb: 2.5, display: 'flex', cursor: 'pointer' }}>
-        <Box sx={{ p: 1 }}>
-          {/* <SubjectImage subject="Toán học" width={30} height={30} /> */}
-          <img src="public/assets/images/subjectlist/Biology.png" sx={{ width: 30 }} />
-          {/* <ing src={Biology} width={30} /> */}
+      <Stack
+        onClick={handleOnClickSubject}
+        spacing={2.5}
+        sx={{ p: 1, display: 'flex', cursor: 'pointer', flexDirection: 'row' }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
+          <img src="/assets/images/subjectlist/Biology.png" width={120} />
         </Box>
-        <Box>
-          <Stack direction="row" alignItems="center" spacing={2}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Stack direction="row" alignItems="center">
             <div>
               <Typography variant="subtitle2">{name}</Typography>
             </div>

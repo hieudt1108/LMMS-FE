@@ -187,7 +187,7 @@ export function handleSendInviteRedux(getOne) {
       const response = await addShareDoc(getOne.id, getOne.initShare);
       console.log('handleSendInviteRedux', response);
       dispatch(slice.actions.handleSendInviteSuccess(response.data.data));
-      return returnMessageSuccess('Chia sẻ thành công');
+      return returnMessageSuccess('Chia sẻ tài liệu thành công');
     } catch (error) {
       return returnMessageError(`${error.message}`);
     }
@@ -199,13 +199,14 @@ export function handleChangePermissionRedux(getOne, user, index, permission) {
     try {
       console.log('handleChangePermissionRedux', getOne, user, index, permission);
       if (!getOne) {
-        return;
+        return returnMessageError('Đổi quyền không thành công');
       }
       dispatch(slice.actions.startLoading());
       const response = await updateShareDocs(getOne.id, [{ user, permission }]);
       dispatch(slice.actions.handleChangePermissionSuccess({ ...response.data.data, index }));
+      return returnMessageSuccess('Đổi quyền thành công');
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      return returnMessageError(`${error.message}`);
     }
   };
 }
@@ -221,9 +222,7 @@ export function startDownloadFileRedux(file, url) {
         fileName: file.urlDocument,
         contentType: file.typeFile,
       };
-
       const token = getLocalStorage('access_token');
-      console.log('token', token);
       axios({
         url: `${url}fileName=${params.fileName}&contentType=${params.contentType}`, //your url
         headers: {
@@ -239,14 +238,14 @@ export function startDownloadFileRedux(file, url) {
           link.setAttribute('download', params.fileName); //or any other extension
           document.body.appendChild(link);
           link.click();
-          return returnMessageSuccess('Tải thành công ');
+          return returnMessageSuccess('Tải tài liệu thành công ');
         } else {
-          return returnMessageError('Thư mục không tồn tại');
+          return returnMessageError('Tài liệu không tồn tại');
         }
       });
     } catch (error) {
       console.log('error', error);
-      return returnMessageError(error.mess);
+      return returnMessageError(error.message);
     }
   };
 }

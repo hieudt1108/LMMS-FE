@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 // // @mui
 // import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography, Stack, Avatar, Box, Alert } from '@mui/material';
+import {FileGeneralRecentCard} from "../general/file";
+import React from "react";
 // routes
 // import { PATH_DASHBOARD } from '../../../routes/paths';
 // // hooks
@@ -33,35 +35,13 @@ export default function DocumentPostCard({ documents }) {
       <Stack spacing={3}>
         {documents && documents?.length ? (
           documents?.map((category) => (
-            <Stack
-              key={category.id}
-              spacing={3}
-              direction="row"
-              alignItems="center"
-              sx={{ border: '1px solid #f3f2f2', borderRadius: '12px' }}
-              p={2}
-            >
-              <Avatar
-                variant="rounded"
-                sx={{ bgcolor: 'background.neutral', width: 48, height: 48, borderRadius: 1.5 }}
-              >
-                <Box component="img" src="/assets/icons/files/ic_document.svg" />
-              </Avatar>
-
-              <Stack spacing={0.5} flexGrow={1}>
-                <Typography variant="subtitle2"> {category.name} </Typography>
-                <Box>
-                  <Typography variant="caption" sx={{ color: 'text.disabled', mr: 3 }}>
-                    TypeFile: {category.typeFile}
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.disabled' }}>
-                    dateCreated:
-                  </Typography>
-                </Box>
+              <Stack spacing={2}>
+                  <FileGeneralRecentCard
+                      key={category.id}
+                      file={category}
+                      onDelete={() => console.log('DELETE', category.id)}
+                  />
               </Stack>
-
-              {/* <Typography variant="subtitle2"> {fData(category.usedStorage)} </Typography> */}
-            </Stack>
           ))
         ) : (
           <Alert severity="error">Tài liệu trống!</Alert>

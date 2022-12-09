@@ -45,48 +45,13 @@ export default function DocumentPostPage() {
 
   const [error, setError] = useState(null);
 
-  // const getPost = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get('/api/Document/post', {
-  //       params: { title },
-  //     });
 
-  //     setPost(response.data.post);
-  //     setLoadingPost(false);
-  //   } catch (error) {
-  //     console.error(error);
-  //     setLoadingPost(false);
-  //     setError(error.message);
-  //   }
-  // }, [title]);
-
-  // const getRecentPosts = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get('/api/Document/posts/recent', {
-  //       params: { title },
-  //     });
-
-  //     setRecentPosts(response.data.recentPosts);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }, [title]);
-
-  // useEffect(() => {
-  //   getRecentPosts();
-  // }, [getRecentPosts]);
-
-  // useEffect(() => {
-  //   if (title) {
-  //     getPost();
-  //   }
-  // }, [getPost, title]);
 
   return (
     <>
-      {/* <Head>
-        <title>{`Document: ${post?.title || ''} | Minimal UI`}</title>
-      </Head> */}
+      <Head>
+          <title> Hệ thống quản lý Học liệu</title>
+      </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs

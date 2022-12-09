@@ -163,11 +163,12 @@ export function createStoreFolderRedux(payload) {
       const response = await postFolder(payload);
       console.log('postFolder', response, response instanceof Error);
       if (response instanceof Error) {
-        return dispatch(slice.actions.hasError(response.response.data.title));
+        return returnMessageSuccess(response.response.data.title);
       }
-      dispatch(slice.actions.createFolderSuccess(response.data.data));
+      dispatch(slice.actions.createStoreFolderSuccess(response.data.data));
+      return returnMessageSuccess('Tạo thư mục thành công');
     } catch (error) {
-      dispatch(slice.actions.hasError(error.message));
+      return returnMessageError(`${error.message}`);
     }
   };
 }
@@ -215,7 +216,7 @@ export function copyDocsToFolderRedux(folderId, docsId) {
   return async () => {
     try {
       if (!folderId || !docsId) {
-        return returnMessageError('Thêm tài liệu lỗi ');
+        return returnMessageError('Thêm tài liệu thất bại ');
       }
       dispatch(slice.actions.startLoading());
       const response = await postCopyDocsToFolder(folderId, docsId);

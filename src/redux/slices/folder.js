@@ -187,18 +187,3 @@ export function deleteDocumentInFolderRedux(documentID) {
   };
 }
 
-// export function uploadDocumentRedux(data) {
-//   return async () => {
-//     try {
-//       dispatch(slice.actions.startLoading());
-//       const response = await postDocument(data);
-//       if (response.status < 400) {
-//         console.log('uploadDocumentRedux', response);
-//       } else {
-//         console.log('Lỗi upload tài liệu', response.data.title);
-//       }
-//     } catch (error) {
-//       dispatch(slice.actions.hasError(error));
-//     }
-//   };
-// }

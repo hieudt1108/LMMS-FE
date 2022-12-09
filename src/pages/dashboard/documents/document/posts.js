@@ -50,6 +50,7 @@ export default function DocumentPostsPage() {
     subjectId: '',
   });
 
+  const [pagging, setPagging] = useState('');
   const renderMenuItem = useCallback((item) => {
     if (item && item.length) {
       return item.map((obj, index) => (
@@ -71,6 +72,8 @@ export default function DocumentPostsPage() {
   async function fetchAllDocument() {
     const res = await getDocumentShareWithMe(filter);
     if (res.status < 400) {
+      setPagging(res);
+
       setDocuments(res.data.data);
     } else {
       console.log(res.message);
@@ -101,6 +104,7 @@ export default function DocumentPostsPage() {
     }
   }
 
+  console.log('pagging: ', pagging);
   const handleSearchChange = useCallback(
     (event, value) => {
       setFilter({ ...filter, searchByName: event.target.value });
@@ -162,7 +166,7 @@ export default function DocumentPostsPage() {
             <TextField
               size="small"
               sx={{ mr: 1, mr: 3 }}
-              autoHighlight
+              autohighlight="true"
               onChange={handleSearchChange}
               placeholder="Search..."
               InputProps={{

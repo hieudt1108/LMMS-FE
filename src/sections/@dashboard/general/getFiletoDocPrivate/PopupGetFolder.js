@@ -39,7 +39,7 @@ export default function PopupGetFolder({ open, onClose }) {
     {
       id: 0,
       value: 'myDocument',
-      label: `Tài liệu của tôi`,
+      label: `Folder của tôi`,
       component: (
         <GeneralFolderPage
           dataGeneralFolder={{

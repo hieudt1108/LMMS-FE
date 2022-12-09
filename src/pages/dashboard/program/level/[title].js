@@ -175,7 +175,7 @@ export default function LevelLayout() {
             <TextField
               size="small"
               sx={{ mr: 1, mr: 3 }}
-              autoHighlight
+              autohighlight="true"
               onChange={handleSearchChange}
               placeholder="Search..."
               InputProps={{

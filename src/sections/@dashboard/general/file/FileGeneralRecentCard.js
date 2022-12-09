@@ -14,7 +14,8 @@ import { useSnackbar } from '../../../../components/snackbar';
 import MenuPopover from '../../../../components/menu-popover';
 import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail';
 import { memo } from 'react';
-//
+// POPUP
+import PopupGetFolder from '../getFiletoDocPrivate/PopupGetFolder';
 import { FileDetailsDrawer, FileShareDialog } from '../../file';
 import DocumentPreview from '../../documents/DocumentPreview';
 import {
@@ -112,6 +113,16 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
     if (message) {
       enqueueSnackbar(message.title, { variant: message.variant });
     }
+  };
+
+  const [openFrom, setOpenFrom] = useState(false);
+
+  const handleOpenFrom = () => {
+    setOpenFrom(true);
+  };
+
+  const handleCloseFrom = () => {
+    setOpenFrom(false);
   };
 
   const handleDeleteDocument = async () => {
@@ -237,7 +248,7 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
         </Box>
       </Stack>
 
-      <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
+      <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 220 }}>
         {(file.typeFile == 'audio/mpeg' ||
           file.typeFile == 'video/mp4' ||
           file.typeFile == 'image/jpeg' ||
@@ -249,6 +260,10 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
           </MenuItem>
         )}
 
+        <MenuItem onClick={handleOpenFrom}>
+          <Iconify icon="simple-line-icons:docs" />
+          Tải về kho của tôi
+        </MenuItem>
         <MenuItem onClick={handleDownloadFile}>
           <Iconify icon="eva:download-outline" />
           Tải xuống
@@ -268,6 +283,8 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
           Xóa
         </MenuItem>
       </MenuPopover>
+
+      <PopupGetFolder open={openFrom} onClose={handleCloseFrom} />
       {openDetails && (
         <FileDetailsDrawer
           // data={file}

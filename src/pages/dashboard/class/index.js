@@ -160,7 +160,7 @@ export default function Classes() {
               <TextField
                 size="small"
                 sx={{ mr: 1 }}
-                autoHighlight
+                autohighlight="true"
                 onChange={handleSearchChange}
                 placeholder="Search..."
                 InputProps={{

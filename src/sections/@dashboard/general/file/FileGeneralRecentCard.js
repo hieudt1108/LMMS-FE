@@ -35,6 +35,7 @@ import axios from 'axios';
 import { createFolderRedux, deleteDocumentInFolderRedux } from '../../../../redux/slices/folder';
 import { useSelector } from 'react-redux';
 import ConfirmDialog from 'src/components/confirm-dialog';
+import { URL_GLOBAL } from '../../../../config';
 
 // ----------------------------------------------------------------------
 

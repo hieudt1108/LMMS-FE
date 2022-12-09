@@ -20,6 +20,7 @@ import {
   MenuItem,
   TextField,
   Chip,
+  Autocomplete,
 } from '@mui/material';
 // routes
 //components
@@ -191,8 +192,11 @@ export default function BlogNewPostForm({ classID }) {
                 <Card sx={{ p: 3 }}>
                   <Stack spacing={3}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Người dùng</span>
+                      <Typography variant="subtitle2" gutterBottom sx={{ marginRight: '25px' }}>
+                        Người dùng
+                      </Typography>
                       <RHFSelect
+                        sx={{ width: '643px' }}
                         name={`items[${index}].userId`}
                         placeholder="nguoi"
                         onChange={(event) => handlerUserChange(event, index)}
@@ -208,8 +212,11 @@ export default function BlogNewPostForm({ classID }) {
                     </div>
                     {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) && (
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Quyền</span>
+                        <Typography variant="subtitle2" gutterBottom sx={{ marginRight: '25px' }}>
+                          Quyền
+                        </Typography>
                         <RHFSelect
+                          sx={{ width: '643px' }}
                           name={`items[${index}].roleId`}
                           placeholder="Quyền"
                           onChange={(event) => handlerRoleChange(event, index)}
@@ -224,10 +231,19 @@ export default function BlogNewPostForm({ classID }) {
                     )}
 
                     {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].subjects) && (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          marginRight: '5px',
+                        }}
+                      >
+                        <Typography variant="subtitle2" gutterBottom sx={{ marginRight: '25px' }}>
+                          Môn học
+                        </Typography>
                         <RHFAutocomplete
-                          sx={{ width: '856px' }}
+                          sx={{ width: '643px' }}
                           name={`items[${index}].subjectId`}
                           multiple
                           onChange={(event, newValue) => {

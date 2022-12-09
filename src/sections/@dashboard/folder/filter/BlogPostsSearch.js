@@ -53,7 +53,7 @@ export default function BlogPostsSearch() {
   return (
     <Autocomplete
       size="small"
-      autoHighlight
+      autohighlight="true"
       popupIcon={null}
       options={searchResults}
       onInputChange={(event, value) => handleSearchPosts(value)}

@@ -89,25 +89,19 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
     setFolderName(event.target.value);
   }, []);
 
-  const handleCreateNewFolder = () => {
-    console.log('CREATE NEW FOLDER', folderName);
+  const handleCreateNewFolder = async () => {
     setFolderName('');
-    dispatch(
+    const message = await dispatch(
       createFolderRedux({
         name: folderName,
         parentId: Number.parseInt(id),
       })
     );
-    handleCloseNewFolder();
-    enqueueSnackbar(error ? error : 'Tạo thư mục thành công', { variant: 'error' });
-  };
-
-  const handleOnClickFileFolderCard = (folder_id) => {
-    console.log('handleOnClickFileFolderCard', folder_id, dataGeneralFolder);
-    if (dataGeneralFolder) {
-      return dataGeneralFolder.setMyFolderId(folder_id);
+    console.log('CREATE NEW FOLDER', message);
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
     }
-    push(PATH_DASHBOARD.folder.link(folder_id));
+    handleCloseNewFolder();
   };
 
   return (
@@ -132,9 +126,8 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
                     ? listFolders.map((folder, index) => (
                         <FileFolderCard
                           dataGeneralFolder={dataGeneralFolder}
-                          key={index}
+                          key={folder.id}
                           folder={folder}
-                          onDelete={() => console.log('DELETE', folder.id)}
                           sx={{
                             ...(_folders.length > 3 && {
                               minWidth: 222,

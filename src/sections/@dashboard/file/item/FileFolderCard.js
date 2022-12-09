@@ -20,23 +20,25 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 
 import useResponsive from '../../../../hooks/useResponsive';
+import { dispatch } from 'src/redux/store';
+import { deleteSubFolderInFolderRedux } from 'src/redux/slices/folder';
 // ----------------------------------------------------------------------
 
-FileFolderCard.propTypes = {
-  sx: PropTypes.object,
-  folder: PropTypes.object,
-  onDelete: PropTypes.func,
-  onSelect: PropTypes.func,
-  selected: PropTypes.bool,
-};
+// FileFolderCard.propTypes = {
+//   sx: PropTypes.object,
+//   folder: PropTypes.object,
+//   onDelete: PropTypes.func,
+//   onSelect: PropTypes.func,
+//   selected: PropTypes.bool,
+// };
 
-export default function FileFolderCard({ dataGeneralFolder, folder, selected, onSelect, onDelete, sx, ...other }) {
+export default function FileFolderCard({ dataGeneralFolder, folder, selected, onSelect, sx, ...other }) {
   const router = useRouter();
   const {
     query: { pid: pID },
     push,
   } = useRouter();
-  console.log('FileFolderCard');
+  console.log('FileFolderCard', folder);
   const isDesktop = useResponsive('up', 'sm');
 
   const { enqueueSnackbar } = useSnackbar();
@@ -132,6 +134,15 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
       return dataGeneralFolder.setMyFolderId(pid);
     }
     push(PATH_DASHBOARD.folder.link(pid));
+  };
+
+  const handleDeleteFolder = async () => {
+    console.log('handleDeleteDocument');
+    const message = await dispatch(deleteSubFolderInFolderRedux(folder.id));
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
+    }
+    handleCloseConfirm();
   };
 
   return (
@@ -283,10 +294,10 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
+        title="Xóa thư mục"
+        content="Bạn có chắc chắn muốn xóa thư mục này?"
         action={
-          <Button variant="contained" color="error" onClick={onDelete}>
+          <Button variant="contained" color="error" onClick={handleDeleteFolder}>
             Delete
           </Button>
         }

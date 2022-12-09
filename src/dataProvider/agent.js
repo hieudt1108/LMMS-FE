@@ -71,7 +71,6 @@ function getMenuItems() {
   return getApi('/Auth/getMenuItems');
 }
 
-
 //class ADMIN
 function getAllClass(params) {
   return getApi('/Class/getAll', params);
@@ -237,8 +236,6 @@ const postClass = (payload) => {
   return postApi('Class', payload);
 };
 
-
-
 // GRADE
 const postGrade = () => {
   return postApi('Grade');
@@ -303,10 +300,12 @@ const postDocument = (payload) => {
   return postApi('Document', payload);
 };
 
-const postDocumentsInSlot = (classId,documentId,slotId,subjectId) => {
-  if(slotId){
-    return postApi(`Document/addDocumentsInSlot?classId=${classId}&documentId=${documentId}&slotId=${slotId}&subjectId=${subjectId}`);
-  }else if(slotId === 0){
+const postDocumentsInSlot = (classId, documentId, slotId, subjectId) => {
+  if (slotId) {
+    return postApi(
+      `Document/addDocumentsInSlot?classId=${classId}&documentId=${documentId}&slotId=${slotId}&subjectId=${subjectId}`
+    );
+  } else if (slotId === 0) {
     return postApi(`Document/addDocumentsInSlot?classId=${classId}&documentId=${documentId}&subjectId=${subjectId}`);
   }
 };
@@ -392,6 +391,11 @@ const deleteRole = (id) => {
 // Permission
 const deletePermission = (id) => {
   return deleteApi(`Permission/${id}`);
+};
+
+// DOCUMENT
+const deleteFolder = (id) => {
+  return deleteApi(`Folder/${id}`);
 };
 
 // PUT API AREA ============================>
@@ -565,4 +569,5 @@ export {
   updateClassMember,
   updateSubjectClass,
   postDocumentsInSlot,
+  deleteFolder,
 };

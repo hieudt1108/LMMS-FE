@@ -304,7 +304,11 @@ const postDocument = (payload) => {
 };
 
 const postDocumentsInSlot = (classId,documentId,slotId,subjectId) => {
-  return postApi(`Document/addDocumentsInSlot?classId=${classId}&documentId=${documentId}&slotId=${slotId}&subjectId=${subjectId}`);
+  if(slotId){
+    return postApi(`Document/addDocumentsInSlot?classId=${classId}&documentId=${documentId}&slotId=${slotId}&subjectId=${subjectId}`);
+  }else if(slotId === 0){
+    return postApi(`Document/addDocumentsInSlot?classId=${classId}&documentId=${documentId}&subjectId=${subjectId}`);
+  }
 };
 
 const addShareDoc = (id, payload) => {

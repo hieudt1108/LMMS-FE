@@ -127,6 +127,16 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
+const returnMessageSuccess = (title) => ({
+  title: `${title}`,
+  variant: '',
+});
+
+const returnMessageError = (title) => ({
+  title: `${title}`,
+  variant: 'error',
+});
+
 //////
 export function getUsersRedux(params, index) {
   return async () => {
@@ -190,8 +200,9 @@ export function createAddUserInCLassRedux() {
     try {
       dispatch(slice.actions.startLoading());
       dispatch(slice.actions.createAddUserInCLassSuccess());
+      return returnMessageSuccess('Thêm người dùng vào lớp học thành công');
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      return returnMessageError(`${error.message}`);
     }
   };
 }

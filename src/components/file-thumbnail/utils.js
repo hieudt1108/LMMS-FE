@@ -79,6 +79,9 @@ export function fileThumb(fileUrl) {
     case 'zip':
       thumb = iconUrl('ic_zip');
       break;
+    case 'application/x-zip-compressed':
+      thumb = iconUrl('ic_zip');
+      break;
     case 'audio':
       thumb = iconUrl('ic_audio');
       break;

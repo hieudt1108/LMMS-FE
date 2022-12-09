@@ -143,7 +143,7 @@ function Searchbar() {
           <StyledSearchbar>
             <Autocomplete
               sx={{ width: 1, height: 1 }}
-              autoHighlight
+              autohighlight="true"
               disablePortal
               disableClearable
               popupIcon={null}

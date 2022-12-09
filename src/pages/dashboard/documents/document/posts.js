@@ -30,7 +30,7 @@ import { useSettingsContext } from '../../../../components/settings';
 // api
 import { getDocumentShareWithMe, getAllTypeDocument, getAllSubject } from '../../../../dataProvider/agent';
 import { DocumentPostCard } from '../../../../sections/@dashboard/documents';
-import {FileGeneralRecentCard} from "../../../../sections/@dashboard/general/file";
+import { FileGeneralRecentCard } from '../../../../sections/@dashboard/general/file';
 
 // ----------------------------------------------------------------------
 
@@ -51,6 +51,7 @@ export default function DocumentPostsPage() {
     subjectId: '',
   });
 
+  const [pagging, setPagging] = useState('');
   const renderMenuItem = useCallback((item) => {
     if (item && item.length) {
       return item.map((obj, index) => (
@@ -72,6 +73,8 @@ export default function DocumentPostsPage() {
   async function fetchAllDocument() {
     const res = await getDocumentShareWithMe(filter);
     if (res.status < 400) {
+      setPagging(res);
+
       setDocuments(res.data.data);
     } else {
       console.log(res.message);
@@ -102,6 +105,7 @@ export default function DocumentPostsPage() {
     }
   }
 
+  console.log('pagging: ', pagging);
   const handleSearchChange = useCallback(
     (event, value) => {
       setFilter({ ...filter, searchByName: event.target.value });
@@ -159,11 +163,11 @@ export default function DocumentPostsPage() {
         />
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <Stack direction='row'>
+          <Stack direction="row">
             <TextField
               size="small"
-              sx={{  mr: 3 }}
-              autoHighlight
+              sx={{ mr: 1, mr: 3 }}
+              autohighlight="true"
               onChange={handleSearchChange}
               placeholder="Tìm kiếm tài liệu..."
               InputProps={{
@@ -196,7 +200,6 @@ export default function DocumentPostsPage() {
         </Stack>
 
         <DocumentPostCard documents={documents} />
-
 
         <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
           <Pagination

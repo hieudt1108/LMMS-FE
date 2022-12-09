@@ -62,7 +62,7 @@ export default function FolderUserSearch() {
   return (
     <Autocomplete
       size="small"
-      autoHighlight
+      autohighlight="true"
       popupIcon={null}
       options={searchResults}
       onInputChange={(event, value) => handleChangeSearch(value)}

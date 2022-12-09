@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import {Card, Typography, Stack, Avatar, Box, Button} from '@mui/material';
@@ -9,6 +9,7 @@ import Iconify from '../../../../components/iconify';
 
 // utils
 import { fData } from '../../../../utils/formatNumber';
+import UploadDocToSlot from "../../myclass/popupdiaglog/UploadDocToSlot";
 
 const GB = 1000000000 * 24;
 
@@ -39,20 +40,27 @@ const data = [
   },
 ];
 
-export default function DocumentLocal({ docs }) {
-  const isDesktop = useResponsive('up', 'sm');
 
+
+export default function DocumentLocal({ docs, classId, subjectId }) {
+  const isDesktop = useResponsive('up', 'sm');
+  const [openFrom, setOpenFrom] = useState(false);
+
+  const handleOpenFrom = () => {
+    setOpenFrom(true);
+  };
+
+  const handleCloseFrom = () => {
+    setOpenFrom(false);
+  };
   return (
     <Card sx={{ p: 3, cursor: 'pointer' }}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3 }}>
-        <Typography sx={{ mb: 2 }} variant="h5">
-          Tài liệu chung
-        </Typography>
-
-        <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />}>
+      <Stack direction="row" alignItems="center" display='flex' justifyContent="flex-end" sx={{ mb: 3 }}>
+        <Button size="small" onClick={handleOpenFrom} startIcon={<Iconify icon="eva:plus-fill" />}>
           Thêm tài liệu chung
         </Button>
       </Stack>
+      <UploadDocToSlot classId={classId} subjectId={subjectId} slotId={0} open={openFrom} onClose={handleCloseFrom} />
       <Stack spacing={2}>
         {docs?.map((doc) =>
           doc.slotId === null ? (

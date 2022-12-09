@@ -36,6 +36,10 @@ export default function FolderNewDocumentPostPage() {
               href: PATH_DASHBOARD.root,
             },
             {
+              name: 'Tài Liệu Của Tôi',
+              href: PATH_DASHBOARD.folder.root,
+            },
+            {
               name: 'Tạo tài liệu',
             },
           ]}

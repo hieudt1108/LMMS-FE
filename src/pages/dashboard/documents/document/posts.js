@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -30,6 +30,7 @@ import { useSettingsContext } from '../../../../components/settings';
 // api
 import { getDocumentShareWithMe, getAllTypeDocument, getAllSubject } from '../../../../dataProvider/agent';
 import { DocumentPostCard } from '../../../../sections/@dashboard/documents';
+import { FileGeneralRecentCard } from '../../../../sections/@dashboard/general/file';
 
 // ----------------------------------------------------------------------
 
@@ -162,13 +163,13 @@ export default function DocumentPostsPage() {
         />
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <Box>
+          <Stack direction="row">
             <TextField
               size="small"
               sx={{ mr: 1, mr: 3 }}
               autohighlight="true"
               onChange={handleSearchChange}
-              placeholder="Search..."
+              placeholder="Tìm kiếm tài liệu..."
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -195,7 +196,7 @@ export default function DocumentPostsPage() {
                 {renderMenuItem(subjects)}
               </Select>
             </FormControl>
-          </Box>
+          </Stack>
         </Stack>
 
         <DocumentPostCard documents={documents} />

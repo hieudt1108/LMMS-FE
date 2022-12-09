@@ -36,7 +36,7 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
     query: { pid: pID },
     push,
   } = useRouter();
-
+  console.log('FileFolderCard');
   const isDesktop = useResponsive('up', 'sm');
 
   const { enqueueSnackbar } = useSnackbar();

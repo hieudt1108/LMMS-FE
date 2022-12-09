@@ -24,8 +24,12 @@ import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail
 import { URL_GLOBAL } from '../../../../config';
 import { FileDetailsDrawer } from '../../file';
 import useResponsive from '../../../../hooks/useResponsive';
+import { dispatch } from '../../../../redux/store';
+import { startDownloadFileRedux } from '../../../../redux/slices/document';
+import { FileGeneralRecentCard } from '../../general/file';
 
 export default function SysllabusSubject({ data, classId, subjectId, docs }) {
+  const isDesktop = useResponsive('up', 'sm');
   const { createBy, createDate, id, isDeleted, name, updateBy, updateDate } = data;
   const [openPreview, setOpenPreview] = useState(false);
   const [openPopover, setOpenPopover] = useState(null);
@@ -55,7 +59,6 @@ export default function SysllabusSubject({ data, classId, subjectId, docs }) {
   const handleCloseFrom = () => {
     setOpenFrom(false);
   };
-  const isDesktop = useResponsive('up', 'sm');
   return (
     <>
       <Card sx={{ p: 3 }}>

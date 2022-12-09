@@ -16,16 +16,20 @@ import SearchNotFound from '../../../components/search-not-found';
 import { getAllUsers } from 'src/dataProvider/agent';
 import { dispatch } from 'src/redux/store';
 import { handleSearchUserRedux } from 'src/redux/slices/document';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 export default function FolderUserSearch() {
   const [searchProducts, setSearchProducts] = useState('');
+  const { getOne } = useSelector((state) => state.document);
+  const listShareUserIds = [getOne.id, ...getOne.listShare.map((element) => element.user.id)];
 
   const [searchResults, setSearchResults] = useState([]);
 
   const handleChangeSearch = async (value) => {
     try {
+      console.log('handleChangeSearch 1', getOne);
       setSearchProducts(value);
       if (value) {
         const response = await getAllUsers({
@@ -33,8 +37,11 @@ export default function FolderUserSearch() {
           pageSize: 5,
           searchByName: value,
         });
-        console.log('handleChangeSearch', value, response.data.data);
-        setSearchResults(response.data.data);
+        const listUserSearches = response.data.data;
+        const listUserSearchesAfterRemove = listUserSearches.filter(function (el) {
+          return listShareUserIds.indexOf(el.id) < 0;
+        });
+        setSearchResults(listUserSearchesAfterRemove);
       }
     } catch (error) {
       console.error(error);

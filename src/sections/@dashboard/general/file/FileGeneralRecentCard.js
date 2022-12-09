@@ -109,7 +109,7 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
 
   const handleDownloadFile = async () => {
     handleClosePopover();
-    const message = await dispatch(startDownloadFileRedux(file, 'http://lmms.site:9090/api/File/downloadFile?'));
+    const message = await dispatch(startDownloadFileRedux(file, URL_GLOBAL.DOWNLOAD_FILE));
     if (message) {
       enqueueSnackbar(message.title, { variant: message.variant });
     }
@@ -147,7 +147,7 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
   };
 
   const handlePreviewFile = useCallback(() => {
-    window.open(`http://lmms.site:8000/${file.urlDocument}`, '_blank', 'noopener,noreferrer');
+    window.open(`${URL_GLOBAL.VIEW_FILE}${file.urlDocument}`, '_blank', 'noopener,noreferrer');
   }, []);
 
   const handleCloseConfirm = () => {

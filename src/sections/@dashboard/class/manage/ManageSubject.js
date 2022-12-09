@@ -10,11 +10,7 @@ export default function ManageSubject({ myClass }) {
   return (
     <>
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <ClassNewestBooking myClass={myClass} title="Môn học hiện có trong lớp" subheader={countSubject} />
-          </Grid>
-        </Grid>
+        <ClassNewestBooking myClass={myClass} title="Môn học hiện có trong lớp" subheader={countSubject} />
       </Container>
     </>
   );

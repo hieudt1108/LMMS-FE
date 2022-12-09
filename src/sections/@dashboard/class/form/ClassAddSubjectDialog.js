@@ -32,7 +32,7 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
 
   const validationSchema = (() => {
     return Yup.object().shape({
-      rolesID: Yup.array().min(1, 'Hãy chọn vai trò'),
+      subjectsId: Yup.array().min(1, 'Hãy chọn một môn học'),
     });
   })();
 
@@ -40,6 +40,7 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
     () => ({
       tagsId: [],
       subjectsId: [],
+      subjectId: '',
     }),
     []
   );
@@ -88,10 +89,8 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
         subjectId: data.tagsId[i],
       });
     }
-    console.log('postData: ', postData);
-    console.log('defaultValues: ', defaultValues);
     try {
-      const res = await updateSubjectClass(classID, { postData });
+      const res = await updateSubjectClass(classID, postData);
       console.log(res);
       if (res.status < 400) {
         enqueueSnackbar('Create success!');

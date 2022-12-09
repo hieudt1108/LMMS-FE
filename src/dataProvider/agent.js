@@ -4,6 +4,7 @@ const instance = axios.create({
   baseURL: 'http://lmms.site:9090/api/',
   timeout: 3000,
 });
+
 import { PATH_AUTH } from '../routes/paths';
 import { useRouter } from 'next/router';
 import { idID } from '@mui/material/locale';
@@ -70,7 +71,7 @@ function getMenuItems() {
   return getApi('/Auth/getMenuItems');
 }
 
-// CLASS
+
 //class ADMIN
 function getAllClass(params) {
   return getApi('/Class/getAll', params);

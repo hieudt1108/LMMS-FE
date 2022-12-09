@@ -125,17 +125,19 @@ export function createFolderRedux(payload) {
   return async () => {
     try {
       if (!payload) {
-        return dispatch(slice.actions.hasError());
+        return returnMessageError('Tạo thư mục không thành công');
       }
       dispatch(slice.actions.startLoading());
       const response = await postFolder(payload);
-      console.log('postFolder', response);
-      if (response.status !== 200) {
-        return dispatch(slice.actions.hasError(response.data.title));
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
       }
+
       dispatch(slice.actions.createFolderSuccess(response.data.data));
+      return returnMessageSuccess('Tạo thư mục thành công');
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      console.log('error', error);
+      return returnMessageError(`${error.message}`);
     }
   };
 }

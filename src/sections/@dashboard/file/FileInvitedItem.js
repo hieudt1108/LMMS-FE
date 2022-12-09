@@ -44,7 +44,7 @@ export default function FileInvitedItem({ index }) {
         <ListItemText
           primary={user.firstName + ' ' + user.lastName}
           secondary={
-            <Tooltip title={user.email}>
+            <Tooltip title={user.firstName + ' ' + user.lastName}>
               <span>{user.email}</span>
             </Tooltip>
           }

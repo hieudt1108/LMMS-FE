@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { useState, useCallback, useEffect, useMemo } from 'react';
+import _ from 'lodash';
 // next
 import { useRouter } from 'next/router';
 // form
@@ -41,8 +42,6 @@ function TextCode() {
 }
 
 export default function BlogNewPostForm({ dataGeneralFolder }) {
-
-
   const { user } = useAuthContext();
   const formData = new FormData();
   const {
@@ -98,7 +97,7 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, prepend, remove } = useFieldArray({
     control,
     name: 'items',
   });
@@ -182,7 +181,7 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
   };
 
   const handleAdd = () => {
-    append({
+    prepend({
       code: `${TextCode()}-${TextCode()}-${TextCode()}-${TextCode()}`,
       description: '',
       name: '',
@@ -196,12 +195,12 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
   const handleRemove = (index) => {
     remove(index);
   };
-
+  console.log('Blog', fields);
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         {fields.map((item, index) => (
-          <div key={index}>
+          <div key={item.code}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={7}>
                 <Card sx={{ p: 3 }}>

@@ -10,6 +10,9 @@ import {
   getAllTypeDocument,
   getDocumentById,
   getFolderByID,
+  getLocalStorage,
+  getProgramById,
+  getSubjectById,
   getUserById,
   postDocument,
   postFile,
@@ -118,6 +121,16 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
+const returnMessageSuccess = (title) => ({
+  title: `${title}`,
+  variant: '',
+});
+
+const returnMessageError = (title) => ({
+  title: `${title}`,
+  variant: 'error',
+});
+
 export function getOneDocumentRedux(id) {
   return async () => {
     try {
@@ -127,7 +140,23 @@ export function getOneDocumentRedux(id) {
       dispatch(slice.actions.startLoading());
       const response = await getDocumentById(id);
       console.log('getOneDocumentRedux', response);
-      dispatch(slice.actions.getOneDocumentSuccess(response.data.data));
+      const document = response.data.data;
+      const detailProgramAndSubject = await Promise.all([
+        getProgramById(document.programId),
+        getSubjectById(document.subjectId),
+      ]);
+      dispatch(
+        slice.actions.getOneDocumentSuccess({
+          ...document,
+          programDetail: detailProgramAndSubject[0].data.data,
+          subjectDetail: detailProgramAndSubject[1].data.data,
+        })
+      );
+      // return {
+      //   ...document,
+      //   programDetail: detailProgramAndSubject[0].data.data,
+      //   subjectDetail: detailProgramAndSubject[1].data.data,
+      // };
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -153,13 +182,14 @@ export function handleSendInviteRedux(getOne) {
     try {
       console.log('handleSendInviteRedux', getOne);
       if (!getOne) {
-        return;
+        return returnMessageError('Thư mục không tồn tại');
       }
       dispatch(slice.actions.startLoading());
       const response = await addShareDoc(getOne.id, getOne.initShare);
       dispatch(slice.actions.handleSendInviteSuccess(response.data.data));
+      return returnMessageSuccess('Chia sẻ thành công');
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      return returnMessageError(`${error.message}`);
     }
   };
 }
@@ -174,6 +204,80 @@ export function handleChangePermissionRedux(getOne, user, index, permission) {
       dispatch(slice.actions.startLoading());
       const response = await updateShareDocs(getOne.id, [{ user, permission }]);
       dispatch(slice.actions.handleChangePermissionSuccess({ ...response.data.data, index }));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function startDownloadFileRedux(file, url) {
+  return async () => {
+    if (!file || !url) {
+      return;
+    }
+    console.log('startDownloadFileRedux', file, url);
+    try {
+      const params = {
+        fileName: file.urlDocument,
+        contentType: file.typeFile,
+      };
+
+      const token = getLocalStorage('access_token');
+      console.log('token', token);
+      axios({
+        url: `${url}fileName=${params.fileName}&contentType=${params.contentType}`, //your url
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        method: 'GET',
+        responseType: 'blob', // important
+      }).then((response) => {
+        if (response.status < 400) {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', params.fileName); //or any other extension
+          document.body.appendChild(link);
+          link.click();
+          return returnMessageSuccess('Tải thành công ');
+        } else {
+          return returnMessageError('Thư mục không tồn tại');
+        }
+      });
+    } catch (error) {
+      console.log('error', error);
+      return returnMessageError(error.mess);
+    }
+  };
+}
+
+export function downloadingFileRedux(folderId) {
+  return async () => {
+    try {
+      if (!folderId) {
+        return;
+      }
+      // const token = getLocalStorage('access_token');
+      // axios({
+      //   url: `${url}fileName=${params.fileName}&contentType=${params.contentType}`, //your url
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      //   method: 'GET',
+      //   responseType: 'blob', // important
+      // }).then((response) => {
+      //   if (response.status < 400) {
+      //     const url = window.URL.createObjectURL(new Blob([response.data]));
+      //     const link = document.createElement('a');
+      //     link.href = url;
+      //     link.setAttribute('download', params.fileName); //or any other extension
+      //     document.body.appendChild(link);
+      //     link.click();
+      //   } else {
+      //     enqueueSnackbar('Thư mục không còn tồn tại', { variant: 'error' });
+      //   }
+      // });
+      // console.log('downloadFileRedux after', document);
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

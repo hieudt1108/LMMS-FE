@@ -34,7 +34,7 @@ GeneralFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function GeneralFilePage({ dataGeneralFolder,dataUploadDocsToSlot }) {
+export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlot }) {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -43,11 +43,17 @@ export default function GeneralFilePage({ dataGeneralFolder,dataUploadDocsToSlot
   } = useRouter();
 
   const { error, folder } = useSelector((state) => state.folder);
+  const { getOne } = useSelector((state) => state.document);
   const { id, listFolders, listDocuments } = folder;
   console.log('GeneralFilePage', listFolders, listDocuments, dataGeneralFolder);
 
   useEffect(() => {
-    dataGeneralFolder ? dispatch(getFolderRedux(dataGeneralFolder.myFolderId)) : dispatch(getFolderRedux(folderID));
+    console.log('GeneralFilePage useEffect ', dataGeneralFolder, folderID);
+    if (dataGeneralFolder) {
+      dispatch(getFolderRedux(dataGeneralFolder.myFolderId));
+    } else if (folderID || folderID === 0) {
+      dispatch(getFolderRedux(folderID));
+    }
   }, [folderID, dataGeneralFolder]);
 
   const smDown = useResponsive('down', 'sm');

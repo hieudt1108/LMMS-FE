@@ -40,7 +40,7 @@ export default function FileDetailsDrawer({
 }) {
   const { getOne } = useSelector((state) => state.document);
 
-  const hasShared = data && !!data.listShare.length;
+  const hasShared = getOne && !!getOne.listShare.length;
 
   const [toggleProperties, setToggleProperties] = useState(true);
 
@@ -56,7 +56,7 @@ export default function FileDetailsDrawer({
 
   return (
     <>
-      {data && (
+      {getOne && (
         <Drawer
           open={open}
           onClose={onClose}
@@ -84,14 +84,14 @@ export default function FileDetailsDrawer({
             </Stack>
 
             <Stack spacing={2.5} justifyContent="center" sx={{ p: 2.5, bgcolor: 'background.neutral' }}>
-              <FileThumbnail file={data.urlDocument} sx={{ width: 64, height: 64 }} imgSx={{ borderRadius: 1 }} />
+              <FileThumbnail file={getOne.urlDocument} sx={{ width: 64, height: 64 }} imgSx={{ borderRadius: 1 }} />
 
               <Typography variant="h6" sx={{ wordBreak: 'break-all' }}>
-                {`Tài liệu: ${data.name}`}
+                {`Tài liệu: ${getOne.name}`}
               </Typography>
 
               <Typography variant="h7" sx={{ wordBreak: 'break-all' }}>
-                {`Tệp đính kèm: ${data.urlDocument}`}
+                {`Tệp đính kèm: ${getOne.urlDocument}`}
               </Typography>
 
               <Divider sx={{ borderStyle: 'dashed' }} />
@@ -99,12 +99,12 @@ export default function FileDetailsDrawer({
               <Stack spacing={1.5}>
                 <Panel label="Danh mục" toggle={toggleCategories} onToggle={handleToggleCategories} />
 
-                {toggleCategories && data ? (
+                {toggleCategories && getOne ? (
                   <>
                     <Stack spacing={1.5}>
-                      <Row label="Chương trình học" value={data.programDetail?.name} />
+                      <Row label="Chương trình học" value={getOne.programDetail?.name} />
 
-                      <Row label="Môn học" value={data.subjectDetail?.name} />
+                      <Row label="Môn học" value={getOne.subjectDetail?.name} />
                     </Stack>
                   </>
                 ) : (
@@ -120,11 +120,11 @@ export default function FileDetailsDrawer({
                 {toggleProperties && (
                   <>
                     <Stack spacing={1.5}>
-                      <Row label="Kích thước" value={fData(data.size)} />
+                      <Row label="Kích thước" value={fData(getOne.size)} />
 
-                      <Row label="Ngày tạo" value={fDateTime(data.createDate)} />
+                      <Row label="Ngày tạo" value={fDateTime(getOne.createDate)} />
 
-                      <Row label="Loại" value={fileFormat(data.typeFile)} />
+                      <Row label="Loại" value={fileFormat(getOne.typeFile)} />
                     </Stack>
                   </>
                 )}
@@ -137,7 +137,7 @@ export default function FileDetailsDrawer({
 
             {hasShared && (
               <List disablePadding sx={{ pl: 2.5, pr: 1 }}>
-                {data.listShare.map(({ user, permission }, index) => (
+                {getOne.listShare.map(({ user, permission }, index) => (
                   <FileInvitedItem key={user.id} user={user} permissionDefault={permission} index={index} />
                 ))}
               </List>

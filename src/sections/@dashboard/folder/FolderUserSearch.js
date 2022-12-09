@@ -59,7 +59,7 @@ export default function FolderUserSearch() {
       popupIcon={null}
       options={searchResults}
       onInputChange={(event, value) => handleChangeSearch(value)}
-      getOptionLabel={(user) => user.email}
+      getOptionLabel={(user) => `${user.firstName} ${user.lastName}`}
       noOptionsText={<SearchNotFound query={searchProducts} />}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       componentsProps={{
@@ -93,9 +93,9 @@ export default function FolderUserSearch() {
         />
       )}
       renderOption={(props, user, { inputValue }) => {
-        const { email, cover, gender, id } = user;
-        const matches = match(email, inputValue);
-        const parts = parse(email, matches);
+        const { cover, gender, id, firstName, lastName } = user;
+        const matches = match(`${firstName} ${lastName}`, inputValue);
+        const parts = parse(`${firstName} ${lastName}`, matches);
 
         return (
           <li {...props}>

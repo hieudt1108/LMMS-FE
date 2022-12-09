@@ -4,6 +4,7 @@ import axios from '../../utils/axios';
 //
 import { dispatch } from '../store';
 import {
+  deleteDocument,
   getAllProgram,
   getAllSubject,
   getAllTypeDocument,
@@ -81,18 +82,34 @@ const slice = createSlice({
         folderId: folderId,
       };
     },
+
+    deleteDocumentInFolderSuccess(state, action) {
+      const { documentID } = action.payload;
+      state.isLoading = false;
+      state.folder.listDocuments = state.folder.listDocuments.filter((item) => item.id === documentID);
+    },
   },
 });
 
 // Reducer
 export default slice.reducer;
 
+const returnMessageSuccess = (title) => ({
+  title: `${title}`,
+  variant: '',
+});
+
+const returnMessageError = (title) => ({
+  title: `${title}`,
+  variant: 'error',
+});
+
 export function getFolderRedux(params) {
   return async () => {
     try {
       console.log('getFolderRedux', params);
       if (!params && params !== 0) {
-        return dispatch(slice.actions.hasError());
+        return dispatch(slice.actions.hasError('không có folderId'));
       }
       dispatch(slice.actions.startLoading());
       const response = await getFolderByID(params);
@@ -142,6 +159,28 @@ export function createDocumentInitialRedux(folderId) {
       );
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function deleteDocumentInFolderRedux(documentID) {
+  return async () => {
+    try {
+      if (!documentID) {
+        return returnMessageError('Xóa thư mục không thành công');
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await deleteDocument(-1);
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
+      }
+
+      dispatch(slice.actions.deleteDocumentInFolderSuccess(documentID));
+
+      return returnMessageSuccess('Xóa thư mục thành công');
+    } catch (error) {
+      console.log('error', error);
+      return returnMessageError(`${error.message}`);
     }
   };
 }

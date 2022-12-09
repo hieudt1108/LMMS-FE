@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // @mui
 import { AvatarGroup, Box, Button, Checkbox, Divider, IconButton, MenuItem, Stack, Typography } from '@mui/material';
 // hooks
@@ -13,6 +13,7 @@ import Iconify from '../../../../components/iconify';
 import { useSnackbar } from '../../../../components/snackbar';
 import MenuPopover from '../../../../components/menu-popover';
 import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail';
+import { memo } from 'react';
 //
 import { FileDetailsDrawer, FileShareDialog } from '../../file';
 import DocumentPreview from '../../documents/DocumentPreview';
@@ -29,9 +30,9 @@ import {
   postDocumentsInSlot,
 } from '../../../../dataProvider/agent';
 import { dispatch } from 'src/redux/store';
-import { getOneDocumentRedux } from 'src/redux/slices/document';
+import { downloadFileRedux, getOneDocumentRedux, startDownloadFileRedux } from 'src/redux/slices/document';
 import axios from 'axios';
-import { createFolderRedux } from '../../../../redux/slices/folder';
+import { createFolderRedux, deleteDocumentInFolderRedux } from '../../../../redux/slices/folder';
 import { useSelector } from 'react-redux';
 import ConfirmDialog from 'src/components/confirm-dialog';
 
@@ -42,19 +43,14 @@ import ConfirmDialog from 'src/components/confirm-dialog';
 //   file: PropTypes.object,
 //   onDelete: PropTypes.func,
 // };
-
-export default function FileGeneralRecentCard({
-  dataGeneralFolder,
-  file,
-  dataUploadDocsToSlot,
-  onDelete,
-  sx,
-  ...other
-}) {
+const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDocsToSlot, sx, ...other }) => {
   const { enqueueSnackbar } = useSnackbar();
+
   const { getOne } = useSelector((state) => state.document);
+  const [documentData, setDocumentData] = useState(getOne);
 
   const { copy } = useCopyToClipboard();
+  const [rerender, setRerender] = useState('');
 
   const isDesktop = useResponsive('up', 'sm');
 
@@ -66,39 +62,17 @@ export default function FileGeneralRecentCard({
 
   const [openDetails, setOpenDetails] = useState(false);
 
-  const [documentData, setDocumentData] = useState({});
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  // useEffect(() => {
-  //   console.log('useEffect FileGeneralRecentCard', file);
-  //   fetchDocument();
-  // }, []);
-
-  async function fetchDocument() {
-    const res = await getDocumentById(file.id);
-    if (res.status < 400) {
-      const document = res.data.data;
-      const detailProgramAndSubject = await Promise.all([
-        getProgramById(document.programId),
-        getSubjectById(document.subjectId),
-      ]);
-      //   console.log('download', res);
-      setDocumentData({
-        ...document,
-        programDetail: detailProgramAndSubject[0].data.data,
-        subjectDetail: detailProgramAndSubject[1].data.data,
-      });
-    } else {
-      console.log('error');
-    }
-  }
+  console.log('FileGeneralRecentCard', file, openDetails);
 
   const handleFavorite = () => {
     setFavorite(!favorite);
   };
 
-  const handleOpenShare = () => {
-    dispatch(getOneDocumentRedux(file.id));
+  const handleOpenShare = async () => {
+    handleClosePopover();
+    await dispatch(getOneDocumentRedux(file.id));
     setOpenShare(true);
   };
 
@@ -114,7 +88,7 @@ export default function FileGeneralRecentCard({
     }
     // mở detail trong thư mục
     else {
-      await fetchDocument();
+      await dispatch(getOneDocumentRedux(file.id));
       setOpenDetails(true);
     }
   };
@@ -131,46 +105,20 @@ export default function FileGeneralRecentCard({
     setOpenPopover(null);
   };
 
-  const handleDownloadFile = async (url) => {
-    try {
-      await fetchDocument();
-      console.log('handleDownloadFile', documentData);
-      const params = {
-        fileName: documentData.urlDocument,
-        contentType: documentData.typeFile,
-      };
-      const token = getLocalStorage('access_token');
-      axios({
-        url: `${url}fileName=${params.fileName}&contentType=${params.contentType}`, //your url
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        method: 'GET',
-        responseType: 'blob', // important
-      }).then((response) => {
-        if (response.status < 400) {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', params.fileName); //or any other extension
-          document.body.appendChild(link);
-          link.click();
-        } else {
-          enqueueSnackbar('Thư mục không còn tồn tại', { variant: 'error' });
-        }
-      });
-    } catch (error) {
-      enqueueSnackbar('Thư mục không còn tồn tại', { variant: 'error' });
+  const handleDownloadFile = async () => {
+    handleClosePopover();
+    const message = await dispatch(startDownloadFileRedux(file, 'http://lmms.site:9090/api/File/downloadFile?'));
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
     }
   };
 
-  const handleDeleteDocument = async (id) => {
-    const res = await deleteDocument(id);
-    if (res.status < 400) {
-      enqueueSnackbar('Xóa tài liệu thành công');
-      window.location.reload();
-    } else {
-      enqueueSnackbar('Xóa tài liệu thất bại', { variant: 'error' });
+  const handleDeleteDocument = async () => {
+    console.log('handleDeleteDocument');
+    handleClosePopover();
+    const message = await dispatch(deleteDocumentInFolderRedux(file.id));
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
     }
   };
 
@@ -186,9 +134,9 @@ export default function FileGeneralRecentCard({
     }
   };
 
-  const handlePreviewFile = (urlDocument) => {
-    window.open(`http://lmms.site:8000/${urlDocument}`, '_blank', 'noopener,noreferrer');
-  };
+  const handlePreviewFile = useCallback(() => {
+    window.open(`http://lmms.site:8000/${file.urlDocument}`, '_blank', 'noopener,noreferrer');
+  }, []);
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
@@ -300,23 +248,13 @@ export default function FileGeneralRecentCard({
           </MenuItem>
         )}
 
-        <MenuItem
-          onClick={() => {
-            handleClosePopover();
-            handleDownloadFile('http://lmms.site:9090/api/File/downloadFile?');
-          }}
-        >
+        <MenuItem onClick={handleDownloadFile}>
           <Iconify icon="eva:download-outline" />
           Tải xuống
         </MenuItem>
 
         {!dataGeneralFolder && (
-          <MenuItem
-            onClick={() => {
-              handleClosePopover();
-              handleOpenShare();
-            }}
-          >
+          <MenuItem onClick={handleOpenShare}>
             <Iconify icon="eva:share-fill" />
             Chia sẻ
           </MenuItem>
@@ -324,20 +262,14 @@ export default function FileGeneralRecentCard({
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem
-          onClick={() => {
-            handleClosePopover();
-            handleDeleteDocument(file.id);
-          }}
-          sx={{ color: 'error.main' }}
-        >
+        <MenuItem onClick={handleDeleteDocument} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" />
           Xóa
         </MenuItem>
       </MenuPopover>
-      {openDetails && documentData && (
+      {openDetails && (
         <FileDetailsDrawer
-          data={documentData}
+          // data={file}
           favorite={false}
           onFavorite={handleFavorite}
           open={openDetails}
@@ -374,6 +306,7 @@ export default function FileGeneralRecentCard({
       />
       {openShare && (
         <FileShareDialog
+          file={file}
           open={openShare}
           data={file}
           onClose={() => {
@@ -383,4 +316,25 @@ export default function FileGeneralRecentCard({
       )}
     </>
   );
-}
+};
+
+export default memo(FileGeneralRecentCard);
+
+// async function fetchDocument() {
+//   const res = await getDocumentById(file.id);
+//   if (res.status < 400) {
+//     const document = res.data.data;
+//     const detailProgramAndSubject = await Promise.all([
+//       getProgramById(document.programId),
+//       getSubjectById(document.subjectId),
+//     ]);
+//     //   console.log('download', res);
+//     setDocumentData({
+//       ...document,
+//       programDetail: detailProgramAndSubject[0].data.data,
+//       subjectDetail: detailProgramAndSubject[1].data.data,
+//     });
+//   } else {
+//     console.log('error');
+//   }
+// }

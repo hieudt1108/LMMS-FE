@@ -11,22 +11,27 @@ import { useCallback, useEffect } from 'react';
 import { dispatch } from 'src/redux/store';
 import { getOneDocumentRedux, handleSendInviteRedux } from 'src/redux/slices/document';
 import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
-FileShareDialog.propTypes = {
-  open: PropTypes.bool,
-  onClose: PropTypes.func,
-};
+// FileShareDialog.propTypes = {
+//   open: PropTypes.bool,
+//   onClose: PropTypes.func,
+// };
 
-export default function FileShareDialog({ open, onClose, ...other }) {
+export default function FileShareDialog({ file, open, onClose, ...other }) {
+  const { enqueueSnackbar } = useSnackbar();
   const { getOne } = useSelector((state) => state.document);
+  console.log('FileShareDialog', getOne);
   const hasShared = getOne && !!getOne.listShare.length;
-  // console.log('FileShareDialog', getOne);
 
-  const handleSendInvite = useCallback(() => {
+  const handleSendInvite = useCallback(async () => {
     console.log('handleSendInvite');
-    dispatch(handleSendInviteRedux(getOne));
+    const message = await dispatch(handleSendInviteRedux(getOne));
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
+    }
   }, [getOne]);
   return (
     <>

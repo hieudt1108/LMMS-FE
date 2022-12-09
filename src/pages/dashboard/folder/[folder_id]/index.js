@@ -54,7 +54,7 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
     } else if (folderID || folderID === 0) {
       dispatch(getFolderRedux(folderID));
     }
-  }, [folderID, dataGeneralFolder]);
+  }, []);
 
   const smDown = useResponsive('down', 'sm');
 

@@ -45,8 +45,11 @@ export default function StoreFileRootPage() {
   const { id, listFolders, listDocuments } = storeFolder;
 
   useEffect(() => {
-    dispatch(getStoreFolderRootRedux());
-  }, [dispatch]);
+    console.log('useEffect StoreFileRootPage', storeFolder);
+    if (!storeFolder.id) {
+      dispatch(getStoreFolderRootRedux());
+    }
+  }, []);
 
   const smDown = useResponsive('down', 'sm');
 

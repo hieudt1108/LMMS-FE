@@ -26,6 +26,7 @@ import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
 import { copyDocsToFolderRedux } from 'src/redux/slices/storeFolder';
 import { BlogNewPostForm } from '../folder';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -35,14 +36,17 @@ import { BlogNewPostForm } from '../folder';
 // };
 
 export default function UploadMyDocumentDialog({ open, onClose }) {
+  const { enqueueSnackbar } = useSnackbar();
   const { storeFolder } = useSelector((state) => state.storeFolder);
   const { id } = storeFolder;
   console.log('UploadMyDocumentDialog', id);
   const [currentTab, setCurrentTab] = useState(0);
   const [myFolderId, setMyFolderId] = useState(0);
-  const handleUploadDocumentToStoreFolder = (myDocumentId) => {
-    console.log('handleUploadDocumentToStoreFolder', myDocumentId, id);
-    dispatch(copyDocsToFolderRedux(id, myDocumentId));
+  const handleUploadDocumentToStoreFolder = async (myDocumentId) => {
+    const message = await dispatch(copyDocsToFolderRedux(id, myDocumentId));
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
+    }
   };
   const tabs = [
     {

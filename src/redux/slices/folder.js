@@ -170,7 +170,7 @@ export function deleteDocumentInFolderRedux(documentID) {
         return returnMessageError('Xóa thư mục không thành công');
       }
       dispatch(slice.actions.startLoading());
-      const response = await deleteDocument(-1);
+      const response = await deleteDocument(documentID);
       if (response instanceof Error) {
         return returnMessageError(`${response.response.data.title}`);
       }

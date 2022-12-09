@@ -114,6 +114,16 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
+const returnMessageSuccess = (title) => ({
+  title: `${title}`,
+  variant: '',
+});
+
+const returnMessageError = (title) => ({
+  title: `${title}`,
+  variant: 'error',
+});
+
 export function getStoreFolderRedux(params) {
   return async () => {
     try {
@@ -205,14 +215,18 @@ export function copyDocsToFolderRedux(folderId, docsId) {
   return async () => {
     try {
       if (!folderId || !docsId) {
-        return dispatch(slice.actions.hasError());
+        return returnMessageError('Thêm tài liệu lỗi ');
       }
       dispatch(slice.actions.startLoading());
       const response = await postCopyDocsToFolder(folderId, docsId);
-      console.log('copyDocsToFolderRedux', response);
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
+      }
+
       dispatch(slice.actions.postCopyDocsToFolderSuccess(response.data.data));
+      return returnMessageSuccess('Thêm tài liệu thành công');
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      return returnMessageError(`${error.message}`);
     }
   };
 }

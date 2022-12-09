@@ -36,13 +36,12 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
     });
   })();
 
-
   const defaultValues = useMemo(
-      () => ({
-        tagsId: [],
-        subjectsId: [],
-      }),
-      []
+    () => ({
+      tagsId: [],
+      subjectsId: [],
+    }),
+    []
   );
 
   const methods = useForm({
@@ -59,7 +58,6 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
-
 
   const [subjectsData, setSubjectsData] = useState([]);
 
@@ -84,13 +82,14 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
 
   const onSubmit = async (data) => {
     let postData = [];
+
     for (let i = 0; i < data.tagsId.length; i++) {
       postData.push({
         subjectId: data.tagsId[i],
       });
     }
-    console.log('postData', postData);
-    console.log('defaultValues', defaultValues);
+    console.log('postData: ', postData);
+    console.log('defaultValues: ', defaultValues);
     try {
       const res = await updateSubjectClass(classID, { postData });
       console.log(res);

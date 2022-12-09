@@ -24,6 +24,8 @@ import {
   getDocumentById,
   getGradeById,
   getLocalStorage,
+  getProgramById,
+  getSubjectById,
   postDocumentsInSlot,
 } from '../../../../dataProvider/agent';
 import { dispatch } from 'src/redux/store';
@@ -64,18 +66,28 @@ export default function FileGeneralRecentCard({
 
   const [openDetails, setOpenDetails] = useState(false);
 
-  const [documentData, setDocumentData] = useState([]);
+  const [documentData, setDocumentData] = useState({});
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  useEffect(() => {
-    fetchDocument();
-  }, []);
+  // useEffect(() => {
+  //   console.log('useEffect FileGeneralRecentCard', file);
+  //   fetchDocument();
+  // }, []);
 
   async function fetchDocument() {
     const res = await getDocumentById(file.id);
     if (res.status < 400) {
+      const document = res.data.data;
+      const detailProgramAndSubject = await Promise.all([
+        getProgramById(document.programId),
+        getSubjectById(document.subjectId),
+      ]);
       //   console.log('download', res);
-      setDocumentData(res.data.data);
+      setDocumentData({
+        ...document,
+        programDetail: detailProgramAndSubject[0].data.data,
+        subjectDetail: detailProgramAndSubject[1].data.data,
+      });
     } else {
       console.log('error');
     }
@@ -94,13 +106,17 @@ export default function FileGeneralRecentCard({
     setOpenShare(false);
   };
 
-  const handleOpenDetails = () => {
+  const handleOpenDetails = async () => {
+    // Chia sẻ lên thư mục chung
     if (dataGeneralFolder) {
       setOpenConfirm(true);
       return;
     }
-    dispatch(getOneDocumentRedux(file.id));
-    setOpenDetails(true);
+    // mở detail trong thư mục
+    else {
+      await fetchDocument();
+      setOpenDetails(true);
+    }
   };
 
   const handleCloseDetails = () => {
@@ -115,8 +131,14 @@ export default function FileGeneralRecentCard({
     setOpenPopover(null);
   };
 
-  const handleDownloadFile = async (url, params) => {
+  const handleDownloadFile = async (url) => {
     try {
+      await fetchDocument();
+      console.log('handleDownloadFile', documentData);
+      const params = {
+        fileName: documentData.urlDocument,
+        contentType: documentData.typeFile,
+      };
       const token = getLocalStorage('access_token');
       axios({
         url: `${url}fileName=${params.fileName}&contentType=${params.contentType}`, //your url
@@ -267,52 +289,12 @@ export default function FileGeneralRecentCard({
       </Stack>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
-        {documentData.typeFile == 'image/jpeg' && (
-          <MenuItem
-            onClick={() => {
-              handlePreviewFile(documentData.urlDocument);
-            }}
-          >
-            <Iconify icon="eva:link-2-fill" />
-            Xem trước
-          </MenuItem>
-        )}
-        {documentData.typeFile == 'image/png' && (
-          <MenuItem
-            onClick={() => {
-              handlePreviewFile(documentData.urlDocument);
-            }}
-          >
-            <Iconify icon="eva:link-2-fill" />
-            Xem trước
-          </MenuItem>
-        )}
-        {documentData.typeFile == 'application/pdf' && (
-          <MenuItem
-            onClick={() => {
-              handlePreviewFile(documentData.urlDocument);
-            }}
-          >
-            <Iconify icon="eva:link-2-fill" />
-            Xem trước
-          </MenuItem>
-        )}
-        {documentData.typeFile == 'video/mp4' && (
-          <MenuItem
-            onClick={() => {
-              handlePreviewFile(documentData.urlDocument);
-            }}
-          >
-            <Iconify icon="eva:link-2-fill" />
-            Xem trước
-          </MenuItem>
-        )}
-        {documentData.typeFile == 'audio/mpeg' && (
-          <MenuItem
-            onClick={() => {
-              handlePreviewFile(documentData.urlDocument);
-            }}
-          >
+        {(file.typeFile == 'audio/mpeg' ||
+          file.typeFile == 'video/mp4' ||
+          file.typeFile == 'image/jpeg' ||
+          file.typeFile == 'image/png' ||
+          file.typeFile == 'application/pdf') && (
+          <MenuItem onClick={handlePreviewFile}>
             <Iconify icon="eva:link-2-fill" />
             Xem trước
           </MenuItem>
@@ -321,10 +303,7 @@ export default function FileGeneralRecentCard({
         <MenuItem
           onClick={() => {
             handleClosePopover();
-            handleDownloadFile('http://lmms.site:9090/api/File/downloadFile?', {
-              fileName: documentData.urlDocument,
-              contentType: documentData.typeFile,
-            });
+            handleDownloadFile('http://lmms.site:9090/api/File/downloadFile?');
           }}
         >
           <Iconify icon="eva:download-outline" />
@@ -356,14 +335,16 @@ export default function FileGeneralRecentCard({
           Xóa
         </MenuItem>
       </MenuPopover>
+      {openDetails && documentData && (
+        <FileDetailsDrawer
+          data={documentData}
+          favorite={false}
+          onFavorite={handleFavorite}
+          open={openDetails}
+          onClose={handleCloseDetails}
+        />
+      )}
 
-      <FileDetailsDrawer
-        data={file}
-        favorite={false}
-        onFavorite={handleFavorite}
-        open={openDetails}
-        onClose={handleCloseDetails}
-      />
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}

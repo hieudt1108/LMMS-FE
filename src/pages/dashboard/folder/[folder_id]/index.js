@@ -96,19 +96,6 @@ export default function GeneralFilePage({ dataGeneralFolder,dataUploadDocsToSlot
     enqueueSnackbar(error ? error : 'Tạo thư mục thành công', { variant: 'error' });
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const newFiles = acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      );
-
-      setFiles([...files, ...newFiles]);
-    },
-    [files]
-  );
-
   const handleOnClickFileFolderCard = (folder_id) => {
     console.log('handleOnClickFileFolderCard', folder_id, dataGeneralFolder);
     if (dataGeneralFolder) {

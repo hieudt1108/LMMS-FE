@@ -106,7 +106,7 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
   useEffect(() => {
     dataGeneralFolder
       ? dispatch(createDocumentInitialRedux(dataGeneralFolder.generalFolderId))
-      : dispatch(createDocumentInitialRedux(folderID));
+      : dispatch(createDocumentInitialRedux(folderId));
   }, [folderId, dataGeneralFolder]);
 
   console.log('BlogNewPostForm', getValues('items'));

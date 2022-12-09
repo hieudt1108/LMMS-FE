@@ -13,6 +13,7 @@ import {
   postDocument,
   postFile,
   postFolder,
+  updateFolder,
 } from 'src/dataProvider/agent';
 import { PATH_DASHBOARD } from '../../routes/paths';
 import { useSnackbar } from '../../components/snackbar';
@@ -95,6 +96,21 @@ const slice = createSlice({
       console.log('deleteSubFolderInFolderSuccess', action, folderID);
       state.isLoading = false;
       state.folder.listFolders = state.folder.listFolders.filter((item) => item.id !== folderID);
+    },
+
+    updateSubFolderSuccess(state, action) {
+      const { id, params } = action.payload;
+      state.isLoading = false;
+
+      state.folder.listFolders = state.folder.listFolders.map((item, indexItem) => {
+        if (item.id !== id) {
+          return item;
+        }
+        return {
+          ...item,
+          ...params,
+        };
+      });
     },
   },
 });
@@ -211,6 +227,29 @@ export function deleteSubFolderInFolderRedux(folderID) {
       dispatch(slice.actions.deleteSubFolderInFolderSuccess({ folderID }));
 
       return returnMessageSuccess('Xóa thư mục thành công');
+    } catch (error) {
+      console.log('error', error);
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
+export function updateSubFolderRedux(id, params) {
+  return async () => {
+    try {
+      if (!id || !params) {
+        return returnMessageError('Cập nhật thư mục không thành công');
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await updateFolder(id, params);
+      console.log('updateFolderRedux', response);
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
+      }
+
+      dispatch(slice.actions.updateSubFolderSuccess({ id, params }));
+
+      return returnMessageSuccess('Cập nhật thư mục thành công');
     } catch (error) {
       console.log('error', error);
       return returnMessageError(`${error.message}`);

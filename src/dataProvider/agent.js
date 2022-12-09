@@ -478,6 +478,10 @@ const updatePermission = (id, payload) => {
   return putApi(`Permission/${id}`, payload);
 };
 
+const updateFolder = (id, payload) => {
+  return putApi(`Folder/${id}`, payload);
+};
+
 //export api here
 
 function addParameter(url, params) {
@@ -570,4 +574,5 @@ export {
   updateSubjectClass,
   postDocumentsInSlot,
   deleteFolder,
+  updateFolder,
 };

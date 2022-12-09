@@ -21,7 +21,7 @@ import { PATH_DASHBOARD } from 'src/routes/paths';
 
 import useResponsive from '../../../../hooks/useResponsive';
 import { dispatch } from 'src/redux/store';
-import { deleteSubFolderInFolderRedux } from 'src/redux/slices/folder';
+import { deleteSubFolderInFolderRedux, updateSubFolderRedux } from 'src/redux/slices/folder';
 // ----------------------------------------------------------------------
 
 // FileFolderCard.propTypes = {
@@ -145,6 +145,15 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
     handleCloseConfirm();
   };
 
+  const handleUpdateSubFolder = async () => {
+    handleCloseEditFolder();
+    setFolderName(folderName);
+    const message = await dispatch(updateSubFolderRedux(folder.id, { name: folderName }));
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
+    }
+  };
+
   return (
     <>
       <Card
@@ -212,31 +221,11 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
         <MenuItem
           onClick={() => {
             handleClosePopover();
-            handleCopy();
-          }}
-        >
-          <Iconify icon="eva:link-2-fill" />
-          Copy Link
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            handleClosePopover();
-            handleOpenShare();
-          }}
-        >
-          <Iconify icon="eva:share-fill" />
-          Share
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            handleClosePopover();
             handleOpenEditFolder();
           }}
         >
           <Iconify icon="eva:edit-fill" />
-          Edit
+          Đổi tên
         </MenuItem>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
@@ -249,7 +238,7 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="eva:trash-2-outline" />
-          Delete
+          Xóa
         </MenuItem>
       </MenuPopover>
 
@@ -277,31 +266,30 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
           setInviteEmail('');
         }}
       />
+      {openEditFolder && (
+        <FileNewFolderDialog
+          open={openEditFolder}
+          onClose={handleCloseEditFolder}
+          title="Edit Folder"
+          onUpdate={handleUpdateSubFolder}
+          folderName={folderName}
+          onChangeFolderName={(event) => setFolderName(event.target.value)}
+        />
+      )}
 
-      <FileNewFolderDialog
-        open={openEditFolder}
-        onClose={handleCloseEditFolder}
-        title="Edit Folder"
-        onUpdate={() => {
-          handleCloseEditFolder();
-          setFolderName(folderName);
-          console.log('UPDATE FOLDER', folderName);
-        }}
-        folderName={folderName}
-        onChangeFolderName={(event) => setFolderName(event.target.value)}
-      />
-
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Xóa thư mục"
-        content="Bạn có chắc chắn muốn xóa thư mục này?"
-        action={
-          <Button variant="contained" color="error" onClick={handleDeleteFolder}>
-            Delete
-          </Button>
-        }
-      />
+      {openConfirm && (
+        <ConfirmDialog
+          open={openConfirm}
+          onClose={handleCloseConfirm}
+          title="Xóa thư mục"
+          content="Bạn có chắc chắn muốn xóa thư mục này?"
+          action={
+            <Button variant="contained" color="error" onClick={handleDeleteFolder}>
+              Delete
+            </Button>
+          }
+        />
+      )}
     </>
   );
 }

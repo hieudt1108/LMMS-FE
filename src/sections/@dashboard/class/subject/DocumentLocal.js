@@ -65,31 +65,12 @@ export default function DocumentLocal({docs, classId, subjectId}) {
                     {docs?.map((doc) =>
                         doc.slotId === null ? (
                             <Stack spacing={2}>
-
                                 <FileGeneralRecentCard
                                     key={doc.id}
                                     file={doc}
                                     onDelete={() => console.log('DELETE', doc.id)}
                                 />
                             </Stack>
-
-                            // <Stack key={doc.code} spacing={2} direction="row" alignItems="center">
-                            //   <Avatar
-                            //     variant="rounded"
-                            //     sx={{ bgcolor: 'background.neutral', width: 48, height: 48, borderRadius: 1.5 }}
-                            //   >
-                            //     <Box component="img" src="/assets/icons/files/ic_img.svg" />
-                            //   </Avatar>
-                            //
-                            //   <Stack spacing={0.5} flexGrow={1}>
-                            //     <Typography variant="subtitle2"> {doc.name} </Typography>
-                            //     <Typography variant="caption" sx={{ color: 'text.disabled' }}>
-                            //       TypeFile: {doc.typeFile}
-                            //     </Typography>
-                            //   </Stack>
-                            //
-                            //   <Typography variant="subtitle2"> {fData(doc.size)} </Typography>
-                            // </Stack>
                         ) : (
                             <div></div>
                         )

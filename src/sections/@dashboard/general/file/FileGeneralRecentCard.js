@@ -45,7 +45,7 @@ import { URL_GLOBAL } from '../../../../config';
 //   file: PropTypes.object,
 //   onDelete: PropTypes.func,
 // };
-const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDocsToSlot, sx, ...other }) => {
+const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDocsToSlot,isDownloadDocumentGeneral, sx, ...other }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const { getOne } = useSelector((state) => state.document);
@@ -259,11 +259,12 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
             Xem trước
           </MenuItem>
         )}
-
-        <MenuItem onClick={handleOpenFrom}>
-          <Iconify icon="simple-line-icons:docs" />
-          Tải về kho của tôi
-        </MenuItem>
+        {isDownloadDocumentGeneral &&(
+            <MenuItem onClick={handleOpenFrom}>
+              <Iconify icon="simple-line-icons:docs" />
+              Tải về kho của tôi
+            </MenuItem>
+        )}
         <MenuItem onClick={handleDownloadFile}>
           <Iconify icon="eva:download-outline" />
           Tải xuống
@@ -338,21 +339,3 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
 
 export default memo(FileGeneralRecentCard);
 
-// async function fetchDocument() {
-//   const res = await getDocumentById(file.id);
-//   if (res.status < 400) {
-//     const document = res.data.data;
-//     const detailProgramAndSubject = await Promise.all([
-//       getProgramById(document.programId),
-//       getSubjectById(document.subjectId),
-//     ]);
-//     //   console.log('download', res);
-//     setDocumentData({
-//       ...document,
-//       programDetail: detailProgramAndSubject[0].data.data,
-//       subjectDetail: detailProgramAndSubject[1].data.data,
-//     });
-//   } else {
-//     console.log('error');
-//   }
-// }

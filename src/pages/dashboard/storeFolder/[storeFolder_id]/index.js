@@ -191,6 +191,7 @@ export default function StoreFilePage() {
                 {listDocuments && listDocuments.length
                   ? listDocuments.map((file) => (
                       <FileGeneralRecentCard
+                        isDownloadDocumentGeneral={true}
                         key={file.id}
                         file={file}
                         onDelete={() => console.log('DELETE', file.id)}

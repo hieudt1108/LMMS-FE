@@ -347,22 +347,3 @@ const FileGeneralRecentCard = ({
 };
 
 export default memo(FileGeneralRecentCard);
-
-// async function fetchDocument() {
-//   const res = await getDocumentById(file.id);
-//   if (res.status < 400) {
-//     const document = res.data.data;
-//     const detailProgramAndSubject = await Promise.all([
-//       getProgramById(document.programId),
-//       getSubjectById(document.subjectId),
-//     ]);
-//     //   console.log('download', res);
-//     setDocumentData({
-//       ...document,
-//       programDetail: detailProgramAndSubject[0].data.data,
-//       subjectDetail: detailProgramAndSubject[1].data.data,
-//     });
-//   } else {
-//     console.log('error');
-//   }
-// }

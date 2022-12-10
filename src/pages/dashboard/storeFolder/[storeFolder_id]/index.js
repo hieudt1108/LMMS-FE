@@ -193,6 +193,7 @@ export default function StoreFilePage() {
                       <FileGeneralRecentCard
                         dataStoreFolder={{
                           disableButtonShare: true,
+                          isDownloadDocumentGeneral: true,
                         }}
                         key={file.id}
                         file={file}

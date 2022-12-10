@@ -165,11 +165,7 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
           maxWidth: 222,
           boxShadow: 0,
           bgcolor: 'background.default',
-          '&:hover': {
-            bgcolor: 'background.paper',
-            boxShadow: (theme) => theme.customShadows.z20,
-            cursor: 'pointer',
-          },
+
           border: (theme) => `solid 1px ${theme.palette.divider}`,
           ...((showCheckbox || selected) && {
             borderColor: 'transparent',
@@ -208,7 +204,15 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
             onClick={() => handleOnClickFileFolderCard(folder.id)}
             component="img"
             src="/assets/icons/files/ic_folder.svg"
-            sx={{ width: 40, height: 40 }}
+            sx={{
+              width: 40,
+              height: 40,
+              '&:hover': {
+                bgcolor: 'background.paper',
+                boxShadow: (theme) => theme.customShadows.z20,
+                cursor: 'pointer',
+              },
+            }}
           />
         )}
 
@@ -285,7 +289,7 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
           content="Bạn có chắc chắn muốn xóa thư mục này?"
           action={
             <Button variant="contained" color="error" onClick={handleDeleteFolder}>
-              Delete
+              Xóa
             </Button>
           }
         />

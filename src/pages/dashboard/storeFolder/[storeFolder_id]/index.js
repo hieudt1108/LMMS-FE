@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import {Container, Grid, IconButton, Stack, Typography} from '@mui/material';
+import { Container, Grid, IconButton, Stack, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // hooks
@@ -22,8 +22,8 @@ import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import { createStoreFolderRedux, getStoreFolderRedux } from '../../../../redux/slices/storeFolder';
-import Iconify from "../../../../components/iconify";
-import UploadMyDocumentDialog from "../../../../sections/@dashboard/storeFolder/UploadMyDocumentDialog";
+import Iconify from '../../../../components/iconify';
+import UploadMyDocumentDialog from '../../../../sections/@dashboard/storeFolder/UploadMyDocumentDialog';
 
 // ----------------------------------------------------------------------
 
@@ -166,19 +166,19 @@ export default function StoreFilePage() {
                     <Typography variant="h6"> Tài liệu gần đây </Typography>
 
                     <IconButton
-                        size="small"
-                        color="success"
-                        onClick={handleOpenFrom}
-                        sx={{
-                          p: 0,
-                          width: 24,
-                          height: 24,
-                          color: 'common.white',
+                      size="small"
+                      color="success"
+                      onClick={handleOpenFrom}
+                      sx={{
+                        p: 0,
+                        width: 24,
+                        height: 24,
+                        color: 'common.white',
+                        bgcolor: 'success.main',
+                        '&:hover': {
                           bgcolor: 'success.main',
-                          '&:hover': {
-                            bgcolor: 'success.main',
-                          },
-                        }}
+                        },
+                      }}
                     >
                       <Iconify icon="eva:plus-fill" />
                     </IconButton>
@@ -191,6 +191,9 @@ export default function StoreFilePage() {
                 {listDocuments && listDocuments.length
                   ? listDocuments.map((file) => (
                       <FileGeneralRecentCard
+                        dataStoreFolder={{
+                          disableButtonShare: true,
+                        }}
                         key={file.id}
                         file={file}
                         onDelete={() => console.log('DELETE', file.id)}

@@ -258,18 +258,20 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
           onDelete();
         }}
       /> */}
+      {openShare && (
+        <FileShareDialog
+          open={openShare}
+          shared={folder.shared}
+          inviteEmail={inviteEmail}
+          onChangeInvite={handleChangeInvite}
+          onCopyLink={handleCopy}
+          onClose={() => {
+            handleCloseShare();
+            setInviteEmail('');
+          }}
+        />
+      )}
 
-      <FileShareDialog
-        open={openShare}
-        shared={folder.shared}
-        inviteEmail={inviteEmail}
-        onChangeInvite={handleChangeInvite}
-        onCopyLink={handleCopy}
-        onClose={() => {
-          handleCloseShare();
-          setInviteEmail('');
-        }}
-      />
       {openEditFolder && (
         <FileNewFolderDialog
           open={openEditFolder}

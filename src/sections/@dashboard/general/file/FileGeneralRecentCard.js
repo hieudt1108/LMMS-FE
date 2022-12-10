@@ -45,7 +45,15 @@ import { URL_GLOBAL } from '../../../../config';
 //   file: PropTypes.object,
 //   onDelete: PropTypes.func,
 // };
-const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDocsToSlot, sx, ...other }) => {
+const FileGeneralRecentCard = ({
+  dataGeneralFolder,
+  file,
+  onDelete,
+  dataStoreFolder,
+  dataUploadDocsToSlot,
+  sx,
+  ...other
+}) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const { getOne } = useSelector((state) => state.document);
@@ -115,14 +123,14 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
     }
   };
 
-  const [openFrom, setOpenFrom] = useState(false);
+  const [openPopupSaveInMyFolder, setOpenPopupSaveInMyFolder] = useState(false);
 
-  const handleOpenFrom = () => {
-    setOpenFrom(true);
+  const handleOpenPopupSaveInMyFolder = () => {
+    setOpenPopupSaveInMyFolder(true);
   };
 
-  const handleCloseFrom = () => {
-    setOpenFrom(false);
+  const handleClosePopupSaveInMyFolder = () => {
+    setOpenPopupSaveInMyFolder(false);
   };
 
   const handleDeleteDocument = async () => {
@@ -259,17 +267,19 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
             Xem trước
           </MenuItem>
         )}
+        {dataGeneralFolder && (
+          <MenuItem onClick={handleOpenPopupSaveInMyFolder}>
+            <Iconify icon="simple-line-icons:docs" />
+            Tải về kho của tôi
+          </MenuItem>
+        )}
 
-        <MenuItem onClick={handleOpenFrom}>
-          <Iconify icon="simple-line-icons:docs" />
-          Tải về kho của tôi
-        </MenuItem>
         <MenuItem onClick={handleDownloadFile}>
           <Iconify icon="eva:download-outline" />
           Tải xuống
         </MenuItem>
 
-        {!dataGeneralFolder && (
+        {!dataGeneralFolder && !dataStoreFolder && (
           <MenuItem onClick={handleOpenShare}>
             <Iconify icon="eva:share-fill" />
             Chia sẻ
@@ -284,7 +294,7 @@ const FileGeneralRecentCard = ({ dataGeneralFolder, file, onDelete, dataUploadDo
         </MenuItem>
       </MenuPopover>
 
-      <PopupGetFolder open={openFrom} onClose={handleCloseFrom} />
+      <PopupGetFolder open={openPopupSaveInMyFolder} onClose={handleClosePopupSaveInMyFolder} />
       {openDetails && (
         <FileDetailsDrawer
           // data={file}

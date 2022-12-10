@@ -199,6 +199,9 @@ export default function StoreFileRootPage() {
                 {listDocuments && listDocuments.length
                   ? listDocuments.map((file) => (
                       <FileGeneralRecentCard
+                        dataStoreFolder={{
+                          disableButtonShare: true,
+                        }}
                         key={file.id}
                         file={file}
                         onDelete={() => console.log('DELETE', file.id)}

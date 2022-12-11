@@ -313,4 +313,4 @@ const FileGeneralRecentCard = ({
   );
 };
 
-export default memo(FileGeneralRecentCard);
+export default FileGeneralRecentCard;

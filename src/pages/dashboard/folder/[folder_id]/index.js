@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Container, Grid, Stack } from '@mui/material';
+import {Box, Breadcrumbs, Button, Container, Grid, IconButton, Link, Stack, Typography} from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // hooks
@@ -23,6 +23,8 @@ import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 import { useSnackbar } from 'notistack';
+import LinkItem from "../../../../components/custom-breadcrumbs/LinkItem";
+import Iconify from "../../../../components/iconify";
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +43,7 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
     query: { folder_id: folderID },
     push,
   } = useRouter();
-
+  const router = useRouter()
   const { error, folder } = useSelector((state) => state.folder);
   const { getOne } = useSelector((state) => state.document);
   const { id, listFolders, listDocuments } = folder;
@@ -104,13 +106,40 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
     handleCloseNewFolder();
   };
 
+
   return (
     <>
       <Head>
         <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
+
+
       <Container maxWidth={themeStretch ? false : 'xl'}>
+        <Box sx={{ mb: 5}}>
+          <Stack flexGrow={1}>
+            <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
+                <IconButton
+                    size="small"
+                    color="success"
+                    onClick={()=> router.back()}
+                    sx={{
+                        p: 0,
+                        width: 24,
+                        height: 24,
+                        color: 'common.white',
+                        bgcolor: 'success.main',
+                        '&:hover': {
+                            bgcolor: 'success.main',
+                        },
+                    }}
+                >
+                    <Iconify icon="eva:arrow-back-outline" />
+                </IconButton>
+              <Typography variant="h4"> Tài liệu của tôi </Typography>
+            </Stack>
+          </Stack>
+        </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12} lg={12}>
             <div>

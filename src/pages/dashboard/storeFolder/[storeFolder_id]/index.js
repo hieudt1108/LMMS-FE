@@ -53,6 +53,8 @@ export default function StoreFilePage() {
 
   const smDown = useResponsive('down', 'sm');
 
+  const router = useRouter()
+
   const { themeStretch } = useSettingsContext();
 
   const [storeFolderName, setStoreFolderName] = useState('');
@@ -131,6 +133,30 @@ export default function StoreFilePage() {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
+        <Box sx={{ mb: 5}}>
+          <Stack flexGrow={1}>
+            <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
+              <IconButton
+                  size="small"
+                  color="success"
+                  onClick={()=> router.back()}
+                  sx={{
+                    p: 0,
+                    width: 24,
+                    height: 24,
+                    color: 'common.white',
+                    bgcolor: 'success.main',
+                    '&:hover': {
+                      bgcolor: 'success.main',
+                    },
+                  }}
+              >
+                <Iconify icon="eva:arrow-back-outline" />
+              </IconButton>
+              <Typography variant="h4"> Kho tài liệu </Typography>
+            </Stack>
+          </Stack>
+        </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12} lg={12}>
             <div>

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Container, Grid, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Container, Grid, IconButton, Stack, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // hooks
@@ -46,6 +46,10 @@ export default function StoreFileRootPage() {
       dispatch(getStoreFolderRootRedux());
     }
   }, []);
+
+  const smDown = useResponsive('down', 'sm');
+
+  const router = useRouter();
 
   const { themeStretch } = useSettingsContext();
 
@@ -121,11 +125,35 @@ export default function StoreFileRootPage() {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
+        <Box sx={{ mb: 5 }}>
+          <Stack flexGrow={1}>
+            <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
+              <IconButton
+                size="small"
+                color="success"
+                onClick={() => router.back()}
+                sx={{
+                  p: 0,
+                  width: 24,
+                  height: 24,
+                  color: 'common.white',
+                  bgcolor: 'success.main',
+                  '&:hover': {
+                    bgcolor: 'success.main',
+                  },
+                }}
+              >
+                <Iconify icon="eva:arrow-back-outline" />
+              </IconButton>
+              <Typography variant="h4"> Kho tài liệu </Typography>
+            </Stack>
+          </Stack>
+        </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12} lg={12}>
             <div>
               <FilePanel
-                title="Folders"
+                title="Thư mục"
                 link={PATH_DASHBOARD.fileManager}
                 onOpen={handleOpenNewStoreFolder}
                 sx={{ mt: 5 }}

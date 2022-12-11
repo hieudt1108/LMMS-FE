@@ -6,8 +6,7 @@ import { AvatarGroup, Box, Button, Checkbox, Divider, IconButton, MenuItem, Stac
 import useResponsive from '../../../../hooks/useResponsive';
 import useCopyToClipboard from '../../../../hooks/useCopyToClipboard';
 // utils
-import { fData } from '../../../../utils/formatNumber';
-import { fDateTime } from '../../../../utils/formatTime';
+
 // components
 import Iconify from '../../../../components/iconify';
 import { useSnackbar } from '../../../../components/snackbar';
@@ -15,49 +14,28 @@ import MenuPopover from '../../../../components/menu-popover';
 import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail';
 import { memo } from 'react';
 // POPUP
-import PopupGetFolder from '../getFiletoDocPrivate/PopupGetFolder';
 import { FileDetailsDrawer, FileShareDialog } from '../../file';
-import DocumentPreview from '../../documents/DocumentPreview';
-import {
-  deleteDocument,
-  deleteUser,
-  downloadFile,
-  getAllLevel,
-  getDocumentById,
-  getGradeById,
-  getLocalStorage,
-  getProgramById,
-  getSubjectById,
-  postDocumentsInSlot,
-} from '../../../../dataProvider/agent';
+import { postDocumentsInSlot } from '../../../../dataProvider/agent';
 import { dispatch } from 'src/redux/store';
-import { downloadFileRedux, getOneDocumentRedux, startDownloadFileRedux } from 'src/redux/slices/document';
-import axios from 'axios';
-import { createFolderRedux, deleteDocumentInFolderRedux } from '../../../../redux/slices/folder';
-import { useSelector } from 'react-redux';
+import { getOneDocumentRedux, startDownloadFileRedux } from 'src/redux/slices/document';
+import { deleteDocumentInFolderRedux } from '../../../../redux/slices/folder';
+
 import ConfirmDialog from 'src/components/confirm-dialog';
 import { URL_GLOBAL } from '../../../../config';
 
 // ----------------------------------------------------------------------
 
-// FileGeneralRecentCard.propTypes = {
-//   sx: PropTypes.object,
-//   file: PropTypes.object,
-//   onDelete: PropTypes.func,
-// };
 const FileGeneralRecentCard = ({
   dataGeneralFolder,
   file,
   onDelete,
   dataStoreFolder,
   dataUploadDocsToSlot,
+  handleOpenPopupSaveInMyFolder,
   sx,
   ...other
 }) => {
   const { enqueueSnackbar } = useSnackbar();
-
-  const { getOne } = useSelector((state) => state.document);
-  const [documentData, setDocumentData] = useState(getOne);
 
   const { copy } = useCopyToClipboard();
   const [rerender, setRerender] = useState('');
@@ -121,16 +99,6 @@ const FileGeneralRecentCard = ({
     if (message) {
       enqueueSnackbar(message.title, { variant: message.variant });
     }
-  };
-
-  const [openPopupSaveInMyFolder, setOpenPopupSaveInMyFolder] = useState(false);
-
-  const handleOpenPopupSaveInMyFolder = () => {
-    setOpenPopupSaveInMyFolder(true);
-  };
-
-  const handleClosePopupSaveInMyFolder = () => {
-    setOpenPopupSaveInMyFolder(false);
   };
 
   const handleDeleteDocument = async () => {
@@ -267,8 +235,8 @@ const FileGeneralRecentCard = ({
             Xem trước
           </MenuItem>
         )}
-        {dataGeneralFolder && (
-          <MenuItem onClick={handleOpenPopupSaveInMyFolder}>
+        {dataStoreFolder && (
+          <MenuItem onClick={() => handleOpenPopupSaveInMyFolder({ document: file })}>
             <Iconify icon="simple-line-icons:docs" />
             Tải về kho của tôi
           </MenuItem>
@@ -294,7 +262,6 @@ const FileGeneralRecentCard = ({
         </MenuItem>
       </MenuPopover>
 
-      <PopupGetFolder open={openPopupSaveInMyFolder} onClose={handleClosePopupSaveInMyFolder} />
       {openDetails && (
         <FileDetailsDrawer
           // data={file}

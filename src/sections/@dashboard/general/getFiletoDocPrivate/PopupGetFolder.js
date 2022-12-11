@@ -12,40 +12,45 @@ import {
   Tabs,
   Typography,
 } from '@mui/material';
-
-import GeneralFolderPage from '../../../../pages/dashboard/folder/listfolder/[folder_id]';
+import GeneralFolderPage from './GeneralFolderPage';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
 import { copyDocsToFolderRedux } from 'src/redux/slices/storeFolder';
 
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 
-PopupGetFolder.propTypes = {
-  open: PropTypes.bool,
-  onClose: PropTypes.func,
-};
+// PopupGetFolder.propTypes = {
+//   open: PropTypes.bool,
+//   onClose: PropTypes.func,
+// };
 
-export default function PopupGetFolder({ open, onClose }) {
+export default function PopupGetFolder({ open, onClose, data }) {
   const { storeFolder } = useSelector((state) => state.storeFolder);
+
+  const { enqueueSnackbar } = useSnackbar();
   const { id } = storeFolder;
   console.log('UploadMyDocumentDialog', id);
   const [currentTab, setCurrentTab] = useState(0);
   const [myFolderId, setMyFolderId] = useState(0);
-  const handleUploadDocumentToStoreFolder = (myDocumentId) => {
-    console.log('handleUploadDocumentToStoreFolder', myDocumentId, id);
-    dispatch(copyDocsToFolderRedux(id, myDocumentId));
+  const handleUploadDocumentToMyFolder = async (folder) => {
+    console.log('handleUploadDocumentToMyFolder', folder, data);
+    const message = await dispatch(copyDocsToFolderRedux(folder.id, data.id));
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
+    }
   };
   const tabs = [
     {
       id: 0,
       value: 'myDocument',
-      label: `Folder của tôi`,
+      label: `Thư mục của tôi`,
       component: (
         <GeneralFolderPage
           dataGeneralFolder={{
             myFolderId: myFolderId,
             setMyFolderId: setMyFolderId,
-            handleUploadDocumentToStoreFolder,
+            handleUploadDocumentToMyFolder,
           }}
         />
       ),

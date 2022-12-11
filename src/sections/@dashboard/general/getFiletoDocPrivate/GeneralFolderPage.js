@@ -1,28 +1,30 @@
+import React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Container, Grid, Stack } from '@mui/material';
+import { Button, Container, Grid, Stack } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { PATH_DASHBOARD } from 'src/routes/paths';
+// import { PATH_DASHBOARD } from 'src/routes/paths';
 // hooks
-import useResponsive from '../../../../hooks/useResponsive';
+import useResponsive from 'src/hooks/useResponsive';
 // _mock
-import { _folders } from '../../../../_mock/arrays';
+import { _folders } from 'src/_mock/arrays';
 // layouts
-import DashboardLayout from '../../../../layouts/dashboard';
+import DashboardLayout from 'src/layouts/dashboard';
 // components
-import Scrollbar from '../../../../components/scrollbar';
-import { useSettingsContext } from '../../../../components/settings';
+import Scrollbar from 'src/components/scrollbar';
+import { useSettingsContext } from 'src/components/settings';
 // sections
-import { FileGeneralRecentCard } from '../../../../sections/@dashboard/general/file';
-import { FileFolderCard, FileNewFolderDialog, FilePanel } from '../../../../sections/@dashboard/file';
+import { FileFolderCard, FileNewFolderDialog, FilePanel, FolderGeneralData } from 'src/sections/@dashboard/file';
 import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 import { useSnackbar } from 'notistack';
+import ConfirmDialog from 'src/components/confirm-dialog/ConfirmDialog';
 
 // ----------------------------------------------------------------------
 
@@ -30,31 +32,20 @@ const GB = 1000000000 * 24;
 
 // ----------------------------------------------------------------------
 
-GeneralFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+GeneralFolderPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-// ----------------------------------------------------------------------
-
-export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlot }) {
-  const theme = useTheme();
+export default function GeneralFolderPage({ dataGeneralFolder }) {
   const { enqueueSnackbar } = useSnackbar();
-  const {
-    query: { folder_id: folderID },
-    push,
-  } = useRouter();
 
   const { error, folder } = useSelector((state) => state.folder);
-  const { getOne } = useSelector((state) => state.document);
   const { id, listFolders, listDocuments } = folder;
-  console.log('GeneralFilePage', listFolders, listDocuments, dataGeneralFolder);
+  console.log('GeneralFolderPage', listFolders, listDocuments, dataGeneralFolder);
 
   useEffect(() => {
-    console.log('GeneralFilePage useEffect ', dataGeneralFolder, folderID);
     if (dataGeneralFolder) {
       dispatch(getFolderRedux(dataGeneralFolder.myFolderId));
-    } else if (folderID || folderID === 0) {
-      dispatch(getFolderRedux(folderID));
     }
-  }, [folderID, dataGeneralFolder]);
+  }, [dataGeneralFolder]);
 
   const smDown = useResponsive('down', 'sm');
 
@@ -89,19 +80,38 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
     setFolderName(event.target.value);
   }, []);
 
-  const handleCreateNewFolder = async () => {
+  const handleCreateNewFolder = () => {
+    console.log('CREATE NEW FOLDER', folderName);
     setFolderName('');
-    const message = await dispatch(
+    dispatch(
       createFolderRedux({
         name: folderName,
         parentId: Number.parseInt(id),
       })
     );
-    console.log('CREATE NEW FOLDER', message);
-    if (message) {
-      enqueueSnackbar(message.title, { variant: message.variant });
-    }
     handleCloseNewFolder();
+    enqueueSnackbar(error ? error : 'Tạo thư mục thành công', { variant: 'error' });
+  };
+
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      const newFiles = acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        })
+      );
+
+      setFiles([...files, ...newFiles]);
+    },
+    [files]
+  );
+
+  const handleOnClickFileFolderCard = (folder_id) => {
+    console.log('handleOnClickFileFolderCard', folder_id, dataGeneralFolder);
+    if (dataGeneralFolder) {
+      return dataGeneralFolder.setMyFolderId(folder_id);
+    }
+    push(PATH_DASHBOARD.folder.link(folder_id));
   };
 
   return (
@@ -115,18 +125,18 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
           <Grid item xs={12} md={12} lg={12}>
             <div>
               <FilePanel
-                title="Folders"
+                title={folder.name ? folder.name : 'Thư mục gốc'}
                 link={PATH_DASHBOARD.fileManager}
                 onOpen={!dataGeneralFolder ? handleOpenNewFolder : ''}
                 sx={{ mt: 5 }}
               />
               <Scrollbar>
-                <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
+                <Stack direction="column" spacing={3} sx={{ pb: 3 }}>
                   {listFolders && listFolders.length
                     ? listFolders.map((folder, index) => (
-                        <FileFolderCard
+                        <FolderGeneralData
                           dataGeneralFolder={dataGeneralFolder}
-                          key={folder.id}
+                          key={index}
                           folder={folder}
                           sx={{
                             ...(_folders.length > 3 && {
@@ -138,42 +148,24 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
                     : ''}
                 </Stack>
               </Scrollbar>
-
-              <FilePanel
-                title="Tài liệu gần đây"
-                link={PATH_DASHBOARD.fileManager}
-                onOpen={!dataGeneralFolder ? handleOpenUploadFile : ''}
-                sx={{ mt: 2 }}
-              />
-
-              <Stack spacing={2}>
-                {listDocuments && listDocuments.length
-                  ? listDocuments.map((file) => (
-                      <FileGeneralRecentCard
-                        dataGeneralFolder={dataGeneralFolder}
-                        dataUploadDocsToSlot={dataUploadDocsToSlot}
-                        key={file.id}
-                        file={file}
-                        onDelete={() => console.log('DELETE', file.id)}
-                      />
-                    ))
-                  : ''}
-              </Stack>
             </div>
+          </Grid>
+
+          <Grid item xs={12} md={12} lg={12}>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => {
+                if (dataGeneralFolder) {
+                  dataGeneralFolder.handleUploadDocumentToMyFolder(folder);
+                }
+              }}
+            >
+              {`Lưu tài liệu về ${folder.name ? folder.name : 'Thư mục gốc'}`}
+            </Button>
           </Grid>
         </Grid>
       </Container>
-
-      <FileNewFolderDialog open={openUploadFile} onClose={handleCloseUploadFile} />
-
-      <FileNewFolderDialog
-        open={openNewFolder}
-        onClose={handleCloseNewFolder}
-        title="New Folder"
-        folderName={folderName}
-        onChangeFolderName={handleChangeFolderName}
-        onCreate={handleCreateNewFolder}
-      />
     </>
   );
 }

@@ -25,10 +25,7 @@ import { createStoreFolderRedux, getStoreFolderRootRedux } from '../../../redux/
 import Iconify from '../../../components/iconify';
 import UploadMyDocumentDialog from '../../../sections/@dashboard/storeFolder/UploadMyDocumentDialog';
 import { useSnackbar } from 'notistack';
-
-// ----------------------------------------------------------------------
-
-const GB = 1000000000 * 24;
+import PopupGetFolder from 'src/sections/@dashboard/general/getFiletoDocPrivate/PopupGetFolder';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +34,6 @@ StoreFileRootPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout
 // ----------------------------------------------------------------------
 
 export default function StoreFileRootPage() {
-  const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const { push } = useRouter();
 
@@ -51,17 +47,13 @@ export default function StoreFileRootPage() {
     }
   }, []);
 
-  const smDown = useResponsive('down', 'sm');
-
   const { themeStretch } = useSettingsContext();
 
   const [storeFolderName, setStoreFolderName] = useState('');
 
-  const [files, setFiles] = useState([]);
+  const [documentHandle, setDocumentHandle] = useState({});
 
   const [openNewStoreFolder, setOpenNewStoreFolder] = useState(false);
-
-  // const [openUploadFile, setOpenUploadFile] = useState(false);
 
   const [openFrom, setOpenFrom] = useState(false);
 
@@ -81,14 +73,17 @@ export default function StoreFileRootPage() {
     setOpenNewStoreFolder(false);
   };
 
-  // const handleOpenUploadFile = () => {
-  //     push(PATH_DASHBOARD.storeFolder.newDocument(Number.parseInt(id)));
-  //     // setOpenUploadFile(true);
-  // };
+  const [openPopupSaveInMyFolder, setOpenPopupSaveInMyFolder] = useState(false);
 
-  // const handleCloseUploadFile = () => {
-  //     setOpenUploadFile(false);
-  // };
+  const handleOpenPopupSaveInMyFolder = (data) => {
+    const { document } = data;
+    setDocumentHandle(document);
+    setOpenPopupSaveInMyFolder(true);
+  };
+
+  const handleClosePopupSaveInMyFolder = () => {
+    setOpenPopupSaveInMyFolder(false);
+  };
 
   const handleChangeStoreFolderName = useCallback((event) => {
     setStoreFolderName(event.target.value);
@@ -113,19 +108,6 @@ export default function StoreFileRootPage() {
       dispatch(removeError('Tạo thư mục thành công'));
     }
   };
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const newFiles = acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      );
-
-      setFiles([...files, ...newFiles]);
-    },
-    [files]
-  );
 
   const handleOnClickFileFolderCard = useCallback((storeFolder_id) => {
     console.log('handleOnClickFileFolderCard', storeFolder_id);
@@ -203,6 +185,7 @@ export default function StoreFileRootPage() {
                           disableButtonShare: true,
                           isDownloadDocumentGeneral: true,
                         }}
+                        handleOpenPopupSaveInMyFolder={handleOpenPopupSaveInMyFolder}
                         key={file.id}
                         file={file}
                         onDelete={() => console.log('DELETE', file.id)}
@@ -216,6 +199,8 @@ export default function StoreFileRootPage() {
       </Container>
 
       {/* <FileNewFolderDialog open={openUploadFile} onClose={handleCloseUploadFile}/> */}
+
+      <PopupGetFolder open={openPopupSaveInMyFolder} onClose={handleClosePopupSaveInMyFolder} data={documentHandle} />
 
       <FileNewFolderDialog
         open={openNewStoreFolder}

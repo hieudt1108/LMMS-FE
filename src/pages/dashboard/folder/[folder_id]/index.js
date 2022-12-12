@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
+import _ from 'lodash';
 // next
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import {Box, Breadcrumbs, Button, Container, Grid, IconButton, Link, Stack, Typography} from '@mui/material';
+import { Box, Breadcrumbs, Button, Container, Grid, IconButton, Link, Stack, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // hooks
@@ -23,8 +24,9 @@ import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 import { useSnackbar } from 'notistack';
-import LinkItem from "../../../../components/custom-breadcrumbs/LinkItem";
-import Iconify from "../../../../components/iconify";
+import LinkItem from '../../../../components/custom-breadcrumbs/LinkItem';
+import Iconify from '../../../../components/iconify';
+import DataGridBasic from 'src/sections/_examples/mui/data-grid/DataGridBasic';
 
 // ----------------------------------------------------------------------
 
@@ -43,28 +45,24 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
     query: { folder_id: folderID },
     push,
   } = useRouter();
-  const router = useRouter()
-  const { error, folder } = useSelector((state) => state.folder);
-  const { getOne } = useSelector((state) => state.document);
+  const { folder, history } = useSelector((state) => state.folder);
   const { id, listFolders, listDocuments } = folder;
-  console.log('GeneralFilePage', listFolders, listDocuments, dataGeneralFolder);
+  console.log('GeneralFilePage', listFolders, listDocuments, dataGeneralFolder, history);
 
   useEffect(() => {
     console.log('GeneralFilePage useEffect ', dataGeneralFolder, folderID);
     if (dataGeneralFolder) {
-      dispatch(getFolderRedux(dataGeneralFolder.myFolderId));
+      // dispatch(getFolderRedux(dataGeneralFolder.myFolderId));
+      return;
     } else if (folderID || folderID === 0) {
       dispatch(getFolderRedux(folderID));
+      return;
     }
   }, [folderID, dataGeneralFolder]);
-
-  const smDown = useResponsive('down', 'sm');
 
   const { themeStretch } = useSettingsContext();
 
   const [folderName, setFolderName] = useState('');
-
-  const [files, setFiles] = useState([]);
 
   const [openNewFolder, setOpenNewFolder] = useState(false);
 
@@ -106,6 +104,17 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
     handleCloseNewFolder();
   };
 
+  const handleBackPage = () => {
+    if (dataGeneralFolder) {
+      if (history.folder.id !== '');
+      dispatch(getFolderUploadDocRedux(folderUploadDoc.folder.id));
+      return;
+    } else {
+      if (history.folder.id !== '');
+      dispatch(getFolderRedux(history.folder.id));
+      return;
+    }
+  };
 
   return (
     <>
@@ -113,84 +122,137 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
         <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
-
-
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Box sx={{ mb: 5}}>
+        <Box sx={{ mb: 5 }}>
           <Stack flexGrow={1}>
             <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
-                <IconButton
-                    size="small"
-                    color="success"
-                    onClick={()=> router.back()}
-                    sx={{
-                        p: 0,
-                        width: 24,
-                        height: 24,
-                        color: 'common.white',
-                        bgcolor: 'success.main',
-                        '&:hover': {
-                            bgcolor: 'success.main',
-                        },
-                    }}
-                >
-                    <Iconify icon="eva:arrow-back-outline" />
-                </IconButton>
+              <IconButton
+                size="small"
+                color="success"
+                disabled={history.folder.id === ''}
+                onClick={handleBackPage}
+                sx={{
+                  p: 0,
+                  width: 24,
+                  height: 24,
+                  color: 'common.white',
+                  bgcolor: 'success.main',
+                  '&:hover': {
+                    bgcolor: 'success.main',
+                  },
+                }}
+              >
+                <Iconify icon="eva:arrow-back-outline" />
+              </IconButton>
               <Typography variant="h4"> Tài liệu của tôi </Typography>
             </Stack>
           </Stack>
         </Box>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={12} lg={12}>
-            <div>
-              <FilePanel
-                title="Folders"
-                link={PATH_DASHBOARD.fileManager}
-                onOpen={!dataGeneralFolder ? handleOpenNewFolder : ''}
-                sx={{ mt: 5 }}
-              />
-              <Scrollbar>
-                <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
-                  {listFolders && listFolders.length
-                    ? listFolders.map((folder, index) => (
-                        <FileFolderCard
+        {!_.isEmpty(dataGeneralFolder) ? (
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={12} lg={12}>
+              <div>
+                <FilePanel
+                  title="Folders"
+                  link={PATH_DASHBOARD.fileManager}
+                  onOpen={!dataGeneralFolder ? handleOpenNewFolder : ''}
+                  sx={{ mt: 5 }}
+                />
+                <Scrollbar>
+                  <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
+                    {!_.isEmpty(dataGeneralFolder.listFolders)
+                      ? dataGeneralFolder.listFolders.map((folder, index) => (
+                          <FileFolderCard
+                            dataGeneralFolder={dataGeneralFolder}
+                            key={folder.id}
+                            folder={folder}
+                            sx={{
+                              ...(_folders.length > 3 && {
+                                minWidth: 222,
+                              }),
+                            }}
+                            onDelete={() => {}}
+                          />
+                        ))
+                      : ''}
+                  </Stack>
+                </Scrollbar>
+
+                <FilePanel
+                  title="Tài liệu gần đây"
+                  link={PATH_DASHBOARD.fileManager}
+                  onOpen={!dataGeneralFolder ? handleOpenUploadFile : ''}
+                  sx={{ mt: 2 }}
+                />
+
+                <Stack spacing={2}>
+                  {!_.isEmpty(dataGeneralFolder.listDocuments)
+                    ? dataGeneralFolder.listDocuments.map((file) => (
+                        <FileGeneralRecentCard
                           dataGeneralFolder={dataGeneralFolder}
-                          key={folder.id}
-                          folder={folder}
-                          sx={{
-                            ...(_folders.length > 3 && {
-                              minWidth: 222,
-                            }),
-                          }}
+                          dataUploadDocsToSlot={dataUploadDocsToSlot}
+                          key={file.id}
+                          file={file}
                         />
                       ))
                     : ''}
                 </Stack>
-              </Scrollbar>
-
-              <FilePanel
-                title="Tài liệu gần đây"
-                link={PATH_DASHBOARD.fileManager}
-                onOpen={!dataGeneralFolder ? handleOpenUploadFile : ''}
-                sx={{ mt: 2 }}
-              />
-
-              <Stack spacing={2}>
-                {listDocuments && listDocuments.length
-                  ? listDocuments.map((file) => (
-                      <FileGeneralRecentCard
-                        dataGeneralFolder={dataGeneralFolder}
-                        dataUploadDocsToSlot={dataUploadDocsToSlot}
-                        key={file.id}
-                        file={file}
-                        onDelete={() => console.log('DELETE', file.id)}
-                      />
-                    ))
-                  : ''}
-              </Stack>
-            </div>
+              </div>
+            </Grid>
           </Grid>
-        </Grid>
+        ) : (
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={12} lg={12}>
+              <div>
+                <FilePanel
+                  title="Folders"
+                  link={PATH_DASHBOARD.fileManager}
+                  onOpen={!dataGeneralFolder ? handleOpenNewFolder : ''}
+                  sx={{ mt: 5 }}
+                />
+                <Scrollbar>
+                  <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
+                    {listFolders && listFolders.length
+                      ? listFolders.map((folder, index) => (
+                          <FileFolderCard
+                            dataGeneralFolder={dataGeneralFolder}
+                            key={folder.id}
+                            folder={folder}
+                            sx={{
+                              ...(_folders.length > 3 && {
+                                minWidth: 222,
+                              }),
+                            }}
+                            onDelete={() => {}}
+                          />
+                        ))
+                      : ''}
+                  </Stack>
+                </Scrollbar>
+
+                <FilePanel
+                  title="Tài liệu gần đây"
+                  link={PATH_DASHBOARD.fileManager}
+                  onOpen={!dataGeneralFolder ? handleOpenUploadFile : ''}
+                  sx={{ mt: 2 }}
+                />
+
+                <Stack spacing={2}>
+                  {listDocuments && listDocuments.length
+                    ? listDocuments.map((file) => (
+                        <FileGeneralRecentCard
+                          dataGeneralFolder={dataGeneralFolder}
+                          dataUploadDocsToSlot={dataUploadDocsToSlot}
+                          key={file.id}
+                          file={file}
+                        />
+                      ))
+                    : ''}
+                </Stack>
+              </div>
+            </Grid>
+          </Grid>
+        )}
       </Container>
 
       <FileNewFolderDialog open={openUploadFile} onClose={handleCloseUploadFile} />

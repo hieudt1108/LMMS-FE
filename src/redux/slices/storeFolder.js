@@ -51,6 +51,11 @@ const initialState = {
       classes: [],
     },
   },
+  history: {
+    storeFolder: {
+      id: '',
+    },
+  },
 };
 
 const slice = createSlice({
@@ -70,7 +75,9 @@ const slice = createSlice({
     },
 
     getStoreFolderSuccess(state, action) {
+      console.log('getStoreFolderSuccess', action);
       state.isLoading = false;
+      state.history.storeFolder = { ...state.history.storeFolder, ...state.storeFolder };
       state.storeFolder = { ...state.storeFolder, ...action.payload };
     },
 

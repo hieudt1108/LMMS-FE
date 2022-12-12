@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Container, Grid, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Container, Grid, IconButton, Stack, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // hooks
@@ -21,10 +21,15 @@ import { FileFolderCard, FileNewFolderDialog, FilePanel } from '../../../../sect
 import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
-import { createStoreFolderRedux, getStoreFolderRedux } from '../../../../redux/slices/storeFolder';
+import {
+  createStoreFolderRedux,
+  getFolderRedux,
+  getFolderUploadDocRedux,
+  getStoreFolderRedux,
+} from '../../../../redux/slices/folder';
 import Iconify from '../../../../components/iconify';
 import UploadMyDocumentDialog from '../../../../sections/@dashboard/storeFolder/UploadMyDocumentDialog';
-
+import PopupGetFolder from 'src/sections/@dashboard/general/getFiletoDocPrivate/PopupGetFolder';
 // ----------------------------------------------------------------------
 
 const GB = 1000000000 * 24;
@@ -36,43 +41,49 @@ StoreFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 // ----------------------------------------------------------------------
 
 export default function StoreFilePage() {
-  const theme = useTheme();
-
   const {
     query: { storeFolder_id: storeFolderID },
     push,
   } = useRouter();
-  const { storeFolder } = useSelector((state) => state.storeFolder);
-  const { id, listFolders, listDocuments } = storeFolder;
+  const { folder, history } = useSelector((state) => state.folder);
+  const { id, listFolders, listDocuments } = folder;
 
-  console.log('StoreFilePage', listFolders, listDocuments);
+  console.log('StoreFilePage', history, storeFolderID);
 
   useEffect(() => {
-    dispatch(getStoreFolderRedux(storeFolderID));
-  }, [dispatch, storeFolderID]);
-
-  const smDown = useResponsive('down', 'sm');
-
-  const router = useRouter()
+    console.log('useEffect StoreFilePage', storeFolderID);
+    dispatch(getFolderRedux(storeFolderID));
+  }, [storeFolderID]);
 
   const { themeStretch } = useSettingsContext();
 
   const [storeFolderName, setStoreFolderName] = useState('');
 
-  const [files, setFiles] = useState([]);
+  const [documentHandle, setDocumentHandle] = useState({});
 
   const [openNewStoreFolder, setOpenNewStoreFolder] = useState(false);
 
-  const [openUploadFile, setOpenUploadFile] = useState(false);
+  const [openFormUploadDocument, setOpenFormUploadDocument] = useState(false);
 
-  const [openFrom, setOpenFrom] = useState(false);
+  const [openPopupSaveInMyFolder, setOpenPopupSaveInMyFolder] = useState(false);
 
-  const handleOpenFrom = () => {
-    setOpenFrom(true);
+  const handleOpenPopupSaveInMyFolder = (data) => {
+    const { document } = data;
+    setDocumentHandle(document);
+    setOpenPopupSaveInMyFolder(true);
+  };
+
+  const handleClosePopupSaveInMyFolder = () => {
+    setOpenPopupSaveInMyFolder(false);
+  };
+
+  const handleOpenFrom = async () => {
+    await dispatch(getFolderUploadDocRedux(0));
+    setOpenFormUploadDocument(true);
   };
 
   const handleCloseFrom = () => {
-    setOpenFrom(false);
+    setOpenFormUploadDocument(false);
   };
 
   const handleOpenNewStoreFolder = () => {
@@ -81,15 +92,6 @@ export default function StoreFilePage() {
 
   const handleCloseNewStoreFolder = () => {
     setOpenNewStoreFolder(false);
-  };
-
-  const handleOpenUploadFile = () => {
-    push(PATH_DASHBOARD.storeFolder.newDocument(Number.parseInt(id)));
-    // setOpenUploadFile(true);
-  };
-
-  const handleCloseUploadFile = () => {
-    setOpenUploadFile(false);
   };
 
   const handleChangeStoreFolderName = useCallback((event) => {
@@ -108,23 +110,10 @@ export default function StoreFilePage() {
     handleCloseNewStoreFolder();
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const newFiles = acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      );
-
-      setFiles([...files, ...newFiles]);
-    },
-    [files]
-  );
-
-  const handleOnClickFileFolderCard = useCallback((storeFolder_id) => {
-    console.log('handleOnClickFileFolderCard', storeFolder_id);
-    push(PATH_DASHBOARD.storeFolder.link(storeFolder_id));
-  }, []);
+  const handleBackPage = () => {
+    console.log('handleBackPage folder', history.folder);
+    if (history.folder.id !== '') dispatch(getFolderRedux(history.folder.id));
+  };
 
   return (
     <>
@@ -133,23 +122,24 @@ export default function StoreFilePage() {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Box sx={{ mb: 5}}>
+        <Box sx={{ mb: 5 }}>
           <Stack flexGrow={1}>
             <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
               <IconButton
-                  size="small"
-                  color="success"
-                  onClick={()=> router.back()}
-                  sx={{
-                    p: 0,
-                    width: 24,
-                    height: 24,
-                    color: 'common.white',
+                size="small"
+                color="success"
+                disabled={history.folder.id === ''}
+                onClick={handleBackPage}
+                sx={{
+                  p: 0,
+                  width: 24,
+                  height: 24,
+                  color: 'common.white',
+                  bgcolor: 'success.main',
+                  '&:hover': {
                     bgcolor: 'success.main',
-                    '&:hover': {
-                      bgcolor: 'success.main',
-                    },
-                  }}
+                  },
+                }}
               >
                 <Iconify icon="eva:arrow-back-outline" />
               </IconButton>
@@ -169,12 +159,13 @@ export default function StoreFilePage() {
               <Scrollbar>
                 <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
                   {listFolders && listFolders.length
-                    ? listFolders.map((storeFolder, index) => (
+                    ? listFolders.map((folder, index) => (
                         <FileFolderCard
                           key={index}
-                          folder={storeFolder}
-                          onClick={() => handleOnClickFileFolderCard(storeFolder.id)}
-                          onDelete={() => console.log('DELETE', storeFolder.id)}
+                          folder={folder}
+                          // onClick={() => handleOnClickFileFolderCard(folder.id)}
+                          onDelete={() => console.log('DELETE', folder.id)}
+                          dataStoreFolder={storeFolderID}
                           sx={{
                             ...(_storeFolders.length > 3 && {
                               minWidth: 222,
@@ -211,16 +202,18 @@ export default function StoreFilePage() {
                   </Stack>
                 </Stack>
               </Stack>
-              <UploadMyDocumentDialog open={openFrom} onClose={handleCloseFrom} />
+              <UploadMyDocumentDialog open={openFormUploadDocument} onClose={handleCloseFrom} />
 
               <Stack spacing={2}>
                 {listDocuments && listDocuments.length
                   ? listDocuments.map((file) => (
                       <FileGeneralRecentCard
                         dataStoreFolder={{
+                          storeFolderID,
                           disableButtonShare: true,
                           isDownloadDocumentGeneral: true,
                         }}
+                        handleOpenPopupSaveInMyFolder={handleOpenPopupSaveInMyFolder}
                         key={file.id}
                         file={file}
                         onDelete={() => console.log('DELETE', file.id)}
@@ -233,16 +226,20 @@ export default function StoreFilePage() {
         </Grid>
       </Container>
 
-      <FileNewFolderDialog open={openUploadFile} onClose={handleCloseUploadFile} />
+      {openPopupSaveInMyFolder && (
+        <PopupGetFolder open={openPopupSaveInMyFolder} onClose={handleClosePopupSaveInMyFolder} data={documentHandle} />
+      )}
 
-      <FileNewFolderDialog
-        open={openNewStoreFolder}
-        onClose={handleCloseNewStoreFolder}
-        title="New Folder"
-        folderName={storeFolderName}
-        onChangeFolderName={handleChangeStoreFolderName}
-        onCreate={handleCreateNewStoreFolder}
-      />
+      {openNewStoreFolder && (
+        <FileNewFolderDialog
+          open={openNewStoreFolder}
+          onClose={handleCloseNewStoreFolder}
+          title="New Folder"
+          folderName={storeFolderName}
+          onChangeFolderName={handleChangeStoreFolderName}
+          onCreate={handleCreateNewStoreFolder}
+        />
+      )}
     </>
   );
 }

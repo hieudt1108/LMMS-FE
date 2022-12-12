@@ -50,7 +50,8 @@ const FileGeneralRecentCard = ({
 
   const [openDetails, setOpenDetails] = useState(false);
 
-  const [openConfirm, setOpenConfirm] = useState(false);
+  const [openConfirmAddDocument, setOpenConfirmAddDocument] = useState(false);
+  const [openConfirmDeleteFile, setOpenConfirmDeleteFile] = useState(false);
 
   console.log('FileGeneralRecentCard', file, openDetails);
 
@@ -71,7 +72,7 @@ const FileGeneralRecentCard = ({
   const handleOpenDetails = async () => {
     // Chia sẻ lên thư mục chung
     if (dataGeneralFolder) {
-      setOpenConfirm(true);
+      setOpenConfirmAddDocument(true);
       return;
     }
     // mở detail trong thư mục
@@ -101,15 +102,6 @@ const FileGeneralRecentCard = ({
     }
   };
 
-  const handleDeleteDocument = async () => {
-    console.log('handleDeleteDocument');
-    handleClosePopover();
-    const message = await dispatch(deleteDocumentInFolderRedux(file.id));
-    if (message) {
-      enqueueSnackbar(message.title, { variant: message.variant });
-    }
-  };
-
   const handleAddDocumentToSlot = async (classId, documentId, slotId, subjectId) => {
     console.log('postData', classId, documentId, slotId, subjectId);
     const res = await postDocumentsInSlot(classId, documentId, slotId, subjectId);
@@ -126,8 +118,18 @@ const FileGeneralRecentCard = ({
     window.open(`${URL_GLOBAL.VIEW_FILE}${file.urlDocument}`, '_blank', 'noopener,noreferrer');
   }, []);
 
-  const handleCloseConfirm = () => {
-    setOpenConfirm(false);
+  const handleCloseConfirmAddDocument = () => {
+    setOpenConfirmAddDocument(false);
+  };
+
+  const handleDeleteFile = async () => {
+    console.log('handleDeleteDocument');
+    const message = await dispatch(deleteDocumentInFolderRedux(file.id));
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
+    }
+    setOpenConfirmDeleteFile(false);
+    handleClosePopover();
   };
 
   return (
@@ -256,7 +258,12 @@ const FileGeneralRecentCard = ({
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleDeleteDocument} sx={{ color: 'error.main' }}>
+        <MenuItem
+          onClick={() => {
+            setOpenConfirmDeleteFile(true);
+          }}
+          sx={{ color: 'error.main' }}
+        >
           <Iconify icon="eva:trash-2-outline" />
           Xóa
         </MenuItem>
@@ -273,9 +280,9 @@ const FileGeneralRecentCard = ({
       )}
 
       <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Xóa"
+        open={openConfirmAddDocument}
+        onClose={handleCloseConfirmAddDocument}
+        title="Thêm tài liệu"
         content={<>Bạn có chắc chắn muốn thêm tài liệu ?</>}
         action={
           <Button
@@ -292,7 +299,7 @@ const FileGeneralRecentCard = ({
                   dataUploadDocsToSlot.subjectId
                 );
               }
-              handleCloseConfirm();
+              handleCloseConfirmAddDocument();
             }}
           >
             Thêm tài liệu
@@ -307,6 +314,20 @@ const FileGeneralRecentCard = ({
           onClose={() => {
             handleCloseShare();
           }}
+        />
+      )}
+
+      {openConfirmDeleteFile && (
+        <ConfirmDialog
+          open={openConfirmDeleteFile}
+          onClose={() => setOpenConfirmDeleteFile(false)}
+          title="Xóa Tài Liệu"
+          content="Bạn có chắc chắn muốn xóa tài liệu này?"
+          action={
+            <Button variant="contained" color="error" onClick={handleDeleteFile}>
+              Xóa
+            </Button>
+          }
         />
       )}
     </>

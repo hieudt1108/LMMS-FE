@@ -18,7 +18,7 @@ import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload } from '../
 import { postDocument, postFile } from '../../../dataProvider/agent';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { createDocumentInitialRedux, uploadDocumentRedux } from 'src/redux/slices/folder';
+import { createDocumentInitialRedux, createDocumentRedux, uploadDocumentRedux } from 'src/redux/slices/folder';
 import { Upload } from '../../../components/upload';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/useAuthContext';
@@ -103,10 +103,8 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
   });
 
   useEffect(() => {
-    dataGeneralFolder
-      ? dispatch(createDocumentInitialRedux(dataGeneralFolder.generalFolderId))
-      : dispatch(createDocumentInitialRedux(folderId));
-  }, [folderId, dataGeneralFolder]);
+    dispatch(createDocumentInitialRedux());
+  }, []);
 
   console.log('BlogNewPostForm', getValues('items'));
   const handleDrop = (acceptedFiles, index) => {
@@ -124,10 +122,19 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
     for (let index = items.length - 1; index >= 0; --index) {
       try {
         const data = items[index];
-        if (!data.file) {
+
+        formData.append('File', getValues(`items[${index}].file`));
+        const response = await postFile(formData);
+        if (response.status !== 200) {
           enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
           continue;
         }
+        console.log('response', response);
+
+        data.TypeFile = response.data.contentType;
+        data.urlDocument = response.data.fileName;
+        data.size = response.data.size;
+
         if (!data.programId) {
           data.programId = programs[0].id;
         }
@@ -137,27 +144,12 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
         if (!data.typeDocumentId) {
           data.typeDocumentId = typeDocuments[0].id;
         }
-        console.log('data', data);
         data.folderId = dataGeneralFolder ? dataGeneralFolder.generalFolderId : folderId;
-
-        formData.append('File', getValues(`items[${index}].file`));
-        const response = await postFile(formData);
-        if (response.status !== 200) {
-          enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
-          continue;
-        }
-        console.log('response', response);
-        data.TypeFile = response.data.contentType;
-        data.urlDocument = response.data.fileName;
-        data.size = response.data.size;
-        const responsePostDocument = await postDocument(data);
-        if (responsePostDocument.status !== 200) {
-          enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
-          continue;
+        const message = await dispatch(createDocumentRedux(data));
+        if (message) {
+          enqueueSnackbar(message.title, { variant: message.variant });
         }
         remove(index);
-        enqueueSnackbar(`Tạo tài liệu${data.code} thành công`);
-        console.log('responsePostDocument', responsePostDocument);
       } catch (error) {
         console.error(`onSubmit error at index: ${index}`, error);
       }

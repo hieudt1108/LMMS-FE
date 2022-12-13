@@ -338,7 +338,7 @@ export function createDocumentRedux(data) {
 
       const responsePostDocument = await postDocument(data);
       if (responsePostDocument instanceof Error) {
-        return returnMessageError(`Tạo tài liệu${data.code} thất bại`);
+        return returnMessageError(`${responsePostDocument.response.data.title}`);
       }
       dispatch(slice.actions.createDocumentSuccess({ document: response.data.data }));
       return returnMessageSuccess(`Tạo tài liệu${data.code} thành công`);

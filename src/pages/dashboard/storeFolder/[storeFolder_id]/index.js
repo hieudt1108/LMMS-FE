@@ -22,6 +22,7 @@ import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import {
+  createFolderRedux,
   createStoreFolderRedux,
   getFolderRedux,
   getFolderUploadDocRedux,
@@ -30,6 +31,7 @@ import {
 import Iconify from '../../../../components/iconify';
 import UploadMyDocumentDialog from '../../../../sections/@dashboard/storeFolder/UploadMyDocumentDialog';
 import PopupGetFolder from 'src/sections/@dashboard/general/getFiletoDocPrivate/PopupGetFolder';
+import { useSnackbar } from 'notistack';
 // ----------------------------------------------------------------------
 
 const GB = 1000000000 * 24;
@@ -47,6 +49,7 @@ export default function StoreFilePage() {
   } = useRouter();
   const { folder, history } = useSelector((state) => state.folder);
   const { id, listFolders, listDocuments } = folder;
+  const { enqueueSnackbar } = useSnackbar();
 
   console.log('StoreFilePage', history, storeFolderID);
 
@@ -98,15 +101,19 @@ export default function StoreFilePage() {
     setStoreFolderName(event.target.value);
   }, []);
 
-  const handleCreateNewStoreFolder = () => {
+  const handleCreateNewStoreFolder = async () => {
     console.log('CREATE NEW FOLDER', storeFolderName);
-    setStoreFolderName('');
-    dispatch(
-      createStoreFolderRedux({
+    const message = await dispatch(
+      createFolderRedux({
         name: storeFolderName,
         parentId: Number.parseInt(id),
       })
     );
+    console.log('CREATE NEW FOLDER', message);
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
+    }
+    setStoreFolderName('');
     handleCloseNewStoreFolder();
   };
 

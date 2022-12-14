@@ -45,6 +45,18 @@ const initialState = {
       id: '',
     },
   },
+  folderSaveDocToMyFolder: {
+    id: '',
+    name: '',
+    parentId: 0,
+    listFolders: [],
+    listDocuments: [],
+  },
+  historySaveDocToMyFolder: {
+    folder: {
+      id: '',
+    },
+  },
   newDocument: {
     data: [],
     init: {
@@ -85,8 +97,18 @@ const slice = createSlice({
     },
     getFolderUploadDocSuccess(state, action) {
       state.isLoading = false;
-      state.historyUploadDoc.folder = { ...state.historyUploadDoc.folder, ...state.folder };
+      state.historyUploadDoc.folder = { ...state.historyUploadDoc.folder, ...state.folderUploadDoc };
       state.folderUploadDoc = { ...state.folderUploadDoc, ...action.payload };
+    },
+
+    getFolderSavetoDocToMyFolderSuccess(state, action) {
+      console.log('getFolderSavetoDocToMyFolderSuccess', action);
+      state.isLoading = false;
+      state.historySaveDocToMyFolder.folder = {
+        ...state.historySaveDocToMyFolder.folder,
+        ...state.folderSaveDocToMyFolder,
+      };
+      state.folderSaveDocToMyFolder = { ...state.folderSaveDocToMyFolder, ...action.payload };
     },
 
     createFolderSuccess(state, action) {
@@ -167,14 +189,29 @@ export function getFolderUploadDocRedux(params) {
   return async () => {
     try {
       if (!params && params !== 0) {
-        return dispatch(slice.actions.hasError('không có folderId'));
+        return returnMessageError(`Truy cập thư mục lỗi`);
       }
       dispatch(slice.actions.startLoading());
       const response = await getFolderByID(params);
       console.log('getFolderByID', response);
       dispatch(slice.actions.getFolderUploadDocSuccess(response.data.data));
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
+export function getFolderSavetoDocToMyFolderRedux(params) {
+  return async () => {
+    try {
+      if (!params && params !== 0) {
+        return returnMessageError(`Truy cập thư mục lỗi`);
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await getFolderByID(params);
+      dispatch(slice.actions.getFolderSavetoDocToMyFolderSuccess(response.data.data));
+    } catch (error) {
+      return returnMessageError(`${error.message}`);
     }
   };
 }
@@ -191,7 +228,7 @@ export function getFolderRedux(params) {
       console.log('getFolderByID', response);
       dispatch(slice.actions.getFolderSuccess(response.data.data));
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      return returnMessageError(`${error.message}`);
     }
   };
 }
@@ -234,7 +271,7 @@ export function createDocumentInitialRedux() {
         })
       );
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      return returnMessageError(`${error.message}`);
     }
   };
 }

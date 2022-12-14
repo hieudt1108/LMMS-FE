@@ -25,6 +25,7 @@ import {
   createFolderRedux,
   createStoreFolderRedux,
   getFolderRedux,
+  getFolderSavetoDocToMyFolderRedux,
   getFolderUploadDocRedux,
   getStoreFolderRedux,
 } from '../../../../redux/slices/folder';
@@ -70,8 +71,9 @@ export default function StoreFilePage() {
 
   const [openPopupSaveInMyFolder, setOpenPopupSaveInMyFolder] = useState(false);
 
-  const handleOpenPopupSaveInMyFolder = (data) => {
+  const handleOpenPopupSaveInMyFolder = async (data) => {
     const { document } = data;
+    await dispatch(getFolderSavetoDocToMyFolderRedux(0));
     setDocumentHandle(document);
     setOpenPopupSaveInMyFolder(true);
   };

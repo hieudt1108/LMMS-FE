@@ -11,15 +11,27 @@ import { format } from 'date-fns';
 import TextMaxLine from '../../../../components/text-max-line';
 
 import { PATH_DASHBOARD } from 'src/routes/paths';
+import { dispatch } from 'src/redux/store';
+import { getFolderSavetoDocToMyFolderRedux } from 'src/redux/slices/folder';
 
 // ----------------------------------------------------------------------
 
-export default function FolderGeneralData({ dataGeneralFolder, selected, onSelect, folder, sx, ...other }) {
+export default function FolderGeneralData({
+  dataSaveDocToMyFolder,
+  dataGeneralFolder,
+  selected,
+  onSelect,
+  folder,
+  sx,
+  ...other
+}) {
   console.log('FolderGeneralData: ', folder);
 
-  const handleOnClickFileFolderCard = (pid) => {
+  const handleOnClickFileFolderCard = async (pid) => {
     if (dataGeneralFolder) {
       return dataGeneralFolder.setMyFolderId(pid);
+    } else {
+      return dispatch(getFolderSavetoDocToMyFolderRedux(pid));
     }
     push(PATH_DASHBOARD.folder.link(pid));
   };

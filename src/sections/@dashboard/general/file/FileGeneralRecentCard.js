@@ -52,8 +52,6 @@ const FileGeneralRecentCard = ({
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  console.log('FileGeneralRecentCard', file, openDetails);
-
   const handleFavorite = () => {
     setFavorite(!favorite);
   };

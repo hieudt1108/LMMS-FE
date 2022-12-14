@@ -39,6 +39,7 @@ import { getAllDocument, getAllTypeDocument, getAllSubject } from '../../../../d
 import { DocumentPostCard } from '../../../../sections/@dashboard/documents';
 
 import { useAuthContext } from 'src/auth/useAuthContext';
+import { use } from 'i18next';
 // ----------------------------------------------------------------------
 
 LevelLayout.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -78,12 +79,14 @@ export default function LevelLayout() {
   });
   const [documents, setDocuments] = useState([]);
   const [typeDocs, setTypeDoc] = useState([]);
-  const [subjects, setSubject] = useState([]);
+  // const [subjects, setSubject] = useState([]);
+  const [paging, setPaging] = useState();
 
   async function fetchAllDocument() {
     const res = await getAllDocument(filter);
     if (res.status < 400) {
       setDocuments(res.data.data);
+      setPaging(JSON.parse(res.headers['x-pagination']));
     } else {
       console.log(res.message);
     }
@@ -100,17 +103,17 @@ export default function LevelLayout() {
     }
   }
 
-  async function fetchAllSubject() {
-    const res = await getAllSubject({
-      pageIndex: 1,
-      pageSize: 100,
-    });
-    if (res.status < 400) {
-      setSubject(res.data.data);
-    } else {
-      console.log(res.message);
-    }
-  }
+  // async function fetchAllSubject() {
+  //   const res = await getAllSubject({
+  //     pageIndex: 1,
+  //     pageSize: 100,
+  //   });
+  //   if (res.status < 400) {
+  //     setSubject(res.data.data);
+  //   } else {
+  //     console.log(res.message);
+  //   }
+  // }
 
   const handleSearchChange = useCallback(
     (event, value) => {
@@ -145,7 +148,7 @@ export default function LevelLayout() {
 
   useEffect(() => {
     fetchAllTypeDoc();
-    fetchAllSubject();
+    // fetchAllSubject();
   }, []);
   return (
     <>
@@ -177,7 +180,7 @@ export default function LevelLayout() {
               sx={{ mr: 1, mr: 3 }}
               autohighlight="true"
               onChange={handleSearchChange}
-              placeholder="Search..."
+              placeholder="Tìm kiếm..."
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -186,17 +189,17 @@ export default function LevelLayout() {
                 ),
               }}
             />
-            <FormControl sx={{ minWidth: 120, mr: 2 }} size="small">
-              <InputLabel id="demo-simple-select-helper-label">Khối</InputLabel>
-              <Select id="demo-simple-select-helper" label="Khối" onChange={handleFilterDocType}>
+            <FormControl sx={{ minWidth: 180, mr: 2 }} size="small">
+              <InputLabel id="demo-simple-select-helper-label">Loại tài liệu</InputLabel>
+              <Select id="demo-simple-select-helper" label="TypeDocument" onChange={handleFilterDocType}>
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {renderMenuItem(typeDocs)}
               </Select>
             </FormControl>
-            <FormControl sx={{ minWidth: 120 }} size="small">
-              <InputLabel id="demo-simple-select-helper-label">Subject</InputLabel>
+            <FormControl sx={{ minWidth: 180 }} size="small">
+              <InputLabel id="demo-simple-select-helper-label">Môn học</InputLabel>
               <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterSubject}>
                 <MenuItem value="">
                   <em>None</em>
@@ -212,8 +215,8 @@ export default function LevelLayout() {
         <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
           <Pagination
             size="small"
-            count={documents?.length}
-            rowsperpage={filter.pageSize}
+            count={paging?.TotalPages}
+            rowsperpage={paging?.PageSize}
             onChange={handlePageChange}
             color="primary"
           />

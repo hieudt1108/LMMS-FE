@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Container, Grid, IconButton, Stack, Typography } from '@mui/material';
+import { Container, Grid, IconButton, Stack, Typography, Box } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // hooks
@@ -53,7 +53,7 @@ export default function StoreFilePage() {
 
   const smDown = useResponsive('down', 'sm');
 
-  const router = useRouter()
+  const router = useRouter();
 
   const { themeStretch } = useSettingsContext();
 
@@ -133,23 +133,23 @@ export default function StoreFilePage() {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Box sx={{ mb: 5}}>
+        <Box sx={{ mb: 5 }}>
           <Stack flexGrow={1}>
             <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
               <IconButton
-                  size="small"
-                  color="success"
-                  onClick={()=> router.back()}
-                  sx={{
-                    p: 0,
-                    width: 24,
-                    height: 24,
-                    color: 'common.white',
+                size="small"
+                color="success"
+                onClick={() => router.back()}
+                sx={{
+                  p: 0,
+                  width: 24,
+                  height: 24,
+                  color: 'common.white',
+                  bgcolor: 'success.main',
+                  '&:hover': {
                     bgcolor: 'success.main',
-                    '&:hover': {
-                      bgcolor: 'success.main',
-                    },
-                  }}
+                  },
+                }}
               >
                 <Iconify icon="eva:arrow-back-outline" />
               </IconButton>

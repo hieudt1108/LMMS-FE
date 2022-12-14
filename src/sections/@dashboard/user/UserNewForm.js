@@ -258,10 +258,10 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                                     label={
                                         <>
                                             <Typography variant="subtitle2" sx={{mb: 0.5, ml: 1}}>
-                                                Vô hiệu hóa
+                                                Vô hiệu hóa/Kích hoạt
                                             </Typography>
                                             <Typography variant="body2" sx={{color: 'text.secondary', ml: 1}}>
-                                                Xác nhận vô hiệu hóa người dùng
+                                                Xác nhận vô hiệu hóa/kích hoạt người dùng
                                             </Typography>
                                         </>
                                     }

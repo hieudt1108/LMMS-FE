@@ -75,7 +75,7 @@ export default function FileInvitedItem({index}) {
                         }),
                     }}
                 >
-                    Can {permissionDefault ? 'Edit' : 'View'}
+                    Có thể {permissionDefault ? 'chỉnh sửa' : 'xem'}
                 </Button>
             </ListItem>
 
@@ -93,7 +93,7 @@ export default function FileInvitedItem({index}) {
                         }}
                     >
                         <Iconify icon="eva:eye-fill"/>
-                        Can view
+                        Có thể xem
                     </MenuItem>
 
                     <MenuItem
@@ -108,7 +108,7 @@ export default function FileInvitedItem({index}) {
                         }}
                     >
                         <Iconify icon="eva:edit-fill"/>
-                        Can edit
+                        Có thể chỉnh sửa
                     </MenuItem>
 
                     <Divider sx={{borderStyle: 'dashed'}}/>
@@ -121,7 +121,7 @@ export default function FileInvitedItem({index}) {
                         sx={{color: 'error.main'}}
                     >
                         <Iconify icon="eva:trash-2-outline"/>
-                        Remove
+                        Xóa
                     </MenuItem>
                 </>
             </MenuPopover>

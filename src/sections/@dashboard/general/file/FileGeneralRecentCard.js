@@ -27,6 +27,7 @@ import { URL_GLOBAL } from '../../../../config';
 
 const FileGeneralRecentCard = ({
   dataGeneralFolder,
+  isShared,
   file,
   onDelete,
   dataStoreFolder,
@@ -227,11 +228,11 @@ const FileGeneralRecentCard = ({
       </Stack>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 220 }}>
-        {(file.typeFile == 'audio/mpeg' ||
-          file.typeFile == 'video/mp4' ||
-          file.typeFile == 'image/jpeg' ||
-          file.typeFile == 'image/png' ||
-          file.typeFile == 'application/pdf') && (
+        {(file.typeFile === 'audio/mpeg' ||
+          file.typeFile === 'video/mp4' ||
+          file.typeFile === 'image/jpeg' ||
+          file.typeFile === 'image/png' ||
+          file.typeFile === 'application/pdf') && (
           <MenuItem onClick={handlePreviewFile}>
             <Iconify icon="eva:link-2-fill" />
             Xem trước
@@ -249,7 +250,7 @@ const FileGeneralRecentCard = ({
           Tải xuống
         </MenuItem>
 
-        {!dataGeneralFolder && !dataStoreFolder && (
+        {!dataGeneralFolder && !dataStoreFolder && isShared && (
           <MenuItem onClick={handleOpenShare}>
             <Iconify icon="eva:share-fill" />
             Chia sẻ

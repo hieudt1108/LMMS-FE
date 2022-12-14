@@ -93,7 +93,7 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
         setMyFolderId(0), onClose();
       }}
     >
-      <DialogActions sx={{ py: 2, px: 3 }}>
+      <DialogActions sx={{ py: 2, px: 3}}>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           Đăng tải tài liệu của tôi
         </Typography>
@@ -136,6 +136,8 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
                   ...(currentTab === 'description' && {
                     p: 3,
                   }),
+                  mt:2,
+
                 }}
               >
                 {tab.component}

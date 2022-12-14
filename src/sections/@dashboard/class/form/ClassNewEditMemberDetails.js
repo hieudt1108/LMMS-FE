@@ -213,7 +213,7 @@ export default function BlogNewPostForm({ classID }) {
                     {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) && (
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Typography variant="subtitle2" gutterBottom sx={{ marginRight: '25px' }}>
-                          Quyền
+                          Vai trò
                         </Typography>
                         <RHFSelect
                           sx={{ width: '643px' }}
@@ -299,7 +299,7 @@ export default function BlogNewPostForm({ classID }) {
                     startIcon={<Iconify icon="eva:trash-2-outline" />}
                     onClick={() => handleRemove(index)}
                   >
-                    Remove
+                    Gỡ
                   </Button>
                 </Stack>
               </Grid>

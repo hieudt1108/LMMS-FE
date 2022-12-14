@@ -58,15 +58,15 @@ export default function addStudent() {
           heading="Thêm người dùng vào lớp"
           links={[
             {
-              name: 'Dashboard',
+              name: 'Trang chủ',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Class',
+              name: 'Chi tiết lớp học',
               href: PATH_DASHBOARD.class.detail(class_id),
             },
             {
-              name: 'New Student',
+              name: 'Thêm thành viên',
             },
           ]}
         />

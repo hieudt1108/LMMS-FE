@@ -72,7 +72,7 @@ export default function ClassTeacher({ myClass, title, subheader, tableLabels, t
 
       <Box sx={{ p: 2, textAlign: 'right' }}>
         <Button size="small" color="inherit" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>
-          View All
+          Xem tất cả
         </Button>
       </Box>
     </Card>
@@ -145,7 +145,7 @@ function BookingDetailsRow({ row }) {
 
         <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" />
-          Delete
+          Xóa
         </MenuItem>
       </MenuPopover>
     </>

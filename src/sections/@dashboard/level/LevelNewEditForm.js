@@ -133,7 +133,7 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
                       }}
                       startIcon={<Iconify icon="eva:trash-2-outline" />}
                   >
-                    Clear
+                    Xóa
                   </Button>
                 </Stack>
               </Stack>

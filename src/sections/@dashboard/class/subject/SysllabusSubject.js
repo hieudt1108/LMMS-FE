@@ -27,8 +27,10 @@ import useResponsive from '../../../../hooks/useResponsive';
 import { dispatch } from '../../../../redux/store';
 import { startDownloadFileRedux } from '../../../../redux/slices/document';
 import { FileGeneralRecentCard } from '../../general/file';
+import {useSelector} from "react-redux";
 
 export default function SysllabusSubject({ data, classId, subjectId, docs }) {
+
   const isDesktop = useResponsive('up', 'sm');
   const { createBy, createDate, id, isDeleted, name, updateBy, updateDate } = data;
   const [openPreview, setOpenPreview] = useState(false);
@@ -91,6 +93,7 @@ export default function SysllabusSubject({ data, classId, subjectId, docs }) {
               doc?.slotId === id ? (
                   <Stack spacing={2}>
                     <FileGeneralRecentCard
+                        isShared = {false}
                         key={doc.id}
                         file={doc}
                         onDelete={() => console.log('DELETE', doc.id)}

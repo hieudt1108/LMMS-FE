@@ -166,7 +166,6 @@ export default function AccountGeneral() {
                             </Typography>
 
                             <div></div>
-                            <RHFTextField name="email" label="Email" id="email"/>
                             <RHFTextField name="phone" label="Số điện thoại" id="phone"/>
                             <RHFTextField name="address" label="Địa chỉ" id="address"/>
                         </Box>

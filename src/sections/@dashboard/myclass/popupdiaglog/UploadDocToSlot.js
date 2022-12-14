@@ -28,10 +28,6 @@ UploadDocToSlot.propTypes = {
     slotId: PropTypes.number,
 };
 export default function UploadDocToSlot({open, onClose, slotId, classId, subjectId}) {
-    const {
-        folderUploadDoc: { listFolders, listDocuments },
-        folder,
-    } = useSelector((state) => state.folder);
     const { storeFolder } = useSelector((state) => state.storeFolder);
     const { id } = storeFolder;
 
@@ -53,8 +49,6 @@ export default function UploadDocToSlot({open, onClose, slotId, classId, subject
                         myFolderId: myFolderId,
                         setMyFolderId: setMyFolderId,
                         handleUploadDocumentToStoreFolder,
-                        listFolders,
-                        listDocuments,
                     }}
                     dataUploadDocsToSlot={{
                         slotId: slotId,

@@ -51,7 +51,11 @@ export default function FolderNewDocumentPostPage() {
           ]}
         />
 
-        <BlogNewPostForm />
+        <BlogNewPostForm
+            dataUploadDocsToSlot={{
+                disableChooseOptions: false,
+            }}
+        />
       </Container>
     </>
   );

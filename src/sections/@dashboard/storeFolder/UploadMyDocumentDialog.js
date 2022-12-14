@@ -79,6 +79,9 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
           dataGeneralFolder={{
             generalFolderId: id,
           }}
+          dataUploadDocsToSlot={{
+            disableChooseOptions: false,
+          }}
         />
       ),
     },

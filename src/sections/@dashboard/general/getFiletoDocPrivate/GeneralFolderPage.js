@@ -34,85 +34,12 @@ const GB = 1000000000 * 24;
 
 GeneralFolderPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default function GeneralFolderPage({ dataGeneralFolder }) {
+export default function GeneralFolderPage({ dataSaveDocToMyFolder }) {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { error, folder } = useSelector((state) => state.folder);
-  const { id, listFolders, listDocuments } = folder;
-  console.log('GeneralFolderPage', listFolders, listDocuments, dataGeneralFolder);
-
-  useEffect(() => {
-    if (dataGeneralFolder) {
-      dispatch(getFolderRedux(dataGeneralFolder.myFolderId));
-    }
-  }, [dataGeneralFolder]);
-
-  const smDown = useResponsive('down', 'sm');
+  const { id, name, listFolders, listDocuments } = dataSaveDocToMyFolder;
 
   const { themeStretch } = useSettingsContext();
-
-  const [folderName, setFolderName] = useState('');
-
-  const [files, setFiles] = useState([]);
-
-  const [openNewFolder, setOpenNewFolder] = useState(false);
-
-  const [openUploadFile, setOpenUploadFile] = useState(false);
-
-  const handleOpenNewFolder = () => {
-    setOpenNewFolder(true);
-  };
-
-  const handleCloseNewFolder = () => {
-    setOpenNewFolder(false);
-  };
-
-  const handleOpenUploadFile = () => {
-    push(PATH_DASHBOARD.folder.newDocument(Number.parseInt(id)));
-    // setOpenUploadFile(true);
-  };
-
-  const handleCloseUploadFile = () => {
-    setOpenUploadFile(false);
-  };
-
-  const handleChangeFolderName = useCallback((event) => {
-    setFolderName(event.target.value);
-  }, []);
-
-  const handleCreateNewFolder = () => {
-    console.log('CREATE NEW FOLDER', folderName);
-    setFolderName('');
-    dispatch(
-      createFolderRedux({
-        name: folderName,
-        parentId: Number.parseInt(id),
-      })
-    );
-    handleCloseNewFolder();
-    enqueueSnackbar(error ? error : 'Tạo thư mục thành công', { variant: 'error' });
-  };
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const newFiles = acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      );
-
-      setFiles([...files, ...newFiles]);
-    },
-    [files]
-  );
-
-  const handleOnClickFileFolderCard = (folder_id) => {
-    console.log('handleOnClickFileFolderCard', folder_id, dataGeneralFolder);
-    if (dataGeneralFolder) {
-      return dataGeneralFolder.setMyFolderId(folder_id);
-    }
-    push(PATH_DASHBOARD.folder.link(folder_id));
-  };
 
   return (
     <>
@@ -125,9 +52,9 @@ export default function GeneralFolderPage({ dataGeneralFolder }) {
           <Grid item xs={12} md={12} lg={12}>
             <div>
               <FilePanel
-                title={folder.name ? folder.name : 'Thư mục gốc'}
+                title={name ? name : 'Thư mục gốc'}
                 link={PATH_DASHBOARD.fileManager}
-                onOpen={!dataGeneralFolder ? handleOpenNewFolder : ''}
+                // onOpen={!dataGeneralFolder ? handleOpenNewFolder : ''}
                 sx={{ mt: 5 }}
               />
               <Scrollbar>
@@ -135,7 +62,7 @@ export default function GeneralFolderPage({ dataGeneralFolder }) {
                   {listFolders && listFolders.length
                     ? listFolders.map((folder, index) => (
                         <FolderGeneralData
-                          dataGeneralFolder={dataGeneralFolder}
+                          dataSaveDocToMyFolder={dataSaveDocToMyFolder}
                           key={index}
                           folder={folder}
                           sx={{
@@ -156,12 +83,12 @@ export default function GeneralFolderPage({ dataGeneralFolder }) {
               variant="contained"
               color="success"
               onClick={() => {
-                if (dataGeneralFolder) {
-                  dataGeneralFolder.handleUploadDocumentToMyFolder(folder);
+                if (dataSaveDocToMyFolder) {
+                  dataSaveDocToMyFolder.handleUploadDocumentToMyFolder(dataSaveDocToMyFolder);
                 }
               }}
             >
-              {`Lưu tài liệu về ${folder.name ? folder.name : 'Thư mục gốc'}`}
+              {`Lưu tài liệu về ${name ? name : 'Thư mục gốc'}`}
             </Button>
           </Grid>
         </Grid>

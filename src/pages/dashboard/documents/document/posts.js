@@ -66,6 +66,8 @@ export default function DocumentPostsPage() {
       </MenuItem>
     );
   });
+
+  console.log('paging: ', paging);
   const [documents, setDocuments] = useState([]);
   const [typeDocs, setTypeDoc] = useState([]);
   const [subjects, setSubject] = useState([]);

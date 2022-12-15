@@ -4,42 +4,35 @@ import { useState } from 'react';
 import { Box, Card, Stack, Button, Divider, MenuItem, Checkbox, IconButton } from '@mui/material';
 // hooks
 import useCopyToClipboard from '../../../../hooks/useCopyToClipboard';
-// utils
-import { fData } from '../../../../utils/formatNumber';
 // components
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import TextMaxLine from '../../../../components/text-max-line';
 import { useSnackbar } from '../../../../components/snackbar';
 import ConfirmDialog from '../../../../components/confirm-dialog';
-//
 import FileShareDialog from '../portal/FileShareDialog';
-import FileDetailsDrawer from '../portal/FileDetailsDrawer';
 import FileNewFolderDialog from '../portal/FileNewFolderDialog';
-import { useRouter } from 'next/router';
-import { PATH_DASHBOARD } from 'src/routes/paths';
 
-import useResponsive from '../../../../hooks/useResponsive';
 import { dispatch } from 'src/redux/store';
-import { deleteSubFolderInFolderRedux, updateSubFolderRedux } from 'src/redux/slices/folder';
-// ----------------------------------------------------------------------
+import {
+  deleteSubFolderInFolderRedux,
+  getFolderRedux,
+  getFolderUploadDocRedux,
+  updateSubFolderRedux,
+} from 'src/redux/slices/folder';
+import { getStoreFolderRedux } from 'src/redux/slices/storeFolder';
 
-// FileFolderCard.propTypes = {
-//   sx: PropTypes.object,
-//   folder: PropTypes.object,
-//   onDelete: PropTypes.func,
-//   onSelect: PropTypes.func,
-//   selected: PropTypes.bool,
-// };
-
-export default function FileFolderCard({ dataGeneralFolder, folder, selected, onSelect, sx, ...other }) {
-  const router = useRouter();
-  const {
-    query: { pid: pID },
-    push,
-  } = useRouter();
+export default function FileFolderCard({
+  dataGeneralFolder,
+  dataStoreFolder,
+  folder,
+  selected,
+  onSelect,
+  onDelete,
+  sx,
+  ...other
+}) {
   console.log('FileFolderCard', folder);
-  const isDesktop = useResponsive('up', 'sm');
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -129,11 +122,11 @@ export default function FileFolderCard({ dataGeneralFolder, folder, selected, on
     copy(folder.url);
   };
 
-  const handleOnClickFileFolderCard = (pid) => {
+  const handleOnClickFileFolderCard = (folderID) => {
     if (dataGeneralFolder) {
-      return dataGeneralFolder.setMyFolderId(pid);
+      return dispatch(getFolderUploadDocRedux(folderID));
     }
-    push(PATH_DASHBOARD.folder.link(pid));
+    dispatch(getFolderRedux(folderID));
   };
 
   const handleDeleteFolder = async () => {

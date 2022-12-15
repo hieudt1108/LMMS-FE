@@ -60,8 +60,6 @@ export const PATH_DASHBOARD = {
   folder: {
     root: path(ROOTS_DASHBOARD, `/folder/0`),
     link: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}`),
-    listfolder: (folder_id) => path(ROOTS_DASHBOARD, `/folder/listfolder/${folder_id ? folder_id : 0}`),
-
     newDocument: (folder_id) => path(ROOTS_DASHBOARD, `/folder/${folder_id ? folder_id : 0}/new`),
   },
 

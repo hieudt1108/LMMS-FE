@@ -103,18 +103,6 @@ export default function LevelLayout() {
     }
   }
 
-  // async function fetchAllSubject() {
-  //   const res = await getAllSubject({
-  //     pageIndex: 1,
-  //     pageSize: 100,
-  //   });
-  //   if (res.status < 400) {
-  //     setSubject(res.data.data);
-  //   } else {
-  //     console.log(res.message);
-  //   }
-  // }
-
   const handleSearchChange = useCallback(
     (event, value) => {
       setFilter({ ...filter, searchByName: event.target.value });

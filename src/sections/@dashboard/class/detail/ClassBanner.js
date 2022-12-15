@@ -80,6 +80,13 @@ export default function ClassBanner({
           Cập nhật
         </MenuItem>
 
+        <MenuItem
+            sx={{ color: 'error.main' }}
+        >
+          <Iconify icon="eva:trash-2-outline" />
+          Xóa
+        </MenuItem>
+
         {/* <MenuItem
         onClick={() => {
           handleClosePopover();

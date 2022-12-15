@@ -11,6 +11,7 @@ import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
 import { BlogNewPostForm } from '../../../../sections/@dashboard/folder';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ FolderNewDocumentPostPage.getLayout = (page) => <DashboardLayout>{page}</Dashboa
 
 export default function FolderNewDocumentPostPage() {
   const { themeStretch } = useSettingsContext();
+  const { folder, history } = useSelector((state) => state.folder);
 
   return (
     <>
@@ -40,12 +42,20 @@ export default function FolderNewDocumentPostPage() {
               href: PATH_DASHBOARD.folder.root,
             },
             {
+              name: `${folder.name}`,
+              href: PATH_DASHBOARD.folder.link(folder.id),
+            },
+            {
               name: 'Tạo tài liệu',
             },
           ]}
         />
 
-        <BlogNewPostForm />
+        <BlogNewPostForm
+            dataUploadDocsToSlot={{
+                disableChooseOptions: false,
+            }}
+        />
       </Container>
     </>
   );

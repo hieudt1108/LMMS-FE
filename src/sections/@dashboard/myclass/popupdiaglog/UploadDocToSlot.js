@@ -58,6 +58,24 @@ export default function UploadDocToSlot({open, onClose, slotId, classId, subject
                 />
             ),
         },
+        {
+            id: 1,
+            value: 'uploadDocument',
+            label: 'Đăng tải tài liệu',
+            component: (
+                <BlogNewPostForm
+                    dataGeneralFolder={{
+                        generalFolderId: id,
+                    }}
+                    dataUploadDocsToSlot={{
+                        disableChooseOptions: true,
+                        slotId: slotId,
+                        classId: classId,
+                        subjectId: subjectId
+                    }}
+                />
+            ),
+        },
 
     ];
 
@@ -113,6 +131,7 @@ export default function UploadDocToSlot({open, onClose, slotId, classId, subject
                                     ...(currentTab === 'description' && {
                                         p: 3,
                                     }),
+                                    mt:2,
                                 }}
                             >
                                 {tab.component}

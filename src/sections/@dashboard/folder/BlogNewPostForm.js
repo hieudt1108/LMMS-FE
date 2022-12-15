@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import _ from 'lodash';
 // next
 import { useRouter } from 'next/router';
@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useFieldArray, useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Grid, Card, Stack, Typography, Divider, Button } from '@mui/material';
+import {Grid, Card, Stack, Typography, Divider, Button, Alert} from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //components
@@ -18,10 +18,11 @@ import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload } from '../
 import { postDocument, postFile } from '../../../dataProvider/agent';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { createDocumentInitialRedux, uploadDocumentRedux } from 'src/redux/slices/folder';
+import { createDocumentInitialRedux, createDocumentRedux, uploadDocumentRedux } from 'src/redux/slices/folder';
 import { Upload } from '../../../components/upload';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/useAuthContext';
+import {FileGeneralRecentCard} from "../general/file";
 
 // ----------------------------------------------------------------------
 function TextCode() {
@@ -41,7 +42,7 @@ function TextCode() {
   return result;
 }
 
-export default function BlogNewPostForm({ dataGeneralFolder }) {
+export default function BlogNewPostForm({ dataGeneralFolder, dataUploadDocsToSlot }) {
   const { user } = useAuthContext();
   const formData = new FormData();
   const {
@@ -103,10 +104,8 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
   });
 
   useEffect(() => {
-    dataGeneralFolder
-      ? dispatch(createDocumentInitialRedux(dataGeneralFolder.generalFolderId))
-      : dispatch(createDocumentInitialRedux(folderId));
-  }, [folderId, dataGeneralFolder]);
+    dispatch(createDocumentInitialRedux());
+  }, []);
 
   console.log('BlogNewPostForm', getValues('items'));
   const handleDrop = (acceptedFiles, index) => {
@@ -124,10 +123,19 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
     for (let index = items.length - 1; index >= 0; --index) {
       try {
         const data = items[index];
-        if (!data.file) {
+
+        formData.append('File', getValues(`items[${index}].file`));
+        const response = await postFile(formData);
+        if (response.status !== 200) {
           enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
           continue;
         }
+        console.log('response', response);
+
+        data.TypeFile = response.data.contentType;
+        data.urlDocument = response.data.fileName;
+        data.size = response.data.size;
+
         if (!data.programId) {
           data.programId = programs[0].id;
         }
@@ -137,27 +145,12 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
         if (!data.typeDocumentId) {
           data.typeDocumentId = typeDocuments[0].id;
         }
-        console.log('data', data);
         data.folderId = dataGeneralFolder ? dataGeneralFolder.generalFolderId : folderId;
-
-        formData.append('File', getValues(`items[${index}].file`));
-        const response = await postFile(formData);
-        if (response.status !== 200) {
-          enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
-          continue;
-        }
-        console.log('response', response);
-        data.TypeFile = response.data.contentType;
-        data.urlDocument = response.data.fileName;
-        data.size = response.data.size;
-        const responsePostDocument = await postDocument(data);
-        if (responsePostDocument.status !== 200) {
-          enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
-          continue;
+        const message = await dispatch(createDocumentRedux(data));
+        if (message) {
+          enqueueSnackbar(message.title, { variant: message.variant });
         }
         remove(index);
-        enqueueSnackbar(`Tạo tài liệu${data.code} thành công`);
-        console.log('responsePostDocument', responsePostDocument);
       } catch (error) {
         console.error(`onSubmit error at index: ${index}`, error);
       }
@@ -239,11 +232,11 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
                   </Stack>
                 </Card>
               </Grid>
-
-              <Grid item xs={12} md={5}>
-                <Card sx={{ p: 3 }}>
-                  <Stack spacing={3}>
-                    {/* <div>
+              {!dataUploadDocsToSlot.disableChooseOptions ? (
+                  <Grid item xs={12} md={5}>
+                    <Card sx={{ p: 3 }}>
+                      <Stack spacing={3}>
+                        {/* <div>
                       <RHFSwitch
                         name="status"
                         label="Tài liệu công khai/ riêng tư"
@@ -252,62 +245,75 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
                       />
                     </div> */}
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Chương Trình</span>
-                      <RHFSelect name={`items[${index}].programId`} placeholder="Chương trình">
-                        {programs.map((option, index) => (
-                          <option key={index} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </RHFSelect>
-                    </div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
-                      <RHFSelect name={`items[${index}].subjectId`} placeholder="Môn học">
-                        {user.subjects.map((option, index) => (
-                          <option key={index} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </RHFSelect>
-                    </div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
-                      <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
-                        {typeDocuments.map((option, index) => (
-                          <option key={index} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </RHFSelect>
-                    </div>
-                  </Stack>
-                </Card>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Chương Trình</span>
+                          <RHFSelect name={`items[${index}].programId`} placeholder="Chương trình">
+                            {programs.map((option, index) => (
+                                <option key={index} value={option.id}>
+                                  {option.name}
+                                </option>
+                            ))}
+                          </RHFSelect>
+                        </div>
+                        <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                            }}
+                        >
+                          <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
+                          <RHFSelect name={`items[${index}].subjectId`} placeholder="Môn học">
+                            {user.subjects.map((option, index) => (
+                                <option key={index} value={option.id}>
+                                  {option.name}
+                                </option>
+                            ))}
+                          </RHFSelect>
+                        </div>
+                        <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                            }}
+                        >
+                          <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
+                          <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
+                            {typeDocuments.map((option, index) => (
+                                <option key={index} value={option.id}>
+                                  {option.name}
+                                </option>
+                            ))}
+                          </RHFSelect>
+                        </div>
+                      </Stack>
+                    </Card>
 
-                <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-                  <Button
-                    size="small"
-                    color="error"
-                    startIcon={<Iconify icon="eva:trash-2-outline" />}
-                    onClick={() => handleRemove(index - 1)}
-                  >
-                    Remove
-                  </Button>
-                </Stack>
-              </Grid>
+                    <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+                      <Button
+                          size="small"
+                          color="error"
+                          startIcon={<Iconify icon="eva:trash-2-outline" />}
+                          onClick={() => handleRemove(index - 1)}
+                      >
+                        Gỡ bản ghi
+                      </Button>
+                    </Stack>
+                  </Grid>
+              ) : (
+                  <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+                    <Button
+                        size="small"
+                        color="error"
+                        startIcon={<Iconify icon="eva:trash-2-outline" />}
+                        onClick={() => handleRemove(index - 1)}
+                    >
+                      Gỡ bản ghi
+                    </Button>
+                  </Stack>
+              )}
+
             </Grid>
 
             <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
@@ -318,6 +324,7 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
           spacing={2}
           direction={{ xs: 'column-reverse', md: 'row' }}
           alignItems={{ xs: 'flex-start', md: 'center' }}
+          sx={{mt:-2,mb:1}}
         >
           <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
             Thêm bản ghi

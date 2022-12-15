@@ -35,7 +35,12 @@ export default function DocumentLocal({ docs, classId, subjectId }) {
           {docs?.map((doc) =>
             doc.slotId === null ? (
               <Stack spacing={2}>
-                <FileGeneralRecentCard key={doc.id} file={doc} onDelete={() => console.log('DELETE', doc.id)} />
+                <FileGeneralRecentCard
+                  isShared={false}
+                  key={doc.id}
+                  file={doc}
+                  onDelete={() => console.log('DELETE', doc.id)}
+                />
               </Stack>
             ) : (
               <div></div>

@@ -26,13 +26,11 @@ import { useSnackbar } from 'notistack';
 // };
 
 export default function PopupGetFolder({ open, onClose, data }) {
-  const { storeFolder } = useSelector((state) => state.storeFolder);
+  const { historySavetoDocToMyFolder, folderSaveDocToMyFolder } = useSelector((state) => state.folder);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { id } = storeFolder;
-  console.log('UploadMyDocumentDialog', id);
   const [currentTab, setCurrentTab] = useState(0);
-  const [myFolderId, setMyFolderId] = useState(0);
+  console.log('PopupGetFolder', folderSaveDocToMyFolder, historySavetoDocToMyFolder);
   const handleUploadDocumentToMyFolder = async (folder) => {
     console.log('handleUploadDocumentToMyFolder', folder, data);
     const message = await dispatch(copyDocsToFolderRedux(folder.id, data.id));
@@ -47,10 +45,9 @@ export default function PopupGetFolder({ open, onClose, data }) {
       label: `Thư mục của tôi`,
       component: (
         <GeneralFolderPage
-          dataGeneralFolder={{
-            myFolderId: myFolderId,
-            setMyFolderId: setMyFolderId,
+          dataSaveDocToMyFolder={{
             handleUploadDocumentToMyFolder,
+            ...folderSaveDocToMyFolder,
           }}
         />
       ),

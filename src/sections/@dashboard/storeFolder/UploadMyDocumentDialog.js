@@ -24,7 +24,7 @@ import StoreFolderNewPostForm from './StoreFolderNewPostForm';
 import GeneralFilePage from '../../../pages/dashboard/folder/[folder_id]';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { copyDocsToFolderRedux } from 'src/redux/slices/storeFolder';
+import { copyDocsToFolderRedux } from 'src/redux/slices/folder';
 import { BlogNewPostForm } from '../folder';
 import { useSnackbar } from 'notistack';
 
@@ -36,13 +36,17 @@ import { useSnackbar } from 'notistack';
 // };
 
 export default function UploadMyDocumentDialog({ open, onClose }) {
+  const {
+    folderUploadDoc: { listFolders, listDocuments },
+    folder,
+  } = useSelector((state) => state.folder);
   const { enqueueSnackbar } = useSnackbar();
-  const { storeFolder } = useSelector((state) => state.storeFolder);
-  const { id } = storeFolder;
+  const { id } = folder;
   console.log('UploadMyDocumentDialog', id);
   const [currentTab, setCurrentTab] = useState(0);
   const [myFolderId, setMyFolderId] = useState(0);
   const handleUploadDocumentToStoreFolder = async (myDocumentId) => {
+    // console.log('handleUploadDocumentToStoreFolder', id, myDocumentId);
     const message = await dispatch(copyDocsToFolderRedux(id, myDocumentId));
     if (message) {
       enqueueSnackbar(message.title, { variant: message.variant });
@@ -59,6 +63,9 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
             myFolderId: myFolderId,
             setMyFolderId: setMyFolderId,
             handleUploadDocumentToStoreFolder,
+            listFolders,
+            listDocuments,
+            isReset: false,
           }}
         />
       ),
@@ -71,6 +78,9 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
         <BlogNewPostForm
           dataGeneralFolder={{
             generalFolderId: id,
+          }}
+          dataUploadDocsToSlot={{
+            disableChooseOptions: false,
           }}
         />
       ),
@@ -86,7 +96,7 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
         setMyFolderId(0), onClose();
       }}
     >
-      <DialogActions sx={{ py: 2, px: 3 }}>
+      <DialogActions sx={{ py: 2, px: 3}}>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           Đăng tải tài liệu của tôi
         </Typography>
@@ -129,6 +139,8 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
                   ...(currentTab === 'description' && {
                     p: 3,
                   }),
+                  mt:2,
+
                 }}
               >
                 {tab.component}

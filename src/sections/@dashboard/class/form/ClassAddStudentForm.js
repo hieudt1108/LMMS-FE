@@ -22,18 +22,5 @@ export default function ClassAddStudentForm({ isEdit = false, classID }) {
     <div>
       <ClassNewEditMemberDetails classID={classID} />
     </div>
-    // <FormProvider methods={methods}>
-
-    //   <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-    //     <LoadingButton
-    //       size="large"
-    //       variant="contained"
-    //       loading={loadingSend && isSubmitting}
-    //       onClick={handleSubmit(handleCreateAndSend)}
-    //     >
-    //       {isEdit ? 'Cập nhật' : 'Tạo mới'}
-    //     </LoadingButton>
-    //   </Stack>
-    // </FormProvider>
   );
 }

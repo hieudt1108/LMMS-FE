@@ -106,8 +106,6 @@ export default function UserListPage() {
 
   const [listUsers, setListUsers] = useState([]);
 
-  const [tableData, setTableData] = useState([]);
-
   const [openUploadFile, setOpenUploadFile] = useState(false);
 
   const dataFiltered = applyFilter({
@@ -126,6 +124,8 @@ export default function UserListPage() {
 
   const getLengthByStatus = (status) => listUsers?.filter((user) => user.enable === status).length;
 
+  const [paging, setPaging] = useState();
+
   const STATUS_OPTIONS = [
     { label: 'tất cả', id: -1, color: 'info', count: listUsers?.length },
     { label: 'hiệu lực', id: 0, color: 'success', count: getLengthByStatus(0) },
@@ -137,19 +137,21 @@ export default function UserListPage() {
     (!dataFiltered?.length && !!filterRole) ||
     (!dataFiltered?.length && !!filterStatus);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const [payload, setDataPayload] = useState({ pageIndex: 1, pageSize: 10 });
 
+  console.log('pageSize:  ', paging?.PageSize);
   async function fetchUsers() {
-    const res = await getAllUsers({ pageIndex: 1, pageSize: 100 });
+    const res = await getAllUsers();
     if (res.status < 400) {
+      setPaging(JSON.parse(res.headers['x-pagination']));
       setListUsers(res.data.data);
     } else {
       console.log(res.message);
     }
   }
-
+  useEffect(() => {
+    fetchUsers();
+  }, []);
   const handleOpenUploadFile = () => {
     setOpenUploadFile(true);
   };

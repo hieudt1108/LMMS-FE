@@ -38,7 +38,7 @@ export default function addStudent() {
     {
       value: 'description',
       label: 'Thêm thành viên vào class',
-      component: <ClassAddStudentForm classID={class_id}/>,
+      component: <ClassAddStudentForm classID={class_id} />,
     },
     {
       value: 'reviews',
@@ -66,7 +66,7 @@ export default function addStudent() {
               href: PATH_DASHBOARD.class.detail(class_id),
             },
             {
-              name: 'Thêm thành viên',
+              name: 'Thêm người dùng',
             },
           ]}
         />

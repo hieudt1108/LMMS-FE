@@ -151,10 +151,6 @@ export default function Classes() {
             />
           </Grid>
 
-          {/* <Grid item xs={12} md={4}>
-            <AppFeatured list={_appFeatured} />
-          </Grid> */}
-
           <Grid item xs={12}>
             <Stack direction="row">
               <TextField

@@ -13,12 +13,7 @@ SubjectTableToolbar.propTypes = {
   onResetFilter: PropTypes.func,
 };
 
-export default function SubjectTableToolbar({
-  isFiltered,
-  filterName,
-  onFilterName,
-  onResetFilter,
-}) {
+export default function SubjectTableToolbar({ isFiltered, filterName, onFilterName, onResetFilter }) {
   return (
     <Stack
       spacing={2}
@@ -31,7 +26,7 @@ export default function SubjectTableToolbar({
     >
       <TextField
         fullWidth
-        value={filterName}
+        // value={filterName}
         onChange={onFilterName}
         placeholder="Tìm kiếm môn học..."
         InputProps={{

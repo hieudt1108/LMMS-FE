@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { useTheme } from '@mui/material/styles';
 import { Box, Breadcrumbs, Button, Container, Grid, IconButton, Link, Stack, Typography } from '@mui/material';
 // routes
-import {PATH_DASHBOARD as folderUploadDoc, PATH_DASHBOARD} from '../../../../routes/paths';
+import { PATH_DASHBOARD as folderUploadDoc, PATH_DASHBOARD } from '../../../../routes/paths';
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
 // _mock
@@ -22,7 +22,7 @@ import { FileFolderCard, FileNewFolderDialog, FilePanel } from '../../../../sect
 import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
-import {createFolderRedux, getFolderRedux, getFolderUploadDocRedux} from 'src/redux/slices/folder';
+import { createFolderRedux, getFolderRedux, getFolderUploadDocRedux } from 'src/redux/slices/folder';
 import { useSnackbar } from 'notistack';
 import LinkItem from '../../../../components/custom-breadcrumbs/LinkItem';
 import Iconify from '../../../../components/iconify';
@@ -241,6 +241,7 @@ export default function GeneralFilePage({ dataGeneralFolder, dataUploadDocsToSlo
                   {listDocuments && listDocuments.length
                     ? listDocuments.map((file) => (
                         <FileGeneralRecentCard
+                          isShared={true}
                           dataGeneralFolder={dataGeneralFolder}
                           dataUploadDocsToSlot={dataUploadDocsToSlot}
                           key={file.id}

@@ -13,12 +13,7 @@ ProgramTableToolbar.propTypes = {
   onResetFilter: PropTypes.func,
 };
 
-export default function ProgramTableToolbar({
-  isFiltered,
-  filterName,
-  onFilterName,
-  onResetFilter,
-}) {
+export default function ProgramTableToolbar({ isFiltered, filterName, onFilterName, onResetFilter }) {
   return (
     <Stack
       spacing={2}
@@ -31,7 +26,6 @@ export default function ProgramTableToolbar({
     >
       <TextField
         fullWidth
-        value={filterName}
         onChange={onFilterName}
         placeholder="Tìm kiếm chương trình học  ..."
         InputProps={{

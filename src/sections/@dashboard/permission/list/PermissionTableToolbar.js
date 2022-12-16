@@ -13,12 +13,7 @@ PermissionTableToolbar.propTypes = {
   onResetFilter: PropTypes.func,
 };
 
-export default function PermissionTableToolbar({
-  isFiltered,
-  filterName,
-  onFilterName,
-  onResetFilter,
-}) {
+export default function PermissionTableToolbar({ isFiltered, filterName, onFilterName, onResetFilter }) {
   return (
     <Stack
       spacing={2}
@@ -31,7 +26,6 @@ export default function PermissionTableToolbar({
     >
       <TextField
         fullWidth
-        value={filterName}
         onChange={onFilterName}
         placeholder="Tìm kiếm quyền..."
         InputProps={{

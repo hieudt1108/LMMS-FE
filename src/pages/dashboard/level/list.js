@@ -1,5 +1,5 @@
 import { paramCase } from 'change-case';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -107,6 +107,12 @@ export default function LevelListPage() {
 
   const isFiltered = filterName !== '';
 
+  const [filter, setFilter] = useState({
+    pageIndex: 1,
+    pageSize: 5,
+    searchByName: '',
+  });
+
   const isNotFound = !dataFiltered.length && !!filterName;
 
   const handleOpenConfirm = () => {
@@ -122,10 +128,12 @@ export default function LevelListPage() {
     setFilterStatus(newValue);
   };
 
-  const handleFilterName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
+  const handleFilterName = useCallback(
+    (event) => {
+      setFilter({ ...filter, searchByName: event.target.value });
+    },
+    [filter]
+  );
 
   const handleDeleteRow = async (id) => {
     const response = await deleteLevel(id);
@@ -176,10 +184,10 @@ export default function LevelListPage() {
 
   useEffect(() => {
     fetchLevels();
-  }, []);
+  }, [filter]);
 
   async function fetchLevels() {
-    const res = await getAllLevel({ pageIndex: 1, pageSize: 100 });
+    const res = await getAllLevel(filter);
     if (res.status < 400) {
       setListLevels(res.data.data);
     } else {
@@ -258,7 +266,8 @@ export default function LevelListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((level) => (
+                  {/* {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((level) => ( */}
+                  {listLevels?.map((level) => (
                     <LevelTableRow
                       key={level.id}
                       row={level}
@@ -268,6 +277,8 @@ export default function LevelListPage() {
                       onEditRow={() => handleEditRow(level.id)}
                     />
                   ))}
+
+                  {/* ))} */}
 
                   <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, listLevels.length)} />
 

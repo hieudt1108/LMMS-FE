@@ -1,5 +1,5 @@
 import { paramCase } from 'change-case';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -50,7 +50,7 @@ import { useSnackbar } from '../../../../components/snackbar';
 const TABLE_HEAD = [
   { id: 'name', label: 'Tên chương trình', align: 'left' },
   { id: 'description', label: 'Mô tả', align: 'left' },
-  {id: 'createDate', label: 'Ngày tạo', align: 'left'},
+  { id: 'createDate', label: 'Ngày tạo', align: 'left' },
   { id: '' },
 ];
 
@@ -108,6 +108,12 @@ export default function ProgramListPage() {
 
   const isNotFound = !dataFiltered.length && !!filterName;
 
+  const [filter, setFilter] = useState({
+    pageIndex: 1,
+    pageSize: 5,
+    searchByName: '',
+  });
+
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
@@ -121,10 +127,12 @@ export default function ProgramListPage() {
     setFilterStatus(newValue);
   };
 
-  const handleFilterName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
+  const handleFilterName = useCallback(
+    (event) => {
+      setFilter({ ...filter, searchByName: event.target.value });
+    },
+    [filter]
+  );
 
   const handleDeleteRow = async (id) => {
     const response = await deleteProgram(id);
@@ -176,10 +184,10 @@ export default function ProgramListPage() {
 
   useEffect(() => {
     fetchPrograms();
-  }, []);
+  }, [filter]);
 
   async function fetchPrograms() {
-    const res = await getAllProgram({ pageIndex: 1, pageSize: 100 });
+    const res = await getAllProgram(filter);
     if (res.status < 400) {
       setListPrograms(res.data.data);
     } else {
@@ -258,7 +266,8 @@ export default function ProgramListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((program) => (
+                  {/* {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((program) => ( */}
+                  {listPrograms?.map((program) => (
                     <ProgramTableRow
                       key={program.id}
                       data={program}
@@ -268,6 +277,8 @@ export default function ProgramListPage() {
                       onEditRow={() => handleEditRow(program.id)}
                     />
                   ))}
+                  {/*               
+                  ))} */}
 
                   <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, listPrograms.length)} />
 

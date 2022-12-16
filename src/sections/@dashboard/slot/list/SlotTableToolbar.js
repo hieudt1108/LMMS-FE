@@ -13,12 +13,7 @@ SlotTableToolbar.propTypes = {
   onResetFilter: PropTypes.func,
 };
 
-export default function SlotTableToolbar({
-  isFiltered,
-  filterName,
-  onFilterName,
-  onResetFilter,
-}) {
+export default function SlotTableToolbar({ isFiltered, filterName, onFilterName, onResetFilter }) {
   return (
     <Stack
       spacing={2}
@@ -31,7 +26,7 @@ export default function SlotTableToolbar({
     >
       <TextField
         fullWidth
-        value={filterName}
+        // value={filterName}
         onChange={onFilterName}
         placeholder="Tìm kiếm tiết học..."
         InputProps={{

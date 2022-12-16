@@ -1,11 +1,13 @@
 import { paramCase } from 'change-case';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 // @mui
 import {
+  Box,
+  Pagination,
   Tab,
   Tabs,
   Card,
@@ -84,6 +86,12 @@ export default function SubjectListPage() {
 
   const { themeStretch } = useSettingsContext();
 
+  const [filter, setFilter] = useState({
+    pageIndex: 1,
+    pageSize: 5,
+    searchByName: '',
+  });
+
   const { push } = useRouter();
 
   const [tableData, setTableData] = useState(_subjects);
@@ -99,6 +107,7 @@ export default function SubjectListPage() {
     comparator: getComparator(order, orderBy),
     filterName,
   });
+  const [paging, setPaging] = useState();
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
@@ -121,10 +130,12 @@ export default function SubjectListPage() {
     setFilterStatus(newValue);
   };
 
-  const handleFilterName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
+  const handleFilterName = useCallback(
+    (event) => {
+      setFilter({ ...filter, searchByName: event.target.value });
+    },
+    [filter]
+  );
 
   const handleDeleteRow = async (id) => {
     const response = await deleteSubject(id);
@@ -141,6 +152,14 @@ export default function SubjectListPage() {
       }
     }
   };
+
+  const handlePageChange = useCallback(async (event, pageIndex) => {
+    let response = await getAllPermission({
+      ...filter,
+      pageIndex: pageIndex,
+    });
+    setFilter({ ...filter, pageIndex: pageIndex });
+  }, []);
 
   const handleDeleteRows = async (selected) => {
     const response = await deleteSubject(selected);
@@ -174,11 +193,12 @@ export default function SubjectListPage() {
 
   useEffect(() => {
     fetchSubjects();
-  }, []);
+  }, [filter]);
 
   async function fetchSubjects() {
-    const res = await getAllSubject({ pageIndex: 1, pageSize: 100 });
+    const res = await getAllSubject(filter);
     if (res.status < 400) {
+      setPaging(JSON.parse(res.headers['x-pagination']));
       setListSubjects(res.data.data);
     } else {
       console.log(res.message);
@@ -256,7 +276,8 @@ export default function SubjectListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((subject) => (
+                  {/* {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((subject) => ( */}
+                  {listSubjects?.map((subject) => (
                     <SubjectTableRow
                       key={subject.id}
                       row={subject}
@@ -267,6 +288,8 @@ export default function SubjectListPage() {
                     />
                   ))}
 
+                  {/* ))} */}
+
                   <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, listSubjects.length)} />
 
                   <TableNoData isNotFound={isNotFound} />
@@ -275,17 +298,16 @@ export default function SubjectListPage() {
             </Scrollbar>
           </TableContainer>
 
-          <TablePaginationCustom
-            labelRowsPerPage="Hàng trên mỗi trang"
-            count={dataFiltered.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPageChange={onChangePage}
-            onRowsPerPageChange={onChangeRowsPerPage}
-            //
-            dense={dense}
-            onChangeDense={onChangeDense}
-          />
+          <Box p={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div></div>
+            <Pagination
+              size="small"
+              count={paging?.TotalPages}
+              rowsperpage={paging?.PageSize}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Box>
         </Card>
       </Container>
 

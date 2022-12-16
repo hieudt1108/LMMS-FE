@@ -13,12 +13,7 @@ LevelTableToolbar.propTypes = {
   onResetFilter: PropTypes.func,
 };
 
-export default function LevelTableToolbar({
-  isFiltered,
-  filterName,
-  onFilterName,
-  onResetFilter,
-}) {
+export default function LevelTableToolbar({ isFiltered, filterName, onFilterName, onResetFilter }) {
   return (
     <Stack
       spacing={2}
@@ -31,7 +26,7 @@ export default function LevelTableToolbar({
     >
       <TextField
         fullWidth
-        value={filterName}
+        // value={filterName}
         onChange={onFilterName}
         placeholder="Tìm kiếm cấp học..."
         InputProps={{

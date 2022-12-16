@@ -13,12 +13,7 @@ TypeDocsTableToolbar.propTypes = {
   onResetFilter: PropTypes.func,
 };
 
-export default function TypeDocsTableToolbar({
-  isFiltered,
-  filterName,
-  onFilterName,
-  onResetFilter,
-}) {
+export default function TypeDocsTableToolbar({ isFiltered, filterName, onFilterName, onResetFilter }) {
   return (
     <Stack
       spacing={2}
@@ -31,7 +26,7 @@ export default function TypeDocsTableToolbar({
     >
       <TextField
         fullWidth
-        value={filterName}
+        // value={filterName}
         onChange={onFilterName}
         placeholder="Tìm kiếm loại tài liệu..."
         InputProps={{

@@ -10,6 +10,7 @@ UserTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterName: PropTypes.string,
   filterRole: PropTypes.string,
+  selectedRole: PropTypes.string,
   onFilterName: PropTypes.func,
   onFilterRole: PropTypes.func,
   onResetFilter: PropTypes.func,
@@ -20,10 +21,16 @@ export default function UserTableToolbar({
   isFiltered,
   filterName,
   filterRole,
+  onSearchChange,
   optionsRole,
   onFilterName,
   onFilterRole,
   onResetFilter,
+  onClickFilter,
+  onChangeRoles,
+  selectedRole,
+  onChangeFilterByEmail,
+  filterByEmail,
 }) {
   return (
     <Stack
@@ -39,8 +46,8 @@ export default function UserTableToolbar({
         fullWidth
         select
         label="Vai trò"
-        value={filterRole}
-        onChange={onFilterRole}
+        value={selectedRole}
+        onChange={onChangeRoles}
         SelectProps={{
           MenuProps: {
             PaperProps: {
@@ -93,8 +100,8 @@ export default function UserTableToolbar({
 
       <TextField
         fullWidth
-        value={filterName}
-        onChange={onFilterName}
+        value={filterByEmail}
+        onChange={onChangeFilterByEmail}
         placeholder="Tìm kiếm người dùng..."
         InputProps={{
           startAdornment: (
@@ -104,6 +111,15 @@ export default function UserTableToolbar({
           ),
         }}
       />
+
+      <Button
+        onClick={onClickFilter}
+        color="error"
+        sx={{ flexShrink: 0 }}
+        startIcon={<Iconify icon="eva:trash-2-outline" />}
+      >
+        Áp dụng
+      </Button>
 
       {isFiltered && (
         <Button

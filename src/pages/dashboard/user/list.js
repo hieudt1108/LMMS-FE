@@ -1,5 +1,5 @@
 import { paramCase } from 'change-case';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -17,6 +17,9 @@ import {
   Container,
   IconButton,
   TableContainer,
+  TablePagination,
+  Pagination,
+  Box,
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -47,6 +50,7 @@ import { useSnackbar } from '../../../components/snackbar';
 import error from 'eslint-plugin-react/lib/util/error';
 import Label from '../../../components/label';
 import FileNewUserDialog from '../../../sections/@dashboard/file/portal/FileNewUsersDialog';
+import { useMemo } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -88,9 +92,9 @@ export default function UserListPage() {
     onChangeRowsPerPage,
   } = useTable();
 
-  const { enqueueSnackbar } = useSnackbar();
+  const [initData, setInitData] = useState([]);
 
-  const { themeStretch } = useSettingsContext();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { push } = useRouter();
 
@@ -104,19 +108,7 @@ export default function UserListPage() {
 
   const [filterStatus, setFilterStatus] = useState(-1);
 
-  const [listUsers, setListUsers] = useState([]);
-
   const [openUploadFile, setOpenUploadFile] = useState(false);
-
-  const dataFiltered = applyFilter({
-    inputData: listUsers,
-    comparator: getComparator(order, orderBy),
-    filterName,
-    filterRole,
-    filterStatus,
-  });
-
-  const dataInPage = dataFiltered?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const denseHeight = dense ? 52 : 72;
 
@@ -124,34 +116,12 @@ export default function UserListPage() {
 
   const getLengthByStatus = (status) => listUsers?.filter((user) => user.enable === status).length;
 
-  const [paging, setPaging] = useState();
-
   const STATUS_OPTIONS = [
     { label: 'tất cả', id: -1, color: 'info', count: listUsers?.length },
     { label: 'hiệu lực', id: 0, color: 'success', count: getLengthByStatus(0) },
     { label: 'không hiệu lực', id: 1, color: 'error', count: getLengthByStatus(1) },
   ];
 
-  const isNotFound =
-    (!dataFiltered?.length && !!filterName) ||
-    (!dataFiltered?.length && !!filterRole) ||
-    (!dataFiltered?.length && !!filterStatus);
-
-  const [payload, setDataPayload] = useState({ pageIndex: 1, pageSize: 10 });
-
-  console.log('pageSize:  ', paging?.PageSize);
-  async function fetchUsers() {
-    const res = await getAllUsers();
-    if (res.status < 400) {
-      setPaging(JSON.parse(res.headers['x-pagination']));
-      setListUsers(res.data.data);
-    } else {
-      console.log(res.message);
-    }
-  }
-  useEffect(() => {
-    fetchUsers();
-  }, []);
   const handleOpenUploadFile = () => {
     setOpenUploadFile(true);
   };
@@ -192,11 +162,11 @@ export default function UserListPage() {
     } else {
       enqueueSnackbar('Xóa người dùng thất bại', { variant: 'error' });
     }
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
+    // if (page > 0) {
+    //   if (dataInPage.length < 2) {
+    //     setPage(page - 1);
+    //   }
+    // }
   };
 
   const handleDeleteRows = async (selected) => {
@@ -208,16 +178,16 @@ export default function UserListPage() {
     } else {
       enqueueSnackbar('Xóa người dùng thất bại', { variant: 'error' });
     }
-    if (page > 0) {
-      if (selected.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selected.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selected.length > dataInPage.length) {
-        const newPage = Math.ceil((listUsers.length - selected.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
-    }
+    // if (page > 0) {
+    //   if (selected.length === dataInPage.length) {
+    //     setPage(page - 1);
+    //   } else if (selected.length === dataFiltered.length) {
+    //     setPage(0);
+    //   } else if (selected.length > dataInPage.length) {
+    //     const newPage = Math.ceil((listUsers.length - selected.length) / rowsPerPage) - 1;
+    //     setPage(newPage);
+    //   }
+    // }
   };
 
   const handleEditRow = (id) => {
@@ -229,10 +199,6 @@ export default function UserListPage() {
     setFilterRole('all');
     setFilterStatus('tất cả');
   };
-
-  useEffect(() => {
-    fetchRoles();
-  }, []);
 
   async function fetchRoles() {
     const res = await getALlRoles({ pageIndex: 1, pageSize: 10 });
@@ -249,6 +215,54 @@ export default function UserListPage() {
       return error;
     }
   }
+
+  const initialFilter = {
+    pageIndex: 1,
+    pageSize: 5,
+    searchByEmail: '',
+    roleId: '',
+  };
+  const [filter, setFilter] = useState(initialFilter);
+  const [paging, setPaging] = useState();
+  const [listUsers, setListUsers] = useState([]);
+  const [role, setSelectedRole] = useState('all');
+  const [filterByEmail, setFilterByEmail] = useState('');
+
+  const handleChangePage = (event, newPage) => {
+    fetchUsers({ ...filter, pageIndex: newPage });
+  };
+
+  const handleChangeRowsPerPage = (event, newPage) => {};
+  const handleChangeFilterByEmail = (event) => {
+    setFilter({ ...filter, searchByEmail: event.target.value });
+    setFilterByEmail(event.target.value);
+  };
+
+  const handleChangeRoles = (event) => {
+    setFilter({ ...filter, roleId: event.target.value === 'all' ? '' : event.target.value });
+    setSelectedRole(event.target.value);
+  };
+
+  const handleClickFilter = () => {
+    fetchUsers(filter);
+  };
+
+  async function fetchUsers(params) {
+    const res = await getAllUsers(params);
+
+    if (res.status < 400) {
+      setPaging(JSON.parse(res.headers['x-pagination']));
+      setListUsers(res.data.data);
+      console.log('listUsers', listUsers);
+    } else {
+      console.log(res.message);
+    }
+  }
+
+  useEffect(() => {
+    fetchRoles();
+    fetchUsers(filter);
+  }, []);
 
   return (
     <>
@@ -308,6 +322,11 @@ export default function UserListPage() {
           <Divider />
 
           <UserTableToolbar
+            onChangeRoles={handleChangeRoles}
+            selectedRole={role}
+            onClickFilter={handleClickFilter}
+            onChangeFilterByEmail={handleChangeFilterByEmail}
+            filterByEmail={filterByEmail}
             isFiltered={isFiltered}
             filterName={filterName}
             filterRole={filterRole}
@@ -355,7 +374,8 @@ export default function UserListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+                  {/* listUsers */}
+                  {listUsers.map((user) => (
                     <UserTableRow
                       key={user.id}
                       data={user}
@@ -367,24 +387,34 @@ export default function UserListPage() {
                   ))}
 
                   <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, listUsers?.length)} />
-
-                  <TableNoData isNotFound={isNotFound} />
                 </TableBody>
               </Table>
             </Scrollbar>
           </TableContainer>
 
+          <Box p={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div></div>
+            <Pagination
+              size="small"
+              count={paging?.TotalPages}
+              rowsperpage={filter.pageSize}
+              onChange={handleChangePage}
+              color="primary"
+            />
+          </Box>
+
+          {/* 
           <TablePaginationCustom
             labelRowsPerPage="Hàng trên mỗi trang"
-            count={dataFiltered?.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPageChange={onChangePage}
-            onRowsPerPageChange={onChangeRowsPerPage}
-            //
+            // count={paging?.TotalCount}
+            count={100}
+            page={filter?.pageIndex}
+            rowsPerPage={filter.pageSize}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
             dense={dense}
             onChangeDense={onChangeDense}
-          />
+          /> */}
         </Card>
       </Container>
       <FileNewUserDialog open={openUploadFile} onClose={handleCloseUploadFile} />
@@ -411,33 +441,3 @@ export default function UserListPage() {
 }
 
 // ----------------------------------------------------------------------
-
-function applyFilter({ inputData, comparator, filterName, filterStatus, filterRole }) {
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
-
-  stabilizedThis?.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis?.map((el) => el[0]);
-
-  if (filterName) {
-    inputData = inputData?.filter((user) => user.lastName.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
-  }
-
-  if (filterStatus === 0) {
-    inputData = inputData?.filter((user) => user.enable === 0);
-  }
-
-  if (filterStatus === 1) {
-    inputData = inputData?.filter((user) => user.enable === 1);
-  }
-
-  if (filterRole !== 'all') {
-    inputData = inputData?.filter((user) => user.roles === filterRole);
-  }
-
-  return inputData;
-}

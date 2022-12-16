@@ -20,12 +20,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { getDocumentById, getGradeById } from '../../../dataProvider/agent';
 import ManageSubject from '../class/manage/ManageSubject';
 import ManageUser from '../class/manage/ManageUser';
-import StoreFolderNewPostForm from './StoreFolderNewPostForm';
-import GeneralFilePage from '../../../pages/dashboard/folder/[folder_id]';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { copyDocsToFolderRedux } from 'src/redux/slices/folder';
-import { BlogNewPostForm } from '../folder';
+import { copyDocsToFolderRedux, getFolderUploadDocRedux } from 'src/redux/slices/folder';
+import { FolderNewPostForm, GeneralFilePage } from '../folder';
 import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
@@ -36,22 +34,18 @@ import { useSnackbar } from 'notistack';
 // };
 
 export default function UploadMyDocumentDialog({ open, onClose }) {
-  const {
-    folderUploadDoc: { listFolders, listDocuments },
-    folder,
-  } = useSelector((state) => state.folder);
+  const { folderUploadDoc } = useSelector((state) => state.folder);
   const { enqueueSnackbar } = useSnackbar();
-  const { id } = folder;
-  console.log('UploadMyDocumentDialog', id);
+
   const [currentTab, setCurrentTab] = useState(0);
-  const [myFolderId, setMyFolderId] = useState(0);
+
   const handleUploadDocumentToStoreFolder = async (myDocumentId) => {
-    // console.log('handleUploadDocumentToStoreFolder', id, myDocumentId);
-    const message = await dispatch(copyDocsToFolderRedux(id, myDocumentId));
+    const message = await dispatch(copyDocsToFolderRedux(folderUploadDoc.id, myDocumentId));
     if (message) {
       enqueueSnackbar(message.title, { variant: message.variant });
     }
   };
+
   const tabs = [
     {
       id: 0,
@@ -59,13 +53,16 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
       label: `Tài liệu của tôi`,
       component: (
         <GeneralFilePage
-          dataGeneralFolder={{
-            myFolderId: myFolderId,
-            setMyFolderId: setMyFolderId,
+          data={{
             handleUploadDocumentToStoreFolder,
-            listFolders,
-            listDocuments,
-            isReset: false,
+            ...folderUploadDoc,
+            handleBackPage: () => {
+              dispatch(getFolderUploadDocRedux(folderUploadDoc.parentId));
+            },
+            types: ['folderUploadDoc'],
+            menuSubFolder: [],
+            menuDocument: [],
+            panel: ['popup'],
           }}
         />
       ),
@@ -75,9 +72,9 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
       value: 'uploadDocument',
       label: 'Đăng tải tài liệu',
       component: (
-        <BlogNewPostForm
+        <FolderNewPostForm
           dataGeneralFolder={{
-            generalFolderId: id,
+            generalFolderId: folderUploadDoc.id,
           }}
         />
       ),
@@ -90,7 +87,7 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
       maxWidth="xl"
       open={open}
       onClose={() => {
-        setMyFolderId(0), onClose();
+        onClose();
       }}
     >
       <DialogActions sx={{ py: 2, px: 3 }}>
@@ -102,7 +99,7 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
           variant="outlined"
           color="inherit"
           onClick={() => {
-            setMyFolderId(0), onClose();
+            onClose();
           }}
         >
           Quay lại

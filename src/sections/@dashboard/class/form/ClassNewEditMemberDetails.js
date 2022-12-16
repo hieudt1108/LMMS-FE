@@ -48,7 +48,7 @@ const checkArray = (arrayName) => {
   return arrayName && arrayName.length;
 };
 
-export default function BlogNewPostForm({ classID }) {
+export default function FolderNewPostForm({ classID }) {
   const { user } = useAuthContext();
   const formData = new FormData();
   const { pagination, addUserInCLass } = useSelector((state) => state.user);
@@ -180,7 +180,7 @@ export default function BlogNewPostForm({ classID }) {
     setValue(event.target.name, event.target.value);
     dispatch(filterSubjectRedux({ users: addUserInCLass[index].users, userId: event.target.value, index }));
   };
-  console.log('BlogNewPostForm', getValues('items'), addUserInCLass);
+  console.log('FolderNewPostForm', getValues('items'), addUserInCLass);
 
   return (
     <>

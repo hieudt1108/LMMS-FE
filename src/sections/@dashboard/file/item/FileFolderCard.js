@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { useState } from 'react';
 // @mui
 import { Box, Card, Stack, Button, Divider, MenuItem, Checkbox, IconButton } from '@mui/material';
@@ -18,20 +19,11 @@ import {
   deleteSubFolderInFolderRedux,
   getFolderRedux,
   getFolderUploadDocRedux,
+  getFolderUploadDocToSlotRedux,
   updateSubFolderRedux,
 } from 'src/redux/slices/folder';
-import { getStoreFolderRedux } from 'src/redux/slices/storeFolder';
 
-export default function FileFolderCard({
-  dataGeneralFolder,
-  dataStoreFolder,
-  folder,
-  selected,
-  onSelect,
-  onDelete,
-  sx,
-  ...other
-}) {
+export default function FileFolderCard({ data, folder, selected, onSelect, onDelete, sx, ...other }) {
   console.log('FileFolderCard', folder);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -123,10 +115,13 @@ export default function FileFolderCard({
   };
 
   const handleOnClickFileFolderCard = (folderID) => {
-    if (dataGeneralFolder) {
+    if (data.types.find((type) => type === 'folderUploadDoc')) {
       return dispatch(getFolderUploadDocRedux(folderID));
+    } else if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
+      return dispatch(getFolderUploadDocToSlotRedux(folderID));
+    } else if (data.types.find((type) => type === 'folder')) {
+      return dispatch(getFolderRedux(folderID));
     }
-    dispatch(getFolderRedux(folderID));
   };
 
   const handleDeleteFolder = async () => {
@@ -178,7 +173,7 @@ export default function FileFolderCard({
             onChange={handleFavorite}
             sx={{ p: 0.75 }}
           />
-          {!dataGeneralFolder && (
+          {!_.isEmpty(data.menuSubFolder) && (
             <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
@@ -215,28 +210,34 @@ export default function FileFolderCard({
       </Card>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
-        <MenuItem
-          onClick={() => {
-            handleClosePopover();
-            handleOpenEditFolder();
-          }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Đổi tên
-        </MenuItem>
+        {data.menuSubFolder.find((element) => element === 'edit') && (
+          <MenuItem
+            onClick={() => {
+              handleClosePopover();
+              handleOpenEditFolder();
+            }}
+          >
+            <Iconify icon="eva:edit-fill" />
+            Đổi tên
+          </MenuItem>
+        )}
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        {data.menuSubFolder.find((element) => element === 'delete') && (
+          <>
+            <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem
-          onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Xóa
-        </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleOpenConfirm();
+                handleClosePopover();
+              }}
+              sx={{ color: 'error.main' }}
+            >
+              <Iconify icon="eva:trash-2-outline" />
+              Xóa
+            </MenuItem>
+          </>
+        )}
       </MenuPopover>
 
       {/* <FileDetailsDrawer
@@ -269,7 +270,7 @@ export default function FileFolderCard({
         <FileNewFolderDialog
           open={openEditFolder}
           onClose={handleCloseEditFolder}
-          title="Edit Folder"
+          title="Sửa Thư mục"
           onUpdate={handleUpdateSubFolder}
           folderName={folderName}
           onChangeFolderName={(event) => setFolderName(event.target.value)}

@@ -12,6 +12,9 @@ import Head from 'next/head';
 
 //
 import { getSubjectById, getDocInClass } from '../../../../../dataProvider/agent';
+import UploadDocToSlot from 'src/sections/@dashboard/myclass/popupdiaglog/UploadDocToSlot';
+import { getFolderUploadDocToSlotRedux } from 'src/redux/slices/folder';
+import { dispatch } from 'src/redux/store';
 
 index.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -21,16 +24,34 @@ export default function index() {
   const [subject, setSubject] = useState();
 
   const [docs, setDocs] = useState([]);
+
+  const [slotId, setSlotId] = useState(0);
+
+  const [openFormUploadDocToSLot, setOpenFormUploadDocToSlot] = useState(false);
+
+  const handleOpenFormUploadDocToSlot = (id) => {
+    console.log('handleOpenFormUploadDocToSlot', id);
+    setSlotId(id);
+    setOpenFormUploadDocToSlot(true);
+  };
+
+  const handleFormUploadDocToSlot = () => {
+    setOpenFormUploadDocToSlot(false);
+  };
+
   const {
     query: { class_id, subject_id },
   } = useRouter();
 
   useEffect(() => {
-    fethOneSubject();
-    fetchDocumentInClass();
-  }, [subject_id]);
+    dispatch(getFolderUploadDocToSlotRedux(0));
+  }),
+    useEffect(() => {
+      fetchOneSubject();
+      fetchDocumentInClass();
+    }, [subject_id]);
 
-  async function fethOneSubject() {
+  async function fetchOneSubject() {
     const res = await getSubjectById(subject_id);
     if (res.status < 400) {
       setSubject(res.data.data);
@@ -72,21 +93,46 @@ export default function index() {
         <Grid container spacing={5}>
           <Grid item xs={12} md={12}>
             <Stack spacing={1}>
-              <Typography variant="h5" sx={{mb:2}}> Tài liệu chung:</Typography>
-              <DocumentLocal docs={docs} classId={class_id} subjectId={subject_id} />
+              <Typography variant="h5" sx={{ mb: 2 }}>
+                {' '}
+                Tài liệu chung:
+              </Typography>
+              <DocumentLocal
+                docs={docs}
+                classId={class_id}
+                subjectId={subject_id}
+                handleOpenFormUploadDocToSlot={handleOpenFormUploadDocToSlot}
+              />
             </Stack>
           </Grid>
 
           <Grid item xs={12} md={12}>
             <Stack spacing={1}>
-              <Typography variant="h5" sx={{mb:2}}> Tài liệu từng tiết:</Typography>
+              <Typography variant="h5" sx={{ mb: 2 }}>
+                {' '}
+                Tài liệu từng tiết:
+              </Typography>
               {subject?.listSlots?.map((data) => (
-                <SysllabusSubject data={data} classId={class_id} subjectId={subject_id} key={data.id} docs={docs} />
+                <SysllabusSubject
+                  data={data}
+                  classId={class_id}
+                  subjectId={subject_id}
+                  key={data.id}
+                  docs={docs}
+                  handleOpenFormUploadDocToSlot={handleOpenFormUploadDocToSlot}
+                />
               ))}
             </Stack>
           </Grid>
         </Grid>
       </Container>
+      <UploadDocToSlot
+        classId={class_id}
+        subjectId={subject_id}
+        slotId={slotId}
+        open={openFormUploadDocToSLot}
+        onClose={handleFormUploadDocToSlot}
+      />
     </>
   );
 }

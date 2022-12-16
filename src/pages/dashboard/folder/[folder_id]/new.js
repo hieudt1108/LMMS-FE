@@ -10,7 +10,7 @@ import DashboardLayout from '../../../../layouts/dashboard';
 import { useSettingsContext } from '../../../../components/settings';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
-import { BlogNewPostForm } from '../../../../sections/@dashboard/folder';
+import { FolderNewPostForm } from '../../../../sections/@dashboard/folder';
 import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
@@ -21,7 +21,7 @@ FolderNewDocumentPostPage.getLayout = (page) => <DashboardLayout>{page}</Dashboa
 
 export default function FolderNewDocumentPostPage() {
   const { themeStretch } = useSettingsContext();
-  const { folder, history } = useSelector((state) => state.folder);
+  const { folder } = useSelector((state) => state.folder);
 
   return (
     <>
@@ -51,7 +51,7 @@ export default function FolderNewDocumentPostPage() {
           ]}
         />
 
-        <BlogNewPostForm />
+        <FolderNewPostForm />
       </Container>
     </>
   );

@@ -41,7 +41,7 @@ function TextCode() {
   return result;
 }
 
-export default function BlogNewPostForm({ dataGeneralFolder }) {
+export default function FolderNewPostForm({ dataGeneralFolder }) {
   const { user } = useAuthContext();
   const formData = new FormData();
   const {
@@ -106,7 +106,7 @@ export default function BlogNewPostForm({ dataGeneralFolder }) {
     dispatch(createDocumentInitialRedux());
   }, []);
 
-  console.log('BlogNewPostForm', getValues('items'));
+  console.log('FolderNewPostForm', getValues('items'));
   const handleDrop = (acceptedFiles, index) => {
     try {
       setValue(`items[${index}].file`, acceptedFiles[0]);

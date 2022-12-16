@@ -19,6 +19,8 @@ import { useSelector } from 'react-redux';
 import { dispatch } from '../../../../redux/store';
 import { FolderNewPostForm, GeneralFilePage } from '../../folder';
 import { copyDocsToFolderRedux, getFolderUploadDocToSlotRedux } from 'src/redux/slices/folder';
+import { postDocumentsInSlotRedux } from 'src/redux/slices/subject';
+import { useSnackbar } from 'notistack';
 
 UploadDocToSlot.propTypes = {
   open: PropTypes.bool,
@@ -28,12 +30,17 @@ UploadDocToSlot.propTypes = {
 export default function UploadDocToSlot({ open, onClose, slotId, classId, subjectId }) {
   const { folderUploadDocToSlot } = useSelector((state) => state.folder);
   const { id } = folderUploadDocToSlot;
+  const { enqueueSnackbar } = useSnackbar();
 
   const [currentTab, setCurrentTab] = useState(0);
   const [myFolderId, setMyFolderId] = useState(0);
-  const handleUploadDocumentToStoreFolder = (myDocumentId) => {
-    console.log('handleUploadDocumentToStoreFolder', myDocumentId, id);
-    dispatch(copyDocsToFolderRedux(id, myDocumentId));
+  const handleAddDocumentToSlot = async (classId, documentId, slotId, subjectId) => {
+    console.log('postData', classId, documentId, slotId, subjectId);
+
+    const message = await dispatch(postDocumentsInSlotRedux(classId, documentId, slotId, subjectId));
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
+    }
   };
 
   const tabs = [
@@ -44,7 +51,7 @@ export default function UploadDocToSlot({ open, onClose, slotId, classId, subjec
       component: (
         <GeneralFilePage
           data={{
-            handleUploadDocumentToStoreFolder,
+            handleAddDocumentToSlot,
             ...folderUploadDocToSlot,
             handleBackPage: () => {
               dispatch(getFolderUploadDocToSlotRedux(folderUploadDocToSlot.parentId));

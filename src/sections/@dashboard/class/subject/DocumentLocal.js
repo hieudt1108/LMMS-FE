@@ -14,34 +14,7 @@ import { FileGeneralRecentCard } from '../../general/file';
 
 const GB = 1000000000 * 24;
 
-const data = [
-  {
-    name: 'Images',
-    usedStorage: GB / 2,
-    filesCount: 223,
-    icon: <Box component="img" src="/assets/icons/files/ic_img.svg" />,
-  },
-  {
-    name: 'Media',
-    usedStorage: GB / 5,
-    filesCount: 223,
-    icon: <Box component="img" src="/assets/icons/files/ic_video.svg" />,
-  },
-  {
-    name: 'Documents',
-    usedStorage: GB / 5,
-    filesCount: 223,
-    icon: <Box component="img" src="/assets/icons/files/ic_document.svg" />,
-  },
-  {
-    name: 'Other',
-    usedStorage: GB / 10,
-    filesCount: 223,
-    icon: <Iconify icon="eva:file-fill" width={24} sx={{ color: 'text.disabled' }} />,
-  },
-];
-
-export default function DocumentLocal({ docs, handleOpenFormUploadDocToSlot }) {
+export default function DocumentLocal({ data, documentInClass, handleOpenFormUploadDocToSlot }) {
   return (
     <>
       <Card sx={{ p: 3, cursor: 'pointer' }}>
@@ -55,7 +28,7 @@ export default function DocumentLocal({ docs, handleOpenFormUploadDocToSlot }) {
           </Button>
         </Stack>
         <Stack spacing={2}>
-          {docs?.map(
+          {documentInClass?.map(
             (doc) =>
               doc.slotId === null && (
                 <Stack spacing={2}>
@@ -63,7 +36,7 @@ export default function DocumentLocal({ docs, handleOpenFormUploadDocToSlot }) {
                     key={doc.id}
                     file={doc}
                     onDelete={() => console.log('DELETE', doc.id)}
-                    data={{ menuDocument: ['preview', 'download', 'share', 'delete'] }}
+                    data={data}
                   />
                 </Stack>
               )

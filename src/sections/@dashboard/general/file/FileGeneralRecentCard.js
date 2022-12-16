@@ -93,18 +93,6 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
     }
   };
 
-  const handleAddDocumentToSlot = async (classId, documentId, slotId, subjectId) => {
-    console.log('postData', classId, documentId, slotId, subjectId);
-    const res = await postDocumentsInSlot(classId, documentId, slotId, subjectId);
-    console.log('postData', res);
-    if (res.status < 400) {
-      enqueueSnackbar('Thêm tài liệu vào tiết học thành công');
-      window.location.reload();
-    } else {
-      enqueueSnackbar('Thêm tài liệu vào tiết học thất bại', { variant: 'error' });
-    }
-  };
-
   const handlePreviewFile = useCallback(() => {
     window.open(`${URL_GLOBAL.VIEW_FILE}${file.urlDocument}`, '_blank', 'noopener,noreferrer');
   }, []);
@@ -115,6 +103,19 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
 
   const handleDeleteFile = async () => {
     console.log('handleDeleteDocument');
+    if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
+      const message = {
+        title: 'Chưa có tính năng này',
+        variant: 'error',
+      };
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      setOpenConfirmDeleteFile(false);
+      handleClosePopover();
+      return;
+    }
+
     const message = await dispatch(deleteDocumentInFolderRedux(file.id));
     if (message) {
       enqueueSnackbar(message.title, { variant: message.variant });
@@ -291,7 +292,7 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
               if (data.types.find((type) => type === 'folderUploadDoc')) {
                 data.handleUploadDocumentToStoreFolder(file.id);
               } else if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
-                handleAddDocumentToSlot(data.classId, file.id, data.slotId, data.subjectId);
+                data.handleAddDocumentToSlot(data.classId, file.id, data.slotId, data.subjectId);
               }
               handleCloseConfirmAddDocument();
             }}

@@ -15,13 +15,19 @@ import { getSubjectById, getDocInClass } from '../../../../../dataProvider/agent
 import UploadDocToSlot from 'src/sections/@dashboard/myclass/popupdiaglog/UploadDocToSlot';
 import { getFolderUploadDocToSlotRedux } from 'src/redux/slices/folder';
 import { dispatch } from 'src/redux/store';
+import { useSelector } from 'react-redux';
+import { getDocumentInClassRedux, getSubjectRedux } from 'src/redux/slices/subject';
 
 index.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
+const data = {
+  types: ['folderUploadDocToSlot'],
+  menuDocument: ['preview', 'download', 'delete'],
+};
+
 export default function index() {
   const { themeStretch } = useSettingsContext();
-
-  const [subject, setSubject] = useState();
+  const { subject, documentInClass } = useSelector((state) => state.subject);
 
   const [docs, setDocs] = useState([]);
 
@@ -44,37 +50,13 @@ export default function index() {
   } = useRouter();
 
   useEffect(() => {
-    dispatch(getFolderUploadDocToSlotRedux(0));
-  }),
-    useEffect(() => {
-      fetchOneSubject();
-      fetchDocumentInClass();
-    }, [subject_id]);
-
-  async function fetchOneSubject() {
-    const res = await getSubjectById(subject_id);
-    if (res.status < 400) {
-      setSubject(res.data.data);
-    } else {
-      <Alert severity="info" sx={{ mb: 3 }}>
-        {res.message}
-      </Alert>;
+    if (class_id && subject_id) {
+      dispatch(getFolderUploadDocToSlotRedux(0));
+      dispatch(getSubjectRedux(subject_id));
+      dispatch(getDocumentInClassRedux(class_id, subject_id));
     }
-  }
+  }, [class_id, subject_id]);
 
-  async function fetchDocumentInClass() {
-    const res = await getDocInClass({
-      classId: class_id,
-      subjectId: subject_id,
-    });
-    if (res.status < 400) {
-      setDocs(res.data.data);
-    } else {
-      <Alert severity="info" sx={{ mb: 3 }}>
-        {res.message}
-      </Alert>;
-    }
-  }
   return (
     <>
       <Head>
@@ -98,7 +80,8 @@ export default function index() {
                 Tài liệu chung:
               </Typography>
               <DocumentLocal
-                docs={docs}
+                data={data}
+                documentInClass={documentInClass}
                 classId={class_id}
                 subjectId={subject_id}
                 handleOpenFormUploadDocToSlot={handleOpenFormUploadDocToSlot}
@@ -112,13 +95,14 @@ export default function index() {
                 {' '}
                 Tài liệu từng tiết:
               </Typography>
-              {subject?.listSlots?.map((data) => (
+              {subject?.listSlots?.map((element) => (
                 <SysllabusSubject
+                  document={element}
                   data={data}
                   classId={class_id}
                   subjectId={subject_id}
                   key={data.id}
-                  docs={docs}
+                  documentInClass={documentInClass}
                   handleOpenFormUploadDocToSlot={handleOpenFormUploadDocToSlot}
                 />
               ))}

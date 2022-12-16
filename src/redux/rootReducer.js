@@ -14,6 +14,7 @@ import folderReducer from './slices/folder';
 import documentReducer from './slices/document';
 import userReducer from './slices/user';
 import myClassReducer from './slices/myclass';
+import subjectReducer from './slices/subject';
 import roleReducer from './slices/roles';
 
 // ----------------------------------------------------------------------
@@ -60,6 +61,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   myclass: myClassReducer,
   role: roleReducer,
+  subject: subjectReducer,
 });
 
 export { rootPersistConfig, rootReducer };

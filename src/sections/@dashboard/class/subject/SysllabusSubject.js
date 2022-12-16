@@ -29,10 +29,16 @@ import { startDownloadFileRedux } from '../../../../redux/slices/document';
 import { FileGeneralRecentCard } from '../../general/file';
 import { useSelector } from 'react-redux';
 
-export default function SysllabusSubject({ data, classId, subjectId, docs, handleOpenFormUploadDocToSlot }) {
-  console.log('SysllabusSubject', data);
+export default function SysllabusSubject({
+  data,
+  document,
+  classId,
+  subjectId,
+  documentInClass,
+  handleOpenFormUploadDocToSlot,
+}) {
   const isDesktop = useResponsive('up', 'sm');
-  const { createBy, createDate, id, isDeleted, name, updateBy, updateDate } = data;
+  const { createBy, createDate, id, isDeleted, name, updateBy, updateDate } = document;
   const [openPreview, setOpenPreview] = useState(false);
   const [openPopover, setOpenPopover] = useState(null);
 
@@ -78,14 +84,10 @@ export default function SysllabusSubject({ data, classId, subjectId, docs, handl
               {format(new Date(createDate), 'dd/MM/yyyy')}
             </Typography>
 
-            {docs?.map((doc) =>
+            {documentInClass?.map((doc) =>
               doc?.slotId === id ? (
                 <Stack key={doc.id} spacing={2}>
-                  <FileGeneralRecentCard
-                    data={{ menuDocument: ['preview', 'download', 'share', 'delete'] }}
-                    file={doc}
-                    onDelete={() => console.log('DELETE', doc.id)}
-                  />
+                  <FileGeneralRecentCard data={data} file={doc} onDelete={() => console.log('DELETE', doc.id)} />
                 </Stack>
               ) : (
                 ''
@@ -94,7 +96,6 @@ export default function SysllabusSubject({ data, classId, subjectId, docs, handl
           </Stack>
         </Stack>
       </Card>
-      <DocumentPreview open={openPreview} onClose={handleClosePreview} />
     </>
   );
 }

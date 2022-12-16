@@ -1,5 +1,5 @@
-import PropTypes, {any} from 'prop-types';
-import {useState} from 'react';
+import PropTypes, { any } from 'prop-types';
+import { useEffect, useState } from 'react';
 // @mui
 import {
     Card,
@@ -12,7 +12,8 @@ import {
     TableCell,
     TableContainer,
     TableRow,
-    Typography, Button
+    Typography,
+    Button,
 } from '@mui/material';
 // components
 import {
@@ -22,20 +23,18 @@ import {
     TableHeadCustom,
     TableNoData,
     TableSelectedAction,
-    useTable
-} from "../../../components/table";
-import {useSnackbar} from "../../../components/snackbar";
-import {useSettingsContext} from "../../../components/settings";
-import Scrollbar from "../../../components/scrollbar";
-import {SlotTableToolbar} from "../slot/list";
-import {LoadingButton} from "@mui/lab";
-import Iconify from "../../../components/iconify";
+    useTable,
+} from '../../../components/table';
+import { useSnackbar } from '../../../components/snackbar';
+import { useSettingsContext } from '../../../components/settings';
+import Scrollbar from '../../../components/scrollbar';
+import { SlotTableToolbar } from '../slot/list';
+import { LoadingButton } from '@mui/lab';
+import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-    {id: 'name', label: 'Tên tiết học', align: 'left'},
-];
+const TABLE_HEAD = [{ id: 'name', label: 'Tên tiết học', align: 'left' }];
 
 SlotListDialog.propTypes = {
     open: PropTypes.bool,
@@ -43,7 +42,7 @@ SlotListDialog.propTypes = {
     data: any,
 };
 
-export default function SlotListDialog({open, onClose, onSelect, data, listSlotSelected}) {
+export default function SlotListDialog({ open, onClose, onSelect, listSlots, selectedSlot }) {
     const {
         dense,
         page,
@@ -63,12 +62,11 @@ export default function SlotListDialog({open, onClose, onSelect, data, listSlotS
         onChangeRowsPerPage,
     } = useTable();
 
+    const { id, name } = listSlots;
 
-    const {id, name} = data;
+    const { enqueueSnackbar } = useSnackbar();
 
-    const {enqueueSnackbar} = useSnackbar();
-
-    const {themeStretch} = useSettingsContext();
+    const { themeStretch } = useSettingsContext();
 
     const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -76,9 +74,8 @@ export default function SlotListDialog({open, onClose, onSelect, data, listSlotS
 
     const [listSlotChecked, setListSlotChecked] = useState([]);
 
-
     const dataFiltered = applyFilter({
-        inputData: data,
+        inputData: listSlots,
         comparator: getComparator(order, orderBy),
         filterName,
     });
@@ -87,8 +84,7 @@ export default function SlotListDialog({open, onClose, onSelect, data, listSlotS
 
     const isFiltered = filterName !== '';
 
-    const isNotFound =
-        (!dataFiltered.length && !!filterName);
+    const isNotFound = !dataFiltered.length && !!filterName;
 
     const handleOpenConfirm = () => {
         setOpenConfirm(true);
@@ -105,47 +101,51 @@ export default function SlotListDialog({open, onClose, onSelect, data, listSlotS
 
     const handleGetId = (slot, event) => {
         setPage(0);
-        onSelectRow(slot)
+        onSelectRow(slot);
         if (event.target.checked) {
-            setListSlotChecked((prev) => ([...prev, slot]))
+            setListSlotChecked((prev) => [...prev, slot]);
         } else {
             setListSlotChecked((prev) => {
                 const filtered = prev.filter((prevSlot) => prevSlot.id != slot.id);
-                console.log(filtered)
+                console.log(filtered);
                 return filtered;
-            })
+            });
         }
     };
 
     const handleSelectSlots = (slot) => {
+        console.log(selected);
         onSelect(slot);
         setFilterName('');
         onClose();
     };
 
-    const sendListSlot = () => {
+    const sendListSlot = () => {};
 
-    }
+    useEffect(() => {
+        if (selectedSlot?.length > 0) {
+            setSelected(selectedSlot);
+        }
+    }, [selectedSlot]);
 
     return (
         <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{pt: 2.5, px: 3}}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ pt: 2.5, px: 3 }}>
                 <Typography variant="h6"> Chọn tiết học </Typography>
 
-                <Button size="small"
-                        startIcon={<Iconify icon="eva:plus-fill"/>}
+                <Button
+                    size="small"
+                    startIcon={<Iconify icon="eva:plus-fill" />}
                     // onClick={sendListSlot}
-                        onClick={() => handleSelectSlots(listSlotChecked)}
-                        sx={{alignSelf: 'flex-end'}}>
-                    {listSlotSelected.length > 0 ? (
-                        'Thay đổi') : ('Thêm')}
-
+                    onClick={() => handleSelectSlots(selected)}
+                    sx={{ alignSelf: 'flex-end' }}
+                >
+                    {selected?.length > 0 ? 'Thay đổi' : 'Thêm'}
                 </Button>
             </Stack>
             <>
                 <Card>
-
-                    <Divider/>
+                    <Divider />
 
                     <SlotTableToolbar
                         isFiltered={isFiltered}
@@ -154,66 +154,60 @@ export default function SlotListDialog({open, onClose, onSelect, data, listSlotS
                         onResetFilter={handleResetFilter}
                     />
 
-                    <TableContainer sx={{position: 'relative', overflow: 'unset'}}>
+                    <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
                         <TableSelectedAction
                             dense={dense}
                             numSelected={selected.length}
-                            rowCount={data.length}
+                            rowCount={listSlots.length}
                             onSelectAllRows={(checked) =>
                                 onSelectAllRows(
                                     checked,
-                                    data.map((row) => row.id)
+                                    listSlots.map((row) => row.id)
                                 )
                             }
                         />
 
-                        <Scrollbar sx={{p: 1.5, pt: 0, maxHeight: 80 * 8}}>
+                        <Scrollbar sx={{ p: 1.5, pt: 0, maxHeight: 80 * 8 }}>
                             <Table size={dense ? 'small' : 'medium'}>
                                 <TableHeadCustom
                                     order={order}
                                     orderBy={orderBy}
                                     headLabel={TABLE_HEAD}
-                                    rowCount={data.length}
+                                    rowCount={listSlots.length}
                                     numSelected={selected.length}
                                     onSort={onSort}
                                     onSelectAllRows={(checked) =>
                                         onSelectAllRows(
                                             checked,
-                                            data.map((row) => row.id)
+                                            listSlots.map((row) => row)
                                         )
                                     }
                                 />
 
                                 <TableBody>
-                                    {dataFiltered.map((slot) => (
-
-                                        <TableRow hover selected={selected.includes(slot.id)}>
+                                    {listSlots.map((slot) => (
+                                        <TableRow hover selected={selected.includes(slot)}>
                                             <TableCell padding="checkbox">
                                                 <Checkbox
                                                     onChange={(event) => {
-                                                        // if (event.target.checked) {
-                                                        handleGetId(slot, event)
-                                                        // }
+                                                        handleGetId(slot, event);
                                                     }}
-                                                    checked={selected.includes(slot)}
-                                                    // onClick={() => handleGetId(slot)}
+                                                    checked={selected.map((item) => item.id).includes(slot.id)}
                                                 />
                                             </TableCell>
-
-                                            <TableCell align="left">{slot.name}</TableCell>
-
+                                            <TableCell align="left">
+                                                {slot.name}
+                                            </TableCell>
                                         </TableRow>
                                     ))}
 
-                                    <TableEmptyRows height={denseHeight}
-                                                    emptyRows={emptyRows(page, rowsPerPage, data.length)}/>
+                                    <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, listSlots.length)} />
 
-                                    <TableNoData isNotFound={isNotFound}/>
+                                    <TableNoData isNotFound={isNotFound} />
                                 </TableBody>
                             </Table>
                         </Scrollbar>
                     </TableContainer>
-
                 </Card>
             </>
         </Dialog>
@@ -222,7 +216,7 @@ export default function SlotListDialog({open, onClose, onSelect, data, listSlotS
 
 // ----------------------------------------------------------------------
 
-function applyFilter({inputData, comparator, filterName}) {
+function applyFilter({ inputData, comparator, filterName }) {
     const stabilizedThis = inputData.map((el, index) => [el, index]);
 
     stabilizedThis.sort((a, b) => {
@@ -236,7 +230,6 @@ function applyFilter({inputData, comparator, filterName}) {
     if (filterName) {
         inputData = inputData.filter((slot) => slot.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
     }
-
 
     return inputData;
 }

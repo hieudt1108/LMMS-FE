@@ -42,7 +42,7 @@ export default function FileShareDialog({ file, open, onClose, ...other }) {
           <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
             <FolderUserSearch />
             <Button variant="contained" sx={{ flexShrink: 0 }} onClick={handleSendInvite}>
-              Send Invite
+              Chia sẻ
             </Button>
           </Stack>
 
@@ -60,7 +60,7 @@ export default function FileShareDialog({ file, open, onClose, ...other }) {
         <DialogActions sx={{ justifyContent: 'space-between' }}>
           {onClose && (
             <Button variant="outlined" color="inherit" onClick={onClose}>
-              Close
+              Đóng
             </Button>
           )}
         </DialogActions>

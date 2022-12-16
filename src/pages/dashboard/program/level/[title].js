@@ -165,7 +165,7 @@ export default function LevelLayout() {
           <Box>
             <TextField
               size="small"
-              sx={{ mr: 1, mr: 3 }}
+              sx={{ mr: 3 }}
               autohighlight="true"
               onChange={handleSearchChange}
               placeholder="Tìm kiếm..."

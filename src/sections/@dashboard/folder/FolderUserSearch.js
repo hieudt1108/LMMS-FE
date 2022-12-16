@@ -120,6 +120,7 @@ export default function FolderUserSearch() {
                 >
                   {part.text}
                 </Typography>
+
               ))}
             </Link>
           </li>

@@ -13,12 +13,7 @@ RolesTableToolbar.propTypes = {
   onResetFilter: PropTypes.func,
 };
 
-export default function RolesTableToolbar({
-  isFiltered,
-  filterName,
-  onFilterName,
-  onResetFilter,
-}) {
+export default function RolesTableToolbar({ isFiltered, filterName, onFilterName, onResetFilter }) {
   return (
     <Stack
       spacing={2}
@@ -31,7 +26,6 @@ export default function RolesTableToolbar({
     >
       <TextField
         fullWidth
-        value={filterName}
         onChange={onFilterName}
         placeholder="Tìm kiếm vai trò..."
         InputProps={{

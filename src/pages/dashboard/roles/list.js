@@ -1,5 +1,5 @@
 import { paramCase } from 'change-case';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -109,6 +109,12 @@ export default function RolesListPage() {
 
   const isNotFound = !dataFiltered.length && !!filterName;
 
+  const [filter, setFilter] = useState({
+    pageIndex: 1,
+    pageSize: 5,
+    searchByName: '',
+  });
+
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
@@ -122,10 +128,12 @@ export default function RolesListPage() {
     setFilterStatus(newValue);
   };
 
-  const handleFilterName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
+  const handleFilterName = useCallback(
+    (event) => {
+      setFilter({ ...filter, searchByName: event.target.value });
+    },
+    [filter]
+  );
 
   const handleDeleteRow = async (id) => {
     const response = await deleteRole(id);
@@ -174,12 +182,8 @@ export default function RolesListPage() {
     setFilterName('');
   };
 
-  useEffect(() => {
-    fetchRoles();
-  }, []);
-
   async function fetchRoles() {
-    const res = await getALlRoles({ pageIndex: 1, pageSize: 100 });
+    const res = await getALlRoles(filter);
     console.log(res.data);
     if (res.status < 400) {
       setListRoles(res.data.data);
@@ -187,6 +191,10 @@ export default function RolesListPage() {
       console.log(res.message);
     }
   }
+  console.log('onFilterName: ', filter);
+  useEffect(() => {
+    fetchRoles();
+  }, [filter]);
 
   return (
     <>
@@ -259,7 +267,8 @@ export default function RolesListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((roles) => (
+                  {/* {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((roles) => ( */}
+                  {listRoles?.map((roles) => (
                     <RoleTableRow
                       key={roles.id}
                       row={roles}
@@ -269,6 +278,8 @@ export default function RolesListPage() {
                       onEditRow={() => handleEditRow(roles.id)}
                     />
                   ))}
+
+                  {/* ))} */}
 
                   <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, listRoles.length)} />
 

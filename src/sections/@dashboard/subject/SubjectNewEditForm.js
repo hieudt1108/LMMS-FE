@@ -31,7 +31,7 @@ export default function SubjectNewEditForm({ isEdit = false, currentSubject }) {
   const { push } = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
-
+  console.log('currentSubject?.listSlots',currentSubject?.listSlots)
   const validationSchema = Yup.object().shape({
     code: Yup.string().trim().required('Mã môn học không được trống'),
     name: Yup.string().trim().required('Tên môn học không được trống'),
@@ -39,13 +39,13 @@ export default function SubjectNewEditForm({ isEdit = false, currentSubject }) {
   });
 
   const defaultValues = useMemo(
-    () => ({
-      code: currentSubject?.code || '',
-      name: currentSubject?.name || '',
-      description: currentSubject?.description || '',
-      listSlots: currentSubject?.listSlots || [],
-    }),
-    [currentSubject]
+      () => ({
+        code: currentSubject?.code || '',
+        name: currentSubject?.name || '',
+        description: currentSubject?.description || '',
+        listSlots: currentSubject?.listSlots || [],
+      }),
+      [currentSubject]
   );
 
   const methods = useForm({
@@ -64,15 +64,6 @@ export default function SubjectNewEditForm({ isEdit = false, currentSubject }) {
   } = methods;
 
   const values = watch();
-
-  useEffect(() => {
-    if (isEdit && currentSubject) {
-      reset(defaultValues);
-    }
-    if (!isEdit) {
-      reset(defaultValues);
-    }
-  }, [isEdit, currentSubject]);
 
   const onSubmit = async (data) => {
     if (!isEdit) {
@@ -109,20 +100,6 @@ export default function SubjectNewEditForm({ isEdit = false, currentSubject }) {
     }
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('avatarUrl', newFile);
-      }
-    },
-    [setValue]
-  );
 
   const handleSelectedSlot = (data) => {
     console.log('Parent', data);
@@ -133,36 +110,48 @@ export default function SubjectNewEditForm({ isEdit = false, currentSubject }) {
     setValue('listSlots', listSlotId);
   };
 
+  useEffect(() => {
+    if (isEdit && currentSubject) {
+      reset(defaultValues);
+    }
+    if (!isEdit) {
+      reset(defaultValues);
+    }
+  }, [isEdit, currentSubject]);
+
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={12}>
-          <Card sx={{ p: 3 }}>
-            <Box rowGap={3} columnGap={2} display="grid">
-              <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
-                Thông tin môn học
-              </Typography>
-              <RHFTextField name="code" label="Mã môn học" id="name" />
-              <RHFTextField name="name" label="Tên môn học" id="name" />
-              <RHFTextField name="description" label="Mô tả" id="description" multiline rows={5} />
-              <SubjectNewEditSlot
-                listSlotSelected={getValues('listSlots')}
-                name="listSlots"
-                id="listSlots"
-                handleSelectedSlot={handleSelectedSlot}
-                onSelect={(slots) => {
-                  // console.log("Parent", slots)
-                }}
-              />
-            </Box>
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Tạo mới' : 'Cập nhật'}
-              </LoadingButton>
-            </Stack>
-          </Card>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={12}>
+            <Card sx={{ p: 3 }}>
+              <Box rowGap={3} columnGap={2} display="grid">
+                <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                  Thông tin môn học
+                </Typography>
+                <RHFTextField name="code" label="Mã môn học" id="name" />
+                <RHFTextField name="name" label="Tên môn học" id="name" />
+                <RHFTextField name="description" label="Mô tả" id="description" multiline rows={5} />
+
+                <SubjectNewEditSlot
+                    isEdit={isEdit}
+                    currentSubject={currentSubject}
+                    listSlotSelected={getValues('listSlots')}
+                    name="listSlots"
+                    id="listSlots"
+                    handleSelectedSlot={handleSelectedSlot}
+                    onSelect={(slots) => {
+                      // console.log("Parent", slots)
+                    }}
+                />
+              </Box>
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  {!isEdit ? 'Tạo mới' : 'Cập nhật'}
+                </LoadingButton>
+              </Stack>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </FormProvider>
+      </FormProvider>
   );
 }

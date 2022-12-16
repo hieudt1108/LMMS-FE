@@ -58,6 +58,7 @@ export default function FileInvitedItem({index}) {
                     sx={{flexGrow: 1, pr: 1}}
                 />
 
+
                 <Button
                     size="small"
                     color="inherit"

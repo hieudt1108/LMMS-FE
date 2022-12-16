@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { Card, Typography, Stack, Avatar, Box, Alert } from '@mui/material';
 import {FileGeneralRecentCard} from "../general/file";
 import React from "react";
+import EmptyContent from "../../../components/empty-content";
 // routes
 // import { PATH_DASHBOARD } from '../../../routes/paths';
 // // hooks
@@ -44,7 +45,12 @@ export default function DocumentPostCard({ documents }) {
               </Stack>
           ))
         ) : (
-          <Alert severity="error">Tài liệu trống!</Alert>
+            <EmptyContent
+                title="Không có dữ liệu"
+                sx={{
+                    '& span.MuiBox-root': { height: 160 },
+                }}
+            />
         )}
       </Stack>
     </Card>

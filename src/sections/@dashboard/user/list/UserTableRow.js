@@ -105,7 +105,8 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="eva:alert-circle-outline" />
-          Vô hiệu hóa
+            {!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
+
         </MenuItem>
 
           <MenuItem
@@ -122,8 +123,8 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
         <ConfirmDialog
             open={openConfirm}
             onClose={handleCloseConfirm}
-            title="Vô hiệu hóa"
-            content="Bạn có chắc chắn vô hiệu hóa người dùng này?"
+            title={!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
+            content={!enable ? 'Bạn có chắc chắn vô hiệu hóa người dùng này?' : 'Bạn có chắc chắn cho phép người dùng này hoạt động?'}
             action={
                 <Button
                     variant="contained"
@@ -133,7 +134,7 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
                         handleCloseConfirm();
                     }}
                 >
-                    Vô hiệu hóa
+                    {!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
                 </Button>
             }
         />

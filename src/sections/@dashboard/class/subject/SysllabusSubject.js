@@ -27,6 +27,7 @@ import useResponsive from '../../../../hooks/useResponsive';
 import { dispatch } from '../../../../redux/store';
 import { startDownloadFileRedux } from '../../../../redux/slices/document';
 import { FileGeneralRecentCard } from '../../general/file';
+import { useSelector } from 'react-redux';
 
 export default function SysllabusSubject({ data, classId, subjectId, docs, handleOpenFormUploadDocToSlot }) {
   console.log('SysllabusSubject', data);

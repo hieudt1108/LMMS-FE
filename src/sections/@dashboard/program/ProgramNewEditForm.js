@@ -136,7 +136,7 @@ export default function ProgramNewEditForm({ isEdit = false, currentProgram }) {
                     }}
                     startIcon={<Iconify icon="eva:trash-2-outline" />}
                 >
-                  Clear
+                  Xóa
                 </Button>
               </Stack>
             </Stack>

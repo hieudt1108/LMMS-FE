@@ -217,7 +217,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Create Class' : 'Save Changes'}
+                {!isEdit ? 'Tạo mới' : 'Cập nhật'}
               </LoadingButton>
             </Stack>
           </Card>

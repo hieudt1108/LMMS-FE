@@ -1,12 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
 import _ from 'lodash';
+<<<<<<< HEAD
+=======
+// next
+import Head from 'next/head';
+// @mui
+import { useTheme } from '@mui/material/styles';
+import { Box, Breadcrumbs, Button, Container, Grid, IconButton, Link, Stack, Typography } from '@mui/material';
+// routes
+import {PATH_DASHBOARD as folderUploadDoc, PATH_DASHBOARD} from '../../../../routes/paths';
+// hooks
+import useResponsive from '../../../../hooks/useResponsive';
+>>>>>>> 9e6c79b672a7bed755898468ea6cc53cb0dfd7c9
 // _mock
 import { _folders } from '../../../../_mock/arrays';
 // layouts
 
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
-import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
+import {createFolderRedux, getFolderRedux, getFolderUploadDocRedux} from 'src/redux/slices/folder';
 import { useSnackbar } from 'notistack';
 import LinkItem from '../../../../components/custom-breadcrumbs/LinkItem';
 import Iconify from '../../../../components/iconify';

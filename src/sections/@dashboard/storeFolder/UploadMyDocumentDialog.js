@@ -76,6 +76,9 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
           dataGeneralFolder={{
             generalFolderId: folderUploadDoc.id,
           }}
+          dataUploadDocsToSlot={{
+            disableChooseOptions: false,
+          }}
         />
       ),
     },
@@ -90,7 +93,7 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
         onClose();
       }}
     >
-      <DialogActions sx={{ py: 2, px: 3 }}>
+      <DialogActions sx={{ py: 2, px: 3}}>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           Đăng tải tài liệu của tôi
         </Typography>
@@ -133,6 +136,8 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
                   ...(currentTab === 'description' && {
                     p: 3,
                   }),
+                  mt:2,
+
                 }}
               >
                 {tab.component}

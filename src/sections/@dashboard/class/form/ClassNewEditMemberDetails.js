@@ -7,24 +7,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useFieldArray, useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import {
-  Grid,
-  Card,
-  Stack,
-  Typography,
-  Divider,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  TextField,
-  Chip,
-  Autocomplete,
-} from '@mui/material';
-// routes
-//components
-// import { useSnackbar } from '../../../components/snackbar';
+import { Grid, Card, Stack, Typography, Divider, Button, TextField, Chip, Autocomplete } from '@mui/material';
+import parse from 'autosuggest-highlight/parse';
+import match from 'autosuggest-highlight/match';
 import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload, RHFAutocomplete } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 import { updateClassMember } from 'src/dataProvider/agent';
@@ -135,10 +120,6 @@ export default function FolderNewPostForm({ classID }) {
         }
 
         dataPayload.push(obj);
-
-        // remove(index);
-        // enqueueSnackbar(`Tạo tài liệu${data.userId} thành công`);
-        // console.log('responsePostDocument', response);
         console.log('data apend: ', data);
       } catch (error) {
         console.error(`onSubmit error at index: ${index}`, error);
@@ -209,11 +190,27 @@ export default function FolderNewPostForm({ classID }) {
                             </option>
                           ))}
                       </RHFSelect>
+                      {/* <Autocomplete
+                        freeSolo
+                        id="free-solo-2-demo"
+                        disableClearable
+                        options={top100Films.map((option) => option.title)}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Search input"
+                            InputProps={{
+                              ...params.InputProps,
+                              type: 'search',
+                            }}
+                          />
+                        )}
+                      /> */}
                     </div>
                     {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) && (
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Typography variant="subtitle2" gutterBottom sx={{ marginRight: '25px' }}>
-                          Quyền
+                          Vai trò
                         </Typography>
                         <RHFSelect
                           sx={{ width: '643px' }}
@@ -262,33 +259,6 @@ export default function FolderNewPostForm({ classID }) {
                         />
                       </div>
                     )}
-
-                    {/*
-                    
-                    // checkArray(addUserInCLass) && checkArray(addUserInCLass[index].subjects)
-                          //   ? addUserInCLass[index].subjects
-                          //   : []
-                    
-                    {subjects && subjects.length ? (
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
-                        <RHFSelect name={`items[${index}].subjectId`} placeholder="Môn học">
-                          {subjects.map((option, index) => (
-                            <option key={index} value={option.id}>
-                              {option.name}
-                            </option>
-                          ))}
-                        </RHFSelect>
-                      </div>
-                    ) : (
-                      ''
-                    )} */}
                   </Stack>
                 </Card>
 
@@ -299,7 +269,7 @@ export default function FolderNewPostForm({ classID }) {
                     startIcon={<Iconify icon="eva:trash-2-outline" />}
                     onClick={() => handleRemove(index)}
                   >
-                    Remove
+                    Gỡ
                   </Button>
                 </Stack>
               </Grid>

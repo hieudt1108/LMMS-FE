@@ -22,7 +22,7 @@ const OPTIONS = [
     linkTo: '/',
   },
   {
-    label: 'Cài đặt',
+    label: 'Cài đặt thông tin',
     linkTo: PATH_DASHBOARD.user.account,
   },
 ];

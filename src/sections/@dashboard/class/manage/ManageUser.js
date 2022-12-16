@@ -22,7 +22,7 @@ export default function ManageUser({ myClass }) {
             myClass={myClass}
             tableData={_subjects}
             tableLabels={[
-              { id: 'STT', label: 'STT' },
+              { id: 'STT', label: '' },
               { id: 'name', label: 'Họ và tên' },
               { id: 'birthDate', label: 'Ngày sinh' },
               { id: 'email', label: 'E-mail' },
@@ -37,7 +37,7 @@ export default function ManageUser({ myClass }) {
             myClass={myClass}
             tableData={_subjects}
             tableLabels={[
-              { id: 'STT', label: 'STT' },
+              { id: 'STT', label: '' },
               { id: 'name', label: 'Họ và tên' },
               { id: 'Subject', label: 'Môn dạy' },
               { id: 'email', label: 'E-mail' },

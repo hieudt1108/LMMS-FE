@@ -33,6 +33,7 @@ import Iconify from '../../../../components/iconify';
 import UploadMyDocumentDialog from '../../../../sections/@dashboard/storeFolder/UploadMyDocumentDialog';
 import PopupGetFolder from 'src/sections/@dashboard/general/getFiletoDocPrivate/PopupGetFolder';
 import { useSnackbar } from 'notistack';
+import { GeneralFilePage } from 'src/sections/@dashboard/folder';
 // ----------------------------------------------------------------------
 
 const GB = 1000000000 * 24;
@@ -48,14 +49,12 @@ export default function StoreFilePage() {
     query: { storeFolder_id: storeFolderID },
     push,
   } = useRouter();
-  const { folder, history } = useSelector((state) => state.folder);
-  const { id, listFolders, listDocuments } = folder;
+
   const { enqueueSnackbar } = useSnackbar();
 
-  console.log('StoreFilePage', history, storeFolderID);
+  const { folder } = useSelector((state) => state.folder);
 
   useEffect(() => {
-    console.log('useEffect StoreFilePage', storeFolderID);
     dispatch(getFolderRedux(storeFolderID));
   }, [storeFolderID]);
 
@@ -67,28 +66,9 @@ export default function StoreFilePage() {
 
   const [openNewStoreFolder, setOpenNewStoreFolder] = useState(false);
 
-  const [openFormUploadDocument, setOpenFormUploadDocument] = useState(false);
-
-  const [openPopupSaveInMyFolder, setOpenPopupSaveInMyFolder] = useState(false);
-
-  const handleOpenPopupSaveInMyFolder = async (data) => {
-    const { document } = data;
-    await dispatch(getFolderSavetoDocToMyFolderRedux(0));
-    setDocumentHandle(document);
-    setOpenPopupSaveInMyFolder(true);
-  };
-
-  const handleClosePopupSaveInMyFolder = () => {
-    setOpenPopupSaveInMyFolder(false);
-  };
-
   const handleOpenFrom = async () => {
     await dispatch(getFolderUploadDocRedux(0));
     setOpenFormUploadDocument(true);
-  };
-
-  const handleCloseFrom = () => {
-    setOpenFormUploadDocument(false);
   };
 
   const handleOpenNewStoreFolder = () => {
@@ -119,136 +99,20 @@ export default function StoreFilePage() {
     handleCloseNewStoreFolder();
   };
 
-  const handleBackPage = () => {
-    console.log('handleBackPage folder', history.folder);
-    if (history.folder.id !== '') dispatch(getFolderRedux(history.folder.id));
-  };
-
   return (
     <>
-      <Head>
-        <title> Hệ thống quản lý Học liệu</title>
-      </Head>
-
-      <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Box sx={{ mb: 5 }}>
-          <Stack flexGrow={1}>
-            <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
-              <IconButton
-                size="small"
-                color="success"
-                disabled={history.folder.id === ''}
-                onClick={handleBackPage}
-                sx={{
-                  p: 0,
-                  width: 24,
-                  height: 24,
-                  color: 'common.white',
-                  bgcolor: 'success.main',
-                  '&:hover': {
-                    bgcolor: 'success.main',
-                  },
-                }}
-              >
-                <Iconify icon="eva:arrow-back-outline" />
-              </IconButton>
-              <Typography variant="h4"> Kho tài liệu </Typography>
-            </Stack>
-          </Stack>
-        </Box>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={12} lg={12}>
-            <div>
-              <FilePanel
-                title="Folders"
-                link={PATH_DASHBOARD.fileManager}
-                onOpen={handleOpenNewStoreFolder}
-                sx={{ mt: 5 }}
-              />
-              <Scrollbar>
-                <Stack direction="row" spacing={3} sx={{ pb: 3 }}>
-                  {listFolders && listFolders.length
-                    ? listFolders.map((folder, index) => (
-                        <FileFolderCard
-                          key={index}
-                          folder={folder}
-                          // onClick={() => handleOnClickFileFolderCard(folder.id)}
-                          onDelete={() => console.log('DELETE', folder.id)}
-                          dataStoreFolder={storeFolderID}
-                          sx={{
-                            ...(_storeFolders.length > 3 && {
-                              minWidth: 222,
-                            }),
-                          }}
-                        />
-                      ))
-                    : ''}
-                </Stack>
-              </Scrollbar>
-
-              <Stack direction="row" alignItems="center" sx={{ mb: 3, mt: 2 }}>
-                <Stack flexGrow={1}>
-                  <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
-                    <Typography variant="h6"> Tài liệu gần đây </Typography>
-
-                    <IconButton
-                      size="small"
-                      color="success"
-                      onClick={handleOpenFrom}
-                      sx={{
-                        p: 0,
-                        width: 24,
-                        height: 24,
-                        color: 'common.white',
-                        bgcolor: 'success.main',
-                        '&:hover': {
-                          bgcolor: 'success.main',
-                        },
-                      }}
-                    >
-                      <Iconify icon="eva:plus-fill" />
-                    </IconButton>
-                  </Stack>
-                </Stack>
-              </Stack>
-              <UploadMyDocumentDialog open={openFormUploadDocument} onClose={handleCloseFrom} />
-
-              <Stack spacing={2}>
-                {listDocuments && listDocuments.length
-                  ? listDocuments.map((file) => (
-                      <FileGeneralRecentCard
-                        dataStoreFolder={{
-                          storeFolderID,
-                          disableButtonShare: true,
-                          isDownloadDocumentGeneral: true,
-                        }}
-                        handleOpenPopupSaveInMyFolder={handleOpenPopupSaveInMyFolder}
-                        key={file.id}
-                        file={file}
-                        onDelete={() => console.log('DELETE', file.id)}
-                      />
-                    ))
-                  : ''}
-              </Stack>
-            </div>
-          </Grid>
-        </Grid>
-      </Container>
-
-      {openPopupSaveInMyFolder && (
-        <PopupGetFolder open={openPopupSaveInMyFolder} onClose={handleClosePopupSaveInMyFolder} data={documentHandle} />
-      )}
-
-      {openNewStoreFolder && (
-        <FileNewFolderDialog
-          open={openNewStoreFolder}
-          onClose={handleCloseNewStoreFolder}
-          title="New Folder"
-          folderName={storeFolderName}
-          onChangeFolderName={handleChangeStoreFolderName}
-          onCreate={handleCreateNewStoreFolder}
-        />
-      )}
+      <GeneralFilePage
+        data={{
+          ...folder,
+          handleBackPage: () => {
+            dispatch(getFolderRedux(folder.parentId));
+          },
+          types: ['folder'],
+          menuSubFolder: ['edit', 'delete'],
+          menuDocument: ['preview', 'download', 'saveInMyFolder', 'delete'],
+          panel: ['storeFolder'],
+        }}
+      ></GeneralFilePage>
     </>
   );
 }

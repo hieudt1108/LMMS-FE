@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useFieldArray, useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import {Grid, Card, Stack, Typography, Divider, Button, Alert} from '@mui/material';
+import { Grid, Card, Stack, Typography, Divider, Button, Alert } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //components
@@ -22,7 +22,7 @@ import { createDocumentInitialRedux, createDocumentRedux, uploadDocumentRedux } 
 import { Upload } from '../../../components/upload';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/useAuthContext';
-import {FileGeneralRecentCard} from "../general/file";
+import { FileGeneralRecentCard } from '../general/file';
 
 // ----------------------------------------------------------------------
 function TextCode() {
@@ -42,7 +42,7 @@ function TextCode() {
   return result;
 }
 
-export default function BlogNewPostForm({ dataGeneralFolder, dataUploadDocsToSlot }) {
+export default function FolderNewPostForm({ dataGeneralFolder }) {
   const { user } = useAuthContext();
   const formData = new FormData();
   const {
@@ -107,7 +107,7 @@ export default function BlogNewPostForm({ dataGeneralFolder, dataUploadDocsToSlo
     dispatch(createDocumentInitialRedux());
   }, []);
 
-  console.log('BlogNewPostForm', getValues('items'));
+  console.log('FolderNewPostForm', getValues('items'));
   const handleDrop = (acceptedFiles, index) => {
     try {
       setValue(`items[${index}].file`, acceptedFiles[0]);
@@ -233,10 +233,10 @@ export default function BlogNewPostForm({ dataGeneralFolder, dataUploadDocsToSlo
                 </Card>
               </Grid>
               {!dataUploadDocsToSlot.disableChooseOptions ? (
-                  <Grid item xs={12} md={5}>
-                    <Card sx={{ p: 3 }}>
-                      <Stack spacing={3}>
-                        {/* <div>
+                <Grid item xs={12} md={5}>
+                  <Card sx={{ p: 3 }}>
+                    <Stack spacing={3}>
+                      {/* <div>
                       <RHFSwitch
                         name="status"
                         label="Tài liệu công khai/ riêng tư"
@@ -245,75 +245,74 @@ export default function BlogNewPostForm({ dataGeneralFolder, dataUploadDocsToSlo
                       />
                     </div> */}
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Chương Trình</span>
-                          <RHFSelect name={`items[${index}].programId`} placeholder="Chương trình">
-                            {programs.map((option, index) => (
-                                <option key={index} value={option.id}>
-                                  {option.name}
-                                </option>
-                            ))}
-                          </RHFSelect>
-                        </div>
-                        <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                            }}
-                        >
-                          <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
-                          <RHFSelect name={`items[${index}].subjectId`} placeholder="Môn học">
-                            {user.subjects.map((option, index) => (
-                                <option key={index} value={option.id}>
-                                  {option.name}
-                                </option>
-                            ))}
-                          </RHFSelect>
-                        </div>
-                        <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                            }}
-                        >
-                          <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
-                          <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
-                            {typeDocuments.map((option, index) => (
-                                <option key={index} value={option.id}>
-                                  {option.name}
-                                </option>
-                            ))}
-                          </RHFSelect>
-                        </div>
-                      </Stack>
-                    </Card>
-
-                    <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-                      <Button
-                          size="small"
-                          color="error"
-                          startIcon={<Iconify icon="eva:trash-2-outline" />}
-                          onClick={() => handleRemove(index - 1)}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Chương Trình</span>
+                        <RHFSelect name={`items[${index}].programId`} placeholder="Chương trình">
+                          {programs.map((option, index) => (
+                            <option key={index} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </RHFSelect>
+                      </div>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
                       >
-                        Gỡ bản ghi
-                      </Button>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
+                        <RHFSelect name={`items[${index}].subjectId`} placeholder="Môn học">
+                          {user.subjects.map((option, index) => (
+                            <option key={index} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </RHFSelect>
+                      </div>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
+                        <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
+                          {typeDocuments.map((option, index) => (
+                            <option key={index} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </RHFSelect>
+                      </div>
                     </Stack>
-                  </Grid>
-              ) : (
+                  </Card>
+
                   <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
                     <Button
-                        size="small"
-                        color="error"
-                        startIcon={<Iconify icon="eva:trash-2-outline" />}
-                        onClick={() => handleRemove(index - 1)}
+                      size="small"
+                      color="error"
+                      startIcon={<Iconify icon="eva:trash-2-outline" />}
+                      onClick={() => handleRemove(index - 1)}
                     >
                       Gỡ bản ghi
                     </Button>
                   </Stack>
+                </Grid>
+              ) : (
+                <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+                  <Button
+                    size="small"
+                    color="error"
+                    startIcon={<Iconify icon="eva:trash-2-outline" />}
+                    onClick={() => handleRemove(index - 1)}
+                  >
+                    Gỡ bản ghi
+                  </Button>
+                </Stack>
               )}
-
             </Grid>
 
             <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
@@ -324,7 +323,7 @@ export default function BlogNewPostForm({ dataGeneralFolder, dataUploadDocsToSlo
           spacing={2}
           direction={{ xs: 'column-reverse', md: 'row' }}
           alignItems={{ xs: 'flex-start', md: 'center' }}
-          sx={{mt:-2,mb:1}}
+          sx={{ mt: -2, mb: 1 }}
         >
           <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
             Thêm bản ghi

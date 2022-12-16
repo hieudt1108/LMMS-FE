@@ -12,13 +12,13 @@ import {
   Tabs,
   Typography,
 } from '@mui/material';
-import GeneralFolderPage from './GeneralFolderPage';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { copyDocsToFolderRedux } from 'src/redux/slices/storeFolder';
 
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
+import { copyDocsToFolderRedux, getFolderSaveDocToMyFolderRedux } from 'src/redux/slices/folder';
+import GeneralFolderPage from './GeneralFolderPage';
 
 // PopupGetFolder.propTypes = {
 //   open: PropTypes.bool,
@@ -26,11 +26,11 @@ import { useSnackbar } from 'notistack';
 // };
 
 export default function PopupGetFolder({ open, onClose, data }) {
-  const { historySavetoDocToMyFolder, folderSaveDocToMyFolder } = useSelector((state) => state.folder);
+  const { folderSaveDocToMyFolder } = useSelector((state) => state.folder);
 
   const { enqueueSnackbar } = useSnackbar();
   const [currentTab, setCurrentTab] = useState(0);
-  console.log('PopupGetFolder', folderSaveDocToMyFolder, historySavetoDocToMyFolder);
+  console.log('PopupGetFolder', folderSaveDocToMyFolder);
   const handleUploadDocumentToMyFolder = async (folder) => {
     console.log('handleUploadDocumentToMyFolder', folder, data);
     const message = await dispatch(copyDocsToFolderRedux(folder.id, data.id));
@@ -45,9 +45,16 @@ export default function PopupGetFolder({ open, onClose, data }) {
       label: `Thư mục của tôi`,
       component: (
         <GeneralFolderPage
-          dataSaveDocToMyFolder={{
+          data={{
             handleUploadDocumentToMyFolder,
             ...folderSaveDocToMyFolder,
+            handleBackPage: () => {
+              dispatch(getFolderSaveDocToMyFolderRedux(folderSaveDocToMyFolder.parentId));
+            },
+            types: ['folderSaveDocToMyFolder'],
+            menuSubFolder: [],
+            menuDocument: [],
+            panel: ['popup'],
           }}
         />
       ),

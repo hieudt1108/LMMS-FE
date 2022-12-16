@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 // utils
-import axios from '../../utils/axios';
 //
 import { dispatch } from '../store';
 import {
@@ -12,14 +11,9 @@ import {
   getFolderByID,
   postCopyDocsToFolder,
   postDocument,
-  postFile,
   postFolder,
   updateFolder,
 } from 'src/dataProvider/agent';
-import { PATH_DASHBOARD } from '../../routes/paths';
-import { useSnackbar } from '../../components/snackbar';
-import { useRouter } from 'next/router';
-import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -40,11 +34,15 @@ const initialState = {
     listFolders: [],
     listDocuments: [],
   },
-  historyUploadDoc: {
-    folder: {
-      id: '',
-    },
+
+  folderUploadDocToSlot: {
+    id: '',
+    name: '',
+    parentId: 0,
+    listFolders: [],
+    listDocuments: [],
   },
+
   folderSaveDocToMyFolder: {
     id: '',
     name: '',
@@ -52,11 +50,7 @@ const initialState = {
     listFolders: [],
     listDocuments: [],
   },
-  historySaveDocToMyFolder: {
-    folder: {
-      id: '',
-    },
-  },
+
   newDocument: {
     data: [],
     init: {
@@ -65,11 +59,6 @@ const initialState = {
       subjects: [],
       users: [],
       classes: [],
-    },
-  },
-  history: {
-    folder: {
-      id: '',
     },
   },
 };
@@ -91,23 +80,23 @@ const slice = createSlice({
     },
 
     getFolderSuccess(state, action) {
+      console.log('getFolderSuccess', action);
       state.isLoading = false;
-      state.history.folder = { ...state.history.folder, ...state.folder };
       state.folder = { ...state.folder, ...action.payload };
     },
     getFolderUploadDocSuccess(state, action) {
       state.isLoading = false;
-      state.historyUploadDoc.folder = { ...state.historyUploadDoc.folder, ...state.folderUploadDoc };
       state.folderUploadDoc = { ...state.folderUploadDoc, ...action.payload };
     },
 
-    getFolderSavetoDocToMyFolderSuccess(state, action) {
+    getFolderUploadDocToSlotSuccess(state, action) {
+      state.isLoading = false;
+      state.folderUploadDocToSlot = { ...state.folderUploadDocToSlot, ...action.payload };
+    },
+
+    getFolderSaveToDocToMyFolderSuccess(state, action) {
       console.log('getFolderSavetoDocToMyFolderSuccess', action);
       state.isLoading = false;
-      state.historySaveDocToMyFolder.folder = {
-        ...state.historySaveDocToMyFolder.folder,
-        ...state.folderSaveDocToMyFolder,
-      };
       state.folderSaveDocToMyFolder = { ...state.folderSaveDocToMyFolder, ...action.payload };
     },
 
@@ -201,7 +190,7 @@ export function getFolderUploadDocRedux(params) {
   };
 }
 
-export function getFolderSavetoDocToMyFolderRedux(params) {
+export function getFolderUploadDocToSlotRedux(params) {
   return async () => {
     try {
       if (!params && params !== 0) {
@@ -209,7 +198,23 @@ export function getFolderSavetoDocToMyFolderRedux(params) {
       }
       dispatch(slice.actions.startLoading());
       const response = await getFolderByID(params);
-      dispatch(slice.actions.getFolderSavetoDocToMyFolderSuccess(response.data.data));
+      console.log('getFolderByID', response);
+      dispatch(slice.actions.getFolderUploadDocToSlotSuccess(response.data.data));
+    } catch (error) {
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
+export function getFolderSaveDocToMyFolderRedux(params) {
+  return async () => {
+    try {
+      if (!params && params !== 0) {
+        return returnMessageError(`Truy cập thư mục lỗi`);
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await getFolderByID(params);
+      dispatch(slice.actions.getFolderSaveToDocToMyFolderSuccess(response.data.data));
     } catch (error) {
       return returnMessageError(`${error.message}`);
     }

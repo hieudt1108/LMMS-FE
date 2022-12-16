@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Button, Container, Grid, Stack } from '@mui/material';
+import { Box, Button, Container, Grid, IconButton, Stack, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from 'src/routes/paths';
 // import { PATH_DASHBOARD } from 'src/routes/paths';
@@ -25,6 +25,7 @@ import { useSelector } from 'react-redux';
 import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 import { useSnackbar } from 'notistack';
 import ConfirmDialog from 'src/components/confirm-dialog/ConfirmDialog';
+import Iconify from 'src/components/iconify/Iconify';
 
 // ----------------------------------------------------------------------
 
@@ -34,10 +35,10 @@ const GB = 1000000000 * 24;
 
 GeneralFolderPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default function GeneralFolderPage({ dataSaveDocToMyFolder }) {
+export default function GeneralFolderPage({ data }) {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { id, name, listFolders, listDocuments } = dataSaveDocToMyFolder;
+  const { id, name, parentId, listFolders, listDocuments } = data;
 
   const { themeStretch } = useSettingsContext();
 
@@ -48,13 +49,38 @@ export default function GeneralFolderPage({ dataSaveDocToMyFolder }) {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
+        <Box sx={{ mb: 5 }}>
+          <Stack flexGrow={1}>
+            <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
+              <IconButton
+                size="small"
+                color="success"
+                disabled={parentId === 0}
+                onClick={data.handleBackPage}
+                sx={{
+                  p: 0,
+                  width: 24,
+                  height: 24,
+                  color: 'common.white',
+                  bgcolor: 'success.main',
+                  '&:hover': {
+                    bgcolor: 'success.main',
+                  },
+                }}
+              >
+                <Iconify icon="eva:arrow-back-outline" />
+              </IconButton>
+              <Typography variant="h4"> {data.name} </Typography>
+            </Stack>
+          </Stack>
+        </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12} lg={12}>
             <div>
               <FilePanel
-                title={name ? name : 'Thư mục gốc'}
+                title="Folders"
                 link={PATH_DASHBOARD.fileManager}
-                // onOpen={!dataGeneralFolder ? handleOpenNewFolder : ''}
+                // onder ? handleOpenNewFolder : ''}
                 sx={{ mt: 5 }}
               />
               <Scrollbar>
@@ -62,7 +88,7 @@ export default function GeneralFolderPage({ dataSaveDocToMyFolder }) {
                   {listFolders && listFolders.length
                     ? listFolders.map((folder, index) => (
                         <FolderGeneralData
-                          dataSaveDocToMyFolder={dataSaveDocToMyFolder}
+                          data={data}
                           key={index}
                           folder={folder}
                           sx={{
@@ -83,12 +109,12 @@ export default function GeneralFolderPage({ dataSaveDocToMyFolder }) {
               variant="contained"
               color="success"
               onClick={() => {
-                if (dataSaveDocToMyFolder) {
-                  dataSaveDocToMyFolder.handleUploadDocumentToMyFolder(dataSaveDocToMyFolder);
+                if (data) {
+                  data.handleUploadDocumentToMyFolder(data);
                 }
               }}
             >
-              {`Lưu tài liệu về ${name ? name : 'Thư mục gốc'}`}
+              {`Lưu tài liệu về đây`}
             </Button>
           </Grid>
         </Grid>

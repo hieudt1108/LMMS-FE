@@ -27,10 +27,10 @@ import useResponsive from '../../../../hooks/useResponsive';
 import { dispatch } from '../../../../redux/store';
 import { startDownloadFileRedux } from '../../../../redux/slices/document';
 import { FileGeneralRecentCard } from '../../general/file';
-import {useSelector} from "react-redux";
+import { useSelector } from 'react-redux';
 
-export default function SysllabusSubject({ data, classId, subjectId, docs }) {
-
+export default function SysllabusSubject({ data, classId, subjectId, docs, handleOpenFormUploadDocToSlot }) {
+  console.log('SysllabusSubject', data);
   const isDesktop = useResponsive('up', 'sm');
   const { createBy, createDate, id, isDeleted, name, updateBy, updateDate } = data;
   const [openPreview, setOpenPreview] = useState(false);
@@ -52,15 +52,6 @@ export default function SysllabusSubject({ data, classId, subjectId, docs }) {
     setOpenPreview(false);
   };
 
-  const [openFrom, setOpenFrom] = useState(false);
-
-  const handleOpenFrom = () => {
-    setOpenFrom(true);
-  };
-
-  const handleCloseFrom = () => {
-    setOpenFrom(false);
-  };
   return (
     <>
       <Card sx={{ p: 3 }}>
@@ -69,20 +60,18 @@ export default function SysllabusSubject({ data, classId, subjectId, docs }) {
             {name}
           </Typography>
 
-          <Button size="small" onClick={handleOpenFrom} startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button
+            size="small"
+            onClick={() => handleOpenFormUploadDocToSlot(id)}
+            startIcon={<Iconify icon="eva:plus-fill" />}
+          >
             Thêm tài liệu
           </Button>
         </Stack>
-        <UploadDocToSlot
-          classId={classId}
-          subjectId={subjectId}
-          slotId={id}
-          open={openFrom}
-          onClose={handleCloseFrom}
-        />
+
         <Stack spacing={3}>
           <Stack key={''} spacing={1}>
-            <Typography variant="body2" sx={{mb:2}}>
+            <Typography variant="body2" sx={{ mb: 2 }}>
               <Box component="span" sx={{ color: 'text.secondary', mr: 0.5 }}>
                 Ngày tạo:
               </Box>
@@ -91,14 +80,13 @@ export default function SysllabusSubject({ data, classId, subjectId, docs }) {
 
             {docs?.map((doc) =>
               doc?.slotId === id ? (
-                  <Stack spacing={2}>
-                    <FileGeneralRecentCard
-                        isShared = {false}
-                        key={doc.id}
-                        file={doc}
-                        onDelete={() => console.log('DELETE', doc.id)}
-                    />
-                  </Stack>
+                <Stack key={doc.id} spacing={2}>
+                  <FileGeneralRecentCard
+                    data={{ menuDocument: ['preview', 'download', 'share', 'delete'] }}
+                    file={doc}
+                    onDelete={() => console.log('DELETE', doc.id)}
+                  />
+                </Stack>
               ) : (
                 ''
               )

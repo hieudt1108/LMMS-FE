@@ -21,7 +21,7 @@ import {
 import { ClassBanner } from '../../../sections/@dashboard/class';
 import DashboardLayout from '../../../layouts/dashboard';
 import { getAllClass } from 'src/dataProvider/agent';
-import { AppFeatured, AppWelcome } from 'src/sections/@dashboard/general/app';
+import { AppWelcome } from 'src/sections/@dashboard/general/app';
 import { SeoIllustration } from 'src/assets/illustrations';
 import { _appFeatured } from 'src/_mock/arrays';
 import Iconify from 'src/components/iconify';
@@ -33,6 +33,7 @@ import { getGradesRedux } from 'src/redux/slices/grade';
 
 // PATH
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import { getFolderUploadDocToSlotRedux } from 'src/redux/slices/folder';
 
 Classes.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function Classes() {
@@ -58,7 +59,8 @@ export default function Classes() {
     dispatch(getClassesRedux(pagingClass));
     dispatch(getProgramsRedux({ pageIndex: 1, pageSize: 15 }));
     dispatch(getGradesRedux({ pageIndex: 1, pageSize: 15 }));
-  }, [dispatch]);
+    dispatch(getFolderUploadDocToSlotRedux(0));
+  }, []);
 
   // const datalength = classes.headers.get('X-Pagination');
   const renderMenuItem = useCallback((item) => {

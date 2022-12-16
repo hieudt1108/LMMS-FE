@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 // @mui
 import { AvatarGroup, Box, Button, Checkbox, Divider, IconButton, MenuItem, Stack, Typography } from '@mui/material';
@@ -25,17 +26,7 @@ import { URL_GLOBAL } from '../../../../config';
 
 // ----------------------------------------------------------------------
 
-const FileGeneralRecentCard = ({
-  dataGeneralFolder,
-  isShared,
-  file,
-  onDelete,
-  dataStoreFolder,
-  dataUploadDocsToSlot,
-  handleOpenPopupSaveInMyFolder,
-  sx,
-  ...other
-}) => {
+const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFolder, sx, ...other }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const { copy } = useCopyToClipboard();
@@ -70,12 +61,13 @@ const FileGeneralRecentCard = ({
 
   const handleOpenDetails = async () => {
     // Chia sẻ lên thư mục chung
-    if (dataGeneralFolder) {
+    if (data.types.find((type) => type === 'folderUploadDoc')) {
       setOpenConfirmAddDocument(true);
       return;
-    }
-    // mở detail trong thư mục
-    else {
+    } else if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
+      setOpenConfirmAddDocument(true);
+      return;
+    } else if (data.types.find((type) => type === 'folder')) {
       await dispatch(getOneDocumentRedux(file.id));
       setOpenDetails(true);
     }
@@ -218,59 +210,67 @@ const FileGeneralRecentCard = ({
             onChange={handleFavorite}
             sx={{ p: 0.75 }}
           />
-
-          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+          {!_.isEmpty(data.menuDocument) && (
+            <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton>
+          )}
         </Box>
       </Stack>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 220 }}>
-        {(file.typeFile === 'audio/mpeg' ||
-          file.typeFile === 'video/mp4' ||
-          file.typeFile === 'image/jpeg' ||
-          file.typeFile === 'image/png' ||
-          file.typeFile === 'application/pdf') && (
-          <MenuItem onClick={handlePreviewFile}>
-            <Iconify icon="eva:link-2-fill" />
-            Xem trước
+        {(file.typeFile == 'audio/mpeg' ||
+          file.typeFile == 'video/mp4' ||
+          file.typeFile == 'image/jpeg' ||
+          file.typeFile == 'image/png' ||
+          file.typeFile == 'application/pdf') &&
+          data.menuDocument.find((element) => element === 'preview') && (
+            <MenuItem onClick={handlePreviewFile}>
+              <Iconify icon="eva:link-2-fill" />
+              Xem trước
+            </MenuItem>
+          )}
+
+        {data.menuDocument.find((element) => element === 'download') && (
+          <MenuItem onClick={handleDownloadFile}>
+            <Iconify icon="eva:download-outline" />
+            Tải xuống
           </MenuItem>
         )}
-        {dataStoreFolder && (
+
+        {data.menuDocument.find((element) => element === 'saveInMyFolder') && (
           <MenuItem onClick={() => handleOpenPopupSaveInMyFolder({ document: file })}>
             <Iconify icon="simple-line-icons:docs" />
             Tải về kho của tôi
           </MenuItem>
         )}
 
-        <MenuItem onClick={handleDownloadFile}>
-          <Iconify icon="eva:download-outline" />
-          Tải xuống
-        </MenuItem>
-
-        {!dataGeneralFolder && !dataStoreFolder && isShared && (
+        {data.menuDocument.find((element) => element === 'share') && (
           <MenuItem onClick={handleOpenShare}>
             <Iconify icon="eva:share-fill" />
             Chia sẻ
           </MenuItem>
         )}
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        {data.menuDocument.find((element) => element === 'delete') && (
+          <>
+            <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem
-          onClick={() => {
-            setOpenConfirmDeleteFile(true);
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Xóa
-        </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setOpenConfirmDeleteFile(true);
+              }}
+              sx={{ color: 'error.main' }}
+            >
+              <Iconify icon="eva:trash-2-outline" />
+              Xóa
+            </MenuItem>
+          </>
+        )}
       </MenuPopover>
 
       {openDetails && (
         <FileDetailsDrawer
-          // data={file}
           favorite={false}
           onFavorite={handleFavorite}
           open={openDetails}
@@ -288,15 +288,10 @@ const FileGeneralRecentCard = ({
             variant="contained"
             color="success"
             onClick={() => {
-              if (dataGeneralFolder && dataUploadDocsToSlot == null) {
-                dataGeneralFolder.handleUploadDocumentToStoreFolder(file.id);
-              } else if (dataUploadDocsToSlot) {
-                handleAddDocumentToSlot(
-                  dataUploadDocsToSlot.classId,
-                  file.id,
-                  dataUploadDocsToSlot.slotId,
-                  dataUploadDocsToSlot.subjectId
-                );
+              if (data.types.find((type) => type === 'folderUploadDoc')) {
+                data.handleUploadDocumentToStoreFolder(file.id);
+              } else if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
+                handleAddDocumentToSlot(data.classId, file.id, data.slotId, data.subjectId);
               }
               handleCloseConfirmAddDocument();
             }}

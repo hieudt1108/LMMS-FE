@@ -51,7 +51,18 @@ export default function FolderNewDocumentPostPage() {
           ]}
         />
 
-        <FolderNewPostForm />
+        <FolderNewPostForm
+          data={{
+            ...folder,
+            handleBackPage: () => {
+              dispatch(getFolderRedux(folder.parentId));
+            },
+            types: ['folder'],
+            menuSubFolder: ['edit', 'delete'],
+            menuDocument: ['preview', 'download', 'share', 'delete'],
+            panel: ['folder'],
+          }}
+        />
       </Container>
     </>
   );

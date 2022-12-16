@@ -23,14 +23,12 @@ import { deleteDocumentInFolderRedux } from '../../../../redux/slices/folder';
 
 import ConfirmDialog from 'src/components/confirm-dialog';
 import { URL_GLOBAL } from '../../../../config';
+import { deleteDocumentInSubjectRedux } from 'src/redux/slices/subject';
 
 // ----------------------------------------------------------------------
 
 const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFolder, sx, ...other }) => {
   const { enqueueSnackbar } = useSnackbar();
-
-  const { copy } = useCopyToClipboard();
-  const [rerender, setRerender] = useState('');
 
   const isDesktop = useResponsive('up', 'sm');
 
@@ -102,12 +100,11 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
   };
 
   const handleDeleteFile = async () => {
-    console.log('handleDeleteDocument');
+    console.log('handleDeleteDocument', data, file.id);
     if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
-      const message = {
-        title: 'Chưa có tính năng này',
-        variant: 'error',
-      };
+      const message = await dispatch(
+        deleteDocumentInSubjectRedux({ id: data.class_id, docsId: file.id, slotId: data.slotId, index: data.index })
+      );
       if (message) {
         enqueueSnackbar(message.title, { variant: message.variant });
       }
@@ -292,7 +289,7 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
               if (data.types.find((type) => type === 'folderUploadDoc')) {
                 data.handleUploadDocumentToStoreFolder(file.id);
               } else if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
-                data.handleAddDocumentToSlot(data.classId, file.id, data.slotId, data.subjectId);
+                data.handleAddDocumentToSlot(file.id);
               }
               handleCloseConfirmAddDocument();
             }}

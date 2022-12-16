@@ -29,12 +29,11 @@ UploadDocToSlot.propTypes = {
 };
 export default function UploadDocToSlot({ open, onClose, slotId, classId, subjectId }) {
   const { folderUploadDocToSlot } = useSelector((state) => state.folder);
-  const { id } = folderUploadDocToSlot;
   const { enqueueSnackbar } = useSnackbar();
 
   const [currentTab, setCurrentTab] = useState(0);
-  const [myFolderId, setMyFolderId] = useState(0);
-  const handleAddDocumentToSlot = async (classId, documentId, slotId, subjectId) => {
+
+  const handleAddDocumentToSlot = async (documentId) => {
     console.log('postData', classId, documentId, slotId, subjectId);
 
     const message = await dispatch(postDocumentsInSlotRedux(classId, documentId, slotId, subjectId));
@@ -52,6 +51,7 @@ export default function UploadDocToSlot({ open, onClose, slotId, classId, subjec
         <GeneralFilePage
           data={{
             handleAddDocumentToSlot,
+            onClose: onClose,
             ...folderUploadDocToSlot,
             handleBackPage: () => {
               dispatch(getFolderUploadDocToSlotRedux(folderUploadDocToSlot.parentId));
@@ -59,13 +59,14 @@ export default function UploadDocToSlot({ open, onClose, slotId, classId, subjec
             types: ['folderUploadDocToSlot'],
             menuSubFolder: [],
             menuDocument: [],
-            panel: ['popup'],
+            panel: ['popupUploadDocToSlot'],
             slotId: slotId,
             classId: classId,
             subjectId: subjectId,
           }}
         />
       ),
+      // component: component,
     },
   ];
 
@@ -75,7 +76,7 @@ export default function UploadDocToSlot({ open, onClose, slotId, classId, subjec
       maxWidth="xl"
       open={open}
       onClose={() => {
-        setMyFolderId(0), onClose();
+        onClose();
       }}
     >
       <DialogActions sx={{ py: 2, px: 3 }}>
@@ -87,7 +88,7 @@ export default function UploadDocToSlot({ open, onClose, slotId, classId, subjec
           variant="outlined"
           color="inherit"
           onClick={() => {
-            setMyFolderId(0), onClose();
+            onClose();
           }}
         >
           Quay lại

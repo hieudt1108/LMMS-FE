@@ -84,10 +84,14 @@ export default function SysllabusSubject({
               {format(new Date(createDate), 'dd/MM/yyyy')}
             </Typography>
 
-            {documentInClass?.map((doc) =>
+            {documentInClass?.map((doc, index) =>
               doc?.slotId === id ? (
                 <Stack key={doc.id} spacing={2}>
-                  <FileGeneralRecentCard data={data} file={doc} onDelete={() => console.log('DELETE', doc.id)} />
+                  <FileGeneralRecentCard
+                    data={{ ...data, slotId: id, index: index }}
+                    file={doc}
+                    onDelete={() => console.log('DELETE', doc.id)}
+                  />
                 </Stack>
               ) : (
                 ''

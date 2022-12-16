@@ -35,6 +35,7 @@ import Iconify from 'src/components/iconify';
 import DataGridBasic from 'src/sections/_examples/mui/data-grid/DataGridBasic';
 import UploadMyDocumentDialog from '../storeFolder/UploadMyDocumentDialog';
 import PopupGetFolder from '../general/getFiletoDocPrivate/PopupGetFolder';
+import UploadNewDocToSlotDialog from '../myclass/popupdiaglog/UploadNewDocToSlot';
 
 // ----------------------------------------------------------------------
 
@@ -63,6 +64,12 @@ export default function GeneralFilePage({ data }) {
   const [openFormUploadDocument, setOpenFormUploadDocument] = useState(false);
 
   const [openPopupSaveInMyFolder, setOpenPopupSaveInMyFolder] = useState(false);
+
+  const [openPopupUploadNewDocToSlot, setOpenPopupUploadNewDocToSlot] = useState(false);
+
+  const handlePopupUploadNewDocToSlot = () => {
+    setOpenPopupUploadNewDocToSlot(false);
+  };
 
   const handleClosePopupSaveInMyFolder = () => {
     setOpenPopupSaveInMyFolder(false);
@@ -179,7 +186,11 @@ export default function GeneralFilePage({ data }) {
                 link={PATH_DASHBOARD.fileManager}
                 onOpen={
                   (data.panel.find((panel) => panel === 'folder') && handleOpenUploadFile) ||
-                  (data.panel.find((panel) => panel === 'storeFolder') && handleOpenFormUploadDocument)
+                  (data.panel.find((panel) => panel === 'storeFolder') && handleOpenFormUploadDocument) ||
+                  (data.panel.find((panel) => panel === 'popupUploadDocToSlot') &&
+                    (() => {
+                      setOpenPopupUploadNewDocToSlot(true);
+                    }))
                 }
                 sx={{ mt: 2 }}
               />
@@ -213,6 +224,13 @@ export default function GeneralFilePage({ data }) {
 
       {openPopupSaveInMyFolder && (
         <PopupGetFolder open={openPopupSaveInMyFolder} onClose={handleClosePopupSaveInMyFolder} data={documentHandle} />
+      )}
+      {openPopupUploadNewDocToSlot && (
+        <UploadNewDocToSlotDialog
+          open={openPopupUploadNewDocToSlot}
+          onClose={handlePopupUploadNewDocToSlot}
+          data={data}
+        />
       )}
     </>
   );

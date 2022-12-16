@@ -29,14 +29,14 @@ export default function DocumentLocal({ data, documentInClass, handleOpenFormUpl
         </Stack>
         <Stack spacing={2}>
           {documentInClass?.map(
-            (doc) =>
+            (doc, index) =>
               doc.slotId === null && (
                 <Stack spacing={2}>
                   <FileGeneralRecentCard
                     key={doc.id}
                     file={doc}
                     onDelete={() => console.log('DELETE', doc.id)}
-                    data={data}
+                    data={{ ...data, index }}
                   />
                 </Stack>
               )

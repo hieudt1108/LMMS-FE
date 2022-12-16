@@ -125,7 +125,6 @@ export default function FileFolderCard({ data, folder, selected, onSelect, onDel
   };
 
   const handleDeleteFolder = async () => {
-    console.log('handleDeleteDocument');
     const message = await dispatch(deleteSubFolderInFolderRedux(folder.id));
     if (message) {
       enqueueSnackbar(message.title, { variant: message.variant });

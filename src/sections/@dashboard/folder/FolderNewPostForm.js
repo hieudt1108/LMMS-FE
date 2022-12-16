@@ -18,7 +18,12 @@ import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload } from '../
 import { postDocument, postFile } from '../../../dataProvider/agent';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { createDocumentInitialRedux, createDocumentRedux, uploadDocumentRedux } from 'src/redux/slices/folder';
+import {
+  createDocumentInitialRedux,
+  createDocumentInSubjectRedux,
+  createDocumentRedux,
+  uploadDocumentRedux,
+} from 'src/redux/slices/folder';
 import { Upload } from '../../../components/upload';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/useAuthContext';
@@ -42,7 +47,8 @@ function TextCode() {
   return result;
 }
 
-export default function FolderNewPostForm({ dataGeneralFolder }) {
+export default function FolderNewPostForm({ data }) {
+  console.log('FolderNewPostForm', data);
   const { user } = useAuthContext();
   const formData = new FormData();
   const {
@@ -122,34 +128,48 @@ export default function FolderNewPostForm({ dataGeneralFolder }) {
     console.log('onSubmit', items);
     for (let index = items.length - 1; index >= 0; --index) {
       try {
-        const data = items[index];
+        const newFolder = items[index];
 
         formData.append('File', getValues(`items[${index}].file`));
         const response = await postFile(formData);
         if (response.status !== 200) {
-          enqueueSnackbar(`Tạo tài liệu${data.code} thất bại`, { variant: 'error' });
+          enqueueSnackbar(`Tạo tài liệu${newFolder.code} thất bại`, { variant: 'error' });
           continue;
         }
         console.log('response', response);
 
-        data.TypeFile = response.data.contentType;
-        data.urlDocument = response.data.fileName;
-        data.size = response.data.size;
+        newFolder.TypeFile = response.data.contentType;
+        newFolder.urlDocument = response.data.fileName;
+        newFolder.size = response.data.size;
 
-        if (!data.programId) {
-          data.programId = programs[0].id;
+        if (!newFolder.programId) {
+          newFolder.programId = programs[0].id;
         }
-        if (!data.subjectId) {
-          data.subjectId = user.subjects[0].id;
+        if (!newFolder.subjectId) {
+          newFolder.subjectId = user.subjects[0].id;
         }
-        if (!data.typeDocumentId) {
-          data.typeDocumentId = typeDocuments[0].id;
+        if (!newFolder.typeDocumentId) {
+          newFolder.typeDocumentId = typeDocuments[0].id;
         }
-        data.folderId = dataGeneralFolder ? dataGeneralFolder.generalFolderId : folderId;
-        const message = await dispatch(createDocumentRedux(data));
-        if (message) {
-          enqueueSnackbar(message.title, { variant: message.variant });
+        if (!_.isEmpty(data.types)) {
+          newFolder.folderId = data.id;
+        } else {
+          enqueueSnackbar('Không xác định được thư mục lưu trữ tài liệu', { variant: 'error' });
+          continue;
         }
+        if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
+          const message = await dispatch(createDocumentInSubjectRedux(newFolder));
+          await data.handleAddDocumentToSlot(message.documentId);
+          if (message) {
+            enqueueSnackbar(message.title, { variant: message.variant });
+          }
+        } else {
+          const message = await dispatch(createDocumentRedux(newFolder));
+          if (message) {
+            enqueueSnackbar(message.title, { variant: message.variant });
+          }
+        }
+
         remove(index);
       } catch (error) {
         console.error(`onSubmit error at index: ${index}`, error);
@@ -232,11 +252,10 @@ export default function FolderNewPostForm({ dataGeneralFolder }) {
                   </Stack>
                 </Card>
               </Grid>
-              {!dataUploadDocsToSlot.disableChooseOptions ? (
-                <Grid item xs={12} md={5}>
-                  <Card sx={{ p: 3 }}>
-                    <Stack spacing={3}>
-                      {/* <div>
+              <Grid item xs={12} md={5}>
+                <Card sx={{ p: 3 }}>
+                  <Stack spacing={3}>
+                    {/* <div>
                       <RHFSwitch
                         name="status"
                         label="Tài liệu công khai/ riêng tư"
@@ -245,63 +264,51 @@ export default function FolderNewPostForm({ dataGeneralFolder }) {
                       />
                     </div> */}
 
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Chương Trình</span>
-                        <RHFSelect name={`items[${index}].programId`} placeholder="Chương trình">
-                          {programs.map((option, index) => (
-                            <option key={index} value={option.id}>
-                              {option.name}
-                            </option>
-                          ))}
-                        </RHFSelect>
-                      </div>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
-                        <RHFSelect name={`items[${index}].subjectId`} placeholder="Môn học">
-                          {user.subjects.map((option, index) => (
-                            <option key={index} value={option.id}>
-                              {option.name}
-                            </option>
-                          ))}
-                        </RHFSelect>
-                      </div>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
-                        <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
-                          {typeDocuments.map((option, index) => (
-                            <option key={index} value={option.id}>
-                              {option.name}
-                            </option>
-                          ))}
-                        </RHFSelect>
-                      </div>
-                    </Stack>
-                  </Card>
-
-                  <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-                    <Button
-                      size="small"
-                      color="error"
-                      startIcon={<Iconify icon="eva:trash-2-outline" />}
-                      onClick={() => handleRemove(index - 1)}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Chương Trình</span>
+                      <RHFSelect name={`items[${index}].programId`} placeholder="Chương trình">
+                        {programs.map((option, index) => (
+                          <option key={index} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </RHFSelect>
+                    </div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
                     >
-                      Gỡ bản ghi
-                    </Button>
+                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
+                      <RHFSelect name={`items[${index}].subjectId`} placeholder="Môn học">
+                        {user.subjects.map((option, index) => (
+                          <option key={index} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </RHFSelect>
+                    </div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
+                      <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
+                        {typeDocuments.map((option, index) => (
+                          <option key={index} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </RHFSelect>
+                    </div>
                   </Stack>
-                </Grid>
-              ) : (
+                </Card>
+
                 <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
                   <Button
                     size="small"
@@ -312,7 +319,7 @@ export default function FolderNewPostForm({ dataGeneralFolder }) {
                     Gỡ bản ghi
                   </Button>
                 </Stack>
-              )}
+              </Grid>
             </Grid>
 
             <Divider sx={{ my: 3, borderStyle: 'dashed' }} />

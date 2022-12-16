@@ -15,16 +15,13 @@ import {
   Typography,
 } from '@mui/material';
 // components
-import Scrollbar from '../../../components/scrollbar';
-import React, { useCallback, useEffect, useState } from 'react';
-import { getDocumentById, getGradeById } from '../../../dataProvider/agent';
-import ManageSubject from '../class/manage/ManageSubject';
-import ManageUser from '../class/manage/ManageUser';
+import React, { useState } from 'react';
+
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
 import { copyDocsToFolderRedux, getFolderUploadDocRedux } from 'src/redux/slices/folder';
-import { FolderNewPostForm, GeneralFilePage } from '../folder';
 import { useSnackbar } from 'notistack';
+import { FolderNewPostForm } from '../../folder';
 
 // ----------------------------------------------------------------------
 
@@ -33,56 +30,18 @@ import { useSnackbar } from 'notistack';
 //   onClose: PropTypes.func,
 // };
 
-export default function UploadMyDocumentDialog({ open, onClose }) {
-  const { folderUploadDoc } = useSelector((state) => state.folder);
+export default function UploadNewDocToSlotDialog({ open, onClose, data }) {
+  const { folderUploadDocToSlot } = useSelector((state) => state.folder);
   const { enqueueSnackbar } = useSnackbar();
 
   const [currentTab, setCurrentTab] = useState(0);
 
-  const handleUploadDocumentToStoreFolder = async (myDocumentId) => {
-    const message = await dispatch(copyDocsToFolderRedux(folderUploadDoc.id, myDocumentId));
-    if (message) {
-      enqueueSnackbar(message.title, { variant: message.variant });
-    }
-  };
-
   const tabs = [
     {
       id: 0,
-      value: 'myDocument',
-      label: `Tài liệu của tôi`,
-      component: (
-        <GeneralFilePage
-          data={{
-            handleUploadDocumentToStoreFolder,
-            ...folderUploadDoc,
-            handleBackPage: () => {
-              dispatch(getFolderUploadDocRedux(folderUploadDoc.parentId));
-            },
-            types: ['folderUploadDoc'],
-            menuSubFolder: [],
-            menuDocument: [],
-            panel: ['popup'],
-          }}
-        />
-      ),
-    },
-    {
-      id: 1,
       value: 'uploadDocument',
       label: 'Đăng tải tài liệu',
-      component: (
-        <FolderNewPostForm
-          data={{
-            handleUploadDocumentToStoreFolder,
-            ...folderUploadDoc,
-            handleBackPage: () => {
-              dispatch(getFolderUploadDocRedux(folderUploadDoc.parentId));
-            },
-            types: ['folderUploadDoc'],
-          }}
-        />
-      ),
+      component: <FolderNewPostForm data={data} />,
     },
   ];
 

@@ -28,6 +28,7 @@ const data = {
 export default function index() {
   const { themeStretch } = useSettingsContext();
   const { subject, documentInClass } = useSelector((state) => state.subject);
+  console.log('index', documentInClass);
 
   const [docs, setDocs] = useState([]);
 
@@ -80,10 +81,8 @@ export default function index() {
                 Tài liệu chung:
               </Typography>
               <DocumentLocal
-                data={data}
+                data={{ ...data, class_id: class_id, subject_id: subject_id, slotId: null }}
                 documentInClass={documentInClass}
-                classId={class_id}
-                subjectId={subject_id}
                 handleOpenFormUploadDocToSlot={handleOpenFormUploadDocToSlot}
               />
             </Stack>
@@ -98,9 +97,7 @@ export default function index() {
               {subject?.listSlots?.map((element) => (
                 <SysllabusSubject
                   document={element}
-                  data={data}
-                  classId={class_id}
-                  subjectId={subject_id}
+                  data={{ ...data, class_id: class_id, subject_id: subject_id }}
                   key={data.id}
                   documentInClass={documentInClass}
                   handleOpenFormUploadDocToSlot={handleOpenFormUploadDocToSlot}

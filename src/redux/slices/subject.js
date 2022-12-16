@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { dispatch } from '../store';
 import {
   deleteDocument,
+  deleteDocumentInSubject,
   deleteFolder,
   getAllProgram,
   getAllSubject,
@@ -64,6 +65,11 @@ const slice = createSlice({
       const { document } = action.payload;
       state.isLoading = false;
       state.documentInClass = [...state.documentInClass, document];
+    },
+    deleteDocumentInSubjectSuccess(state, action) {
+      const { index } = action.payload;
+      state.isLoading = false;
+      state.documentInClass = [...state.documentInClass.slice(0, index), ...state.documentInClass.slice(index + 1)];
     },
   },
 });
@@ -135,6 +141,26 @@ export function postDocumentsInSlotRedux(classId, documentId, slotId, subjectId)
         return returnMessageError(`${response.response.data.title}`);
       }
       dispatch(slice.actions.postDocumentsInSlotSuccess({ document: response.data.data }));
+    } catch (error) {
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
+export function deleteDocumentInSubjectRedux(params) {
+  return async () => {
+    try {
+      if (_.isEmpty(params)) {
+        return returnMessageError(`truyền params sai`);
+      }
+      dispatch(slice.actions.startLoading());
+
+      const response = await deleteDocumentInSubject(params);
+
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
+      }
+      dispatch(slice.actions.deleteDocumentInSubjectSuccess({ index: params.index }));
     } catch (error) {
       return returnMessageError(`${error.message}`);
     }

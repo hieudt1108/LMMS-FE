@@ -158,6 +158,12 @@ const slice = createSlice({
       state.isLoading = false;
       state.folder.listDocuments = [...state.folder.listDocuments, document];
     },
+    createDocumentInSubjectSuccess(state, action) {
+      const { document } = action.payload;
+      console.log('createDocumentInSubjectSuccess', document);
+      state.isLoading = false;
+      state.folderUploadDocToSlot.listDocuments = [...state.folderUploadDocToSlot.listDocuments, document];
+    },
   },
 });
 
@@ -375,15 +381,39 @@ export function createDocumentRedux(data) {
       if (!data.file) {
         return returnMessageError(`Tạo tài liệu${data.code} thất bại`);
       }
-
       console.log('data', data);
 
       const responsePostDocument = await postDocument(data);
       if (responsePostDocument instanceof Error) {
         return returnMessageError(`${responsePostDocument.response.data.title}`);
       }
-      dispatch(slice.actions.createDocumentSuccess({ document: response.data.data }));
+      dispatch(slice.actions.createDocumentSuccess({ document: responsePostDocument.data.data }));
       return returnMessageSuccess(`Tạo tài liệu${data.code} thành công`);
+    } catch (error) {
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
+export function createDocumentInSubjectRedux(data) {
+  return async () => {
+    try {
+      if (!data.file) {
+        return returnMessageError(`Tạo tài liệu${data.code} thất bại`);
+      }
+      console.log('data', data);
+
+      const responsePostDocument = await postDocument(data);
+      console.log('createDocumentInSubjectRedux', responsePostDocument);
+      if (responsePostDocument instanceof Error) {
+        return returnMessageError(`${responsePostDocument.response.data.title}`);
+      }
+      dispatch(slice.actions.createDocumentInSubjectSuccess({ document: responsePostDocument.data.data }));
+      return {
+        title: `Tạo tài liệu${data.code} thành công`,
+        documentId: responsePostDocument.data.data.id,
+        variant: '',
+      };
     } catch (error) {
       return returnMessageError(`${error.message}`);
     }

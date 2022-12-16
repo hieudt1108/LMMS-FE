@@ -431,6 +431,14 @@ const updateSubjectClass = (id, payload) => {
   return putApi(`Class/updateSubject/${id}`, payload);
 };
 
+const deleteDocumentInSubject = (params) => {
+  if (params.slotId) {
+    return putApi(`Document/removeDocInClass-Slot/${params.id}?docsId=${params.docsId}&slotId=${params.slotId}`);
+  } else {
+    return putApi(`Document/removeDocInClass-Slot/${params.id}?docsId=${params.docsId}`);
+  }
+};
+
 // LEVEL
 const updateLevel = (id, payload) => {
   return putApi(`Level/${id}`, payload);
@@ -575,4 +583,5 @@ export {
   postDocumentsInSlot,
   deleteFolder,
   updateFolder,
+  deleteDocumentInSubject,
 };

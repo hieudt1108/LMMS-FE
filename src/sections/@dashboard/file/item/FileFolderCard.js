@@ -17,10 +17,12 @@ import FileNewFolderDialog from '../portal/FileNewFolderDialog';
 import { dispatch } from 'src/redux/store';
 import {
   deleteSubFolderInFolderRedux,
+  deleteSubFolderInStoreFolderRedux,
   getFolderRedux,
   getFolderUploadDocRedux,
   getFolderUploadDocToSlotRedux,
   updateSubFolderRedux,
+  updateSubStoreFolderRedux,
 } from 'src/redux/slices/folder';
 
 export default function FileFolderCard({ data, folder, selected, onSelect, onDelete, sx, ...other }) {
@@ -125,19 +127,40 @@ export default function FileFolderCard({ data, folder, selected, onSelect, onDel
   };
 
   const handleDeleteFolder = async () => {
-    const message = await dispatch(deleteSubFolderInFolderRedux(folder.id));
-    if (message) {
-      enqueueSnackbar(message.title, { variant: message.variant });
+    if (data.types.find((type) => type === 'storeFolder')) {
+      const message = await dispatch(deleteSubFolderInStoreFolderRedux(folder.id));
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      handleCloseConfirm();
+    } else if (data.types.find((type) => type === 'folder')) {
+      const message = await dispatch(deleteSubFolderInFolderRedux(folder.id));
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      handleCloseConfirm();
+    } else {
+      enqueueSnackbar(`Chỉ được xóa tài liệu ở thư mục của tôi và thư mục chung`, { variant: `error` });
     }
-    handleCloseConfirm();
   };
 
   const handleUpdateSubFolder = async () => {
-    handleCloseEditFolder();
-    setFolderName(folderName);
-    const message = await dispatch(updateSubFolderRedux(folder.id, { name: folderName }));
-    if (message) {
-      enqueueSnackbar(message.title, { variant: message.variant });
+    if (data.types.find((type) => type === 'storeFolder')) {
+      const message = await dispatch(updateSubStoreFolderRedux(folder.id, { name: folderName }));
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      setFolderName(folderName);
+      handleCloseEditFolder();
+    } else if (data.types.find((type) => type === 'folder')) {
+      const message = await dispatch(updateSubFolderRedux(folder.id, { name: folderName }));
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      setFolderName(folderName);
+      handleCloseEditFolder();
+    } else {
+      enqueueSnackbar(`Chỉ được sửa thư mục ở thư mục của tôi và thư mục chung`, { variant: `error` });
     }
   };
 

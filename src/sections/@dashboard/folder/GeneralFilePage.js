@@ -24,6 +24,7 @@ import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import {
   createFolderRedux,
+  createStoreFolderRedux,
   getFolderRedux,
   getFolderSaveDocToMyFolderRedux,
   getFolderSavetoDocToMyFolderRedux,
@@ -49,6 +50,7 @@ GeneralFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function GeneralFilePage({ data }) {
   const theme = useTheme();
+  const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { id, name, parentId, listFolders, listDocuments } = data;
   console.log('GeneralFilePage', data);
@@ -105,18 +107,33 @@ export default function GeneralFilePage({ data }) {
   }, []);
 
   const handleCreateNewFolder = async () => {
-    setFolderName('');
-    const message = await dispatch(
-      createFolderRedux({
-        name: folderName,
-        parentId: Number.parseInt(id),
-      })
-    );
-    console.log('CREATE NEW FOLDER', message);
-    if (message) {
-      enqueueSnackbar(message.title, { variant: message.variant });
+    if (data.types.find((type) => type === 'storeFolder')) {
+      const message = await dispatch(
+        createStoreFolderRedux({
+          name: folderName,
+          parentId: Number.parseInt(id),
+        })
+      );
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      setFolderName('');
+      handleCloseNewFolder();
+    } else if (data.types.find((type) => type === 'folder')) {
+      const message = await dispatch(
+        createFolderRedux({
+          name: folderName,
+          parentId: Number.parseInt(id),
+        })
+      );
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      setFolderName('');
+      handleCloseNewFolder();
+    } else {
+      enqueueSnackbar(`Chỉ được tạo tài liệu ở thư mục của tôi và thư mục chung`, { variant: `error` });
     }
-    handleCloseNewFolder();
   };
 
   return (
@@ -209,15 +226,17 @@ export default function GeneralFilePage({ data }) {
           </Grid>
         </Grid>
       </Container>
+      {openNewFolder && (
+        <FileNewFolderDialog
+          open={openNewFolder}
+          onClose={handleCloseNewFolder}
+          title="New Folder"
+          folderName={folderName}
+          onChangeFolderName={handleChangeFolderName}
+          onCreate={handleCreateNewFolder}
+        />
+      )}
 
-      <FileNewFolderDialog
-        open={openNewFolder}
-        onClose={handleCloseNewFolder}
-        title="New Folder"
-        folderName={folderName}
-        onChangeFolderName={handleChangeFolderName}
-        onCreate={handleCreateNewFolder}
-      />
       {openFormUploadDocument && (
         <UploadMyDocumentDialog open={openFormUploadDocument} onClose={() => setOpenFormUploadDocument(false)} />
       )}

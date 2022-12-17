@@ -22,7 +22,7 @@ import ManageSubject from '../class/manage/ManageSubject';
 import ManageUser from '../class/manage/ManageUser';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { copyDocsToFolderRedux, getFolderUploadDocRedux } from 'src/redux/slices/folder';
+import { copyDocsToFolderRedux, copyDocsToStoreFolderRedux, getFolderUploadDocRedux } from 'src/redux/slices/folder';
 import { FolderNewPostForm, GeneralFilePage } from '../folder';
 import { useSnackbar } from 'notistack';
 
@@ -40,7 +40,7 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
   const [currentTab, setCurrentTab] = useState(0);
 
   const handleUploadDocumentToStoreFolder = async (myDocumentId) => {
-    const message = await dispatch(copyDocsToFolderRedux(folderUploadDoc.id, myDocumentId));
+    const message = await dispatch(copyDocsToStoreFolderRedux(folderUploadDoc.id, myDocumentId));
     if (message) {
       enqueueSnackbar(message.title, { variant: message.variant });
     }

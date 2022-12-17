@@ -19,7 +19,7 @@ import { FileDetailsDrawer, FileShareDialog } from '../../file';
 import { postDocumentsInSlot } from '../../../../dataProvider/agent';
 import { dispatch } from 'src/redux/store';
 import { getOneDocumentRedux, startDownloadFileRedux } from 'src/redux/slices/document';
-import { deleteDocumentInFolderRedux } from '../../../../redux/slices/folder';
+import { deleteDocumentInFolderRedux, deleteDocumentInStoreFolderRedux } from '../../../../redux/slices/folder';
 
 import ConfirmDialog from 'src/components/confirm-dialog';
 import { URL_GLOBAL } from '../../../../config';
@@ -113,12 +113,23 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
       return;
     }
 
-    const message = await dispatch(deleteDocumentInFolderRedux(file.id));
-    if (message) {
-      enqueueSnackbar(message.title, { variant: message.variant });
+    if (data.types.find((type) => type === 'storeFolder')) {
+      const message = await dispatch(deleteDocumentInStoreFolderRedux(file.id));
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      setOpenConfirmDeleteFile(false);
+      handleClosePopover();
+    } else if (data.types.find((type) => type === 'folder')) {
+      const message = await dispatch(deleteDocumentInFolderRedux(file.id));
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      setOpenConfirmDeleteFile(false);
+      handleClosePopover();
+    } else {
+      enqueueSnackbar(`Không xóa được tài liệu tại đây`, { variant: `error` });
     }
-    setOpenConfirmDeleteFile(false);
-    handleClosePopover();
   };
 
   return (

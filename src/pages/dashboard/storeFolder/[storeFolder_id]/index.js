@@ -68,7 +68,7 @@ export default function StoreFilePage() {
           handleBackPage: () => {
             dispatch(getStoreFolderRedux(storeFolder.parentId));
           },
-          types: ['folder'],
+          types: ['storeFolder'],
           menuSubFolder: ['edit', 'delete'],
           menuDocument: ['preview', 'download', 'saveInMyFolder', 'delete'],
           panel: ['storeFolder'],

@@ -8,14 +8,14 @@ import { Button, Chip, Divider, Stack, Typography } from '@mui/material';
 // _mock
 // components
 //
-import SlotListDialog from './SlotListDialog';
-import { getAllSlot } from '../../../dataProvider/agent';
+import PermissionListDialog from './PermissionListDialog';
+import { getAllPermission } from '../../../dataProvider/agent';
 import useResponsive from '../../../hooks/useResponsive';
 import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function SubjectNewEditSlot({ selectedSlots, handleSelectedSlot, slots }) {
+export default function RolesNewEditPermission({ selectedPermissions, handleSelectedPermission, permissions }) {
     const {
         watch,
         getValues,
@@ -36,9 +36,9 @@ export default function SubjectNewEditSlot({ selectedSlots, handleSelectedSlot, 
         setOpenFrom(false);
     };
 
-    const handleAddSlot = (data) => {
-        const arrObjSlot = slots.filter((item) => data.includes(item.id));
-        setValue('listSlots', arrObjSlot);
+    const handleAddPermission = (data) => {
+        const arrObjPermission = permissions.filter((item) => data.includes(item.id));
+        setValue('permissionId', arrObjPermission);
     };
 
     return (
@@ -50,25 +50,25 @@ export default function SubjectNewEditSlot({ selectedSlots, handleSelectedSlot, 
             <Stack sx={{ width: 1 }}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
                     <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
-                        Tiết học:
+                        Bao gồm những quyền:
                     </Typography>
 
                     <Button size="small" startIcon={<Iconify icon="eva:edit-fill" />} onClick={handleOpenFrom}>
                         Thêm/Thay đổi
                     </Button>
 
-                    <SlotListDialog
-                        slots={slots}
-                        selectedSlots={selectedSlots}
+                    <PermissionListDialog
+                        permissions={permissions}
+                        selectedPermissions={selectedPermissions}
                         open={openFrom}
                         onClose={handleCloseFrom}
-                        handleAddSlot={handleAddSlot}
+                        handleAddPermission={handleAddPermission}
                     />
                 </Stack>
-                {selectedSlots?.length > 0 && (
+                {selectedPermissions?.length > 0 && (
                     <Panel>
-                        {selectedSlots.map((slot) => (
-                            <Chip key={slot.id} label={slot.name} size="small" sx={{ m: 0.5 }} />
+                        {selectedPermissions.map((perm) => (
+                            <Chip key={perm.id} label={perm.name} size="small" sx={{ m: 0.5 }} />
                         ))}
                     </Panel>
                 )}

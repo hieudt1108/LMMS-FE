@@ -57,7 +57,7 @@ export default function RolesTableRow({ row, selected, onEditRow, onSelectRow, o
     <>
       <TableRow hover selected={selected}>
         <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
+
         </TableCell>
 
         <TableCell align="left">{name}</TableCell>
@@ -65,22 +65,6 @@ export default function RolesTableRow({ row, selected, onEditRow, onSelectRow, o
 
         <TableCell align="left">{new Date(createDate).toLocaleDateString()}</TableCell>
 
-        <TableCell>
-          {rolePermission.map((r) =>
-              r === null || '' ? (
-                  <Label></Label>
-              ) : (
-                  <Label
-                      key={r.id}
-                      variant="soft"
-                      color={'success'}
-                      sx={{ textTransform: 'capitalize' }}
-                  >
-                    {r.name}
-                  </Label>
-              )
-          )}
-        </TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

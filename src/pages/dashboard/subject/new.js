@@ -11,6 +11,8 @@ import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 // sections
 import SubjectNewEditForm from '../../../sections/@dashboard/subject/SubjectNewEditForm';
+import {useEffect, useState} from "react";
+import {getAllSlot} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +22,21 @@ SubjectCreatePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout
 
 export default function SubjectCreatePage() {
   const { themeStretch } = useSettingsContext();
+
+  const [slots, setSlots] = useState([]);
+
+    async function fetchSlots() {
+        const res = await getAllSlot({ pageIndex: 1, pageSize: 100 });
+        if (res.status < 400) {
+            setSlots(res.data.data);
+        } else {
+            console.log('error');
+        }
+    }
+
+    useEffect(() => {
+        fetchSlots();
+    }, []);
 
   return (
     <>
@@ -42,7 +59,7 @@ export default function SubjectCreatePage() {
             { name: 'Tạo mới' },
           ]}
         />
-        <SubjectNewEditForm />
+        <SubjectNewEditForm slots={slots}/>
       </Container>
     </>
   );

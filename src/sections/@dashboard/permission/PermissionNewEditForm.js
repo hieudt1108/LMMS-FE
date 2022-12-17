@@ -16,7 +16,7 @@ import {PATH_DASHBOARD} from '../../../routes/paths';
 // components
 import {useSnackbar} from '../../../components/snackbar';
 import FormProvider, {RHFTextField} from '../../../components/hook-form';
-import {createPermission, getAllPermission} from "../../../dataProvider/agent";
+import {createPermission, getAllPermission, updatePermission} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -158,17 +158,6 @@ export default function PermissionNewEditForm({ isEdit = false, currentPermissio
                     id="description"
 
                 />
-                <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
-                  Cài đặt quyền
-                </Typography>
-                <div></div>
-                <RHFTextField
-                    name="path"
-                    label="Đường dẫn"
-                    id="path"
-                    multiline rows={3}
-                />
-
               </Box>
 
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>

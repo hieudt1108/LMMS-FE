@@ -56,7 +56,7 @@ export default function ProgramTableRow({ data, selected, onEditRow, onSelectRow
     <>
       <TableRow hover selected={selected}>
         <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
+
         </TableCell>
 
         <TableCell align="left">{name}</TableCell>

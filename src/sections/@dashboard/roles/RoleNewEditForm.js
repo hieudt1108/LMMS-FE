@@ -4,7 +4,7 @@ import {useEffect, useMemo, useState} from 'react';
 // next
 import {useRouter} from 'next/router';
 // form
-import {useForm} from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 // @mui
 import {LoadingButton} from '@mui/lab';
@@ -17,7 +17,10 @@ import {PATH_DASHBOARD} from '../../../routes/paths';
 import {useSnackbar} from '../../../components/snackbar';
 import FormProvider, {RHFAutocomplete, RHFSelect, RHFTextField} from '../../../components/hook-form';
 import Iconify from "../../../components/iconify";
-import {createRole, getAllPermission, updateRole} from "../../../dataProvider/agent";
+import {createRole, createSubject, getAllPermission, updateRole, updateSubject} from "../../../dataProvider/agent";
+import SubjectNewEditSlot from "../subject/SubjectNewEditSlot";
+import RolesNewEditPermisson from "./RolesNewEditPermission";
+import RolesNewEditPermission from "./RolesNewEditPermission";
 
 // ----------------------------------------------------------------------
 
@@ -26,8 +29,9 @@ RolesNewEditForm.propTypes = {
   currentRoles: PropTypes.object,
 };
 
-export default function RolesNewEditForm({ isEdit = false, currentRoles }) {
+export default function RolesNewEditForm({ isEdit = false, currentRoles, permissions }) {
   const { push } = useRouter();
+  console.log(permissions)
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -40,8 +44,7 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles }) {
       () => ({
         name: currentRoles?.name || '',
         description: currentRoles?.description || '',
-        permissionId: [],
-        tagsId: [],
+        permissionId: currentRoles?.permissionId || [],
       }),
       [currentRoles]
   );
@@ -71,63 +74,51 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles }) {
   }, [isEdit, currentRoles]);
 
 
-  const [permissions, setPermissions] = useState([]);
-
-
-  useEffect(() => {
-    fetchPermissions();
-  }, []);
-
-
-  async function fetchPermissions() {
-    const res = await getAllPermission({pageIndex: 1, pageSize: 100});
-    if (res.status < 400) {
-      const transformData = res.data.data.map((tag) => {
-        return {
-          label: `${tag.name}  (${tag.description})`,
-          id: tag.id,
-        };
-      });
-      console.log(transformData)
-      setPermissions(transformData);
-    } else {
-      console.log('error fetch api');
-    }
-  }
-
   const onSubmit = async (data) => {
-    if(!isEdit){
+    if (!isEdit) {
       try {
-        const res = await createRole(data)
-        if (res.status < 400) {
-          reset();
-          enqueueSnackbar('Create success!');
-          push(PATH_DASHBOARD.role.list);
-        } else {
-          enqueueSnackbar('Create Fail');
-        }
-      } catch (error) {
-        enqueueSnackbar('Create Fail');
-      }
-    }else{
-      try {
-        const res = await updateRole(currentRoles.id,{
+        const res = await createRole({
           name: data.name,
           description: data.description,
-          permissionId: data.tagsId,
-        })
+          permissionId: data.permissionId?.map((perm) => perm.id),
+        });
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Update success!');
+          enqueueSnackbar('Tạo vai trò thành công');
           push(PATH_DASHBOARD.role.list);
         } else {
-          enqueueSnackbar('Update Fail');
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Update Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+      }
+    } else {
+      try {
+        // return console.log('Form data', data);
+        const res = await updateSubject(currentRoles.id, {
+          name: data.name,
+          description: data.description,
+          permissionId: data.permissionId?.map((perm) => perm.id),
+        });
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Cập nhật vai trò thành công!');
+          push(PATH_DASHBOARD.role.list);
+        } else {
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+        }
+      } catch (error) {
+        enqueueSnackbar('Đã có lỗi xảy ra !', { variant: 'error' });
       }
     }
+  };
 
+  const handleSelectedPermission = (data) => {
+    const listPermissionId = [];
+    data.map((perm) => {
+      listPermissionId.push(perm.id);
+    });
+    setValue('permissionId', listPermissionId);
   };
 
 
@@ -140,10 +131,6 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles }) {
                   rowGap={3}
                   columnGap={2}
                   display="grid"
-                  gridTemplateColumns={{
-                    xs: 'repeat(1, 1fr)',
-                    sm: 'repeat(2, 1fr)',
-                  }}
               >
                 <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
                   Thông tin vai trò
@@ -155,30 +142,21 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles }) {
                     id="name"
                 />
                 <RHFTextField
+
                     name="description"
                     label="Mô tả"
                     id="description"
 
                 />
-                <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
-                  Cài đặt vai trò
-                </Typography>
-                <div></div>
-                <RHFAutocomplete
+                <Controller
                     name="permissionId"
-                    multiple
-                    onChange={(event, newValue) => {
-                      setValue('permissionId', newValue);
-                      const tagsId = newValue.map((tag) => tag.id);
-                      setValue('tagsId', tagsId);
+                    control={control}
+                    defaultValue={[]}
+                    render={({ field: { onChange, onBlur, value, name, ref } }) => {
+                      return (
+                          <RolesNewEditPermission selectedPermissions={value} permissions={permissions} handleSelectedPermission={handleSelectedPermission} />
+                      );
                     }}
-                    options={permissions}
-                    renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                            <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
-                        ))
-                    }
-                    renderInput={(params) => <TextField label="Quyền" {...params} />}
                 />
 
               </Box>

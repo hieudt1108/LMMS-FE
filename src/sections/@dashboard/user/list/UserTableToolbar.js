@@ -102,7 +102,7 @@ export default function UserTableToolbar({
         fullWidth
         value={filterByEmail}
         onChange={onChangeFilterByEmail}
-        placeholder="Tìm kiếm người dùng..."
+        placeholder="Tìm kiếm người dùng theo email..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -114,9 +114,9 @@ export default function UserTableToolbar({
 
       <Button
         onClick={onClickFilter}
-        color="error"
+        color="success"
         sx={{ flexShrink: 0 }}
-        startIcon={<Iconify icon="eva:trash-2-outline" />}
+        startIcon={<Iconify icon="eva:checkmark-square-2-outline" />}
       >
         Áp dụng
       </Button>

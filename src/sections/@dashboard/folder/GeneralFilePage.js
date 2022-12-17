@@ -155,7 +155,7 @@ export default function GeneralFilePage({ data }) {
           <Grid item xs={12} md={12} lg={12}>
             <div>
               <FilePanel
-                title="Folders"
+                title="Thư mục"
                 link={PATH_DASHBOARD.fileManager}
                 onOpen={
                   // bật lên với folder bình thường

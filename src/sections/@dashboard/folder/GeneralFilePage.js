@@ -78,7 +78,7 @@ export default function GeneralFilePage({ data }) {
   const handleOpenPopupSaveInMyFolder = async (data) => {
     const { document } = data;
     await dispatch(getFolderSaveDocToMyFolderRedux(0));
-    // setDocumentHandle(document);
+    setDocumentHandle(document);
     setOpenPopupSaveInMyFolder(true);
   };
 

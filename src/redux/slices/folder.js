@@ -27,6 +27,13 @@ const initialState = {
     listFolders: [],
     listDocuments: [],
   },
+  storeFolder: {
+    id: '',
+    name: '',
+    parentId: 0,
+    listFolders: [],
+    listDocuments: [],
+  },
   folderUploadDoc: {
     id: '',
     name: '',
@@ -83,6 +90,12 @@ const slice = createSlice({
       console.log('getFolderSuccess', action);
       state.isLoading = false;
       state.folder = { ...state.folder, ...action.payload };
+    },
+
+    getStoreFolderSuccess(state, action) {
+      console.log('getStoreFolderSuccess', action);
+      state.isLoading = false;
+      state.storeFolder = { ...state.storeFolder, ...action.payload };
     },
     getFolderUploadDocSuccess(state, action) {
       state.isLoading = false;
@@ -221,6 +234,23 @@ export function getFolderSaveDocToMyFolderRedux(params) {
       dispatch(slice.actions.startLoading());
       const response = await getFolderByID(params);
       dispatch(slice.actions.getFolderSaveToDocToMyFolderSuccess(response.data.data));
+    } catch (error) {
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
+export function getStoreFolderRedux(params) {
+  return async () => {
+    try {
+      console.log('getFolderRedux', params);
+      if (!params && params !== 0) {
+        return dispatch(slice.actions.hasError('không có folderId'));
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await getFolderByID(params);
+      console.log('getFolderByID', response);
+      dispatch(slice.actions.getStoreFolderSuccess(response.data.data));
     } catch (error) {
       return returnMessageError(`${error.message}`);
     }

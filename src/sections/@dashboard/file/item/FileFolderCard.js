@@ -26,7 +26,7 @@ import {
 } from 'src/redux/slices/folder';
 
 export default function FileFolderCard({ data, folder, selected, onSelect, onDelete, sx, ...other }) {
-  console.log('FileFolderCard', folder);
+  console.log('FileFolderCard', data, folder);
 
   const { enqueueSnackbar } = useSnackbar();
 

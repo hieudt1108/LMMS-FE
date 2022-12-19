@@ -5,7 +5,7 @@ import match from 'autosuggest-highlight/match';
 // next
 import { useRouter } from 'next/router';
 // @mui
-import { Link, Typography, Autocomplete, InputAdornment, Avatar } from '@mui/material';
+import { Link, Typography, Autocomplete, InputAdornment, Avatar, Tooltip } from '@mui/material';
 // utils
 // routes
 // components
@@ -61,7 +61,7 @@ export default function FolderUserSearch() {
 
   return (
     <Autocomplete
-      size="small"
+      size="medium"
       autohighlight="true"
       popupIcon={null}
       options={searchResults}
@@ -86,7 +86,7 @@ export default function FolderUserSearch() {
       renderInput={(params) => (
         <CustomTextField
           {...params}
-          width={220}
+          width={250}
           placeholder="Search..."
           onKeyUp={handleKeyUp}
           InputProps={{
@@ -100,7 +100,7 @@ export default function FolderUserSearch() {
         />
       )}
       renderOption={(props, user, { inputValue }) => {
-        const { cover, gender, id, firstName, lastName } = user;
+        const { cover, gender, id, firstName, lastName, email } = user;
         const matches = match(`${firstName} ${lastName}`, inputValue);
         const parts = parse(`${firstName} ${lastName}`, matches);
 
@@ -120,8 +120,11 @@ export default function FolderUserSearch() {
                 >
                   {part.text}
                 </Typography>
-
               ))}
+              <br />
+              <Typography component="span" variant="subtitle2" color={'textPrimary'}>
+                {email}
+              </Typography>
             </Link>
           </li>
         );

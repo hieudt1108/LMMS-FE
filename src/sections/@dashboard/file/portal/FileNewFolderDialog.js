@@ -71,7 +71,7 @@ export default function FileNewFolderDialog({
 
       <DialogContent dividers sx={{ pt: 1, pb: 0, border: 'none' }}>
         {(onCreate || onUpdate) && (
-          <TextField fullWidth label="Folder name" value={folderName} onChange={onChangeFolderName} sx={{ mb: 3 }} />
+          <TextField fullWidth label="Tên thư mục" value={folderName} onChange={onChangeFolderName} sx={{ mb: 3 }} />
         )}
         {!(onCreate || onUpdate) && <Upload multiple files={files} onDrop={handleDrop} onRemove={handleRemoveFile} />}
       </DialogContent>
@@ -92,7 +92,7 @@ export default function FileNewFolderDialog({
         {(onCreate || onUpdate) && (
           <Stack direction="row" justifyContent="flex-end" flexGrow={1}>
             <Button variant="soft" onClick={onCreate || onUpdate}>
-              {onUpdate ? 'Save' : 'Create'}
+              {onUpdate ? 'Lưu' : 'Tạo'}
             </Button>
           </Stack>
         )}

@@ -5,6 +5,7 @@ import { Box, Button, Card, Checkbox, Dialog, Divider, FormControlLabel, Stack, 
 import Iconify from '../../../components/iconify';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import Scrollbar from "../../../components/scrollbar";
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +56,7 @@ export default function SlotListDialog({ selectedSlots, slots, onClose, open, ha
                     {selectedSlots?.length > 0 ? 'Thay đổi' : 'Thêm'}
                 </Button>
             </Stack>
-            <>
+            <Scrollbar sx={{ p: 1.5, pt: 0, maxHeight: 80 * 8 }}>
                 <Card sx={{ p: 2.5, px: 3 }}>
                     {/* <FormControlLabel label="Tất cả" control={<Checkbox value={'tất cả'} onChange={handleSelectSlots} />} /> */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
@@ -73,7 +74,7 @@ export default function SlotListDialog({ selectedSlots, slots, onClose, open, ha
                         ))}
                     </Box>
                 </Card>
-            </>
+            </Scrollbar>
         </Dialog>
     );
 }

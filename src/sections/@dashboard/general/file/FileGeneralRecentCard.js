@@ -219,7 +219,7 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
             onChange={handleFavorite}
             sx={{ p: 0.75 }}
           />
-          {!_.isEmpty(data.menuDocument) && (
+          {!_.isEmpty(data?.menuDocument) && (
             <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
@@ -233,35 +233,35 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
           file.typeFile == 'image/jpeg' ||
           file.typeFile == 'image/png' ||
           file.typeFile == 'application/pdf') &&
-          data.menuDocument.find((element) => element === 'preview') && (
+          data?.menuDocument.find((element) => element === 'preview') && (
             <MenuItem onClick={handlePreviewFile}>
               <Iconify icon="eva:link-2-fill" />
               Xem trước
             </MenuItem>
           )}
 
-        {data.menuDocument.find((element) => element === 'download') && (
+        {data?.menuDocument.find((element) => element === 'download') && (
           <MenuItem onClick={handleDownloadFile}>
             <Iconify icon="eva:download-outline" />
             Tải xuống
           </MenuItem>
         )}
 
-        {data.menuDocument.find((element) => element === 'saveInMyFolder') && (
+        {data?.menuDocument.find((element) => element === 'saveInMyFolder') && (
           <MenuItem onClick={() => handleOpenPopupSaveInMyFolder({ document: file })}>
             <Iconify icon="simple-line-icons:docs" />
             Tải về kho của tôi
           </MenuItem>
         )}
 
-        {data.menuDocument.find((element) => element === 'share') && (
+        {data?.menuDocument.find((element) => element === 'share') && (
           <MenuItem onClick={handleOpenShare}>
             <Iconify icon="eva:share-fill" />
             Chia sẻ
           </MenuItem>
         )}
 
-        {data.menuDocument.find((element) => element === 'delete') && (
+        {data?.menuDocument.find((element) => element === 'delete') && (
           <>
             <Divider sx={{ borderStyle: 'dashed' }} />
 

@@ -51,7 +51,6 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Tên vai trò', align: 'left' },
   { id: 'description', label: 'Mô tả', align: 'left' },
   { id: 'createDate', label: 'Ngày tạo', align: 'left' },
-  { id: 'permissionId', label: 'Quyền', align: 'left' },
   { id: '' },
 ];
 

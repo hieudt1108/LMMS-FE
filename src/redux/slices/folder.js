@@ -27,6 +27,13 @@ const initialState = {
     listFolders: [],
     listDocuments: [],
   },
+  storeFolder: {
+    id: '',
+    name: '',
+    parentId: 0,
+    listFolders: [],
+    listDocuments: [],
+  },
   folderUploadDoc: {
     id: '',
     name: '',
@@ -84,6 +91,12 @@ const slice = createSlice({
       state.isLoading = false;
       state.folder = { ...state.folder, ...action.payload };
     },
+
+    getStoreFolderSuccess(state, action) {
+      console.log('getStoreFolderSuccess', action);
+      state.isLoading = false;
+      state.storeFolder = { ...state.storeFolder, ...action.payload };
+    },
     getFolderUploadDocSuccess(state, action) {
       state.isLoading = false;
       state.folderUploadDoc = { ...state.folderUploadDoc, ...action.payload };
@@ -105,6 +118,11 @@ const slice = createSlice({
       state.isLoading = false;
       state.folder.listFolders = [...state.folder.listFolders, action.payload];
     },
+    createStoreFolderSuccess(state, action) {
+      console.log('createFolderSuccess', action);
+      state.isLoading = false;
+      state.storeFolder.listFolders = [...state.storeFolder.listFolders, action.payload];
+    },
 
     createDocumentInitialSuccess(state, action) {
       console.log('createDocumentInitialSuccess', action);
@@ -124,12 +142,23 @@ const slice = createSlice({
       state.isLoading = false;
       state.folder.listDocuments = state.folder.listDocuments.filter((item) => item.id !== documentID);
     },
+    deleteDocumentInStoreFolderSuccess(state, action) {
+      const { documentID } = action.payload;
+      state.isLoading = false;
+      state.storeFolder.listDocuments = state.storeFolder.listDocuments.filter((item) => item.id !== documentID);
+    },
 
     deleteSubFolderInFolderSuccess(state, action) {
       const { folderID } = action.payload;
       console.log('deleteSubFolderInFolderSuccess', action, folderID);
       state.isLoading = false;
       state.folder.listFolders = state.folder.listFolders.filter((item) => item.id !== folderID);
+    },
+    deleteSubFolderInStoreFolderSuccess(state, action) {
+      const { folderID } = action.payload;
+      console.log('deleteSubFolderInFolderSuccess', action, folderID);
+      state.isLoading = false;
+      state.storeFolder.listFolders = state.storeFolder.listFolders.filter((item) => item.id !== folderID);
     },
 
     updateSubFolderSuccess(state, action) {
@@ -146,17 +175,36 @@ const slice = createSlice({
         };
       });
     },
+    updateSubStoreFolderSuccess(state, action) {
+      const { id, params } = action.payload;
+      state.isLoading = false;
+
+      state.storeFolder.listFolders = state.storeFolder.listFolders.map((item, indexItem) => {
+        if (item.id !== id) {
+          return item;
+        }
+        return {
+          ...item,
+          ...params,
+        };
+      });
+    },
 
     postCopyDocsToFolderSuccess(state, action) {
       console.log('postCopyDocsToFolderSuccess', action);
       state.isLoading = false;
       state.folder.listDocuments = [...state.folder.listDocuments, action.payload];
     },
+    postCopyDocsToStoreFolderSuccess(state, action) {
+      console.log('postCopyDocsToFolderSuccess', action);
+      state.isLoading = false;
+      state.storeFolder.listDocuments = [...state.storeFolder.listDocuments, action.payload];
+    },
 
     createDocumentSuccess(state, action) {
       const { document } = action.payload;
       state.isLoading = false;
-      state.folder.listDocuments = [...state.folder.listDocuments, document];
+      state.storeFolder.listDocuments = [...state.storeFolder.listDocuments, document];
     },
     createDocumentInSubjectSuccess(state, action) {
       const { document } = action.payload;
@@ -227,6 +275,23 @@ export function getFolderSaveDocToMyFolderRedux(params) {
   };
 }
 
+export function getStoreFolderRedux(params) {
+  return async () => {
+    try {
+      console.log('getFolderRedux', params);
+      if (!params && params !== 0) {
+        return dispatch(slice.actions.hasError('không có folderId'));
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await getFolderByID(params);
+      console.log('getFolderByID', response);
+      dispatch(slice.actions.getStoreFolderSuccess(response.data.data));
+    } catch (error) {
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
 export function getFolderRedux(params) {
   return async () => {
     try {
@@ -257,6 +322,27 @@ export function createFolderRedux(payload) {
       }
 
       dispatch(slice.actions.createFolderSuccess(response.data.data));
+      return returnMessageSuccess('Tạo thư mục thành công');
+    } catch (error) {
+      console.log('error', error);
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
+export function createStoreFolderRedux(payload) {
+  return async () => {
+    try {
+      if (!payload) {
+        return returnMessageError('Tạo thư mục không thành công');
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await postFolder(payload);
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
+      }
+
+      dispatch(slice.actions.createStoreFolderSuccess(response.data.data));
       return returnMessageSuccess('Tạo thư mục thành công');
     } catch (error) {
       console.log('error', error);
@@ -309,6 +395,28 @@ export function deleteDocumentInFolderRedux(documentID) {
   };
 }
 
+export function deleteDocumentInStoreFolderRedux(documentID) {
+  return async () => {
+    try {
+      if (!documentID) {
+        return returnMessageError('Xóa tài liệu không thành công');
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await deleteDocument(documentID);
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
+      }
+
+      dispatch(slice.actions.deleteDocumentInStoreFolderSuccess({ documentID }));
+
+      return returnMessageSuccess('Xóa tài liệu thành công');
+    } catch (error) {
+      console.log('error', error);
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
 export function deleteSubFolderInFolderRedux(folderID) {
   return async () => {
     try {
@@ -323,6 +431,29 @@ export function deleteSubFolderInFolderRedux(folderID) {
       }
 
       dispatch(slice.actions.deleteSubFolderInFolderSuccess({ folderID }));
+
+      return returnMessageSuccess('Xóa thư mục thành công');
+    } catch (error) {
+      console.log('error', error);
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
+export function deleteSubFolderInStoreFolderRedux(folderID) {
+  return async () => {
+    try {
+      if (!folderID) {
+        return returnMessageError('Xóa thư mục không thành công');
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await deleteFolder(folderID);
+      console.log('deleteSubFolderInFolderRedux', response);
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
+      }
+
+      dispatch(slice.actions.deleteSubFolderInStoreFolderSuccess({ folderID }));
 
       return returnMessageSuccess('Xóa thư mục thành công');
     } catch (error) {
@@ -355,6 +486,29 @@ export function updateSubFolderRedux(id, params) {
   };
 }
 
+export function updateSubStoreFolderRedux(id, params) {
+  return async () => {
+    try {
+      if (!id || !params) {
+        return returnMessageError('Cập nhật thư mục không thành công');
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await updateFolder(id, params);
+      console.log('updateFolderRedux', response);
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
+      }
+
+      dispatch(slice.actions.updateSubStoreFolderSuccess({ id, params }));
+
+      return returnMessageSuccess('Cập nhật thư mục thành công');
+    } catch (error) {
+      console.log('error', error);
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
 export function copyDocsToFolderRedux(folderId, docsId) {
   return async () => {
     try {
@@ -368,6 +522,26 @@ export function copyDocsToFolderRedux(folderId, docsId) {
       }
 
       dispatch(slice.actions.postCopyDocsToFolderSuccess(response.data.data));
+      return returnMessageSuccess('Thêm tài liệu thành công');
+    } catch (error) {
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
+export function copyDocsToStoreFolderRedux(folderId, docsId) {
+  return async () => {
+    try {
+      if (!folderId || !docsId) {
+        return returnMessageError('Thêm tài liệu thất bại ');
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await postCopyDocsToFolder(folderId, docsId);
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
+      }
+
+      dispatch(slice.actions.postCopyDocsToStoreFolderSuccess(response.data.data));
       return returnMessageSuccess('Thêm tài liệu thành công');
     } catch (error) {
       return returnMessageError(`${error.message}`);

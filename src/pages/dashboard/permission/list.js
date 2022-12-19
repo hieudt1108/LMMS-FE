@@ -225,13 +225,6 @@ export default function PermissionListPage() {
             { name: 'Quyền', href: PATH_DASHBOARD.permission.root },
             { name: 'Danh sách' },
           ]}
-          action={
-            <NextLink href={PATH_DASHBOARD.permission.new} passHref>
-              <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                Thêm quyền
-              </Button>
-            </NextLink>
-          }
         />
 
         <Card>

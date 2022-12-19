@@ -52,62 +52,23 @@ export default function StoreFilePage() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { folder } = useSelector((state) => state.folder);
+  const { storeFolder } = useSelector((state) => state.folder);
 
   useEffect(() => {
-    dispatch(getFolderRedux(storeFolderID));
-  }, [storeFolderID]);
-
-  const { themeStretch } = useSettingsContext();
-
-  const [storeFolderName, setStoreFolderName] = useState('');
-
-  const [documentHandle, setDocumentHandle] = useState({});
-
-  const [openNewStoreFolder, setOpenNewStoreFolder] = useState(false);
-
-  const handleOpenFrom = async () => {
-    await dispatch(getFolderUploadDocRedux(0));
-    setOpenFormUploadDocument(true);
-  };
-
-  const handleOpenNewStoreFolder = () => {
-    setOpenNewStoreFolder(true);
-  };
-
-  const handleCloseNewStoreFolder = () => {
-    setOpenNewStoreFolder(false);
-  };
-
-  const handleChangeStoreFolderName = useCallback((event) => {
-    setStoreFolderName(event.target.value);
-  }, []);
-
-  const handleCreateNewStoreFolder = async () => {
-    console.log('CREATE NEW FOLDER', storeFolderName);
-    const message = await dispatch(
-      createFolderRedux({
-        name: storeFolderName,
-        parentId: Number.parseInt(id),
-      })
-    );
-    console.log('CREATE NEW FOLDER', message);
-    if (message) {
-      enqueueSnackbar(message.title, { variant: message.variant });
+    if (storeFolderID) {
+      dispatch(getStoreFolderRedux(storeFolderID));
     }
-    setStoreFolderName('');
-    handleCloseNewStoreFolder();
-  };
+  }, [storeFolderID]);
 
   return (
     <>
       <GeneralFilePage
         data={{
-          ...folder,
+          ...storeFolder,
           handleBackPage: () => {
-            dispatch(getFolderRedux(folder.parentId));
+            dispatch(getStoreFolderRedux(storeFolder.parentId));
           },
-          types: ['folder'],
+          types: ['storeFolder'],
           menuSubFolder: ['edit', 'delete'],
           menuDocument: ['preview', 'download', 'saveInMyFolder', 'delete'],
           panel: ['storeFolder'],

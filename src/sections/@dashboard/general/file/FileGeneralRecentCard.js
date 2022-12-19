@@ -19,7 +19,7 @@ import { FileDetailsDrawer, FileShareDialog } from '../../file';
 import { postDocumentsInSlot } from '../../../../dataProvider/agent';
 import { dispatch } from 'src/redux/store';
 import { getOneDocumentRedux, startDownloadFileRedux } from 'src/redux/slices/document';
-import { deleteDocumentInFolderRedux } from '../../../../redux/slices/folder';
+import { deleteDocumentInFolderRedux, deleteDocumentInStoreFolderRedux } from '../../../../redux/slices/folder';
 
 import ConfirmDialog from 'src/components/confirm-dialog';
 import { URL_GLOBAL } from '../../../../config';
@@ -113,12 +113,23 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
       return;
     }
 
-    const message = await dispatch(deleteDocumentInFolderRedux(file.id));
-    if (message) {
-      enqueueSnackbar(message.title, { variant: message.variant });
+    if (data.types.find((type) => type === 'storeFolder')) {
+      const message = await dispatch(deleteDocumentInStoreFolderRedux(file.id));
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      setOpenConfirmDeleteFile(false);
+      handleClosePopover();
+    } else if (data.types.find((type) => type === 'folder')) {
+      const message = await dispatch(deleteDocumentInFolderRedux(file.id));
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      setOpenConfirmDeleteFile(false);
+      handleClosePopover();
+    } else {
+      enqueueSnackbar(`Không xóa được tài liệu tại đây`, { variant: `error` });
     }
-    setOpenConfirmDeleteFile(false);
-    handleClosePopover();
   };
 
   return (
@@ -208,7 +219,7 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
             onChange={handleFavorite}
             sx={{ p: 0.75 }}
           />
-          {!_.isEmpty(data.menuDocument) && (
+          {!_.isEmpty(data?.menuDocument) && (
             <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
@@ -222,35 +233,35 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
           file.typeFile == 'image/jpeg' ||
           file.typeFile == 'image/png' ||
           file.typeFile == 'application/pdf') &&
-          data.menuDocument.find((element) => element === 'preview') && (
+          data?.menuDocument.find((element) => element === 'preview') && (
             <MenuItem onClick={handlePreviewFile}>
               <Iconify icon="eva:link-2-fill" />
               Xem trước
             </MenuItem>
           )}
 
-        {data.menuDocument.find((element) => element === 'download') && (
+        {data?.menuDocument.find((element) => element === 'download') && (
           <MenuItem onClick={handleDownloadFile}>
             <Iconify icon="eva:download-outline" />
             Tải xuống
           </MenuItem>
         )}
 
-        {data.menuDocument.find((element) => element === 'saveInMyFolder') && (
+        {data?.menuDocument.find((element) => element === 'saveInMyFolder') && (
           <MenuItem onClick={() => handleOpenPopupSaveInMyFolder({ document: file })}>
             <Iconify icon="simple-line-icons:docs" />
             Tải về kho của tôi
           </MenuItem>
         )}
 
-        {data.menuDocument.find((element) => element === 'share') && (
+        {data?.menuDocument.find((element) => element === 'share') && (
           <MenuItem onClick={handleOpenShare}>
             <Iconify icon="eva:share-fill" />
             Chia sẻ
           </MenuItem>
         )}
 
-        {data.menuDocument.find((element) => element === 'delete') && (
+        {data?.menuDocument.find((element) => element === 'delete') && (
           <>
             <Divider sx={{ borderStyle: 'dashed' }} />
 

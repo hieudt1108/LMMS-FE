@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 // next
 import { useRouter } from 'next/router';
 // form
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
@@ -27,11 +27,11 @@ SubjectNewEditForm.propTypes = {
   currentSubject: PropTypes.object,
 };
 
-export default function SubjectNewEditForm({ isEdit = false, currentSubject }) {
+export default function SubjectNewEditForm({ isEdit = false, currentSubject, slots }) {
   const { push } = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
-  console.log('currentSubject?.listSlots',currentSubject?.listSlots)
+
   const validationSchema = Yup.object().shape({
     code: Yup.string().trim().required('Mã môn học không được trống'),
     name: Yup.string().trim().required('Tên môn học không được trống'),
@@ -63,12 +63,15 @@ export default function SubjectNewEditForm({ isEdit = false, currentSubject }) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
-
   const onSubmit = async (data) => {
     if (!isEdit) {
       try {
-        const res = await createSubject(data);
+        const res = await createSubject({
+          code: data.code,
+          name: data.name,
+          description: data.description,
+          listSlots: data.listSlots?.map((slot) => slot.id),
+        });
         if (res.status < 400) {
           reset();
           enqueueSnackbar('Tạo môn học thành công');
@@ -81,11 +84,12 @@ export default function SubjectNewEditForm({ isEdit = false, currentSubject }) {
       }
     } else {
       try {
+        // return console.log('Form data', data);
         const res = await updateSubject(currentSubject.id, {
           code: data.code,
           name: data.name,
           description: data.description,
-          listSlots: data.listSlots,
+          listSlots: data.listSlots?.map((slot) => slot.id),
         });
         if (res.status < 400) {
           reset();
@@ -100,9 +104,7 @@ export default function SubjectNewEditForm({ isEdit = false, currentSubject }) {
     }
   };
 
-
   const handleSelectedSlot = (data) => {
-    console.log('Parent', data);
     const listSlotId = [];
     data.map((slot) => {
       listSlotId.push(slot.id);
@@ -132,15 +134,14 @@ export default function SubjectNewEditForm({ isEdit = false, currentSubject }) {
                 <RHFTextField name="name" label="Tên môn học" id="name" />
                 <RHFTextField name="description" label="Mô tả" id="description" multiline rows={5} />
 
-                <SubjectNewEditSlot
-                    isEdit={isEdit}
-                    currentSubject={currentSubject}
-                    listSlotSelected={getValues('listSlots')}
+                <Controller
                     name="listSlots"
-                    id="listSlots"
-                    handleSelectedSlot={handleSelectedSlot}
-                    onSelect={(slots) => {
-                      // console.log("Parent", slots)
+                    control={control}
+                    defaultValue={[]}
+                    render={({ field: { onChange, onBlur, value, name, ref } }) => {
+                      return (
+                          <SubjectNewEditSlot selectedSlots={value} slots={slots} handleSelectedSlot={handleSelectedSlot} />
+                      );
                     }}
                 />
               </Box>

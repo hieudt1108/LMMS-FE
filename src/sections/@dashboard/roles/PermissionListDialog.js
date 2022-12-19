@@ -8,65 +8,65 @@ import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
-SlotListDialog.propTypes = {
+PermissionListDialog.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
     data: any,
 };
 
-export default function SlotListDialog({ selectedSlots, slots, onClose, open, handleAddSlot }) {
-    const [selectedSlot, setSelectedSlot] = useState([]);
+export default function PermissionListDialog({ selectedPermissions, permissions, onClose, open, handleAddPermission }) {
+    console.log(permissions)
+    const [selectedPermission, setSelectedPermission] = useState([]);
 
-    const handleSelectSlots = (e) => {
+    const handleSelectPermissions = (e) => {
         const { value, checked } = e.target;
 
         console.log(`${value} is ${checked}`);
 
         if (checked) {
-            setSelectedSlot((prev) => [...prev, parseInt(value)]);
+            setSelectedPermission((prev) => [...prev, parseInt(value)]);
         } else {
-            setSelectedSlot((prev) => prev.filter((item) => item !== parseInt(value)));
+            setSelectedPermission((prev) => prev.filter((item) => item !== parseInt(value)));
         }
     };
 
-    const onAddSlot = () => {
-        handleAddSlot(selectedSlot);
-        setSelectedSlot([]);
+    const onAddPermission = () => {
+        handleAddPermission(selectedPermission);
+        setSelectedPermission([]);
         onClose();
     };
 
     useEffect(() => {
-        if (selectedSlots?.length > 0) {
-            setSelectedSlot(selectedSlots.map((item) => item.id));
+        if (selectedPermissions?.length > 0) {
+            setSelectedPermission(selectedPermissions.map((item) => item.id));
         }
-    }, [selectedSlots]);
+    }, [selectedPermissions]);
 
     return (
         <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ pt: 2.5, px: 3 }}>
-                <Typography variant="h6"> Chọn tiết học </Typography>
+                <Typography variant="h6"> Chọn quyền cho vai trò </Typography>
 
                 <Button
                     size="small"
                     startIcon={<Iconify icon="eva:plus-fill" />}
-                    onClick={onAddSlot}
+                    onClick={onAddPermission}
                     sx={{ alignSelf: 'flex-end' }}
                 >
-                    {selectedSlots?.length > 0 ? 'Thay đổi' : 'Thêm'}
+                    {selectedPermissions?.length > 0 ? 'Thay đổi' : 'Thêm'}
                 </Button>
             </Stack>
             <>
                 <Card sx={{ p: 2.5, px: 3 }}>
-                    {/* <FormControlLabel label="Tất cả" control={<Checkbox value={'tất cả'} onChange={handleSelectSlots} />} /> */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-                        {slots?.map((slot) => (
+                        {permissions?.map((perm) => (
                             <FormControlLabel
-                                label={slot.name}
+                                label={perm.name}
                                 control={
                                     <Checkbox
-                                        value={slot.id}
-                                        defaultChecked={selectedSlots.map((item) => item.id).includes(slot.id)}
-                                        onChange={handleSelectSlots}
+                                        value={perm.id}
+                                        defaultChecked={selectedPermissions.map((item) => item.id).includes(perm.id)}
+                                        onChange={handleSelectPermissions}
                                     />
                                 }
                             />

@@ -56,7 +56,7 @@ export default function SubjectTableRow({ row, selected, onEditRow, onSelectRow,
     <>
       <TableRow hover selected={selected}>
         <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
+
         </TableCell>
 
         <TableCell align="left">{code}</TableCell>

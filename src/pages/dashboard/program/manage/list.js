@@ -16,7 +16,7 @@ import {
   TableBody,
   Container,
   IconButton,
-  TableContainer,
+  TableContainer, Box, Pagination,
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
@@ -42,7 +42,7 @@ import {
 } from '../../../../components/table';
 // sections
 import { ProgramTableToolbar, ProgramTableRow } from '../../../../sections/@dashboard/program/list';
-import { deleteProgram, deleteUser, getAllProgram } from '../../../../dataProvider/agent';
+import {deleteProgram, deleteUser, getAllPermission, getAllProgram} from '../../../../dataProvider/agent';
 import { useSnackbar } from '../../../../components/snackbar';
 
 // ----------------------------------------------------------------------
@@ -107,7 +107,7 @@ export default function ProgramListPage() {
   const isFiltered = filterName !== '';
 
   const isNotFound = !dataFiltered.length && !!filterName;
-
+  const [paging, setPaging] = useState();
   const [filter, setFilter] = useState({
     pageIndex: 1,
     pageSize: 5,
@@ -171,7 +171,13 @@ export default function ProgramListPage() {
       }
     }
   };
-
+  const handlePageChange = useCallback(async (event, pageIndex) => {
+    let response = await getAllProgram({
+      ...filter,
+      pageIndex: pageIndex,
+    });
+    setFilter({ ...filter, pageIndex: pageIndex });
+  }, []);
   const handleEditRow = (id) => {
     push(PATH_DASHBOARD.program.edit(id));
   };
@@ -189,6 +195,7 @@ export default function ProgramListPage() {
   async function fetchPrograms() {
     const res = await getAllProgram(filter);
     if (res.status < 400) {
+      setPaging(JSON.parse(res.headers['x-pagination']));
       setListPrograms(res.data.data);
     } else {
       console.log(res.message);
@@ -288,17 +295,16 @@ export default function ProgramListPage() {
             </Scrollbar>
           </TableContainer>
 
-          <TablePaginationCustom
-            labelRowsPerPage="Hàng trên mỗi trang"
-            count={dataFiltered.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPageChange={onChangePage}
-            onRowsPerPageChange={onChangeRowsPerPage}
-            //
-            dense={dense}
-            onChangeDense={onChangeDense}
-          />
+          <Box p={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div></div>
+            <Pagination
+                size="small"
+                count={paging?.TotalPages}
+                rowsperpage={paging?.PageSize}
+                onChange={handlePageChange}
+                color="primary"
+            />
+          </Box>
         </Card>
       </Container>
 

@@ -30,11 +30,12 @@ export default function ResetPasswordPage() {
       <PasswordIcon sx={{ mb: 5, height: 96 }} />
 
       <Typography variant="h3" paragraph>
-        Forgot your password?
+        Quên mật khẩu?
       </Typography>
 
       <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-        Please enter the email address associated with your account and We will email you a link to reset your password.
+        Vui lòng nhập địa chỉ email được liên kết với tài khoản của bạn và chúng tôi sẽ gửi Email cho bạn một liên kết
+        để đặt lại mật khẩu.
       </Typography>
 
       <AuthResetPasswordForm />
@@ -51,7 +52,7 @@ export default function ResetPasswordPage() {
           }}
         >
           <Iconify icon="eva:chevron-left-fill" width={16} />
-          Return to sign in
+          Quay lại đăng nhập{' '}
         </Link>
       </NextLink>
     </>

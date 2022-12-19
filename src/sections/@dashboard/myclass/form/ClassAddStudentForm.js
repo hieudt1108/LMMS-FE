@@ -12,22 +12,6 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useRouter } from 'next/router';
 import { useSnackbar } from '../../../../components/snackbar';
 
-const TAGS_OPTION = [
-  'Toy Story 3',
-  'Logan',
-  'Full Metal Jacket',
-  'Dangal',
-  'The Sting',
-  '2001: A Space Odyssey',
-  "Singin' in the Rain",
-  'Toy Story',
-  'Bicycle Thieves',
-  'The Kid',
-  'Inglourious Basterds',
-  'Snatch',
-  '3 Idiots',
-];
-
 export default function ClassAddStudentForm({ isEdit = false }) {
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();

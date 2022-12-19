@@ -191,7 +191,6 @@ export default function RolesListPage() {
       console.log(res.message);
     }
   }
-  console.log('onFilterName: ', filter);
   useEffect(() => {
     fetchRoles();
   }, [filter]);

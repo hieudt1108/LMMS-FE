@@ -55,7 +55,7 @@ export default function FolderGeneralData({ data, selected, onSelect, folder, sx
             <TextMaxLine variant="h6" sx={{ mt: 1 }}>
               {folder.name}
             </TextMaxLine>
-            <span>{format(new Date(folder.createDate), 'dd MMM yyyy')}</span>
+            <span>{`Ngày tạo: `}{format(new Date(folder.createDate), 'dd/MM/yyyy')}</span>
           </Box>
           <Box></Box>
         </Stack>

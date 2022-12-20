@@ -26,6 +26,7 @@ import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 import { useSnackbar } from 'notistack';
 import ConfirmDialog from 'src/components/confirm-dialog/ConfirmDialog';
 import Iconify from 'src/components/iconify/Iconify';
+import {LoadingButton} from "@mui/lab";
 
 // ----------------------------------------------------------------------
 
@@ -42,6 +43,7 @@ export default function GeneralFolderPage({ data }) {
 
   const { themeStretch } = useSettingsContext();
 
+    const isDesktop = useResponsive('up', 'sm');
   return (
     <>
       <Head>
@@ -49,7 +51,7 @@ export default function GeneralFolderPage({ data }) {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Box sx={{ mb: 5 }}>
+        <Box sx={{ mt: 1 }}>
           <Stack flexGrow={1}>
             <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
               <IconButton
@@ -74,11 +76,11 @@ export default function GeneralFolderPage({ data }) {
             </Stack>
           </Stack>
         </Box>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{mb:2}}>
           <Grid item xs={12} md={12} lg={12}>
             <div>
               <FilePanel
-                title="Folders"
+                title="Thư mục"
                 link={PATH_DASHBOARD.fileManager}
                 // onder ? handleOpenNewFolder : ''}
                 sx={{ mt: 5 }}
@@ -92,9 +94,20 @@ export default function GeneralFolderPage({ data }) {
                           key={index}
                           folder={folder}
                           sx={{
-                            ...(_folders.length > 3 && {
-                              minWidth: 222,
-                            }),
+                              p: 2.5,
+                              borderRadius: 2,
+                              position: 'relative',
+                              border: (theme) => `solid 1px ${theme.palette.divider}`,
+                              '&:hover': {
+                                  bgcolor: 'background.paper',
+                                  boxShadow: (theme) => theme.customShadows.z20,
+                                  cursor: 'pointer',
+                              },
+                              ...(isDesktop && {
+                                  p: 1.5,
+                                  borderRadius: 1.5,
+                              }),
+
                           }}
                         />
                       ))
@@ -104,20 +117,28 @@ export default function GeneralFolderPage({ data }) {
             </div>
           </Grid>
 
-          <Grid item xs={12} md={12} lg={12}>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => {
-                if (data) {
-                  data.handleUploadDocumentToMyFolder(data);
-                }
-              }}
-            >
-              {`Lưu tài liệu về đây`}
-            </Button>
-          </Grid>
         </Grid>
+          <Stack
+              spacing={2}
+              direction={{ xs: 'column-reverse', md: 'row' }}
+              alignItems={{ xs: 'flex-start', md: 'center' }}
+              sx={{ mt: -2, mb: 1 }}
+          >
+              <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
+                  <LoadingButton
+                      type="submit"
+                      variant="contained"
+                      size="large"
+                      onClick={() => {
+                          if (data) {
+                              data.handleUploadDocumentToMyFolder(data);
+                          }
+                      }}
+                  >
+                      Lưu tài liệu
+                  </LoadingButton>
+              </Stack>
+          </Stack>
       </Container>
     </>
   );

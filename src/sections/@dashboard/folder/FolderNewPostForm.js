@@ -211,6 +211,9 @@ export default function FolderNewPostForm({ data }) {
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ mb:3,flexShrink: 0 }}>
+          Thêm bản ghi
+        </Button>
         {fields.map((item, index) => (
           <div key={item.code}>
             <Grid container spacing={3}>
@@ -331,9 +334,7 @@ export default function FolderNewPostForm({ data }) {
           alignItems={{ xs: 'flex-start', md: 'center' }}
           sx={{ mt: -2, mb: 1 }}
         >
-          <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
-            Thêm bản ghi
-          </Button>
+
 
           <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
             <LoadingButton
@@ -343,7 +344,7 @@ export default function FolderNewPostForm({ data }) {
               size="large"
               loading={isSubmitting}
             >
-              Đăng tải tài liệu
+              Đăng tải
             </LoadingButton>
           </Stack>
         </Stack>

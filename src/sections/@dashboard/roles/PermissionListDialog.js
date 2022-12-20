@@ -62,7 +62,7 @@ export default function PermissionListDialog({ selectedPermissions, permissions,
                     <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
                         {permissions?.map((perm) => (
                             <FormControlLabel
-                                label={perm.name}
+                                label={`${perm.name} ( ${perm.description} )`}
                                 control={
                                     <Checkbox
                                         value={perm.id}

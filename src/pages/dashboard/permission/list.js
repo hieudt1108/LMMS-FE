@@ -300,7 +300,7 @@ export default function PermissionListPage() {
             </Scrollbar>
           </TableContainer>
 
-          {/* <Box p={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Box p={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div></div>
             <Pagination
               size="small"
@@ -309,7 +309,7 @@ export default function PermissionListPage() {
               onChange={handlePageChange}
               color="primary"
             />
-          </Box> */}
+          </Box>
         </Card>
       </Container>
 

@@ -21,6 +21,7 @@ import {
   getFolderRedux,
   getFolderUploadDocRedux,
   getFolderUploadDocToSlotRedux,
+  getStoreFolderRedux,
   updateSubFolderRedux,
   updateSubStoreFolderRedux,
 } from 'src/redux/slices/folder';
@@ -123,6 +124,8 @@ export default function FileFolderCard({ data, folder, selected, onSelect, onDel
       return dispatch(getFolderUploadDocToSlotRedux(folderID));
     } else if (data.types.find((type) => type === 'folder')) {
       return dispatch(getFolderRedux(folderID));
+    } else if (data.types.find((type) => type === 'storeFolder')) {
+      return dispatch(getStoreFolderRedux(folderID));
     }
   };
 

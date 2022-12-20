@@ -28,7 +28,7 @@ UploadDocToSlot.propTypes = {
   slotId: PropTypes.number,
 };
 export default function UploadDocToSlot({ open, onClose, slotId, classId, subjectId }) {
-  const { folderUploadDocToSlot } = useSelector((state) => state.folder);
+  const { folderUploadDocToSlot, folderUploadDocToSlotInGeneralFolder } = useSelector((state) => state.folder);
   const { enqueueSnackbar } = useSnackbar();
 
   const [currentTab, setCurrentTab] = useState(0);
@@ -47,6 +47,32 @@ export default function UploadDocToSlot({ open, onClose, slotId, classId, subjec
       id: 0,
       value: 'myDocument',
       label: `Tài liệu của tôi`,
+      component: (
+        <GeneralFilePage
+          data={{
+            handleAddDocumentToSlot,
+            onClose: onClose,
+            ...folderUploadDocToSlot,
+            handleBackPage: () => {
+              dispatch(getFolderUploadDocToSlotRedux(folderUploadDocToSlot.parentId));
+            },
+            types: ['folderUploadDocToSlot'],
+            menuSubFolder: [],
+            menuDocument: [],
+            panel: ['popupUploadDocToSlot'],
+            slotId: slotId,
+            classId: classId,
+            subjectId: subjectId,
+          }}
+        />
+      ),
+      // component: component,
+    },
+
+    {
+      id: 1,
+      value: 'generalDocument',
+      label: `Kho tài liệu chung`,
       component: (
         <GeneralFilePage
           data={{

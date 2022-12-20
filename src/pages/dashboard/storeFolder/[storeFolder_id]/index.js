@@ -16,7 +16,6 @@ import DashboardLayout from '../../../../layouts/dashboard';
 import Scrollbar from '../../../../components/scrollbar';
 import { useSettingsContext } from '../../../../components/settings';
 // sections
-import { FileGeneralRecentCard } from '../../../../sections/@dashboard/general/file';
 import { FileFolderCard, FileNewFolderDialog, FilePanel } from '../../../../sections/@dashboard/file';
 import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';

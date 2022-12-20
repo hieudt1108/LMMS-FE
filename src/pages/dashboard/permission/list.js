@@ -1,29 +1,25 @@
-import { paramCase } from 'change-case';
-import { useEffect, useState, useCallback } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
-import NextLink from 'next/link';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // @mui
 import {
   Box,
-  Pagination,
-  Tab,
-  Tabs,
-  Card,
-  Table,
   Button,
-  Tooltip,
-  Divider,
-  TableBody,
+  Card,
   Container,
+  Divider,
   IconButton,
+  Pagination,
+  Table,
+  TableBody,
   TableContainer,
+  Tooltip,
 } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import {PATH_DASHBOARD} from '../../../routes/paths';
 // _mock_
-import { _typeDocumentList } from '../../../_mock/arrays';
+import {_typeDocumentList} from '../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
@@ -31,26 +27,20 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import { useSettingsContext } from '../../../components/settings';
+import {useSettingsContext} from '../../../components/settings';
 import {
-  useTable,
-  getComparator,
   emptyRows,
-  TableNoData,
+  getComparator,
   TableEmptyRows,
   TableHeadCustom,
+  TableNoData,
   TableSelectedAction,
-  TablePaginationCustom,
+  useTable,
 } from '../../../components/table';
 // sections
-import { PermissionTableToolbar, PermissionTableRow } from '../../../sections/@dashboard/permission/list';
-import {
-  deletePermission,
-  deleteTypeDocument,
-  getAllPermission,
-  getAllTypeDocument,
-} from '../../../dataProvider/agent';
-import { useSnackbar } from '../../../components/snackbar';
+import {PermissionTableRow, PermissionTableToolbar} from '../../../sections/@dashboard/permission/list';
+import {deletePermission, getAllPermission,} from '../../../dataProvider/agent';
+import {useSnackbar} from '../../../components/snackbar';
 
 // ----------------------------------------------------------------------
 

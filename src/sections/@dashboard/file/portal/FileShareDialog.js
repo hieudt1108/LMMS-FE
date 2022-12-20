@@ -36,7 +36,7 @@ export default function FileShareDialog({ file, open, onClose, ...other }) {
   return (
     <>
       <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
-        <DialogTitle> Invite </DialogTitle>
+        <DialogTitle> Chia sẻ tài liệu </DialogTitle>
 
         <DialogContent sx={{ overflow: 'unset' }}>
           <Stack direction="row" spacing={1} sx={{ mb: 3 }}>

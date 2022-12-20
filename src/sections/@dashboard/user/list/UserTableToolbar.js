@@ -100,7 +100,6 @@ export default function UserTableToolbar({
 
       <TextField
         fullWidth
-        value={filterByEmail}
         onChange={onChangeFilterByEmail}
         placeholder="Tìm kiếm người dùng theo email..."
         InputProps={{
@@ -111,26 +110,6 @@ export default function UserTableToolbar({
           ),
         }}
       />
-
-      <Button
-        onClick={onClickFilter}
-        color="success"
-        sx={{ flexShrink: 0 }}
-        startIcon={<Iconify icon="eva:checkmark-square-2-outline" />}
-      >
-        Áp dụng
-      </Button>
-
-      {isFiltered && (
-        <Button
-          color="error"
-          sx={{ flexShrink: 0 }}
-          onClick={onResetFilter}
-          startIcon={<Iconify icon="eva:trash-2-outline" />}
-        >
-          Xóa
-        </Button>
-      )}
     </Stack>
   );
 }

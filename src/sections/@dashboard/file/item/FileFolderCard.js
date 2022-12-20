@@ -21,6 +21,7 @@ import {
   getFolderRedux,
   getFolderUploadDocRedux,
   getFolderUploadDocToSlotRedux,
+  getStoreFolderRedux,
   updateSubFolderRedux,
   updateSubStoreFolderRedux,
 } from 'src/redux/slices/folder';
@@ -123,6 +124,8 @@ export default function FileFolderCard({ data, folder, selected, onSelect, onDel
       return dispatch(getFolderUploadDocToSlotRedux(folderID));
     } else if (data.types.find((type) => type === 'folder')) {
       return dispatch(getFolderRedux(folderID));
+    } else if (data.types.find((type) => type === 'storeFolder')) {
+      return dispatch(getStoreFolderRedux(folderID));
     }
   };
 
@@ -187,14 +190,6 @@ export default function FileFolderCard({ data, folder, selected, onSelect, onDel
         {...other}
       >
         <Stack direction="row" alignItems="center" sx={{ top: 8, right: 8, position: 'absolute' }}>
-          <Checkbox
-            color="warning"
-            icon={<Iconify icon="eva:star-outline" />}
-            checkedIcon={<Iconify icon="eva:star-fill" />}
-            checked={favorited}
-            onChange={handleFavorite}
-            sx={{ p: 0.75 }}
-          />
           {!_.isEmpty(data.menuSubFolder) && (
             <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
               <Iconify icon="eva:more-vertical-fill" />

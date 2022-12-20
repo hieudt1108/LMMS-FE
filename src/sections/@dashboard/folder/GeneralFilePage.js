@@ -79,6 +79,7 @@ export default function GeneralFilePage({ data }) {
 
   const handleOpenPopupSaveInMyFolder = async (data) => {
     const { document } = data;
+    console.log('data',data)
     await dispatch(getFolderSaveDocToMyFolderRedux(0));
     setDocumentHandle(document);
     setOpenPopupSaveInMyFolder(true);
@@ -143,7 +144,7 @@ export default function GeneralFilePage({ data }) {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Box sx={{ mb: 5 }}>
+        <Box >
           <Stack flexGrow={1}>
             <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
               <IconButton

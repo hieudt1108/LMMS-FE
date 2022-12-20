@@ -42,6 +42,14 @@ const initialState = {
     listDocuments: [],
   },
 
+  folderUploadDocToSlotInGeneralFolder: {
+    id: '',
+    name: '',
+    parentId: 0,
+    listFolders: [],
+    listDocuments: [],
+  },
+
   folderUploadDocToSlot: {
     id: '',
     name: '',

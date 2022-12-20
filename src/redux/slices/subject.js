@@ -141,6 +141,7 @@ export function postDocumentsInSlotRedux(classId, documentId, slotId, subjectId)
         return returnMessageError(`${response.response.data.title}`);
       }
       dispatch(slice.actions.postDocumentsInSlotSuccess({ document: response.data.data }));
+      return returnMessageSuccess('Thêm tài liệu thành công');
     } catch (error) {
       return returnMessageError(`${error.message}`);
     }

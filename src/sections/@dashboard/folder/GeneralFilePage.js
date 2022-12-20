@@ -26,9 +26,7 @@ import {
   createFolderRedux,
   createStoreFolderRedux,
   getFolderRedux,
-  getFolderSaveDocToMyFolderRedux,
   getFolderSavetoDocToMyFolderRedux,
-  getFolderUploadDocRedux,
 } from 'src/redux/slices/folder';
 import { useSnackbar } from 'notistack';
 import LinkItem from 'src/components/custom-breadcrumbs/LinkItem';
@@ -79,13 +77,13 @@ export default function GeneralFilePage({ data }) {
 
   const handleOpenPopupSaveInMyFolder = async (data) => {
     const { document } = data;
-    await dispatch(getFolderSaveDocToMyFolderRedux(0));
+    await dispatch(getFolderRedux(0, 'folderSaveDocToMyFolder'));
     setDocumentHandle(document);
     setOpenPopupSaveInMyFolder(true);
   };
 
   const handleOpenFormUploadDocument = async () => {
-    await dispatch(getFolderUploadDocRedux(0));
+    await dispatch(getFolderRedux(0, 'folderUploadDoc'));
     setOpenFormUploadDocument(true);
   };
 

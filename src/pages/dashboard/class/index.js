@@ -33,7 +33,7 @@ import { getGradesRedux } from 'src/redux/slices/grade';
 
 // PATH
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import { getFolderUploadDocToSlotRedux } from 'src/redux/slices/folder';
+import { getFolderRedux } from 'src/redux/slices/folder';
 
 Classes.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function Classes() {
@@ -59,7 +59,7 @@ export default function Classes() {
     dispatch(getClassesRedux(pagingClass));
     dispatch(getProgramsRedux({ pageIndex: 1, pageSize: 15 }));
     dispatch(getGradesRedux({ pageIndex: 1, pageSize: 15 }));
-    dispatch(getFolderUploadDocToSlotRedux(0));
+    dispatch(getFolderRedux(0, 'folderUploadDocToSlot'));
   }, []);
 
   // const datalength = classes.headers.get('X-Pagination');

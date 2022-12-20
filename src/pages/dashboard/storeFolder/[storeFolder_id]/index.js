@@ -20,14 +20,7 @@ import { FileFolderCard, FileNewFolderDialog, FilePanel } from '../../../../sect
 import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
-import {
-  createFolderRedux,
-  createStoreFolderRedux,
-  getFolderRedux,
-  getFolderSavetoDocToMyFolderRedux,
-  getFolderUploadDocRedux,
-  getStoreFolderRedux,
-} from '../../../../redux/slices/folder';
+import { getFolderRedux, getStoreFolderRedux } from '../../../../redux/slices/folder';
 import Iconify from '../../../../components/iconify';
 import UploadMyDocumentDialog from '../../../../sections/@dashboard/storeFolder/UploadMyDocumentDialog';
 import PopupGetFolder from 'src/sections/@dashboard/general/getFiletoDocPrivate/PopupGetFolder';
@@ -55,7 +48,7 @@ export default function StoreFilePage() {
 
   useEffect(() => {
     if (storeFolderID) {
-      dispatch(getStoreFolderRedux(storeFolderID));
+      dispatch(getFolderRedux(storeFolderID, 'storeFolder'));
     }
   }, [storeFolderID]);
 
@@ -65,7 +58,7 @@ export default function StoreFilePage() {
         data={{
           ...storeFolder,
           handleBackPage: () => {
-            dispatch(getStoreFolderRedux(storeFolder.parentId));
+            dispatch(getFolderRedux(storeFolder.parentId, 'storeFolder'));
           },
           types: ['storeFolder'],
           menuSubFolder: ['edit', 'delete'],

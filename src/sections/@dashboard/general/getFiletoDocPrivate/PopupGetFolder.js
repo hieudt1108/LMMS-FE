@@ -17,7 +17,7 @@ import { dispatch } from 'src/redux/store';
 
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { copyDocsToFolderRedux, getFolderSaveDocToMyFolderRedux } from 'src/redux/slices/folder';
+import { copyDocsToFolderRedux, getFolderRedux, getFolderSaveDocToMyFolderRedux } from 'src/redux/slices/folder';
 import GeneralFolderPage from './GeneralFolderPage';
 
 // PopupGetFolder.propTypes = {
@@ -49,7 +49,7 @@ export default function PopupGetFolder({ open, onClose, data }) {
             handleUploadDocumentToMyFolder,
             ...folderSaveDocToMyFolder,
             handleBackPage: () => {
-              dispatch(getFolderSaveDocToMyFolderRedux(folderSaveDocToMyFolder.parentId));
+              dispatch(getFolderRedux(folderSaveDocToMyFolder.parentId, 'folderSaveDocToMyFolder'));
             },
             types: ['folderSaveDocToMyFolder'],
             menuSubFolder: [],

@@ -22,7 +22,7 @@ import ManageSubject from '../class/manage/ManageSubject';
 import ManageUser from '../class/manage/ManageUser';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { copyDocsToFolderRedux, copyDocsToStoreFolderRedux, getFolderUploadDocRedux } from 'src/redux/slices/folder';
+import { copyDocsToFolderRedux, copyDocsToStoreFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 import { FolderNewPostForm, GeneralFilePage } from '../folder';
 import { useSnackbar } from 'notistack';
 
@@ -57,7 +57,7 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
             handleUploadDocumentToStoreFolder,
             ...folderUploadDoc,
             handleBackPage: () => {
-              dispatch(getFolderUploadDocRedux(folderUploadDoc.parentId));
+              dispatch(getFolderRedux(folderUploadDoc.parentId, 'folderUploadDoc'));
             },
             types: ['folderUploadDoc'],
             menuSubFolder: [],
@@ -77,7 +77,7 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
             handleUploadDocumentToStoreFolder,
             ...folderUploadDoc,
             handleBackPage: () => {
-              dispatch(getFolderUploadDocRedux(folderUploadDoc.parentId));
+              dispatch(getFolderRedux(folderUploadDoc.parentId, 'folderUploadDoc'));
             },
             types: ['folderUploadDoc'],
           }}

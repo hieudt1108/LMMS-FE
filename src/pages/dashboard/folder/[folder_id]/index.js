@@ -15,7 +15,7 @@ import { _folders } from '../../../../_mock/arrays';
 
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
-import { createFolderRedux, getFolderRedux, getFolderUploadDocRedux } from 'src/redux/slices/folder';
+import { createFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 import { useSnackbar } from 'notistack';
 import LinkItem from '../../../../components/custom-breadcrumbs/LinkItem';
 import Iconify from '../../../../components/iconify';
@@ -37,19 +37,16 @@ export default function FolderPage({ dataGeneralFolder, dataUploadDocsToSlot }) 
   const { folder } = useSelector((state) => state.folder);
 
   useEffect(() => {
-    dispatch(getFolderRedux(0));
+    dispatch(getFolderRedux(0, 'folder'));
   }, []);
 
-  const handleBackPage = () => {
-    dispatch(getFolderRedux(folder.parentId));
-  };
   return (
     <>
       <GeneralFilePage
         data={{
           ...folder,
           handleBackPage: () => {
-            dispatch(getFolderRedux(folder.parentId));
+            dispatch(getFolderRedux(folder.parentId, 'folder'));
           },
           types: ['folder'],
           menuSubFolder: ['edit', 'delete'],

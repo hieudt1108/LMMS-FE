@@ -18,7 +18,7 @@ import {
 import { useSelector } from 'react-redux';
 import { dispatch } from '../../../../redux/store';
 import { FolderNewPostForm, GeneralFilePage } from '../../folder';
-import { copyDocsToFolderRedux, getFolderUploadDocToSlotRedux } from 'src/redux/slices/folder';
+import { copyDocsToFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 import { postDocumentsInSlotRedux } from 'src/redux/slices/subject';
 import { useSnackbar } from 'notistack';
 
@@ -54,7 +54,7 @@ export default function UploadDocToSlot({ open, onClose, slotId, classId, subjec
             onClose: onClose,
             ...folderUploadDocToSlot,
             handleBackPage: () => {
-              dispatch(getFolderUploadDocToSlotRedux(folderUploadDocToSlot.parentId));
+              dispatch(getFolderRedux(folderUploadDocToSlot.parentId, 'folderUploadDocToSlot'));
             },
             types: ['folderUploadDocToSlot'],
             menuSubFolder: [],
@@ -78,11 +78,13 @@ export default function UploadDocToSlot({ open, onClose, slotId, classId, subjec
           data={{
             handleAddDocumentToSlot,
             onClose: onClose,
-            ...folderUploadDocToSlot,
+            ...folderUploadDocToSlotInGeneralFolder,
             handleBackPage: () => {
-              dispatch(getFolderUploadDocToSlotRedux(folderUploadDocToSlot.parentId));
+              dispatch(
+                getFolderRedux(folderUploadDocToSlotInGeneralFolder.parentId, 'folderUploadDocToSlotInGeneralFolder')
+              );
             },
-            types: ['folderUploadDocToSlot'],
+            types: ['folderUploadDocToSlotInGeneralFolder'],
             menuSubFolder: [],
             menuDocument: [],
             panel: ['popupUploadDocToSlot'],

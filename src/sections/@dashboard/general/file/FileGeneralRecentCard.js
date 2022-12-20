@@ -59,10 +59,14 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
 
   const handleOpenDetails = async () => {
     // Chia sẻ lên thư mục chung
-    if (data.types.find((type) => type === 'folderUploadDoc')) {
-      setOpenConfirmAddDocument(true);
-      return;
-    } else if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
+    if (
+      data.types.find(
+        (type) =>
+          type === 'folderUploadDoc' ||
+          type === 'folderUploadDocToSlot' ||
+          type === 'folderUploadDocToSlotInGeneralFolder'
+      )
+    ) {
       setOpenConfirmAddDocument(true);
       return;
     } else if (data.types.find((type) => type === 'folder')) {
@@ -299,7 +303,11 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
             onClick={() => {
               if (data.types.find((type) => type === 'folderUploadDoc')) {
                 data.handleUploadDocumentToStoreFolder(file.id);
-              } else if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
+              } else if (
+                data.types.find(
+                  (type) => type === 'folderUploadDocToSlot' || type === 'folderUploadDocToSlotInGeneralFolder'
+                )
+              ) {
                 data.handleAddDocumentToSlot(file.id);
               }
               handleCloseConfirmAddDocument();

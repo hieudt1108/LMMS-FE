@@ -55,7 +55,7 @@ export default function FolderNewDocumentPostPage() {
           data={{
             ...folder,
             handleBackPage: () => {
-              dispatch(getFolderRedux(folder.parentId));
+              dispatch(getFolderRedux(folder.parentId, 'folder'));
             },
             types: ['folder'],
             menuSubFolder: ['edit', 'delete'],

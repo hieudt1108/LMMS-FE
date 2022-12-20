@@ -143,7 +143,7 @@ export default function GeneralFilePage({ data }) {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Box sx={{ mb: 5 }}>
+        <Box >
           <Stack flexGrow={1}>
             <Stack direction="row" alignItems="center" spacing={1} flexGrow={1}>
               <IconButton

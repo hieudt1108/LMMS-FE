@@ -19,7 +19,7 @@ import React, { useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import { dispatch } from 'src/redux/store';
-import { copyDocsToFolderRedux, getFolderUploadDocRedux } from 'src/redux/slices/folder';
+import { copyDocsToFolderRedux } from 'src/redux/slices/folder';
 import { useSnackbar } from 'notistack';
 import { FolderNewPostForm } from '../../folder';
 

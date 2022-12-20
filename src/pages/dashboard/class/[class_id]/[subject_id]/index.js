@@ -13,7 +13,7 @@ import Head from 'next/head';
 //
 import { getSubjectById, getDocInClass } from '../../../../../dataProvider/agent';
 import UploadDocToSlot from 'src/sections/@dashboard/myclass/popupdiaglog/UploadDocToSlot';
-import { getFolderUploadDocToSlotRedux } from 'src/redux/slices/folder';
+import { getFolderRedux, getFolderUploadDocToSlotInGeneralFolderRedux } from 'src/redux/slices/folder';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import { getDocumentInClassRedux, getSubjectRedux } from 'src/redux/slices/subject';
@@ -51,8 +51,12 @@ export default function index() {
   } = useRouter();
 
   useEffect(() => {
+    dispatch(getFolderRedux(0, 'folderUploadDocToSlot'));
+    dispatch(getFolderRedux(72, 'folderUploadDocToSlotInGeneralFolder'));
+  }, []);
+
+  useEffect(() => {
     if (class_id && subject_id) {
-      dispatch(getFolderUploadDocToSlotRedux(0));
       dispatch(getSubjectRedux(subject_id));
       dispatch(getDocumentInClassRedux(class_id, subject_id));
     }

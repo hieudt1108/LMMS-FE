@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import _ from 'lodash';
 // utils
 //
 import { dispatch } from '../store';
@@ -96,29 +97,9 @@ const slice = createSlice({
 
     getFolderSuccess(state, action) {
       console.log('getFolderSuccess', action);
+      const { folder, nameData } = action.payload;
       state.isLoading = false;
-      state.folder = { ...state.folder, ...action.payload };
-    },
-
-    getStoreFolderSuccess(state, action) {
-      console.log('getStoreFolderSuccess', action);
-      state.isLoading = false;
-      state.storeFolder = { ...state.storeFolder, ...action.payload };
-    },
-    getFolderUploadDocSuccess(state, action) {
-      state.isLoading = false;
-      state.folderUploadDoc = { ...state.folderUploadDoc, ...action.payload };
-    },
-
-    getFolderUploadDocToSlotSuccess(state, action) {
-      state.isLoading = false;
-      state.folderUploadDocToSlot = { ...state.folderUploadDocToSlot, ...action.payload };
-    },
-
-    getFolderSaveToDocToMyFolderSuccess(state, action) {
-      console.log('getFolderSavetoDocToMyFolderSuccess', action);
-      state.isLoading = false;
-      state.folderSaveDocToMyFolder = { ...state.folderSaveDocToMyFolder, ...action.payload };
+      state[`${nameData}`] = { ...state[`${nameData}`], ...folder };
     },
 
     createFolderSuccess(state, action) {
@@ -236,83 +217,19 @@ const returnMessageError = (title) => ({
   variant: 'error',
 });
 
-export function getFolderUploadDocRedux(params) {
-  return async () => {
-    try {
-      if (!params && params !== 0) {
-        return returnMessageError(`Truy cập thư mục lỗi`);
-      }
-      dispatch(slice.actions.startLoading());
-      const response = await getFolderByID(params);
-      console.log('getFolderByID', response);
-      dispatch(slice.actions.getFolderUploadDocSuccess(response.data.data));
-    } catch (error) {
-      return returnMessageError(`${error.message}`);
-    }
-  };
-}
-
-export function getFolderUploadDocToSlotRedux(params) {
-  return async () => {
-    try {
-      if (!params && params !== 0) {
-        return returnMessageError(`Truy cập thư mục lỗi`);
-      }
-      dispatch(slice.actions.startLoading());
-      const response = await getFolderByID(params);
-      console.log('getFolderByID', response);
-      dispatch(slice.actions.getFolderUploadDocToSlotSuccess(response.data.data));
-    } catch (error) {
-      return returnMessageError(`${error.message}`);
-    }
-  };
-}
-
-export function getFolderSaveDocToMyFolderRedux(params) {
-  return async () => {
-    try {
-      if (!params && params !== 0) {
-        return returnMessageError(`Truy cập thư mục lỗi`);
-      }
-      dispatch(slice.actions.startLoading());
-      const response = await getFolderByID(params);
-      dispatch(slice.actions.getFolderSaveToDocToMyFolderSuccess(response.data.data));
-    } catch (error) {
-      return returnMessageError(`${error.message}`);
-    }
-  };
-}
-
-export function getStoreFolderRedux(params) {
+export function getFolderRedux(params, nameData) {
   return async () => {
     try {
       console.log('getFolderRedux', params);
-      if (!params && params !== 0) {
-        return dispatch(slice.actions.hasError('không có folderId'));
+      if ((!params && params !== 0) || !nameData) {
+        return returnMessageError(`Không truy cập được thư mục này`);
       }
       dispatch(slice.actions.startLoading());
       const response = await getFolderByID(params);
       console.log('getFolderByID', response);
-      dispatch(slice.actions.getStoreFolderSuccess(response.data.data));
+      dispatch(slice.actions.getFolderSuccess({ folder: response.data.data, nameData }));
     } catch (error) {
-      return returnMessageError(`${error.message}`);
-    }
-  };
-}
-
-export function getFolderRedux(params) {
-  return async () => {
-    try {
-      console.log('getFolderRedux', params);
-      if (!params && params !== 0) {
-        return dispatch(slice.actions.hasError('không có folderId'));
-      }
-      dispatch(slice.actions.startLoading());
-      const response = await getFolderByID(params);
-      console.log('getFolderByID', response);
-      dispatch(slice.actions.getFolderSuccess(response.data.data));
-    } catch (error) {
-      return returnMessageError(`${error.message}`);
+      return returnMessageError(`Có lỗi xảy ra`);
     }
   };
 }

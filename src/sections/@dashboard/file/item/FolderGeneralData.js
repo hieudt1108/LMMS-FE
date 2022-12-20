@@ -12,7 +12,7 @@ import TextMaxLine from '../../../../components/text-max-line';
 
 import { PATH_DASHBOARD } from 'src/routes/paths';
 import { dispatch } from 'src/redux/store';
-import { getFolderSaveDocToMyFolderRedux, getFolderSavetoDocToMyFolderRedux } from 'src/redux/slices/folder';
+import { getFolderRedux } from 'src/redux/slices/folder';
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ export default function FolderGeneralData({ data, selected, onSelect, folder, sx
   console.log('FolderGeneralData: ', data);
 
   const handleOnClickFileFolderCard = async (pid) => {
-    dispatch(getFolderSaveDocToMyFolderRedux(pid));
+    dispatch(getFolderRedux(pid, 'folderSaveDocToMyFolder'));
   };
 
   return (

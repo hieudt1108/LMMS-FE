@@ -19,8 +19,6 @@ import {
   deleteSubFolderInFolderRedux,
   deleteSubFolderInStoreFolderRedux,
   getFolderRedux,
-  getFolderUploadDocRedux,
-  getFolderUploadDocToSlotRedux,
   getStoreFolderRedux,
   updateSubFolderRedux,
   updateSubStoreFolderRedux,
@@ -117,15 +115,13 @@ export default function FileFolderCard({ data, folder, selected, onSelect, onDel
     copy(folder.url);
   };
 
-  const handleOnClickFileFolderCard = (folderID) => {
-    if (data.types.find((type) => type === 'folderUploadDoc')) {
-      return dispatch(getFolderUploadDocRedux(folderID));
-    } else if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
-      return dispatch(getFolderUploadDocToSlotRedux(folderID));
-    } else if (data.types.find((type) => type === 'folder')) {
-      return dispatch(getFolderRedux(folderID));
-    } else if (data.types.find((type) => type === 'storeFolder')) {
-      return dispatch(getStoreFolderRedux(folderID));
+  const handleOnClickFileFolderCard = async (folderID) => {
+    if (data.types.length) {
+      const message = await dispatch(getFolderRedux(folderID, data.types[0]));
+      if (message && message.variant) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      }
+      return;
     }
   };
 

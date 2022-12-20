@@ -27,7 +27,6 @@ import {
 import { Upload } from '../../../components/upload';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/useAuthContext';
-import { FileGeneralRecentCard } from '../general/file';
 
 // ----------------------------------------------------------------------
 function TextCode() {

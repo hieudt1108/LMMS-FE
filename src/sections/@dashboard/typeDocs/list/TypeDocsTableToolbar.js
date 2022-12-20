@@ -9,11 +9,14 @@ import Iconify from '../../../../components/iconify';
 TypeDocsTableToolbar.propTypes = {
   isFiltered: PropTypes.bool,
   filterName: PropTypes.string,
+    filterSubject: PropTypes.string,
+    selectedSubject: PropTypes.string,
   onFilterName: PropTypes.func,
   onResetFilter: PropTypes.func,
+    optionsSubject: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default function TypeDocsTableToolbar({ isFiltered, filterName, onFilterName, onResetFilter }) {
+export default function TypeDocsTableToolbar({ isFiltered, filterName,selectedSubject,onChangeSubjects, onFilterName, onResetFilter,optionsSubject }) {
   return (
     <Stack
       spacing={2}
@@ -24,6 +27,61 @@ export default function TypeDocsTableToolbar({ isFiltered, filterName, onFilterN
       }}
       sx={{ px: 2.5, py: 3 }}
     >
+        <TextField
+            fullWidth
+            select
+            label="Thuộc môn học"
+            value={selectedSubject}
+            onChange={onChangeSubjects}
+            SelectProps={{
+                MenuProps: {
+                    PaperProps: {
+                        sx: {
+                            maxHeight: 260,
+                        },
+                    },
+                },
+            }}
+            sx={{
+                maxWidth: 240,
+                textTransform: 'capitalize',
+            }}
+        >
+            <MenuItem
+                key="all"
+                value="all"
+                sx={{
+                    mx: 1,
+                    my: 0.5,
+                    borderRadius: 0.75,
+                    typography: 'body2',
+                    textTransform: 'capitalize',
+                    '&:first-of-type': { mt: 0 },
+                    '&:last-of-type': { mb: 0 },
+                }}
+            >
+                Tất cả
+            </MenuItem>
+            {optionsSubject.length
+                ? optionsSubject.map((option) => (
+                    <MenuItem
+                        key={option.id}
+                        value={option.id}
+                        sx={{
+                            mx: 1,
+                            my: 0.5,
+                            borderRadius: 0.75,
+                            typography: 'body2',
+                            textTransform: 'capitalize',
+                            '&:first-of-type': { mt: 0 },
+                            '&:last-of-type': { mb: 0 },
+                        }}
+                    >
+                        {option.label}
+                    </MenuItem>
+                ))
+                : ''}
+        </TextField>
       <TextField
         fullWidth
         // value={filterName}

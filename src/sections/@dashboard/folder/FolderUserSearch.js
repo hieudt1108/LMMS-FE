@@ -87,7 +87,7 @@ export default function FolderUserSearch() {
         <CustomTextField
           {...params}
           width={250}
-          placeholder="Search..."
+          placeholder="Tìm kiếm người dùng..."
           onKeyUp={handleKeyUp}
           InputProps={{
             ...params.InputProps,

@@ -44,10 +44,10 @@ export default function AuthResetPasswordForm() {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <RHFTextField name="email" label="Email address" />
+      <RHFTextField name="email" label="Email " />
 
       <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting} sx={{ mt: 3 }}>
-        Send Request
+        Gửi yêu cầu
       </LoadingButton>
     </FormProvider>
   );

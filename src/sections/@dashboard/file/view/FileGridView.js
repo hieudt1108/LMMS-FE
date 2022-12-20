@@ -204,7 +204,7 @@ export default function FileGridView({ table, data, dataFiltered, onDeleteItem, 
       <FileNewFolderDialog
         open={openNewFolder}
         onClose={handleCloseNewFolder}
-        title="New Folder"
+        title="Tạo thư mục mới"
         onCreate={() => {
           handleCloseNewFolder();
           setFolderName('');

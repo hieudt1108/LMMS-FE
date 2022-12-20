@@ -30,20 +30,20 @@ export default function NewPasswordPage() {
       <SentIcon sx={{ mb: 5, height: 96 }} />
 
       <Typography variant="h3" paragraph>
-        Request sent successfully!
+        Gửi yêu cầu thành công{' '}
       </Typography>
 
       <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-        We've sent a 6-digit confirmation email to your email.
+        Chúng tôi đã gửi Email xác nhận gồm 6 chữ số đến Email của bạn.
         <br />
-        Please enter the code in below box to verify your email.
+        Vui lòng nhập mã vào ô bên dưới để xác minh Email của bạn.{' '}
       </Typography>
 
       <AuthNewPasswordForm />
 
       <Typography variant="body2" sx={{ my: 3 }}>
-        Don’t have a code? &nbsp;
-        <Link variant="subtitle2">Resend code</Link>
+        Bạn ko nhận được mã? &nbsp;
+        <Link variant="subtitle2">Gửi mã</Link>
       </Typography>
 
       <NextLink href={PATH_AUTH.login} passHref>
@@ -57,7 +57,7 @@ export default function NewPasswordPage() {
           }}
         >
           <Iconify icon="eva:chevron-left-fill" width={16} />
-          Return to sign in
+          Quay lại đăng nhập{' '}
         </Link>
       </NextLink>
     </>

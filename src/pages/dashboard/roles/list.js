@@ -1,27 +1,26 @@
-import { paramCase } from 'change-case';
-import { useCallback, useEffect, useState } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // @mui
 import {
-  Tab,
-  Tabs,
-  Card,
-  Table,
+  Box,
   Button,
-  Tooltip,
-  Divider,
-  TableBody,
+  Card,
   Container,
+  Divider,
   IconButton,
+  Pagination,
+  Table,
+  TableBody,
   TableContainer,
+  Tooltip,
 } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import {PATH_DASHBOARD} from '../../../routes/paths';
 // _mock_
-import { _typeDocumentList } from '../../../_mock/arrays';
+import {_typeDocumentList} from '../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
@@ -29,21 +28,20 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import { useSettingsContext } from '../../../components/settings';
+import {useSettingsContext} from '../../../components/settings';
 import {
-  useTable,
-  getComparator,
   emptyRows,
-  TableNoData,
+  getComparator,
   TableEmptyRows,
   TableHeadCustom,
+  TableNoData,
   TableSelectedAction,
-  TablePaginationCustom,
+  useTable,
 } from '../../../components/table';
 // sections
-import { RoleTableToolbar, RoleTableRow } from '../../../sections/@dashboard/roles/list';
-import { deleteRole, deleteTypeDocument, getALlRoles, getAllTypeDocument } from '../../../dataProvider/agent';
-import { useSnackbar } from '../../../components/snackbar';
+import {RoleTableRow, RoleTableToolbar} from '../../../sections/@dashboard/roles/list';
+import {deleteRole, getALlRoles} from '../../../dataProvider/agent';
+import {useSnackbar} from '../../../components/snackbar';
 
 // ----------------------------------------------------------------------
 
@@ -107,7 +105,7 @@ export default function RolesListPage() {
   const isFiltered = filterName !== '';
 
   const isNotFound = !dataFiltered.length && !!filterName;
-
+  const [paging, setPaging] = useState();
   const [filter, setFilter] = useState({
     pageIndex: 1,
     pageSize: 5,
@@ -122,10 +120,6 @@ export default function RolesListPage() {
     setOpenConfirm(false);
   };
 
-  const handleFilterStatus = (event, newValue) => {
-    setPage(0);
-    setFilterStatus(newValue);
-  };
 
   const handleFilterName = useCallback(
     (event) => {
@@ -173,6 +167,14 @@ export default function RolesListPage() {
     }
   };
 
+  const handlePageChange = useCallback(async (event, pageIndex) => {
+    let response = await getALlRoles({
+      ...filter,
+      pageIndex: pageIndex,
+    });
+    setFilter({ ...filter, pageIndex: pageIndex });
+
+  }, []);
   const handleEditRow = (id) => {
     push(PATH_DASHBOARD.role.edit(id));
   };
@@ -183,14 +185,14 @@ export default function RolesListPage() {
 
   async function fetchRoles() {
     const res = await getALlRoles(filter);
-    console.log(res.data);
+    console.log(res);
     if (res.status < 400) {
+      setPaging(JSON.parse(res.headers['x-pagination']));
       setListRoles(res.data.data);
     } else {
       console.log(res.message);
     }
   }
-  console.log('onFilterName: ', filter);
   useEffect(() => {
     fetchRoles();
   }, [filter]);
@@ -288,17 +290,17 @@ export default function RolesListPage() {
             </Scrollbar>
           </TableContainer>
 
-          <TablePaginationCustom
-            labelRowsPerPage="Hàng trên mỗi trang"
-            count={dataFiltered.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPageChange={onChangePage}
-            onRowsPerPageChange={onChangeRowsPerPage}
-            //
-            dense={dense}
-            onChangeDense={onChangeDense}
-          />
+          <Box p={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div></div>
+            <Pagination
+                size="small"
+                count={paging?.TotalPages}
+                rowsperpage={paging?.PageSize}
+                onChange={handlePageChange}
+                color="primary"
+            />
+          </Box>
+
         </Card>
       </Container>
 

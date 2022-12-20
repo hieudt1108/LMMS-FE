@@ -91,13 +91,13 @@ export default function AuthNewPasswordForm() {
 
         {(!!errors.code1 || !!errors.code2 || !!errors.code3 || !!errors.code4 || !!errors.code5 || !!errors.code6) && (
           <FormHelperText error sx={{ px: 2 }}>
-            Code is required
+            Mã không đúng
           </FormHelperText>
         )}
 
         <RHFTextField
           name="password"
-          label="Password"
+          label="Mật khẩu mới"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -112,7 +112,7 @@ export default function AuthNewPasswordForm() {
 
         <RHFTextField
           name="confirmPassword"
-          label="Confirm New Password"
+          label="Nhập lại mật khẩu mới"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -126,7 +126,7 @@ export default function AuthNewPasswordForm() {
         />
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting} sx={{ mt: 3 }}>
-          Update Password
+          Cập nhật mật khẩu
         </LoadingButton>
       </Stack>
     </FormProvider>

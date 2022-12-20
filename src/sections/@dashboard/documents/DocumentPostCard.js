@@ -8,6 +8,8 @@ import { Card, Typography, Stack, Avatar, Box, Alert } from '@mui/material';
 import {FileGeneralRecentCard} from "../general/file";
 import React from "react";
 import EmptyContent from "../../../components/empty-content";
+import {dispatch} from "../../../redux/store";
+import {getStoreFolderRedux} from "../../../redux/slices/folder";
 // routes
 // import { PATH_DASHBOARD } from '../../../routes/paths';
 // // hooks
@@ -38,6 +40,11 @@ export default function DocumentPostCard({ documents }) {
           documents?.map((category) => (
               <Stack spacing={2}>
                   <FileGeneralRecentCard
+                      data={{
+                          menuDocument: ['preview', 'download'],
+                          types: ['folder'],
+                      }}
+                      fileShare={category}
                       key={category.id}
                       file={category}
                       onDelete={() => console.log('DELETE', category.id)}

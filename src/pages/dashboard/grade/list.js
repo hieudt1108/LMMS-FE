@@ -16,7 +16,7 @@ import {
   TableBody,
   Container,
   IconButton,
-  TableContainer,
+  TableContainer, Box, Pagination,
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -110,6 +110,7 @@ export default function GradeListPage() {
   const denseHeight = dense ? 52 : 72;
 
   const isFiltered = filterName !== '';
+  const [paging, setPaging] = useState();
 
   const [filter, setFilter] = useState({
     pageIndex: 1,
@@ -177,6 +178,14 @@ export default function GradeListPage() {
     }
   };
 
+  const handlePageChange = useCallback(async (event, pageIndex) => {
+    let response = await getAllGrade({
+      ...filter,
+      pageIndex: pageIndex,
+    });
+    setFilter({ ...filter, pageIndex: pageIndex });
+  }, []);
+
   const handleEditRow = (id) => {
     push(PATH_DASHBOARD.grade.edit(id));
   };
@@ -189,6 +198,7 @@ export default function GradeListPage() {
   useEffect(() => {
     fetchLevels();
   }, []);
+
   useEffect(() => {
     fetchGrades();
   }, [filter]);
@@ -205,6 +215,7 @@ export default function GradeListPage() {
   async function fetchGrades() {
     const res = await getAllGrade(filter);
     if (res.status < 400) {
+      setPaging(JSON.parse(res.headers['x-pagination']));
       setListGrades(res.data.data);
     } else {
       console.log(res.message);
@@ -317,17 +328,16 @@ export default function GradeListPage() {
             </Scrollbar>
           </TableContainer>
 
-          <TablePaginationCustom
-            labelRowsPerPage="Hàng trên mỗi trang"
-            count={dataFiltered.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPageChange={onChangePage}
-            onRowsPerPageChange={onChangeRowsPerPage}
-            //
-            dense={dense}
-            onChangeDense={onChangeDense}
-          />
+          <Box p={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div></div>
+            <Pagination
+                size="small"
+                count={paging?.TotalPages}
+                rowsperpage={paging?.PageSize}
+                onChange={handlePageChange}
+                color="primary"
+            />
+          </Box>
         </Card>
       </Container>
 

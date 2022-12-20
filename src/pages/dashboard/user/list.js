@@ -150,10 +150,6 @@ export default function UserListPage() {
         setOpenConfirm(false);
     };
 
-    const handleFilterStatus = (event, newValue) => {
-        setPage(0);
-        setFilterStatus(newValue);
-    };
 
     const [isSearching, setIsSearching] = useState(false)
 
@@ -214,23 +210,19 @@ export default function UserListPage() {
         fetchUsers({...filter, pageIndex: newPage});
     };
 
-    const handleChangeRowsPerPage = (event, newPage) => {
-    };
-    const handleChangeFilterByEmail = (event) => {
-        setFilter({...filter, searchByEmail: event.target.value});
-        setFilterByEmail(event.target.value);
-    };
+    const handleChangeFilterByEmail = useCallback(
+        (event) => {
+            setFilter({...filter, searchByEmail: event.target.value});
+        },
+        [filter]
+    );
+
 
     const handleChangeRoles = (event) => {
         setFilter({...filter, roleId: event.target.value === 'all' ? '' : event.target.value});
         setSelectedRole(event.target.value);
     };
 
-    const handleClickFilter = () => {
-        fetchUsers(filter);
-        setIsSearching(true)
-        console.log('filter1', filter)
-    };
 
     const handleResetFilter = () => {
         setSelectedRole('all');
@@ -238,8 +230,8 @@ export default function UserListPage() {
         setIsSearching(false)
     };
 
-    async function fetchUsers(params) {
-        const res = await getAllUsers(params);
+    async function fetchUsers() {
+        const res = await getAllUsers(filter);
         if (res.status < 400) {
             setPaging(JSON.parse(res.headers['x-pagination']));
             setListUsers(res.data.data);
@@ -248,10 +240,12 @@ export default function UserListPage() {
             console.log(res.message);
         }
     }
+    useEffect(() => {
+        fetchUsers();
+    }, [filter]);
 
     useEffect(() => {
         fetchRoles();
-        fetchUsers(filter);
     }, []);
 
 
@@ -294,7 +288,6 @@ export default function UserListPage() {
                     <UserTableToolbar
                         onChangeRoles={handleChangeRoles}
                         selectedRole={role}
-                        onClickFilter={handleClickFilter}
                         onChangeFilterByEmail={handleChangeFilterByEmail}
                         filterByEmail={filterByEmail}
                         isFiltered={isSearching}

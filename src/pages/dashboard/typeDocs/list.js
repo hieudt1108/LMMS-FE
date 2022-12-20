@@ -52,8 +52,7 @@ import error from "eslint-plugin-react/lib/util/error";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-    {id: 'code', label: 'Mã môn học', align: 'left'},
-    {id: 'name', label: 'Tên môn học', align: 'left'},
+    {id: 'name', label: 'Tên loại tài liệu', align: 'left'},
     {id: 'description', label: 'Mô tả', align: 'left'},
     {id: ''},
 ];
@@ -241,16 +240,16 @@ export default function TypeDocsListPage() {
 
             <Container maxWidth={'xl'}>
                 <CustomBreadcrumbs
-                    heading="Danh sách môn học"
+                    heading="Danh sách loại tài liệu"
                     links={[
                         {name: 'Trang chủ', href: PATH_DASHBOARD.root},
-                        {name: 'Môn học', href: PATH_DASHBOARD.type_documents.root},
+                        {name: 'Loại tài liệu', href: PATH_DASHBOARD.type_documents.root},
                         {name: 'Danh sách'},
                     ]}
                     action={
                         <NextLink href={PATH_DASHBOARD.type_documents.new} passHref>
                             <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill"/>}>
-                                Thêm môn học
+                                Thêm loại tài liệu
                             </Button>
                         </NextLink>
                     }

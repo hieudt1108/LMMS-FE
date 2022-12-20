@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 // import NextLink from 'next/link';
 // // @mui
 // import { alpha, styled } from '@mui/material/styles';
-import { Card, Typography, Stack, Avatar, Box, Alert } from '@mui/material';
+import {Card, Typography, Stack, Avatar, Box, Alert} from '@mui/material';
 import {FileGeneralRecentCard} from "../general/file";
-import React from "react";
+import React, {useState} from "react";
 import EmptyContent from "../../../components/empty-content";
 import {dispatch} from "../../../redux/store";
-import {getStoreFolderRedux} from "../../../redux/slices/folder";
+import {getFolderSaveDocToMyFolderRedux, getStoreFolderRedux} from "../../../redux/slices/folder";
+import PopupGetFolder from "../general/getFiletoDocPrivate/PopupGetFolder";
 // routes
 // import { PATH_DASHBOARD } from '../../../routes/paths';
 // // hooks
@@ -25,43 +26,62 @@ import {getStoreFolderRedux} from "../../../redux/slices/folder";
 // ----------------------------------------------------------------------
 
 DocumentPostCard.propTypes = {
-  index: PropTypes.number,
-  document: PropTypes.object,
+    index: PropTypes.number,
+    document: PropTypes.object,
 };
 
-export default function DocumentPostCard({ documents }) {
-  // const isDesktop = useResponsive('up', 'md');
+export default function DocumentPostCard({documents}) {
 
-  // const { code, name, typeFile, id } = document;
-  return (
-    <Card sx={{ p: 3, cursor: 'pointer' }}>
-      <Stack spacing={3}>
-        {documents && documents?.length ? (
-          documents?.map((category) => (
-              <Stack spacing={2}>
-                  <FileGeneralRecentCard
-                      data={{
-                          menuDocument: ['preview', 'download'],
-                          types: ['folder'],
-                      }}
-                      fileShare={category}
-                      key={category.id}
-                      file={category}
-                      onDelete={() => console.log('DELETE', category.id)}
-                  />
-              </Stack>
-          ))
-        ) : (
-            <EmptyContent
-                title="Không có dữ liệu"
-                sx={{
-                    '& span.MuiBox-root': { height: 160 },
-                }}
-            />
-        )}
-      </Stack>
-    </Card>
-  );
+    const [documentHandle, setDocumentHandle] = useState({});
+
+    const [openPopupSaveInMyFolder, setOpenPopupSaveInMyFolder] = useState(false);
+
+    const handleClosePopupSaveInMyFolder = () => {
+        setOpenPopupSaveInMyFolder(false);
+    };
+
+    const handleOpenPopupSaveInMyFolder = async (documents) => {
+        const {document} = documents;
+        await dispatch(getFolderSaveDocToMyFolderRedux(0));
+        setDocumentHandle(document);
+        setOpenPopupSaveInMyFolder(true);
+    };
+
+    return (
+        <>
+            <Card sx={{p: 3, cursor: 'pointer'}}>
+                <Stack spacing={3}>
+                    {documents && documents?.length ? (
+                        documents?.map((category) => (
+                            <Stack spacing={2}>
+                                <FileGeneralRecentCard
+                                    data={{
+                                        menuDocument: ['preview', 'download', 'saveInMyFolder'],
+                                        types: ['folder'],
+                                    }}
+                                    handleOpenPopupSaveInMyFolder={handleOpenPopupSaveInMyFolder}
+                                    key={category.id}
+                                    file={category}
+                                    onDelete={() => console.log('DELETE', category.id)}
+                                />
+                            </Stack>
+                        ))
+                    ) : (
+                        <EmptyContent
+                            title="Không có dữ liệu"
+                            sx={{
+                                '& span.MuiBox-root': {height: 160},
+                            }}
+                        />
+                    )}
+                </Stack>
+            </Card>
+            {openPopupSaveInMyFolder && (
+                <PopupGetFolder open={openPopupSaveInMyFolder} onClose={handleClosePopupSaveInMyFolder}
+                                data={documentHandle}/>
+            )}
+        </>
+    );
 }
 
 // ----------------------------------------------------------------------

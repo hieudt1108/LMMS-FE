@@ -52,7 +52,6 @@ export default function UserAccountPage() {
           heading="Cài đặt tài khoản"
           links={[
             { name: 'Trang chủ', href: PATH_DASHBOARD.root },
-            { name: 'Tài khoản', href: PATH_DASHBOARD.user.root },
             { name: 'Cài đặt' },
           ]}
         />

@@ -1,367 +1,436 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useEffect, useMemo, useState } from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 // next
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // form
-import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {Controller, useFieldArray, useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 // @mui
-import { LoadingButton } from '@mui/lab';
-import { Box, Card, Chip, FormControlLabel, Grid, Stack, Switch, TextField, Typography } from '@mui/material';
+import {LoadingButton} from '@mui/lab';
+import {
+    Alert,
+    Box,
+    Button,
+    Card,
+    Chip, Divider,
+    FormControl,
+    FormControlLabel,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Select,
+    Stack,
+    Switch,
+    TextField,
+    Typography
+} from '@mui/material';
 // utils
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import {PATH_DASHBOARD} from '../../../routes/paths';
 // assets
 // components
-import { useSnackbar } from '../../../components/snackbar';
-import FormProvider, { RHFAutocomplete, RHFRadioGroup, RHFTextField } from '../../../components/hook-form';
-import { DatePicker } from '@mui/x-date-pickers';
-import { createUserAuth, getALlRoles, getAllSubject, updateUser } from '../../../dataProvider/agent';
+import {useSnackbar} from '../../../components/snackbar';
+import FormProvider, {RHFAutocomplete, RHFRadioGroup, RHFSelect, RHFTextField} from '../../../components/hook-form';
+import {DatePicker} from '@mui/x-date-pickers';
+import {
+    createUserAuth, getALlRoles, getAllSubject, getRoleById, getSubjectById, updateUser
+} from '../../../dataProvider/agent';
+import Iconify from "../../../components/iconify";
 
 // ----------------------------------------------------------------------
-const GENDER_OPTION = [
-  { label: 'Nam', value: '0' },
-  { label: 'Nữ', value: '1' },
-];
+const GENDER_OPTION = [{label: 'Nam', value: '0'}, {label: 'Nữ', value: '1'},];
 
 UserNewForm.propTypes = {
-  isEdit: PropTypes.bool,
-  currentUser: PropTypes.object,
+    isEdit: PropTypes.bool, currentUser: PropTypes.object,
 };
 
-export default function UserNewForm({ isEdit = false, currentUser }) {
-  const { push } = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-  console.log('currentUserRoles', currentUser);
+export default function UserNewForm({isEdit = false, currentUser}) {
+    const {push} = useRouter();
+    const {enqueueSnackbar} = useSnackbar();
+    console.log('currentUserRoles', currentUser);
 
-  const validationSchema = (() => {
-    if (!isEdit) {
-      return Yup.object().shape({
-        userName: Yup.string().trim().required('Tên đăng nhập không được trống'),
-        password: Yup.string().trim().required('Mật khẩu không được trống'),
-        roleID: Yup.array().min(1, 'Hãy chọn vai trò'),
-        firstName: Yup.string().trim().required('Không được để trống'),
-        lastName: Yup.string().trim().required('Không được để trống'),
-        email: Yup.string().notRequired(),
-        phone: Yup.string().notRequired(),
-        address: Yup.mixed().notRequired(),
-      });
-    } else {
-      return Yup.object().shape({
-        firstName: Yup.string().trim().required('Không được để trống'),
-        lastName: Yup.string().trim().required('Không được để trống'),
-        email: Yup.string().notRequired(),
-        phone: Yup.string().notRequired(),
-        address: Yup.mixed().notRequired(),
-      });
-    }
-  })();
-
-  const defaultValues = useMemo(
-    () => ({
-      userName: currentUser?.userName || '',
-      password: currentUser?.password || '',
-      firstName: currentUser?.firstName || '',
-      lastName: currentUser?.lastName || '',
-      email: currentUser?.email || '',
-      gender: currentUser?.gender || 0,
-      phone: currentUser?.phone || '',
-      address: currentUser?.address || '',
-      isTeacher: 0,
-      roleID: [],
-      tagsId: [],
-      tagsName: '',
-      subjectId: [],
-      suId: [],
-      birthDate: currentUser?.birthDate || new Date(),
-      enable: currentUser?.enable || 0,
-    }),
-    [currentUser]
-  );
-
-  const methods = useForm({
-    resolver: yupResolver(validationSchema),
-    defaultValues,
-  });
-
-  const {
-    reset,
-    watch,
-    control,
-    setValue,
-    getValues,
-    handleSubmit,
-    formState: { isSubmitting, errors },
-  } = methods;
-
-  useEffect(() => {
-    if (isEdit && currentUser) {
-      reset(defaultValues);
-    }
-    if (!isEdit) {
-      reset(defaultValues);
-    }
-  }, [isEdit, currentUser]);
-
-  const [userRole, setUserRole] = useState([]);
-  const [userSubjects, setUserSubjects] = useState([]);
-  const [role, setRole] = useState([]);
-  useEffect(() => {
-    fetchRoles();
-    fetchSubject();
-  }, []);
-
-  async function fetchRoles() {
-    const res = await getALlRoles({ pageIndex: 1, pageSize: 10 });
-    if (res.status < 400) {
-      const transformData = res.data.data.map((tag) => {
-        return {
-          label: tag.name,
-          id: tag.id,
-        };
-      });
-      setUserRole(transformData);
-    } else {
-      console.log('error fetch api');
-    }
-  }
-
-  async function fetchSubject() {
-    const res = await getAllSubject({ pageIndex: 1, pageSize: 100 });
-    if (res.status < 400) {
-      const transformDataSubject = res.data.data.map((su) => {
-        return {
-          label: su.name,
-          id: su.id,
-        };
-      });
-      console.log('transformDataSubject', transformDataSubject);
-      setUserSubjects(transformDataSubject);
-    } else {
-      console.log('error fetch api');
-    }
-  }
-
-  const onSubmit = async (data) => {
-    const roles = [];
-    for (let i = 0; i < data.tagsId.length; i++) {
-      if (data.tagsId[i] === 11) {
-        roles.push({
-          roleId: data.tagsId[i],
-          subjectId: getValues('subjectId').map((item) => item.id),
-        });
-      } else {
-        roles.push({
-          roleId: data.tagsId[i],
-          subjectId: [],
-        });
-      }
-    }
-    if (!isEdit) {
-      try {
-        const dataCreate = {
-          userName: data.userName,
-          password: data.password,
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          gender: data.gender,
-          birthDate: data.birthDate,
-          address: data.address,
-          phone: data.phone,
-          isTeacher: data.isTeacher,
-          roles: roles,
-        };
-        const res = await createUserAuth(dataCreate);
-        console.log(res);
-        if (res.status < 400) {
-          reset();
-          enqueueSnackbar('Tạo người dùng thành công');
-          push(PATH_DASHBOARD.user.list);
+    const validationSchema = (() => {
+        if (!isEdit) {
+            return Yup.object().shape({
+                userName: Yup.string().trim().required('Tên đăng nhập không được trống'),
+                password: Yup.string().trim().required('Mật khẩu không được trống'),
+                roleID: Yup.array().min(1, 'Hãy chọn vai trò'),
+                firstName: Yup.string().trim().required('Không được để trống'),
+                lastName: Yup.string().trim().required('Không được để trống'),
+                email: Yup.string().notRequired(),
+                phone: Yup.string().notRequired(),
+                address: Yup.mixed().notRequired(),
+            });
         } else {
-          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+            return Yup.object().shape({
+                firstName: Yup.string().trim().required('Không được để trống'),
+                lastName: Yup.string().trim().required('Không được để trống'),
+                email: Yup.string().notRequired(),
+                phone: Yup.string().notRequired(),
+                address: Yup.mixed().notRequired(),
+            });
         }
-      } catch (error) {
-        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
-        console.error(error);
-      }
-    } else {
-      const res = await updateUser(currentUser.id, {
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        gender: data.gender,
-        birthDate: data.birthDate,
-        address: data.address,
-        phone: data.phone,
-        enable: data.enable,
-        roles: roles,
-      });
-      if (res.status < 400) {
-        reset();
-        enqueueSnackbar('Cập nhật người dùng thành công');
-        push(PATH_DASHBOARD.user.list);
-      } else {
-        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
-      }
+    })();
+
+    const defaultValues = useMemo(() => ({
+        userName: currentUser?.userName || '',
+        password: currentUser?.password || '',
+        firstName: currentUser?.firstName || '',
+        lastName: currentUser?.lastName || '',
+        email: currentUser?.email || '',
+        gender: currentUser?.gender || 0,
+        phone: currentUser?.phone || '',
+        address: currentUser?.address || '',
+        isTeacher: 0,
+        roleID: [],
+        tagsId: [],
+        tagsName: '',
+        subjectId: [],
+        suId: [],
+        birthDate: currentUser?.birthDate || new Date(),
+        enable: currentUser?.enable || 0,
+    }), [currentUser]);
+
+    const methods = useForm({
+        resolver: yupResolver(validationSchema), defaultValues,
+    });
+
+    const {
+        reset, watch, control, setValue, getValues, handleSubmit, formState: {isSubmitting, errors},
+    } = methods;
+    const values = watch();
+
+    const {fields, append, prepend, remove} = useFieldArray({
+        control, name: 'items',
+    });
+
+    const renderMenuItem = useCallback((item) => {
+        if (item && item.length) {
+            return item.map((obj, index) => (
+                <MenuItem
+                   value={obj}
+                   key={index}
+                   sx={{
+                       mx: 1,
+                       my: 0.5,
+                       borderRadius: 0.75,
+                       typography: 'body2',
+                       textTransform: 'capitalize',
+                       '&:first-of-type': {mt: 0},
+                       '&:last-of-type': {mb: 0},
+                   }}
+                >
+                    {obj.name}
+                </MenuItem>));
+        }
+        return (<MenuItem>
+                <Alert severity="error">Không có dữ liệu!</Alert>
+            </MenuItem>);
+    });
+
+    const handleAdd = () => {
+        prepend({
+            roleID: [], tagsId: [], tagsName: false, subjectId: [], suId: [],
+        });
+    };
+
+    const handleRemove = (index) => {
+        remove(index);
+    };
+
+
+    const handleChangeRoleID = useCallback((event, index) => {
+        console.log('role', event.target.value.name)
+        setValue(`items[${index}].roleID`, event.target.value.name);
+        if (event.target.value.name === 'GIAOVIEN' || event.target.value.name === 'TRUONGBOMON') {
+            setValue(`items[${index}].tagsName`, true);
+        } else {
+            setValue(`items[${index}].tagsName`, false);
+        }
+    }, [setValue, values.items]);
+
+    useEffect(() => {
+        if (isEdit && currentUser) {
+            reset(defaultValues);
+        }
+        if (!isEdit) {
+            reset(defaultValues);
+        }
+    }, [isEdit, currentUser]);
+
+    const [userRole, setUserRole] = useState([]);
+    const [userSubjects, setUserSubjects] = useState([]);
+    const [role, setRole] = useState([]);
+    useEffect(() => {
+        fetchRoles();
+        fetchSubject();
+    }, []);
+
+    async function fetchRoles() {
+        const res = await getALlRoles({pageIndex: 1, pageSize: 10});
+        if (res.status < 400) {
+            setUserRole(res.data.data);
+        } else {
+            console.log('error fetch api');
+        }
     }
-  };
 
-  return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Card sx={{ p: 3 }}>
-            <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
-            >
-              {!isEdit && (
-                <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
-                  Tài khoản
-                </Typography>
-              )}
-              {!isEdit && <div></div>}
-              {!isEdit && <RHFTextField name="userName" label="Tên tài khoản" id="userName" />}
-              {!isEdit && <RHFTextField name="password" label="Mật khẩu" id="password" />}
+    async function fetchSubject() {
+        const res = await getAllSubject({pageIndex: 1, pageSize: 100});
+        if (res.status < 400) {
+            const transformDataSubject = res.data.data.map((su) => {
+                return {
+                    label: su.name, id: su.id,
+                };
+            });
+            console.log('transformDataSubject', transformDataSubject);
+            setUserSubjects(transformDataSubject);
+        } else {
+            console.log('error fetch api');
+        }
+    }
 
-              <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
-                Cài đặt tài khoản
-              </Typography>
-              {!isEdit && <div></div>}
-              {isEdit && <div></div>}
-              {isEdit && (
-                <FormControlLabel
-                  labelPlacement="start"
-                  control={
-                    <Controller
-                      name="enable"
-                      control={control}
-                      render={({ field }) => (
-                        <Switch
-                          {...field}
-                          checked={field.value !== 0}
-                          onChange={(event) => field.onChange(event.target.checked ? 1 : 0)}
-                        />
-                      )}
-                    />
-                  }
-                  label={
-                    <>
-                      <Typography variant="subtitle2" sx={{ mb: 0.5, ml: 1 }}>
-                        Vô hiệu hóa/Kích hoạt
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
-                        Xác nhận vô hiệu hóa/kích hoạt người dùng
-                      </Typography>
-                    </>
-                  }
-                  sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
-                />
-              )}
-
-              {isEdit && <div></div>}
-              <RHFAutocomplete
-                name="roleID"
-                multiple
-                onChange={(event, newValue) => {
-                  setValue('roleID', newValue);
-                  const tagsId = newValue.map((tag) => tag.id);
-                  const tagsName = newValue.map((tag) => tag.label);
-                  setValue('tagsId', tagsId);
-                  setValue('tagsName', tagsName);
-                  setRole(tagsId);
-                  if (!getValues('tagsName').includes('GIAOVIEN')) {
-                    setValue('subjectId', []);
-                  }
-                }}
-                options={userRole}
-                renderTags={(value, getTagProps) =>
-                  value.map((option, index) => (
-                    <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
-                  ))
+    const onSubmit = async (data) => {
+        const roles = [];
+        for (let i = 0; i < data.tagsId.length; i++) {
+            if (data.tagsId[i] === 11) {
+                roles.push({
+                    roleId: data.tagsId[i], subjectId: getValues('subjectId').map((item) => item.id),
+                });
+            } else {
+                roles.push({
+                    roleId: data.tagsId[i], subjectId: [],
+                });
+            }
+        }
+        if (!isEdit) {
+            try {
+                const dataCreate = {
+                    userName: data.userName,
+                    password: data.password,
+                    email: data.email,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    gender: data.gender,
+                    birthDate: data.birthDate,
+                    address: data.address,
+                    phone: data.phone,
+                    isTeacher: data.isTeacher,
+                    roles: roles,
+                };
+                const res = await createUserAuth(dataCreate);
+                console.log(res);
+                if (res.status < 400) {
+                    reset();
+                    enqueueSnackbar('Tạo người dùng thành công');
+                    push(PATH_DASHBOARD.user.list);
+                } else {
+                    enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
                 }
-                renderInput={(params) => <TextField label="Vai trò" {...params} />}
-              />
+            } catch (error) {
+                enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
+                console.error(error);
+            }
+        } else {
+            const res = await updateUser(currentUser.id, {
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                gender: data.gender,
+                birthDate: data.birthDate,
+                address: data.address,
+                phone: data.phone,
+                enable: data.enable,
+                roles: roles,
+            });
+            if (res.status < 400) {
+                reset();
+                enqueueSnackbar('Cập nhật người dùng thành công');
+                push(PATH_DASHBOARD.user.list);
+            } else {
+                enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
+            }
+        }
+    };
 
-              <RHFAutocomplete
-                name="subjectId"
-                multiple
-                onChange={(event, newValue) => {
-                  setValue('subjectId', newValue);
-                  const suId = newValue.map((su) => su.id);
-                  setValue('suId', suId);
-                }}
-                disabled={getValues('tagsName').includes('GIAOVIEN') ? false : true}
-                options={userSubjects}
-                renderTags={(value, getTagProps) =>
-                  value.map((option, index) => (
-                    <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
-                  ))
-                }
-                renderInput={(params) => <TextField label="Môn dạy" {...params} />}
-              />
+    return (<FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
+                    <Card sx={{p: 3}}>
+                        <Box
+                            rowGap={3}
+                            columnGap={2}
+                            display="grid"
+                            gridTemplateColumns={{
+                                xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)',
+                            }}
+                        >
+                            {!isEdit && (<Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                                    Tài khoản
+                                </Typography>)}
+                            {!isEdit && <div></div>}
+                            {!isEdit && <RHFTextField name="userName" label="Tên tài khoản" id="userName"/>}
+                            {!isEdit && <RHFTextField name="password" label="Mật khẩu" id="password"/>}
 
-              <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
-                Thông tin cá nhân
-              </Typography>
-              <div></div>
-              <RHFTextField name="firstName" label="Họ" id="firstName" />
-              <RHFTextField name="lastName" label="Tên" id="lastName" />
-              <Stack sx={{ ml: 1.5 }}>
-                <Typography variant="subtitle2" sx={{ color: 'text.secondary', mt: 1 }}>
-                  Giới tính
-                </Typography>
-                <RHFRadioGroup
-                  name="gender"
-                  options={GENDER_OPTION}
-                  sx={{
-                    mt: 0.5,
-                    '& .MuiFormControlLabel-root': { mr: 4 },
-                  }}
-                />
-              </Stack>
-              <Stack sx={{ mt: 2.5 }}>
-                <Controller
-                  name="birthDate"
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <DatePicker
-                      label="Sinh nhật"
-                      value={field.value}
-                      onChange={(newValue) => {
-                        field.onChange(newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
-                      )}
-                    />
-                  )}
-                />
-              </Stack>
-              <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
-                Thông tin liên hệ
-              </Typography>
 
-              <div></div>
-              <RHFTextField name="email" label="Email" id="email" />
-              <RHFTextField name="phone" label="Số điện thoại" id="phone" />
-              <RHFTextField name="address" label="Địa chỉ" id="address" />
-            </Box>
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Tạo mới' : 'Cập nhật'}
-              </LoadingButton>
-            </Stack>
-          </Card>
-        </Grid>
-      </Grid>
-    </FormProvider>
-  );
+                            <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                                Thông tin cá nhân
+                            </Typography>
+                            <div></div>
+                            <RHFTextField name="firstName" label="Họ" id="firstName"/>
+                            <RHFTextField name="lastName" label="Tên" id="lastName"/>
+                            <Stack sx={{ml: 1.5}}>
+                                <Typography variant="subtitle2" sx={{color: 'text.secondary', mt: 1}}>
+                                    Giới tính
+                                </Typography>
+                                <RHFRadioGroup
+                                    name="gender"
+                                    options={GENDER_OPTION}
+                                    sx={{
+                                        mt: 0.5, '& .MuiFormControlLabel-root': {mr: 4},
+                                    }}
+                                />
+                            </Stack>
+                            <Stack sx={{mt: 2.5}}>
+                                <Controller
+                                    name="birthDate"
+                                    control={control}
+                                    render={({field, fieldState: {error}}) => (<DatePicker
+                                            label="Sinh nhật"
+                                            value={field.value}
+                                            onChange={(newValue) => {
+                                                field.onChange(newValue);
+                                            }}
+                                            renderInput={(params) => (<TextField {...params} fullWidth error={!!error}
+                                                                                 helperText={error?.message}/>)}
+                                        />)}
+                                />
+                            </Stack>
+                            <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                                Thông tin liên hệ
+                            </Typography>
+
+                            <div></div>
+                            <RHFTextField name="email" label="Email" id="email"/>
+                            <RHFTextField name="phone" label="Số điện thoại" id="phone"/>
+                            <RHFTextField name="address" label="Địa chỉ" id="address"/>
+
+                        </Box>
+                        <div></div>
+                        <Stack direction="row" spacing={1.5} sx={{mt: 4}}>
+                            <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                                Cài đặt tài khoản
+                            </Typography>
+                            <Button
+                                size="small"
+                                sx={{display: 'flex', justifyContent: 'flex-start'}}
+                                onClick={handleAdd}
+                                startIcon={<Iconify icon="eva:plus-fill"/>}>
+                                Thêm bản ghi
+                            </Button>
+                        </Stack>
+
+                        {!isEdit && <div></div>}
+                        {isEdit && <div></div>}
+                        {isEdit && (<FormControlLabel
+                                labelPlacement="start"
+                                control={<Controller
+                                    name="enable"
+                                    control={control}
+                                    render={({field}) => (<Switch
+                                            {...field}
+                                            checked={field.value !== 0}
+                                            onChange={(event) => field.onChange(event.target.checked ? 1 : 0)}
+                                        />)}
+                                />}
+                                label={<>
+                                    <Typography variant="subtitle2" sx={{mb: 0.5, ml: 1}}>
+                                        Vô hiệu hóa/Kích hoạt
+                                    </Typography>
+                                    <Typography variant="body2" sx={{color: 'text.secondary', ml: 1}}>
+                                        Xác nhận vô hiệu hóa/kích hoạt người dùng
+                                    </Typography>
+                                </>}
+                                sx={{mx: 0, mb: 3, width: 1, justifyContent: 'space-between'}}
+                            />)}
+
+                        {isEdit && <div></div>}
+
+                        {fields.map((item, index) => (<div>
+
+                                <Stack direction="row" spacing={2} sx={{mt: 2}}>
+                                    <Grid md={6}>
+                                        {/*<RHFSelect*/}
+                                        {/*    name="roleID"*/}
+                                        {/*    multiple*/}
+                                        {/*    onChange={(event, newValue) => {*/}
+                                        {/*        setValue('roleID', newValue);*/}
+                                        {/*        const tagsId = newValue.map((tag) => tag.id);*/}
+                                        {/*        const tagsName = newValue.map((tag) => tag.label);*/}
+                                        {/*        setValue('tagsId', tagsId);*/}
+                                        {/*        setValue('tagsName', tagsName);*/}
+                                        {/*        setRole(tagsId);*/}
+                                        {/*        if (!getValues('tagsName').includes('GIAOVIEN')) {*/}
+                                        {/*            setValue('subjectId', []);*/}
+                                        {/*        }*/}
+                                        {/*    }}*/}
+                                        {/*    options={userRole}*/}
+                                        {/*    renderTags={(value, getTagProps) =>*/}
+                                        {/*        value.map((option, index) => (*/}
+                                        {/*            <Chip {...getTagProps({index})} key={index} size="small"*/}
+                                        {/*                  label={option.label}/>*/}
+                                        {/*        ))*/}
+                                        {/*    }*/}
+                                        {/*    renderInput={(params) => <TextField label="Vai trò" {...params} />}*/}
+                                        {/*/>*/}
+                                        <FormControl fullWidth size="medium">
+                                            <InputLabel id="demo-simple-select-helper-label">Vai trò</InputLabel>
+                                            <Select name={`items[${index}].roleID`} label="Subject"
+                                                    onChange={(event) => handleChangeRoleID(event, index)}>
+                                                {renderMenuItem(userRole)}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid md={6}>
+                                        <RHFAutocomplete
+                                            name={`items[${index}].subjectId`}
+                                            multiple
+                                            onChange={(event, newValue) => {
+                                                setValue(`items[${index}].subjectId`, newValue);
+                                                const suId = newValue.map((su) => su.id);
+                                                setValue(`items[${index}].suId`, suId);
+                                            }}
+                                            disabled={!getValues(`items[${index}].tagsName`)}
+                                            options={userSubjects}
+                                            renderTags={(value, getTagProps) => value.map((option, index) => (
+                                                <Chip {...getTagProps({index})} key={index} size="small"
+                                                      label={option.label}/>))}
+                                            renderInput={(params) => <TextField label="Môn dạy" {...params} />}
+                                        />
+                                    </Grid>
+                                </Stack>
+                                <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+                            <Stack direction="row" spacing={1.5}>
+                                <Button
+                                    size="small"
+                                    color="error"
+                                    startIcon={<Iconify icon="eva:trash-2-outline"/>}
+                                    onClick={() => handleRemove(index - 1)}
+                                >
+                                    Gỡ bản ghi
+                                </Button>
+                            </Stack>
+                            </div>
+
+                        ))}
+                        <Stack alignItems="flex-end" sx={{mt: 3}}>
+                            <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                                {!isEdit ? 'Tạo mới' : 'Cập nhật'}
+                            </LoadingButton>
+                        </Stack>
+                    </Card>
+                </Grid>
+            </Grid>
+        </FormProvider>);
 }

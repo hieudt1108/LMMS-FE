@@ -77,6 +77,7 @@ export default function LevelLayout() {
       </MenuItem>
     );
   });
+
   const [documents, setDocuments] = useState([]);
   const [typeDocs, setTypeDoc] = useState([]);
   // const [subjects, setSubject] = useState([]);
@@ -123,6 +124,7 @@ export default function LevelLayout() {
     },
     [filter]
   );
+
   const handlePageChange = useCallback(async (event, pageIndex) => {
     let response = await getAllDocument({
       ...filter,

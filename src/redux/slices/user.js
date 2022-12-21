@@ -80,11 +80,10 @@ const slice = createSlice({
     },
     filterSubjectSuccess(state, action) {
       const { users, userId, index } = action.payload;
-      const user = users.filter((data) => data.id + '' === userId);
+      const user = users.filter((data) => data.id === userId);
       const userTransfer = user[0].subjects.map((data) => {
         return { id: data.id, label: data.name };
       });
-      console.log('filterSubjectSuccess', state.users, action.payload, userTransfer);
       state.isLoading = false;
       state.addUserInCLass = state.addUserInCLass.map((item, indexItem) => {
         if (indexItem !== index) {

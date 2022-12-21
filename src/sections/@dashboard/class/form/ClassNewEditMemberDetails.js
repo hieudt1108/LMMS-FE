@@ -157,10 +157,10 @@ export default function FolderNewPostForm({ classID }) {
     dispatch(getUsersByRoleIdRedux({ ...pagination, roleId: event.target.value }, index));
   }, []);
 
-  const handlerUserChange = (event, index) => {
-    console.log('handlerUserChange', event.target.value);
-    setValue(event.target.name, event.target.value);
-    dispatch(filterSubjectRedux({ users: addUserInCLass[index].users, userId: event.target.value, index }));
+  const handlerUserChange = (event, index, userHandle) => {
+    // console.log('handlerUserChange', userHandle, event.target.name, event.target.value, index);
+    setValue(`items[${index}].userId`, userHandle.id);
+    dispatch(filterSubjectRedux({ users: addUserInCLass[index].users, userId: userHandle.id, index }));
   };
   console.log('FolderNewPostForm', getValues('items'), addUserInCLass);
 
@@ -177,7 +177,32 @@ export default function FolderNewPostForm({ classID }) {
                       <Typography variant="subtitle2" gutterBottom sx={{ marginRight: '25px' }}>
                         Người dùng
                       </Typography>
-                      <RHFSelect
+
+                      <Autocomplete
+                        id="size-small-filled"
+                        name={`items[${index}].userId`}
+                        onChange={(event, userHandle) => handlerUserChange(event, index, userHandle)}
+                        sx={{ width: '643px' }}
+                        options={addUserInCLass[index].users}
+                        getOptionLabel={(user) => `${user.email}-${user.firstName} ${user.lastName}`}
+                        defaultValue={addUserInCLass[index].users[0]}
+                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip
+                              variant="outlined"
+                              label={option.firstName}
+                              size="small"
+                              {...getTagProps({ index })}
+                            />
+                          ))
+                        }
+                        renderInput={(params) => (
+                          <TextField {...params} variant="filled" label="Size small" placeholder="Favorites" />
+                        )}
+                      />
+
+                      {/* <RHFSelect
                         sx={{ width: '643px' }}
                         name={`items[${index}].userId`}
                         placeholder="nguoi"
@@ -190,7 +215,7 @@ export default function FolderNewPostForm({ classID }) {
                               {option.email} - {option.firstName} {option.lastName}
                             </option>
                           ))}
-                      </RHFSelect>
+                      </RHFSelect> */}
                       {/* <RHFAutocomplete
                           sx={{ width: '643px' }}
                           name={`items[${index}].userId`}

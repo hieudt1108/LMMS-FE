@@ -77,6 +77,7 @@ export default function LevelLayout() {
       </MenuItem>
     );
   });
+
   const [documents, setDocuments] = useState([]);
   const [typeDocs, setTypeDoc] = useState([]);
   // const [subjects, setSubject] = useState([]);
@@ -123,6 +124,7 @@ export default function LevelLayout() {
     },
     [filter]
   );
+
   const handlePageChange = useCallback(async (event, pageIndex) => {
     let response = await getAllDocument({
       ...filter,
@@ -177,7 +179,7 @@ export default function LevelLayout() {
                 ),
               }}
             />
-            <FormControl sx={{ minWidth: 180, mr: 2 }} size="small">
+            {/* <FormControl sx={{ minWidth: 180, mr: 2 }} size="small">
               <InputLabel id="demo-simple-select-helper-label">Loại tài liệu</InputLabel>
               <Select id="demo-simple-select-helper" label="TypeDocument" onChange={handleFilterDocType}>
                 <MenuItem value="">
@@ -185,7 +187,7 @@ export default function LevelLayout() {
                 </MenuItem>
                 {renderMenuItem(typeDocs)}
               </Select>
-            </FormControl>
+            </FormControl> */}
             <FormControl sx={{ minWidth: 180 }} size="small">
               <InputLabel id="demo-simple-select-helper-label">Môn học</InputLabel>
               <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterSubject}>

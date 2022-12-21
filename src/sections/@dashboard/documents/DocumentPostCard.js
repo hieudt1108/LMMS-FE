@@ -9,7 +9,7 @@ import { FileGeneralRecentCard } from '../general/file';
 import React, { useState } from 'react';
 import EmptyContent from '../../../components/empty-content';
 import { dispatch } from '../../../redux/store';
-import { getFolderSaveDocToMyFolderRedux, getStoreFolderRedux } from '../../../redux/slices/folder';
+import {getFolderRedux, getFolderSaveDocToMyFolderRedux, getStoreFolderRedux} from '../../../redux/slices/folder';
 import PopupGetFolder from '../general/getFiletoDocPrivate/PopupGetFolder';
 // routes
 // import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -41,7 +41,7 @@ export default function DocumentPostCard({ documents }) {
 
   const handleOpenPopupSaveInMyFolder = async (documents) => {
     const { document } = documents;
-    await dispatch(getFolderSaveDocToMyFolderRedux(0));
+    await dispatch(getFolderRedux(0, 'folderSaveDocToMyFolder'));
     setDocumentHandle(document);
     setOpenPopupSaveInMyFolder(true);
   };

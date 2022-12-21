@@ -177,15 +177,7 @@ export default function DocumentPostsPage() {
                 ),
               }}
             />
-            <FormControl sx={{ minWidth: 150, mr: 2 }} size="small">
-              <InputLabel id="demo-simple-select-helper-label">Loại tài liệu</InputLabel>
-              <Select id="demo-simple-select-helper" label="Khối" onChange={handleFilterDocType}>
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {renderMenuItem(typeDocs)}
-              </Select>
-            </FormControl>
+
             <FormControl sx={{ minWidth: 170 }} size="small">
               <InputLabel id="demo-simple-select-helper-label">Môn học</InputLabel>
               <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterSubject}>

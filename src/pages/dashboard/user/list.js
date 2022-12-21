@@ -128,11 +128,6 @@ export default function UserListPage() {
 
     const getLengthByStatus = (status) => listUsers?.filter((user) => user.enable === status).length;
 
-    const STATUS_OPTIONS = [
-        {label: 'tất cả', id: -1, color: 'info', count: listUsers?.length},
-        {label: 'hiệu lực', id: 0, color: 'success', count: getLengthByStatus(0)},
-        {label: 'không hiệu lực', id: 1, color: 'error', count: getLengthByStatus(1)},
-    ];
 
     const handleOpenUploadFile = () => {
         setOpenUploadFile(true);

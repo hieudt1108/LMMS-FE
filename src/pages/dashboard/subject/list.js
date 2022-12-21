@@ -154,7 +154,7 @@ export default function SubjectListPage() {
   };
 
   const handlePageChange = useCallback(async (event, pageIndex) => {
-    let response = await getAllPermission({
+    let response = await getAllSubject({
       ...filter,
       pageIndex: pageIndex,
     });

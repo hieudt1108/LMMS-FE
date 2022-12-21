@@ -78,8 +78,8 @@ export default function addStudent() {
             onChange={(event, newValue) => setCurrentTab(newValue)}
             sx={{ px: 3, bgcolor: 'background.neutral' }}
           >
-            {TABS.map((tab) => (
-              <Tab key={tab.id} value={tab.value} label={tab.label} />
+            {TABS.map((tab, index) => (
+              <Tab key={index} value={tab.value} label={tab.label} />
             ))}
           </Tabs>
 

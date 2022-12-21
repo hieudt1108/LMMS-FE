@@ -24,6 +24,7 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 //API
 import { getClassById } from '../../../../dataProvider/agent';
 import ClassAddSubjectDialog from '../../../../sections/@dashboard/class/form/ClassAddSubjectDialog';
+import myclass from 'src/redux/slices/myclass';
 // ----------------------------------------------------------------------
 
 ClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -48,6 +49,21 @@ export default function ClassDetail() {
       </Alert>;
     }
   }
+
+  console.log('myClass main: ', myClass);
+
+  // if (
+  //   myclass.members((mb) => {
+  //     mb.roleInClasses.map((obj) => {
+  //       if (obj.role === 'GVCHUNHIEM' || obj.role === 'GIAOVIEN') {
+  //         student_count++;
+  //       } else if (obj.role === 'HOCSINH') {
+  //         teacher_count++;
+  //       }
+  //     });
+  //   })
+  // )
+  // console.log('teacher_count', teacher_count);
 
   useEffect(() => {
     fetchMyClass();
@@ -93,11 +109,11 @@ export default function ClassDetail() {
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3} mb={2}>
           <Grid item xs={12} md={4}>
-            <ClassWidgetSummary title="Giáo viên" total={7} icon={<BookingIllustration />} />
+            <ClassWidgetSummary title="Giáo viên" total={myClass?.members.length} icon={<BookingIllustration />} />
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <ClassWidgetSummary title="Học sinh" total={30} icon={<CheckInIllustration />} />
+            <ClassWidgetSummary title="Học sinh" total={myClass?.members.length} icon={<CheckInIllustration />} />
           </Grid>
 
           <Grid item xs={12} md={4}>

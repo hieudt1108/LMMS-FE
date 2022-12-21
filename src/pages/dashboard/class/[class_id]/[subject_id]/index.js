@@ -81,7 +81,6 @@ export default function index() {
           <Grid item xs={12} md={12}>
             <Stack spacing={1}>
               <Typography variant="h5" sx={{ mb: 2 }}>
-                {' '}
                 Tài liệu chung:
               </Typography>
               <DocumentLocal
@@ -98,11 +97,11 @@ export default function index() {
                 {' '}
                 Tài liệu từng tiết:
               </Typography>
-              {subject?.listSlots?.map((element) => (
+              {subject?.listSlots?.map((element, index) => (
                 <SysllabusSubject
                   document={element}
                   data={{ ...data, class_id: class_id, subject_id: subject_id }}
-                  key={data.id}
+                  key={index}
                   documentInClass={documentInClass}
                   handleOpenFormUploadDocToSlot={handleOpenFormUploadDocToSlot}
                 />

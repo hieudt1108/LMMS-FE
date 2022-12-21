@@ -185,7 +185,7 @@ export default function FolderNewPostForm({ classID }) {
                         sx={{ width: '643px' }}
                         options={addUserInCLass[index].users}
                         getOptionLabel={(user) => `${user.email} - ${user.firstName} ${user.lastName}`}
-                        defaultValue={addUserInCLass[index].users[0]}
+                        // defaultValue={addUserInCLass[index].users[0]}
                         isOptionEqualToValue={(option, value) => option.id === value.id}
                         renderTags={(value, getTagProps) =>
                           value.map((option, index) => (

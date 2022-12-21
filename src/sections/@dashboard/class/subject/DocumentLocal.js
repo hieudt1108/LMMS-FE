@@ -33,7 +33,7 @@ export default function DocumentLocal({ data, documentInClass, handleOpenFormUpl
               doc.slotId === null && (
                 <Stack spacing={2}>
                   <FileGeneralRecentCard
-                    key={doc.id}
+                    key={index}
                     file={doc}
                     onDelete={() => console.log('DELETE', doc.id)}
                     data={{ ...data, index }}

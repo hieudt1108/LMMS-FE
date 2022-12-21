@@ -37,7 +37,7 @@ export default function addStudent() {
   const TABS = [
     {
       value: 'description',
-      label: 'Thêm thành viên vào class',
+      label: 'Thêm thành viên vào lớp học',
       component: <ClassAddStudentForm classID={class_id} />,
     },
     {

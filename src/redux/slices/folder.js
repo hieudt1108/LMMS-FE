@@ -70,7 +70,7 @@ const initialState = {
   newDocument: {
     data: [],
     init: {
-      typeDocuments: [],
+      typeDocuments: [{ typeDocumentInEachRecord: [] }],
       programs: [],
       subjects: [],
       users: [],
@@ -115,15 +115,40 @@ const slice = createSlice({
 
     createDocumentInitialSuccess(state, action) {
       console.log('createDocumentInitialSuccess', action);
-      const { programs, subjects, typeDocuments } = action.payload;
+      const { programs, typeDocuments } = action.payload;
       state.isLoading = false;
-      state.newDocument.init = { ...state.newDocument.init, ...action.payload };
-      state.newDocument.data = {
-        ...state.newDocument.data,
-        programId: programs[0].id,
-        subjectId: subjects[0].id,
-        typeDocumentId: typeDocuments[0].id,
-      };
+      state.newDocument.init = { ...state.newDocument.init, programs, typeDocuments };
+    },
+
+    getTypeDocumentBySubjectSuccess(state, action) {
+      console.log('getTypeDocumentBySubjectSuccess', action, state.newDocument.init.typeDocuments.length);
+      const { typeDocuments, index } = action.payload;
+      if (state.newDocument.init.typeDocuments.length === index) {
+        state.isLoading = false;
+        state.newDocument.init.typeDocuments = [
+          ...state.newDocument.init.typeDocuments,
+          { typeDocumentInEachRecord: typeDocuments },
+        ];
+      } else {
+        state.isLoading = false;
+        state.newDocument.init.typeDocuments = state.newDocument.init.typeDocuments.map((item, indexItem) => {
+          if (indexItem !== index) {
+            return item;
+          }
+          return {
+            ...item,
+            typeDocumentInEachRecord: typeDocuments,
+          };
+        });
+      }
+    },
+
+    removeTypeDocumentByIndexSuccess(state, action) {
+      const { index } = action.payload;
+      state.newDocument.init.typeDocuments = [
+        ...state.newDocument.init.typeDocuments.slice(0, index),
+        ...state.newDocument.init.typeDocuments.slice(index + 1),
+      ];
     },
 
     deleteDocumentInFolderSuccess(state, action) {
@@ -276,6 +301,43 @@ export function createStoreFolderRedux(payload) {
   };
 }
 
+export function getTypeDocumentBySubjectRedux(subjectId, index) {
+  return async () => {
+    try {
+      dispatch(slice.actions.startLoading());
+      const params = {
+        pageIndex: 1,
+        pageSize: 100,
+        subjectId,
+      };
+      const response = await getAllTypeDocument(params);
+      dispatch(
+        slice.actions.getTypeDocumentBySubjectSuccess({
+          typeDocuments: response.data.data,
+          index: index,
+        })
+      );
+    } catch (error) {
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
+export function removeTypeDocumentByIndexRedux(index) {
+  return async () => {
+    try {
+      dispatch(slice.actions.startLoading());
+      dispatch(
+        slice.actions.removeTypeDocumentByIndexSuccess({
+          index: index,
+        })
+      );
+    } catch (error) {
+      return returnMessageError(`${error.message}`);
+    }
+  };
+}
+
 export function createDocumentInitialRedux() {
   return async () => {
     try {
@@ -284,12 +346,11 @@ export function createDocumentInitialRedux() {
         pageIndex: 1,
         pageSize: 100,
       };
-      const response = await Promise.all([getAllProgram(params), getAllSubject(params), getAllTypeDocument(params)]);
+      const response = await Promise.all([getAllProgram(params), getAllTypeDocument(params)]);
       dispatch(
         slice.actions.createDocumentInitialSuccess({
           programs: response[0].data.data,
-          subjects: response[1].data.data,
-          typeDocuments: response[2].data,
+          typeDocuments: response[1].data.data,
         })
       );
     } catch (error) {

@@ -22,6 +22,8 @@ import {
   createDocumentInitialRedux,
   createDocumentInSubjectRedux,
   createDocumentRedux,
+  getTypeDocumentBySubjectRedux,
+  removeTypeDocumentByIndexRedux,
   uploadDocumentRedux,
 } from 'src/redux/slices/folder';
 import { Upload } from '../../../components/upload';
@@ -47,13 +49,18 @@ function TextCode() {
 }
 
 export default function FolderNewPostForm({ data }) {
-  console.log('FolderNewPostForm', data);
+  const { newDocument } = useSelector((state) => state.folder);
   const { user } = useAuthContext();
+
+  const { id, programs, typeDocuments } = newDocument.init;
   const formData = new FormData();
-  const {
-    query: { folder_id: folderId },
-    push,
-  } = useRouter();
+
+  useEffect(() => {
+    dispatch(createDocumentInitialRedux());
+    if (!_.isEmpty(user)) {
+      dispatch(getTypeDocumentBySubjectRedux(user.subjects[0].id, 0));
+    }
+  }, [dispatch]);
 
   const validationSchema = (() => {
     return Yup.object().shape({
@@ -61,33 +68,31 @@ export default function FolderNewPostForm({ data }) {
         Yup.object().shape({
           name: Yup.string().required('Name is require!'),
           code: Yup.string().required('Code is require!'),
-          description: Yup.string().required('Description is require!'),
         })
       ),
     });
   })();
 
-  const { newDocument } = useSelector((state) => state.folder);
-
-  const { id, programs, typeDocuments } = newDocument.init;
-
   const [file, setFile] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const defaultValues = useMemo(() => ({
-    items: [
-      {
-        code: `${TextCode()}-${TextCode()}-${TextCode()}-${TextCode()}`,
-        description: '',
-        file: '',
-        name: '',
-        programId: '',
-        subjectId: '',
-        typeDocumentId: '',
-      },
-    ],
-  }));
+  const defaultValues = useMemo(
+    () => ({
+      items: [
+        {
+          code: `${TextCode()}-${TextCode()}-${TextCode()}-${TextCode()}`,
+          description: '',
+          file: '',
+          name: '',
+          programId: programs[0]?.id,
+          subjectId: user.subjects[0]?.id,
+          typeDocumentId: typeDocuments[0]?.typeDocumentInEachRecord[0]?.id,
+        },
+      ],
+    }),
+    [dispatch]
+  );
 
   const methods = useForm({
     resolver: yupResolver(validationSchema),
@@ -107,12 +112,8 @@ export default function FolderNewPostForm({ data }) {
     control,
     name: 'items',
   });
+  console.log('FolderNewPostForm', newDocument, fields);
 
-  useEffect(() => {
-    dispatch(createDocumentInitialRedux());
-  }, []);
-
-  console.log('FolderNewPostForm', getValues('items'));
   const handleDrop = (acceptedFiles, index) => {
     try {
       setValue(`items[${index}].file`, acceptedFiles[0]);
@@ -124,7 +125,7 @@ export default function FolderNewPostForm({ data }) {
   };
 
   const onSubmit = async ({ items }) => {
-    console.log('onSubmit', items);
+    console.log('onSubmit', items, fields);
     for (let index = items.length - 1; index >= 0; --index) {
       try {
         const newFolder = items[index];
@@ -148,7 +149,7 @@ export default function FolderNewPostForm({ data }) {
           newFolder.subjectId = user.subjects[0].id;
         }
         if (!newFolder.typeDocumentId) {
-          newFolder.typeDocumentId = typeDocuments[0].id;
+          newFolder.typeDocumentId = typeDocuments[index].typeDocumentInEachRecord[0].id;
         }
         if (!_.isEmpty(data.types)) {
           newFolder.folderId = data.id;
@@ -168,19 +169,12 @@ export default function FolderNewPostForm({ data }) {
             enqueueSnackbar(message.title, { variant: message.variant });
           }
         }
-
+        await dispatch(removeTypeDocumentByIndexRedux(index));
         remove(index);
       } catch (error) {
         console.error(`onSubmit error at index: ${index}`, error);
       }
     }
-    // items.map((data, index) => {
-    //   data.status = data.status ? 1 : 0;
-    //   dispatch(uploadDocumentRedux(data)).then(() => {
-    //     enqueueSnackbar('Tạo tài liệu thành công');
-    //     push(PATH_DASHBOARD.folder.link(folderId));
-    //   });
-    // });
   };
 
   const handleRemoveFile = (indexLocal) => {
@@ -192,26 +186,38 @@ export default function FolderNewPostForm({ data }) {
     // setValue('file', []);
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
+    await dispatch(getTypeDocumentBySubjectRedux(user.subjects[0].id, fields.length));
     prepend({
       code: `${TextCode()}-${TextCode()}-${TextCode()}-${TextCode()}`,
       description: '',
       name: '',
       file: '',
-      programId: '',
-      subjectId: '',
-      typeDocumentId: '',
+      programId: programs[0].id,
+      subjectId: user.subjects[0].id,
+      typeDocumentId: typeDocuments[fields.length]?.typeDocumentInEachRecord[0].id,
     });
   };
 
-  const handleRemove = (index) => {
+  const handleRemove = async (index) => {
+    await dispatch(removeTypeDocumentByIndexRedux(index));
     remove(index);
   };
-  console.log('Blog', fields);
+
+  const handlerSubjectChange = async (event, index) => {
+    console.log('handlerUserChange', event.target.value);
+    setValue(event.target.name, event.target.value);
+    await dispatch(getTypeDocumentBySubjectRedux(event.target.value));
+  };
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ mb:3,flexShrink: 0 }}>
+        <Button
+          size="small"
+          startIcon={<Iconify icon="eva:plus-fill" />}
+          onClick={handleAdd}
+          sx={{ mb: 3, flexShrink: 0 }}
+        >
           Thêm bản ghi
         </Button>
         {fields.map((item, index) => (
@@ -269,8 +275,8 @@ export default function FolderNewPostForm({ data }) {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Chương Trình</span>
                       <RHFSelect name={`items[${index}].programId`} placeholder="Chương trình">
-                        {programs.map((option, index) => (
-                          <option key={index} value={option.id}>
+                        {programs.map((option) => (
+                          <option key={option.id} value={option.id}>
                             {option.name}
                           </option>
                         ))}
@@ -284,9 +290,13 @@ export default function FolderNewPostForm({ data }) {
                       }}
                     >
                       <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Môn học</span>
-                      <RHFSelect name={`items[${index}].subjectId`} placeholder="Môn học">
-                        {user.subjects.map((option, index) => (
-                          <option key={index} value={option.id}>
+                      <RHFSelect
+                        name={`items[${index}].subjectId`}
+                        onChange={(event) => handlerSubjectChange(event, index)}
+                        placeholder="Môn học"
+                      >
+                        {user.subjects.map((option) => (
+                          <option key={option.id} value={option.id}>
                             {option.name}
                           </option>
                         ))}
@@ -301,11 +311,12 @@ export default function FolderNewPostForm({ data }) {
                     >
                       <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
                       <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
-                        {typeDocuments.map((option, index) => (
-                          <option key={index} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
+                        {!_.isEmpty(typeDocuments[index]) &&
+                          typeDocuments[index].typeDocumentInEachRecord.map((option) => (
+                            <option key={option.id} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
                       </RHFSelect>
                     </div>
                   </Stack>
@@ -316,7 +327,7 @@ export default function FolderNewPostForm({ data }) {
                     size="small"
                     color="error"
                     startIcon={<Iconify icon="eva:trash-2-outline" />}
-                    onClick={() => handleRemove(index - 1)}
+                    onClick={() => handleRemove(index)}
                   >
                     Gỡ bản ghi
                   </Button>
@@ -334,8 +345,6 @@ export default function FolderNewPostForm({ data }) {
           alignItems={{ xs: 'flex-start', md: 'center' }}
           sx={{ mt: -2, mb: 1 }}
         >
-
-
           <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
             <LoadingButton
               disabled={getValues('items').length === 0}

@@ -16,7 +16,9 @@ import {
   TableBody,
   Container,
   IconButton,
-  TableContainer, Box, Pagination,
+  TableContainer,
+  Box,
+  Pagination,
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -178,13 +180,16 @@ export default function GradeListPage() {
     }
   };
 
-  const handlePageChange = useCallback(async (event, pageIndex) => {
-    let response = await getAllGrade({
-      ...filter,
-      pageIndex: pageIndex,
-    });
-    setFilter({ ...filter, pageIndex: pageIndex });
-  }, []);
+  const handlePageChange = useCallback(
+    async (event, pageIndex) => {
+      let response = await getAllGrade({
+        ...filter,
+        pageIndex: pageIndex,
+      });
+      setFilter({ ...filter, pageIndex: pageIndex });
+    },
+    [filter]
+  );
 
   const handleEditRow = (id) => {
     push(PATH_DASHBOARD.grade.edit(id));
@@ -331,11 +336,11 @@ export default function GradeListPage() {
           <Box p={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div></div>
             <Pagination
-                size="small"
-                count={paging?.TotalPages}
-                rowsperpage={paging?.PageSize}
-                onChange={handlePageChange}
-                color="primary"
+              size="small"
+              count={paging?.TotalPages}
+              rowsperpage={paging?.PageSize}
+              onChange={handlePageChange}
+              color="primary"
             />
           </Box>
         </Card>

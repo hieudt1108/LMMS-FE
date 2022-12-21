@@ -153,13 +153,16 @@ export default function SubjectListPage() {
     }
   };
 
-  const handlePageChange = useCallback(async (event, pageIndex) => {
-    let response = await getAllSubject({
-      ...filter,
-      pageIndex: pageIndex,
-    });
-    setFilter({ ...filter, pageIndex: pageIndex });
-  }, []);
+  const handlePageChange = useCallback(
+    async (event, pageIndex) => {
+      let response = await getAllSubject({
+        ...filter,
+        pageIndex: pageIndex,
+      });
+      setFilter({ ...filter, pageIndex: pageIndex });
+    },
+    [filter]
+  );
 
   const handleDeleteRows = async (selected) => {
     const response = await deleteSubject(selected);

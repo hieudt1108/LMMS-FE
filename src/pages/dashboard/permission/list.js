@@ -1,7 +1,7 @@
-import {useCallback, useEffect, useState} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 // @mui
 import {
   Box,
@@ -17,9 +17,9 @@ import {
   Tooltip,
 } from '@mui/material';
 // routes
-import {PATH_DASHBOARD} from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 // _mock_
-import {_typeDocumentList} from '../../../_mock/arrays';
+import { _typeDocumentList } from '../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
@@ -27,7 +27,7 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import {useSettingsContext} from '../../../components/settings';
+import { useSettingsContext } from '../../../components/settings';
 import {
   emptyRows,
   getComparator,
@@ -38,9 +38,9 @@ import {
   useTable,
 } from '../../../components/table';
 // sections
-import {PermissionTableRow, PermissionTableToolbar} from '../../../sections/@dashboard/permission/list';
-import {deletePermission, getAllPermission,} from '../../../dataProvider/agent';
-import {useSnackbar} from '../../../components/snackbar';
+import { PermissionTableRow, PermissionTableToolbar } from '../../../sections/@dashboard/permission/list';
+import { deletePermission, getAllPermission } from '../../../dataProvider/agent';
+import { useSnackbar } from '../../../components/snackbar';
 
 // ----------------------------------------------------------------------
 
@@ -170,13 +170,16 @@ export default function PermissionListPage() {
       }
     }
   };
-  const handlePageChange = useCallback(async (event, pageIndex) => {
-    let response = await getAllPermission({
-      ...filter,
-      pageIndex: pageIndex,
-    });
-    setFilter({ ...filter, pageIndex: pageIndex });
-  }, []);
+  const handlePageChange = useCallback(
+    async (event, pageIndex) => {
+      let response = await getAllPermission({
+        ...filter,
+        pageIndex: pageIndex,
+      });
+      setFilter({ ...filter, pageIndex: pageIndex });
+    },
+    [filter]
+  );
 
   const handleEditRow = (id) => {
     push(PATH_DASHBOARD.permission.edit(id));
@@ -191,7 +194,6 @@ export default function PermissionListPage() {
     console.log(res.data);
     if (res.status < 400) {
       setPaging(JSON.parse(res.headers['x-pagination']));
-
       setListPermission(res.data.data);
     } else {
       console.log(res.message);

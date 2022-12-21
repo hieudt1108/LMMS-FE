@@ -125,13 +125,16 @@ export default function LevelLayout() {
     [filter]
   );
 
-  const handlePageChange = useCallback(async (event, pageIndex) => {
-    let response = await getAllDocument({
-      ...filter,
-      pageIndex: pageIndex,
-    });
-    setFilter({ ...filter, pageIndex: pageIndex });
-  }, []);
+  const handlePageChange = useCallback(
+    async (event, pageIndex) => {
+      let response = await getAllDocument({
+        ...filter,
+        pageIndex: pageIndex,
+      });
+      setFilter({ ...filter, pageIndex: pageIndex });
+    },
+    [filter]
+  );
   useEffect(() => {
     fetchAllDocument();
   }, [filter]);

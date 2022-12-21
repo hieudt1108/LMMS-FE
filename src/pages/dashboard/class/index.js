@@ -108,19 +108,22 @@ export default function Classes() {
     [pagingClass]
   );
 
-  const handlePageChange = useCallback(async (event, pageIndex) => {
-    let response = await getAllClass({
-      ...pagingClass,
-      pageIndex: pageIndex,
-    });
-    setPagingClass({ ...pagingClass, pageIndex: pageIndex });
-    dispatch(
-      getClassesRedux({
+  const handlePageChange = useCallback(
+    async (event, pageIndex) => {
+      let response = await getAllClass({
         ...pagingClass,
         pageIndex: pageIndex,
-      })
-    );
-  }, []);
+      });
+      setPagingClass({ ...pagingClass, pageIndex: pageIndex });
+      dispatch(
+        getClassesRedux({
+          ...pagingClass,
+          pageIndex: pageIndex,
+        })
+      );
+    },
+    [pagingClass]
+  );
 
   const { themeStretch } = useSettingsContext();
   return (

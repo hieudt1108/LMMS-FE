@@ -36,11 +36,13 @@ export default function addStudent() {
 
   const TABS = [
     {
+      id: 1,
       value: 'description',
       label: 'Thêm thành viên vào lớp học',
       component: <ClassAddStudentForm classID={class_id} />,
     },
     {
+      id: 2,
       value: 'reviews',
       label: `Thêm thành viên từ danh sách Excel`,
       component: <ClassAddStudentXls />,
@@ -77,7 +79,7 @@ export default function addStudent() {
             sx={{ px: 3, bgcolor: 'background.neutral' }}
           >
             {TABS.map((tab) => (
-              <Tab key={tab.value} value={tab.value} label={tab.label} />
+              <Tab key={tab.id} value={tab.value} label={tab.label} />
             ))}
           </Tabs>
 

@@ -81,7 +81,9 @@ export default function FileInvitedItem({ index }) {
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 160 }}>
         <>
-          <MenuItem
+          {/* không remove code cmt ở đây  */}
+          {/* <MenuItem
+            disabled={true}
             onClick={() => {
               handleClosePopover();
               handleChangePermission(0);
@@ -97,6 +99,7 @@ export default function FileInvitedItem({ index }) {
           </MenuItem>
 
           <MenuItem
+            disabled={true}
             onClick={() => {
               handleClosePopover();
               handleChangePermission(1);
@@ -111,7 +114,7 @@ export default function FileInvitedItem({ index }) {
             Có thể chỉnh sửa
           </MenuItem>
 
-          <Divider sx={{ borderStyle: 'dashed' }} />
+          <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
           <MenuItem
             onClick={() => {

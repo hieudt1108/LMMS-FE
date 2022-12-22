@@ -22,12 +22,15 @@ import { getOneDocumentRedux, startDownloadFileRedux } from 'src/redux/slices/do
 import { deleteDocumentInFolderRedux, deleteDocumentInStoreFolderRedux } from '../../../../redux/slices/folder';
 
 import ConfirmDialog from 'src/components/confirm-dialog';
-import { URL_GLOBAL } from '../../../../config';
+import { ROLES_CODE, URL_GLOBAL } from '../../../../config';
 import { deleteDocumentInSubjectRedux } from 'src/redux/slices/subject';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
 const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFolder, sx, ...other }) => {
+  const { user } = useAuthContext();
+  console.log('FileGeneralRecentCard', user);
   const { enqueueSnackbar } = useSnackbar();
 
   const isDesktop = useResponsive('up', 'sm');
@@ -242,13 +245,14 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
             Tải xuống
           </MenuItem>
         )}
-
-        {data?.menuDocument.find((element) => element === 'saveInMyFolder') && (
-          <MenuItem onClick={() => handleOpenPopupSaveInMyFolder({ document: file })}>
-            <Iconify icon="simple-line-icons:docs" />
-            Tải về kho của tôi
-          </MenuItem>
-        )}
+        {/* ẩn đi với role HOCSINH */}
+        {data?.menuDocument.find((element) => element === 'saveInMyFolder') &&
+          !user.roles.find((role) => role.name === ROLES_CODE.STUDENT) && (
+            <MenuItem onClick={() => handleOpenPopupSaveInMyFolder({ document: file })}>
+              <Iconify icon="simple-line-icons:docs" />
+              Tải về kho của tôi
+            </MenuItem>
+          )}
 
         {data?.menuDocument.find((element) => element === 'share') && (
           <MenuItem onClick={handleOpenShare}>

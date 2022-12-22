@@ -464,6 +464,14 @@ const updateTypeDocument = (id, payload) => {
   return putApi(`TypeDocument/${id}`, payload);
 };
 
+const addTypeDocumentToSubject = (id, subjectId) => {
+  return putApi(`TypeDocument/addTypeDocumentToSubject/${id}?subjectId=${subjectId}`);
+};
+
+const removeTypeDocumentToSubject = (id, subjectId) => {
+  return putApi(`TypeDocument/removeTypeDocumentToSubject/${id}?subjectId=${subjectId}`);
+};
+
 // USER
 const updateUser = (id, payload) => {
   return putApi(`User/${id}`, payload);
@@ -584,4 +592,6 @@ export {
   deleteFolder,
   updateFolder,
   deleteDocumentInSubject,
+  addTypeDocumentToSubject,
+  removeTypeDocumentToSubject,
 };

@@ -50,21 +50,6 @@ export default function ClassDetail() {
     }
   }
 
-  console.log('myClass main: ', myClass);
-
-  // if (
-  //   myclass.members((mb) => {
-  //     mb.roleInClasses.map((obj) => {
-  //       if (obj.role === 'GVCHUNHIEM' || obj.role === 'GIAOVIEN') {
-  //         student_count++;
-  //       } else if (obj.role === 'HOCSINH') {
-  //         teacher_count++;
-  //       }
-  //     });
-  //   })
-  // )
-  // console.log('teacher_count', teacher_count);
-
   useEffect(() => {
     fetchMyClass();
   }, [class_id]);

@@ -20,6 +20,7 @@ const initialState = {
   user: null,
   ROLES: null,
   SUBJECTS: null,
+  headOfSubject: null,
 };
 
 const reducer = (state, action) => {
@@ -30,6 +31,7 @@ const reducer = (state, action) => {
       user: action.payload.user,
       ROLES: action.payload.user?.roles,
       SUBJECTS: action.payload.user?.subjects,
+      headOfSubject: action.payload.user?.headOfSubject,
     };
   }
   if (action.type === 'LOGIN') {
@@ -39,6 +41,7 @@ const reducer = (state, action) => {
       user: action.payload.user,
       ROLES: action.payload.user?.roles,
       SUBJECTS: action.payload.user?.subjects,
+      headOfSubject: action.payload.user?.headOfSubject,
     };
   }
   if (action.type === 'REGISTER') {
@@ -90,6 +93,9 @@ export function AuthProvider({ children }) {
             },
             SUBJECTS: {
               ...responseUser.data.data.subjects,
+            },
+            headOfSubject: {
+              ...responseUser.data.data.headOfSubject,
             },
           },
         });
@@ -143,6 +149,9 @@ export function AuthProvider({ children }) {
         },
         SUBJECTS: {
           ...responseUser.data.data.subjects,
+        },
+        headOfSubject: {
+          ...responseUser.data.data.headOfSubject,
         },
       },
     });

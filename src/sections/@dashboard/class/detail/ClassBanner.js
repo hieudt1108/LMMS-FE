@@ -71,60 +71,25 @@ export default function ClassBanner({
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
         <MenuItem
-        onClick={() => {
-          handleClosePopover();
-          handleEditClass(data.id);
-        }}
+          onClick={() => {
+            handleClosePopover();
+            handleEditClass(data.id);
+          }}
         >
           <Iconify icon="eva:link-2-fill" />
           Cập nhật
         </MenuItem>
 
-        <MenuItem
-            sx={{ color: 'error.main' }}
-        >
+        <MenuItem sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" />
           Xóa
         </MenuItem>
-
-        {/* <MenuItem
-        onClick={() => {
-          handleClosePopover();
-          handleOpenShare();
-        }}
-        >
-          <Iconify icon="eva:share-fill" />
-          Share
-        </MenuItem> */}
-
-        {/* <MenuItem
-          onClick={() => {
-            handleClosePopover();
-            handleOpenEditFolder();
-          }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Edit
-        </MenuItem>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem
-          onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Delete
-        </MenuItem> */}
       </MenuPopover>
       <Typography onClick={() => handleClassDetails(data.id)} variant="h3">
         {data ? data.name : 'Undefined'}
       </Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.64 }}>
-        {data ? data.schoolYear : 'Undefined'}
+        {'Niên khóa: '}{data ? data.schoolYear : 'Undefined'}
       </Typography>
     </Card>
   );

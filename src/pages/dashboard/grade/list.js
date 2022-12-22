@@ -16,7 +16,9 @@ import {
   TableBody,
   Container,
   IconButton,
-  TableContainer, Box, Pagination,
+  TableContainer,
+  Box,
+  Pagination,
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -116,6 +118,7 @@ export default function GradeListPage() {
     pageIndex: 1,
     pageSize: 5,
     searchByName: '',
+    levelId: '',
   });
 
   const isNotFound = (!dataFiltered.length && !!filterName) || (!dataFiltered.length && !!filterLevel);
@@ -128,10 +131,15 @@ export default function GradeListPage() {
     setOpenConfirm(false);
   };
 
-  const handleFilterLevel = (event, newValue) => {
-    setPage(0);
-    setFilterLevel(newValue);
-  };
+  const handleFilterLevel = useCallback(
+      (event, newValue) => {
+        console.log('event.target.value',newValue)
+        setFilter({...filter, levelId: newValue === 'all' ? '' : newValue});
+        setFilterLevel(newValue);
+      },
+      [filter]
+  );
+
   const handleFilterName = useCallback(
     (event) => {
       setFilter({ ...filter, searchByName: event.target.value });
@@ -178,13 +186,16 @@ export default function GradeListPage() {
     }
   };
 
-  const handlePageChange = useCallback(async (event, pageIndex) => {
-    let response = await getAllGrade({
-      ...filter,
-      pageIndex: pageIndex,
-    });
-    setFilter({ ...filter, pageIndex: pageIndex });
-  }, []);
+  const handlePageChange = useCallback(
+    async (event, pageIndex) => {
+      let response = await getAllGrade({
+        ...filter,
+        pageIndex: pageIndex,
+      });
+      setFilter({ ...filter, pageIndex: pageIndex });
+    },
+    [filter]
+  );
 
   const handleEditRow = (id) => {
     push(PATH_DASHBOARD.grade.edit(id));
@@ -331,11 +342,11 @@ export default function GradeListPage() {
           <Box p={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div></div>
             <Pagination
-                size="small"
-                count={paging?.TotalPages}
-                rowsperpage={paging?.PageSize}
-                onChange={handlePageChange}
-                color="primary"
+              size="small"
+              count={paging?.TotalPages}
+              rowsperpage={paging?.PageSize}
+              onChange={handlePageChange}
+              color="primary"
             />
           </Box>
         </Card>

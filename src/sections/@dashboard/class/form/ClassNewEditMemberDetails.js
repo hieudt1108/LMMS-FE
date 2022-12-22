@@ -132,7 +132,7 @@ export default function FolderNewPostForm({ classID }) {
     if (response instanceof Error) {
       enqueueSnackbar(`Thêm  thất bại`, { variant: 'error' });
     } else {
-      enqueueSnackbar(`Thêm thành công `, { variant: 'error' });
+      enqueueSnackbar(`Thêm thành công `, { variant: 'success' });
     }
   };
 
@@ -159,8 +159,8 @@ export default function FolderNewPostForm({ classID }) {
 
   const handlerUserChange = (event, index, userHandle) => {
     // console.log('handlerUserChange', userHandle, event.target.name, event.target.value, index);
-    setValue(`items[${index}].userId`, userHandle.id);
-    dispatch(filterSubjectRedux({ users: addUserInCLass[index].users, userId: userHandle.id, index }));
+    setValue(`items[${index}].userId`, userHandle?.id);
+    dispatch(filterSubjectRedux({ users: addUserInCLass[index]?.users, userId: userHandle?.id, index }));
   };
   console.log('FolderNewPostForm', getValues('items'), addUserInCLass);
 
@@ -184,8 +184,8 @@ export default function FolderNewPostForm({ classID }) {
                         onChange={(event, userHandle) => handlerUserChange(event, index, userHandle)}
                         sx={{ width: '643px' }}
                         options={addUserInCLass[index].users}
-                        getOptionLabel={(user) => `${user.email}-${user.firstName} ${user.lastName}`}
-                        defaultValue={addUserInCLass[index].users[0]}
+                        getOptionLabel={(user) => `${user.email} - ${user.firstName} ${user.lastName}`}
+                        // defaultValue={addUserInCLass[index].users[0]}
                         isOptionEqualToValue={(option, value) => option.id === value.id}
                         renderTags={(value, getTagProps) =>
                           value.map((option, index) => (
@@ -198,98 +198,15 @@ export default function FolderNewPostForm({ classID }) {
                           ))
                         }
                         renderInput={(params) => (
-                          <TextField {...params} variant="filled" label="Size small" placeholder="Favorites" />
+                          <TextField
+                            {...params}
+                            // variant="filled"
+                            // label="Size small"
+                            placeholder="Tìm kiếmm người dùng..."
+                          />
                         )}
                       />
-
-                      {/* <RHFSelect
-                        sx={{ width: '643px' }}
-                        name={`items[${index}].userId`}
-                        placeholder="nguoi"
-                        onChange={(event) => handlerUserChange(event, index)}
-                      >
-                        {checkArray(addUserInCLass) &&
-                          checkArray(addUserInCLass[index].users) &&
-                          addUserInCLass[index].users.map((option, index) => (
-                            <option key={index} value={option.id}>
-                              {option.email} - {option.firstName} {option.lastName}
-                            </option>
-                          ))}
-                      </RHFSelect> */}
-                      {/* <RHFAutocomplete
-                          sx={{ width: '643px' }}
-                          name={`items[${index}].userId`}
-                          onChange={(event, newValue) => {
-                            console.log('RHFAutocomplete', newValue);
-                            setValue(`items[${index}].subjectId`, newValue);
-                          }}
-                          options={addUserInCLass[index].subjects.length ? addUserInCLass[index].subjects : []}
-                          renderTags={(value, getTagProps) =>
-                            value.map((option, index) => (
-                              <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
-                            ))
-                          }
-                          renderInput={(params) => {
-                            return <TextField {...params} />;
-                          }}
-                        /> */}
-                      {/* <Autocomplete
-                        id="size-small-filled"
-                        // size="small"
-                        name={`items[${index}].userId`}
-                        onChange={(event) => handlerUserChange(event, index)}
-                        sx={{ width: '643px' }}
-                        options={addUserInCLass[index].users}
-                        getOptionLabel={(user) => `${user.firstName} ${user.lastName}`}
-                        defaultValue={addUserInCLass[index].users[0]}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              variant="outlined"
-                              label={option.firstName}
-                              size="small"
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        renderInput={(params) => (
-                          <TextField {...params} variant="filled" label="Size small" placeholder="Favorites" />
-                        )}
-                      /> */}
                     </div>
-                    {/* <Autocomplete
-                      id="highlights-demo"
-                      name={`items[${index}].userId`}
-                      sx={{ width: 300 }}
-                      options={addUserInCLass[index].users}
-                      onInputChange={(event) => handlerUserChange(event, index)}
-                      getOptionLabel={(user) => `${user.firstName} ${user.lastName}`}
-                      isOptionEqualToValue={(option, value) => option.id === value.id}
-                      renderInput={(params) => <TextField {...params} label="Highlights" margin="normal" />}
-                      renderOption={(props, user, { inputValue }) => {
-                        const { cover, gender, id, firstName, lastName } = user;
-                        const matches = match(`${firstName} ${lastName}`, inputValue);
-                        const parts = parse(`${firstName} ${lastName}`, matches);
-
-                        return (
-                          <li {...props}>
-                            <div>
-                              {parts.map((part, index) => (
-                                <span
-                                  key={index}
-                                  style={{
-                                    fontWeight: part.highlight ? 700 : 400,
-                                  }}
-                                >
-                                  {part.text}
-                                </span>
-                              ))}
-                            </div>
-                          </li>
-                        );
-                      }}
-                    /> */}
 
                     {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) && (
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -317,7 +234,6 @@ export default function FolderNewPostForm({ classID }) {
                           display: 'flex',
                           justifyContent: 'space-between',
                           alignItems: 'center',
-                          marginRight: '5px',
                         }}
                       >
                         <Typography variant="subtitle2" gutterBottom sx={{ marginRight: '25px' }}>

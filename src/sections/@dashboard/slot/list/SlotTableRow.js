@@ -97,7 +97,7 @@ export default function SlotTableRow({ row, selected, onEditRow, onSelectRow, on
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Xóa cấp học"
+        title="Xóa tiết học"
         content="Bạn có chắc chắn muốn xóa?"
         action={
           <Button variant="contained" color="error" onClick={onDeleteRow}>

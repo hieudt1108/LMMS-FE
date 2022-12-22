@@ -28,7 +28,6 @@ ClassNewestBooking.propTypes = {
 };
 
 export default function ClassNewestBooking({ myClass, title, subheader, sx, ...other }) {
-  console.log('myClass', myClass);
   const theme = useTheme();
 
   return (
@@ -43,10 +42,8 @@ export default function ClassNewestBooking({ myClass, title, subheader, sx, ...o
         }}
       />
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 12, sm: 12, md: 12 }}>
-        {myClass?.subjects?.map((item) => (
-          <Grid item xs={2} sm={12} md={12} key={item.id}>
-            {/* <Item>xs=2</Item> */}
-
+        {myClass?.subjects?.map((item, index) => (
+          <Grid item xs={2} sm={12} md={12} key={index}>
             <BookingItem key={item.subjectId} item={item} />
           </Grid>
         ))}

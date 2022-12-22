@@ -14,10 +14,6 @@ import { updateClassMember } from 'src/dataProvider/agent';
 export default function ClassAddStudentForm({ isEdit = false, classID }) {
   const { push } = useRouter();
 
-  // useEffect(() => {
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   return (
     <div>
       <ClassNewEditMemberDetails classID={classID} />

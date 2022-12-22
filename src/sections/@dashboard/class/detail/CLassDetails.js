@@ -60,8 +60,8 @@ export default function CLassDetails({ myClass, title, subheader, tableLabels, t
             <TableHeadCustom headLabel={tableLabels} />
 
             <TableBody>
-              {myClass?.members?.map((row) => (
-                <BookingDetailsRow key={row.id} row={row} />
+              {myClass?.members?.map((row, index) => (
+                <BookingDetailsRow key={index} row={row} />
               ))}
             </TableBody>
           </Table>

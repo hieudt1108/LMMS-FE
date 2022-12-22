@@ -1,8 +1,8 @@
-import {useCallback, useEffect, useState} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 // @mui
 import {
   Box,
@@ -18,9 +18,9 @@ import {
   Tooltip,
 } from '@mui/material';
 // routes
-import {PATH_DASHBOARD} from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 // _mock_
-import {_typeDocumentList} from '../../../_mock/arrays';
+import { _typeDocumentList } from '../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
@@ -28,7 +28,7 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import ConfirmDialog from '../../../components/confirm-dialog';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
-import {useSettingsContext} from '../../../components/settings';
+import { useSettingsContext } from '../../../components/settings';
 import {
   emptyRows,
   getComparator,
@@ -39,9 +39,9 @@ import {
   useTable,
 } from '../../../components/table';
 // sections
-import {RoleTableRow, RoleTableToolbar} from '../../../sections/@dashboard/roles/list';
-import {deleteRole, getALlRoles} from '../../../dataProvider/agent';
-import {useSnackbar} from '../../../components/snackbar';
+import { RoleTableRow, RoleTableToolbar } from '../../../sections/@dashboard/roles/list';
+import { deleteRole, getALlRoles } from '../../../dataProvider/agent';
+import { useSnackbar } from '../../../components/snackbar';
 
 // ----------------------------------------------------------------------
 
@@ -120,7 +120,6 @@ export default function RolesListPage() {
     setOpenConfirm(false);
   };
 
-
   const handleFilterName = useCallback(
     (event) => {
       setFilter({ ...filter, searchByName: event.target.value });
@@ -167,14 +166,16 @@ export default function RolesListPage() {
     }
   };
 
-  const handlePageChange = useCallback(async (event, pageIndex) => {
-    let response = await getALlRoles({
-      ...filter,
-      pageIndex: pageIndex,
-    });
-    setFilter({ ...filter, pageIndex: pageIndex });
-
-  }, []);
+  const handlePageChange = useCallback(
+    async (event, pageIndex) => {
+      let response = await getALlRoles({
+        ...filter,
+        pageIndex: pageIndex,
+      });
+      setFilter({ ...filter, pageIndex: pageIndex });
+    },
+    [filter]
+  );
   const handleEditRow = (id) => {
     push(PATH_DASHBOARD.role.edit(id));
   };
@@ -293,14 +294,13 @@ export default function RolesListPage() {
           <Box p={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div></div>
             <Pagination
-                size="small"
-                count={paging?.TotalPages}
-                rowsperpage={paging?.PageSize}
-                onChange={handlePageChange}
-                color="primary"
+              size="small"
+              count={paging?.TotalPages}
+              rowsperpage={paging?.PageSize}
+              onChange={handlePageChange}
+              color="primary"
             />
           </Box>
-
         </Card>
       </Container>
 

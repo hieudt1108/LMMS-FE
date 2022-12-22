@@ -128,7 +128,7 @@ export default slice.reducer;
 
 const returnMessageSuccess = (title) => ({
   title: `${title}`,
-  variant: '',
+  variant: 'success',
 });
 
 const returnMessageError = (title) => ({

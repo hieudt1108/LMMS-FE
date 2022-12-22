@@ -1,64 +1,68 @@
 import PropTypes from 'prop-types';
-import * as Yup from 'yup';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 // next
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 // form
-import {Controller, useFieldArray, useForm} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 // @mui
-import {LoadingButton} from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
 import {
     Alert,
+    Autocomplete,
     Box,
     Button,
     Card,
-    Chip, Divider,
+    Chip,
+    Divider,
     FormControl,
     FormControlLabel,
     Grid,
+    InputAdornment,
     InputLabel,
     MenuItem,
     Select,
     Stack,
     Switch,
     TextField,
-    Typography
+    Typography,
 } from '@mui/material';
 // utils
 // routes
-import {PATH_DASHBOARD} from '../../../routes/paths';
+import { PATH_DASHBOARD } from '../../../routes/paths';
+import * as Yup from 'yup';
 // assets
 // components
-import {useSnackbar} from '../../../components/snackbar';
-import FormProvider, {RHFAutocomplete, RHFRadioGroup, RHFSelect, RHFTextField} from '../../../components/hook-form';
-import {DatePicker} from '@mui/x-date-pickers';
-import {
-    createUserAuth, getALlRoles, getAllSubject, getRoleById, getSubjectById, updateUser
-} from '../../../dataProvider/agent';
-import Iconify from "../../../components/iconify";
+import { DatePicker } from '@mui/x-date-pickers';
+import FormProvider, { RHFAutocomplete, RHFRadioGroup, RHFTextField } from '../../../components/hook-form';
+import Iconify from '../../../components/iconify';
+import { useSnackbar } from '../../../components/snackbar';
+import { getALlRoles, getAllSubject, updateUser, createUserAuth } from '../../../dataProvider/agent';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import {yupResolver} from "@hookform/resolvers/yup";
 
 // ----------------------------------------------------------------------
-const GENDER_OPTION = [{label: 'Nam', value: '0'}, {label: 'Nữ', value: '1'},];
+const GENDER_OPTION = [
+    { label: 'Nam', value: '0' },
+    { label: 'Nữ', value: '1' },
+];
 
 UserNewForm.propTypes = {
-    isEdit: PropTypes.bool, currentUser: PropTypes.object,
+    isEdit: PropTypes.bool,
+    currentUser: PropTypes.object,
 };
 
-export default function UserNewForm({isEdit = false, currentUser}) {
-    const {push} = useRouter();
-    const {enqueueSnackbar} = useSnackbar();
-    console.log('currentUserRoles', currentUser);
+export default function UserNewForm({ isEdit = false, currentUser }) {
+    const { push } = useRouter();
+    const { enqueueSnackbar } = useSnackbar();
 
     const validationSchema = (() => {
         if (!isEdit) {
             return Yup.object().shape({
                 userName: Yup.string().trim().required('Tên đăng nhập không được trống'),
                 password: Yup.string().trim().required('Mật khẩu không được trống'),
-                roleID: Yup.array().min(1, 'Hãy chọn vai trò'),
                 firstName: Yup.string().trim().required('Không được để trống'),
                 lastName: Yup.string().trim().required('Không được để trống'),
-                email: Yup.string().notRequired(),
+                email: Yup.string().trim().required('Không được để trống'),
                 phone: Yup.string().notRequired(),
                 address: Yup.mixed().notRequired(),
             });
@@ -66,72 +70,88 @@ export default function UserNewForm({isEdit = false, currentUser}) {
             return Yup.object().shape({
                 firstName: Yup.string().trim().required('Không được để trống'),
                 lastName: Yup.string().trim().required('Không được để trống'),
-                email: Yup.string().notRequired(),
+                email: Yup.string().trim().required('Không được để trống'),
                 phone: Yup.string().notRequired(),
                 address: Yup.mixed().notRequired(),
             });
         }
     })();
 
-    const defaultValues = useMemo(() => ({
-        userName: currentUser?.userName || '',
-        password: currentUser?.password || '',
-        firstName: currentUser?.firstName || '',
-        lastName: currentUser?.lastName || '',
-        email: currentUser?.email || '',
-        gender: currentUser?.gender || 0,
-        phone: currentUser?.phone || '',
-        address: currentUser?.address || '',
-        isTeacher: 0,
-        roleID: [],
-        tagsId: [],
-        tagsName: '',
-        subjectId: [],
-        suId: [],
-        birthDate: currentUser?.birthDate || new Date(),
-        enable: currentUser?.enable || 0,
-    }), [currentUser]);
+    const defaultValues = useMemo(
+        () => ({
+            userName: currentUser?.userName || '',
+            password: currentUser?.password || '',
+            firstName: currentUser?.firstName || '',
+            lastName: currentUser?.lastName || '',
+            email: currentUser?.email || '',
+            gender: currentUser?.gender || 0,
+            phone: currentUser?.phone || '',
+            address: currentUser?.address || '',
+            birthDate: currentUser?.birthDate || new Date(),
+            enable: currentUser?.enable || 0,
+            isTeacher: 0,
+            roleID: [],
+            tagsId: [],
+            tagsName: '',
+            subjectId: [],
+            suId: [],
+            items: [],
+        }),
+        [currentUser]
+    );
 
     const methods = useForm({
-        resolver: yupResolver(validationSchema), defaultValues,
+        resolver: yupResolver(validationSchema),
+        defaultValues,
     });
 
     const {
-        reset, watch, control, setValue, getValues, handleSubmit, formState: {isSubmitting, errors},
+        reset,
+        watch,
+        control,
+        setValue,
+        getValues,
+        handleSubmit,
+        formState: { isSubmitting, errors },
     } = methods;
     const values = watch();
 
-    const {fields, append, prepend, remove} = useFieldArray({
-        control, name: 'items',
+    const { fields, append, prepend, remove } = useFieldArray({
+        control,
+        name: 'items',
     });
 
     const renderMenuItem = useCallback((item) => {
         if (item && item.length) {
             return item.map((obj, index) => (
                 <MenuItem
-                   value={obj}
-                   key={index}
-                   sx={{
-                       mx: 1,
-                       my: 0.5,
-                       borderRadius: 0.75,
-                       typography: 'body2',
-                       textTransform: 'capitalize',
-                       '&:first-of-type': {mt: 0},
-                       '&:last-of-type': {mb: 0},
-                   }}
+                    value={obj.id}
+                    key={index}
+                    sx={{
+                        mx: 1,
+                        my: 0.5,
+                        borderRadius: 0.75,
+                        typography: 'body2',
+                        textTransform: 'capitalize',
+                        '&:first-of-type': { mt: 0 },
+                        '&:last-of-type': { mb: 0 },
+                    }}
                 >
                     {obj.name}
-                </MenuItem>));
+                </MenuItem>
+            ));
         }
-        return (<MenuItem>
+        return (
+            <MenuItem>
                 <Alert severity="error">Không có dữ liệu!</Alert>
-            </MenuItem>);
+            </MenuItem>
+        );
     });
 
     const handleAdd = () => {
-        prepend({
-            roleID: [], tagsId: [], tagsName: false, subjectId: [], suId: [],
+        append({
+            id: '',
+            subjects: [],
         });
     };
 
@@ -140,35 +160,11 @@ export default function UserNewForm({isEdit = false, currentUser}) {
     };
 
 
-    const handleChangeRoleID = useCallback((event, index) => {
-        console.log('role', event.target.value.name)
-        setValue(`items[${index}].roleID`, event.target.value.name);
-        if (event.target.value.name === 'GIAOVIEN' || event.target.value.name === 'TRUONGBOMON') {
-            setValue(`items[${index}].tagsName`, true);
-        } else {
-            setValue(`items[${index}].tagsName`, false);
-        }
-    }, [setValue, values.items]);
-
-    useEffect(() => {
-        if (isEdit && currentUser) {
-            reset(defaultValues);
-        }
-        if (!isEdit) {
-            reset(defaultValues);
-        }
-    }, [isEdit, currentUser]);
-
     const [userRole, setUserRole] = useState([]);
     const [userSubjects, setUserSubjects] = useState([]);
-    const [role, setRole] = useState([]);
-    useEffect(() => {
-        fetchRoles();
-        fetchSubject();
-    }, []);
 
     async function fetchRoles() {
-        const res = await getALlRoles({pageIndex: 1, pageSize: 10});
+        const res = await getALlRoles({ pageIndex: 1, pageSize: 10 });
         if (res.status < 400) {
             setUserRole(res.data.data);
         } else {
@@ -177,33 +173,28 @@ export default function UserNewForm({isEdit = false, currentUser}) {
     }
 
     async function fetchSubject() {
-        const res = await getAllSubject({pageIndex: 1, pageSize: 100});
+        const res = await getAllSubject({ pageIndex: 1, pageSize: 100 });
         if (res.status < 400) {
-            const transformDataSubject = res.data.data.map((su) => {
-                return {
-                    label: su.name, id: su.id,
-                };
-            });
-            console.log('transformDataSubject', transformDataSubject);
-            setUserSubjects(transformDataSubject);
+            setUserSubjects(res.data.data);
         } else {
             console.log('error fetch api');
         }
     }
 
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword((prevShowPassword) => !prevShowPassword);
+    };
+
     const onSubmit = async (data) => {
-        const roles = [];
-        for (let i = 0; i < data.tagsId.length; i++) {
-            if (data.tagsId[i] === 11) {
-                roles.push({
-                    roleId: data.tagsId[i], subjectId: getValues('subjectId').map((item) => item.id),
-                });
-            } else {
-                roles.push({
-                    roleId: data.tagsId[i], subjectId: [],
-                });
-            }
-        }
+        const rolesData = data.items.map((item) => {
+            const subjectIds = item.subjects.map((subject) => subject.id);
+            return {
+                roleId: item.id,
+                subjectId: subjectIds,
+            };
+        });
         if (!isEdit) {
             try {
                 const dataCreate = {
@@ -217,20 +208,19 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                     address: data.address,
                     phone: data.phone,
                     isTeacher: data.isTeacher,
-                    roles: roles,
+                    roles: rolesData,
                 };
                 const res = await createUserAuth(dataCreate);
-                console.log(res);
                 if (res.status < 400) {
                     reset();
                     enqueueSnackbar('Tạo người dùng thành công');
                     push(PATH_DASHBOARD.user.list);
                 } else {
-                    enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
+                    enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
                 }
             } catch (error) {
-                enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
-                console.error(error);
+                console.log(error);
+                enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
             }
         } else {
             const res = await updateUser(currentUser.id, {
@@ -242,189 +232,243 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                 address: data.address,
                 phone: data.phone,
                 enable: data.enable,
-                roles: roles,
+                roles: rolesData,
             });
             if (res.status < 400) {
                 reset();
                 enqueueSnackbar('Cập nhật người dùng thành công');
                 push(PATH_DASHBOARD.user.list);
             } else {
-                enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
+                enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
             }
         }
     };
 
-    return (<FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    useEffect(() => {
+        if (isEdit && currentUser) {
+            setValue('lastName', currentUser.lastName);
+            setValue('firstName', currentUser.firstName);
+            setValue('gender', currentUser.gender);
+            setValue('birthDate', currentUser.birthDate);
+            setValue('email', currentUser.email);
+            setValue('phone', currentUser.phone);
+            setValue('address', currentUser.address);
+            setValue('enable', currentUser.enable);
+            setValue('items', currentUser.roles);
+        }
+        if (!isEdit) {
+            reset(defaultValues);
+        }
+    }, [isEdit, currentUser]);
+
+    useEffect(() => {
+        fetchRoles();
+        fetchSubject();
+    }, []);
+    return (
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Card sx={{p: 3}}>
+                    <Card sx={{ p: 3 }}>
                         <Box
                             rowGap={3}
                             columnGap={2}
                             display="grid"
                             gridTemplateColumns={{
-                                xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)',
+                                xs: 'repeat(1, 1fr)',
+                                sm: 'repeat(2, 1fr)',
                             }}
                         >
-                            {!isEdit && (<Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                            {!isEdit && (
+                                <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
                                     Tài khoản
-                                </Typography>)}
+                                </Typography>
+                            )}
                             {!isEdit && <div></div>}
-                            {!isEdit && <RHFTextField name="userName" label="Tên tài khoản" id="userName"/>}
-                            {!isEdit && <RHFTextField name="password" label="Mật khẩu" id="password"/>}
+                            {!isEdit && <RHFTextField name="userName" label="Tên tài khoản" id="userName" />}
+                            {!isEdit && (
+                                <RHFTextField
+                                    name="password"
+                                    type={showPassword ? 'text' : 'password'}
+                                    label="Mật khẩu"
+                                    id="password"
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                {showPassword ? (
+                                                    <Visibility onClick={togglePasswordVisibility} />
+                                                ) : (
+                                                    <VisibilityOff onClick={togglePasswordVisibility} />
+                                                )}
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            )}
 
-
-                            <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                            <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
                                 Thông tin cá nhân
                             </Typography>
                             <div></div>
-                            <RHFTextField name="firstName" label="Họ" id="firstName"/>
-                            <RHFTextField name="lastName" label="Tên" id="lastName"/>
-                            <Stack sx={{ml: 1.5}}>
-                                <Typography variant="subtitle2" sx={{color: 'text.secondary', mt: 1}}>
+                            <RHFTextField name="firstName" label="Họ" id="firstName" />
+                            <RHFTextField name="lastName" label="Tên" id="lastName" />
+                            <Stack sx={{ ml: 1.5 }}>
+                                <Typography variant="subtitle2" sx={{ color: 'text.secondary', mt: 1 }}>
                                     Giới tính
                                 </Typography>
                                 <RHFRadioGroup
                                     name="gender"
                                     options={GENDER_OPTION}
                                     sx={{
-                                        mt: 0.5, '& .MuiFormControlLabel-root': {mr: 4},
+                                        mt: 0.5,
+                                        '& .MuiFormControlLabel-root': { mr: 4 },
                                     }}
                                 />
                             </Stack>
-                            <Stack sx={{mt: 2.5}}>
+                            <Stack sx={{ mt: 2.5 }}>
                                 <Controller
                                     name="birthDate"
                                     control={control}
-                                    render={({field, fieldState: {error}}) => (<DatePicker
+                                    render={({ field, fieldState: { error } }) => (
+                                        <DatePicker
                                             label="Sinh nhật"
                                             value={field.value}
                                             onChange={(newValue) => {
                                                 field.onChange(newValue);
                                             }}
-                                            renderInput={(params) => (<TextField {...params} fullWidth error={!!error}
-                                                                                 helperText={error?.message}/>)}
-                                        />)}
+                                            renderInput={(params) => (
+                                                <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
+                                            )}
+                                        />
+                                    )}
                                 />
                             </Stack>
-                            <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                            <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
                                 Thông tin liên hệ
                             </Typography>
 
                             <div></div>
-                            <RHFTextField name="email" label="Email" id="email"/>
-                            <RHFTextField name="phone" label="Số điện thoại" id="phone"/>
-                            <RHFTextField name="address" label="Địa chỉ" id="address"/>
-
+                            <RHFTextField name="email" label="Email" id="email" />
+                            <RHFTextField name="phone" label="Số điện thoại" id="phone" />
+                            <RHFTextField name="address" label="Địa chỉ" id="address" />
                         </Box>
                         <div></div>
-                        <Stack direction="row" spacing={1.5} sx={{mt: 4}}>
-                            <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
+                        <Stack direction="row" spacing={1.5} sx={{ mt: 4 }}>
+                            <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
                                 Cài đặt tài khoản
                             </Typography>
                             <Button
                                 size="small"
-                                sx={{display: 'flex', justifyContent: 'flex-start'}}
+                                sx={{ display: 'flex', justifyContent: 'flex-start' }}
                                 onClick={handleAdd}
-                                startIcon={<Iconify icon="eva:plus-fill"/>}>
+                                startIcon={<Iconify icon="eva:plus-fill" />}
+                            >
                                 Thêm bản ghi
                             </Button>
                         </Stack>
 
                         {!isEdit && <div></div>}
                         {isEdit && <div></div>}
-                        {isEdit && (<FormControlLabel
+                        {isEdit && (
+                            <FormControlLabel
                                 labelPlacement="start"
-                                control={<Controller
-                                    name="enable"
-                                    control={control}
-                                    render={({field}) => (<Switch
-                                            {...field}
-                                            checked={field.value !== 0}
-                                            onChange={(event) => field.onChange(event.target.checked ? 1 : 0)}
-                                        />)}
-                                />}
-                                label={<>
-                                    <Typography variant="subtitle2" sx={{mb: 0.5, ml: 1}}>
-                                        Vô hiệu hóa/Kích hoạt
-                                    </Typography>
-                                    <Typography variant="body2" sx={{color: 'text.secondary', ml: 1}}>
-                                        Xác nhận vô hiệu hóa/kích hoạt người dùng
-                                    </Typography>
-                                </>}
-                                sx={{mx: 0, mb: 3, width: 1, justifyContent: 'space-between'}}
-                            />)}
+                                control={
+                                    <Controller
+                                        name="enable"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Switch
+                                                {...field}
+                                                checked={field.value !== 0}
+                                                onChange={(event) => field.onChange(event.target.checked ? 1 : 0)}
+                                            />
+                                        )}
+                                    />
+                                }
+                                label={
+                                    <>
+                                        <Typography variant="subtitle2" sx={{ mb: 0.5, ml: 1 }}>
+                                            Vô hiệu hóa/Kích hoạt
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
+                                            Xác nhận vô hiệu hóa/kích hoạt người dùng
+                                        </Typography>
+                                    </>
+                                }
+                                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+                            />
+                        )}
 
                         {isEdit && <div></div>}
 
-                        {fields.map((item, index) => (<div>
-
-                                <Stack direction="row" spacing={2} sx={{mt: 2}}>
-                                    <Grid md={6}>
-                                        {/*<RHFSelect*/}
-                                        {/*    name="roleID"*/}
-                                        {/*    multiple*/}
-                                        {/*    onChange={(event, newValue) => {*/}
-                                        {/*        setValue('roleID', newValue);*/}
-                                        {/*        const tagsId = newValue.map((tag) => tag.id);*/}
-                                        {/*        const tagsName = newValue.map((tag) => tag.label);*/}
-                                        {/*        setValue('tagsId', tagsId);*/}
-                                        {/*        setValue('tagsName', tagsName);*/}
-                                        {/*        setRole(tagsId);*/}
-                                        {/*        if (!getValues('tagsName').includes('GIAOVIEN')) {*/}
-                                        {/*            setValue('subjectId', []);*/}
-                                        {/*        }*/}
-                                        {/*    }}*/}
-                                        {/*    options={userRole}*/}
-                                        {/*    renderTags={(value, getTagProps) =>*/}
-                                        {/*        value.map((option, index) => (*/}
-                                        {/*            <Chip {...getTagProps({index})} key={index} size="small"*/}
-                                        {/*                  label={option.label}/>*/}
-                                        {/*        ))*/}
-                                        {/*    }*/}
-                                        {/*    renderInput={(params) => <TextField label="Vai trò" {...params} />}*/}
-                                        {/*/>*/}
-                                        <FormControl fullWidth size="medium">
-                                            <InputLabel id="demo-simple-select-helper-label">Vai trò</InputLabel>
-                                            <Select name={`items[${index}].roleID`} label="Subject"
-                                                    onChange={(event) => handleChangeRoleID(event, index)}>
-                                                {renderMenuItem(userRole)}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid md={6}>
-                                        <RHFAutocomplete
-                                            name={`items[${index}].subjectId`}
-                                            multiple
-                                            onChange={(event, newValue) => {
-                                                setValue(`items[${index}].subjectId`, newValue);
-                                                const suId = newValue.map((su) => su.id);
-                                                setValue(`items[${index}].suId`, suId);
-                                            }}
-                                            disabled={!getValues(`items[${index}].tagsName`)}
-                                            options={userSubjects}
-                                            renderTags={(value, getTagProps) => value.map((option, index) => (
-                                                <Chip {...getTagProps({index})} key={index} size="small"
-                                                      label={option.label}/>))}
-                                            renderInput={(params) => <TextField label="Môn dạy" {...params} />}
-                                        />
-                                    </Grid>
-                                </Stack>
-                                <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
-                            <Stack direction="row" spacing={1.5}>
-                                <Button
-                                    size="small"
-                                    color="error"
-                                    startIcon={<Iconify icon="eva:trash-2-outline"/>}
-                                    onClick={() => handleRemove(index - 1)}
-                                >
-                                    Gỡ bản ghi
-                                </Button>
-                            </Stack>
-                            </div>
-
-                        ))}
-                        <Stack alignItems="flex-end" sx={{mt: 3}}>
+                        {fields.map((item, index) => {
+                            return (
+                                <div key={item.id}>
+                                    <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                                        <Grid md={6}>
+                                            <Controller
+                                                control={control}
+                                                name={`items[${index}].id`}
+                                                render={({
+                                                             field: { onChange, onBlur, value, name, ref },
+                                                             fieldState: { invalid, isTouched, isDirty, error },
+                                                             formState,
+                                                         }) => {
+                                                    return (
+                                                        <FormControl fullWidth size="medium">
+                                                            <InputLabel>Vai trò</InputLabel>
+                                                            <Select label="Vai trò" onChange={onChange} value={value}>
+                                                                {renderMenuItem(userRole)}
+                                                            </Select>
+                                                        </FormControl>
+                                                    );
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid md={6}>
+                                            <Controller
+                                                name={`items[${index}].subjects`}
+                                                control={control}
+                                                render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                                                    <Autocomplete
+                                                        value={value}
+                                                        disabled={
+                                                            userRole.find((item) => item.id === getValues(`items[${index}].id`))?.name !==
+                                                            'GIAOVIEN' &&
+                                                            userRole.find((item) => item.id === getValues(`items[${index}].id`))?.name !==
+                                                            'TRUONGBOMON'
+                                                        }
+                                                        disableCloseOnSelect
+                                                        multiple
+                                                        options={userSubjects}
+                                                        getOptionLabel={(option) => option.name}
+                                                        renderTags={(value, getTagProps) =>
+                                                            value.map((option, index) => (
+                                                                <Chip {...getTagProps({ index })} key={index} size="small" label={option.name} />
+                                                            ))
+                                                        }
+                                                        renderInput={(params) => <TextField label="Môn dạy" {...params} />}
+                                                        onChange={(_, data) => onChange(data)}
+                                                    />
+                                                )}
+                                            />
+                                        </Grid>
+                                    </Stack>
+                                    <Stack direction="row" spacing={1.5} sx={{ mt: 1 }}>
+                                        <Button
+                                            size="small"
+                                            color="error"
+                                            startIcon={<Iconify icon="eva:trash-2-outline" />}
+                                            onClick={() => handleRemove(index)}
+                                        >
+                                            Gỡ bản ghi
+                                        </Button>
+                                    </Stack>
+                                    <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+                                </div>
+                            );
+                        })}
+                        <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                             <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                                 {!isEdit ? 'Tạo mới' : 'Cập nhật'}
                             </LoadingButton>
@@ -432,5 +476,6 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                     </Card>
                 </Grid>
             </Grid>
-        </FormProvider>);
+        </FormProvider>
+    );
 }

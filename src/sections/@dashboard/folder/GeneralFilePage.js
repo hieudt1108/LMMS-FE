@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Box, Button, Container, Grid, IconButton, Link, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, IconButton, Link, Pagination, Stack, Typography } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from 'src/routes/paths';
 
@@ -134,6 +134,20 @@ export default function GeneralFilePage({ data }) {
     }
   };
 
+  const handlePageChange = useCallback(async (event, pageIndex) => {
+    let response = await getAllClass({
+      ...pagingClass,
+      pageIndex: pageIndex,
+    });
+    setPagingClass({ ...pagingClass, pageIndex: pageIndex });
+    dispatch(
+      getClassesRedux({
+        ...pagingClass,
+        pageIndex: pageIndex,
+      })
+    );
+  }, []);
+
   return (
     <>
       <Head>
@@ -222,6 +236,11 @@ export default function GeneralFilePage({ data }) {
               </Stack>
             </div>
           </Grid>
+        </Grid>
+        <Grid item xs={12} justifyContent="flex-end">
+          <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
+            <Pagination size="small" count={100} rowsperpage={2} onChange={handlePageChange} color="primary" />
+          </Stack>
         </Grid>
       </Container>
       {openNewFolder && (

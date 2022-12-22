@@ -311,7 +311,7 @@ export default function FolderNewPostForm({ data }) {
                     >
                       <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
                       <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
-                        {!_.isEmpty(typeDocuments[index]) &&
+                        {!_.isEmpty(typeDocuments[index].typeDocumentInEachRecord) &&
                           typeDocuments[index].typeDocumentInEachRecord.map((option) => (
                             <option key={option.id} value={option.id}>
                               {option.name}

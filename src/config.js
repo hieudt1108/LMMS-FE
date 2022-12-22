@@ -5,7 +5,7 @@ import { PATH_DASHBOARD } from './routes/paths';
 // ----------------------------------------------------------------------
 
 export const HOST_API_KEY = process.env.HOST_API_KEY || '';
-export const PAGE_SIZE = 5;
+export const PAGE_SIZE = 7;
 export const ROLES_CODE = {
   STUDENT: 'HOCSINH',
   TEACHER: 'TEACHER',

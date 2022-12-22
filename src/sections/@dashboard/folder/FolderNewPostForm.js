@@ -85,9 +85,9 @@ export default function FolderNewPostForm({ data }) {
           description: '',
           file: '',
           name: '',
-          programId: programs[0]?.id,
-          subjectId: user.subjects[0]?.id,
-          typeDocumentId: typeDocuments[0]?.typeDocumentInEachRecord[0]?.id,
+          programId: '',
+          subjectId: '',
+          typeDocumentId: '',
         },
       ],
     }),
@@ -193,9 +193,9 @@ export default function FolderNewPostForm({ data }) {
       description: '',
       name: '',
       file: '',
-      programId: programs[0].id,
-      subjectId: user.subjects[0].id,
-      typeDocumentId: typeDocuments[fields.length]?.typeDocumentInEachRecord[0].id,
+      programId: '',
+      subjectId: '',
+      typeDocumentId: '',
     });
   };
 

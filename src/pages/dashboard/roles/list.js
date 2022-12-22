@@ -168,10 +168,6 @@ export default function RolesListPage() {
 
   const handlePageChange = useCallback(
     async (event, pageIndex) => {
-      let response = await getALlRoles({
-        ...filter,
-        pageIndex: pageIndex,
-      });
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]

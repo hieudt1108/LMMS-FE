@@ -188,8 +188,6 @@ export default function TypeDocsListPage() {
         fetchTypeDocuments({...filter, pageIndex: newPage});
     };
 
-
-
     const handleDeleteRows = async (selected) => {
         const response = await deleteTypeDocument(selected);
         if (response.status < 400) {

@@ -203,10 +203,6 @@ export default function UserListPage() {
     }
 
     const handlePageChange = useCallback(async (event, pageIndex) => {
-        let response = await getAllUsers({
-            ...filter,
-            pageIndex: pageIndex,
-        });
         setFilter({ ...filter, pageIndex: pageIndex });
     }, [filter]);
 
@@ -223,8 +219,6 @@ export default function UserListPage() {
         },
         [filter]
     );
-
-
 
 
     const handleResetFilter = () => {

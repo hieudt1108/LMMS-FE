@@ -100,13 +100,13 @@ export default function PermissionNewEditForm({ isEdit = false, currentPermissio
         const res = await createPermission(data)
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Create success!');
+          enqueueSnackbar('Tạo quyền thành công!');
           push(PATH_DASHBOARD.permission.list);
         } else {
-          enqueueSnackbar('Create Fail');
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Create Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra!', { variant: 'error' });
       }
     }else{
       try {
@@ -116,13 +116,13 @@ export default function PermissionNewEditForm({ isEdit = false, currentPermissio
         })
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Update success!');
+          enqueueSnackbar('Cập nhật quyền thành công!');
           push(PATH_DASHBOARD.permission.list);
         } else {
-          enqueueSnackbar('Update Fail');
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Update Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra!', { variant: 'error' });
       }
     }
   };

@@ -133,7 +133,6 @@ export default function GradeListPage() {
 
   const handleFilterLevel = useCallback(
       (event, newValue) => {
-        console.log('event.target.value',newValue)
         setFilter({...filter, levelId: newValue === 'all' ? '' : newValue});
         setFilterLevel(newValue);
       },
@@ -188,10 +187,6 @@ export default function GradeListPage() {
 
   const handlePageChange = useCallback(
     async (event, pageIndex) => {
-      let response = await getAllGrade({
-        ...filter,
-        pageIndex: pageIndex,
-      });
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]

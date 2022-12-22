@@ -175,10 +175,6 @@ export default function ProgramListPage() {
   };
   const handlePageChange = useCallback(
     async (event, pageIndex) => {
-      let response = await getAllProgram({
-        ...filter,
-        pageIndex: pageIndex,
-      });
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]

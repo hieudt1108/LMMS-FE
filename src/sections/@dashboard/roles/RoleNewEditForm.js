@@ -44,7 +44,7 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
       () => ({
         name: currentRoles?.name || '',
         description: currentRoles?.description || '',
-        permissionId: currentRoles?.permissionId || [],
+        permissionId: currentRoles?.permission || [],
       }),
       [currentRoles]
   );
@@ -75,6 +75,7 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
 
 
   const onSubmit = async (data) => {
+    console.log('data',data)
     if (!isEdit) {
       try {
         const res = await createRole({
@@ -85,7 +86,7 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
         if (res.status < 400) {
           reset();
           enqueueSnackbar('Tạo vai trò thành công');
-          push(PATH_DASHBOARD.role.list);
+          // push(PATH_DASHBOARD.role.list);
         } else {
           enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }

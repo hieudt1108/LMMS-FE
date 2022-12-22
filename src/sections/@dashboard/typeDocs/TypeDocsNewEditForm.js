@@ -74,13 +74,13 @@ export default function TypeDocsNewEditForm({ isEdit = false, currentTypeDocs })
         const res = await postTypeDocument(data)
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Create success!');
+          enqueueSnackbar('Tạo loại tài liệu thành công!');
           push(PATH_DASHBOARD.type_documents.list);
         } else {
-          enqueueSnackbar('Create Fail');
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Create Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra!', { variant: 'error' });
       }
     }else{
       try {
@@ -89,13 +89,13 @@ export default function TypeDocsNewEditForm({ isEdit = false, currentTypeDocs })
         })
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Update success!');
+          enqueueSnackbar('Cập nhật loại tài liệu thành công!');
           push(PATH_DASHBOARD.type_documents.list);
         } else {
-          enqueueSnackbar('Update Fail');
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Update Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra!', { variant: 'error' });
       }
     }
 

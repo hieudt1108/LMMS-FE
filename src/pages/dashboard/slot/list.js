@@ -177,10 +177,6 @@ export default function SlotListPage() {
 
   const handlePageChange = useCallback(
     async (event, pageIndex) => {
-      let response = await getAllSlot({
-        ...filter,
-        pageIndex: pageIndex,
-      });
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]

@@ -134,10 +134,6 @@ export default function PermissionListPage() {
 
   const handlePageChange = useCallback(
     async (event, pageIndex) => {
-      let response = await getAllPermission({
-        ...filter,
-        pageIndex: pageIndex,
-      });
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]

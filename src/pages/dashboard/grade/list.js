@@ -118,6 +118,7 @@ export default function GradeListPage() {
     pageIndex: 1,
     pageSize: 5,
     searchByName: '',
+    levelId: '',
   });
 
   const isNotFound = (!dataFiltered.length && !!filterName) || (!dataFiltered.length && !!filterLevel);
@@ -130,10 +131,15 @@ export default function GradeListPage() {
     setOpenConfirm(false);
   };
 
-  const handleFilterLevel = (event, newValue) => {
-    setPage(0);
-    setFilterLevel(newValue);
-  };
+  const handleFilterLevel = useCallback(
+      (event, newValue) => {
+        console.log('event.target.value',newValue)
+        setFilter({...filter, levelId: newValue === 'all' ? '' : newValue});
+        setFilterLevel(newValue);
+      },
+      [filter]
+  );
+
   const handleFilterName = useCallback(
     (event) => {
       setFilter({ ...filter, searchByName: event.target.value });

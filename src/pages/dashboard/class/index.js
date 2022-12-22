@@ -73,7 +73,7 @@ export default function Classes() {
     }
     return (
       <MenuItem>
-        <Alert severity="error">This is an error !</Alert>
+        <Alert severity="error">Không có dữ liệu!</Alert>
       </MenuItem>
     );
   });
@@ -135,7 +135,7 @@ export default function Classes() {
         <Grid container spacing={3} sx={{ marginBottom: '50px' }}>
           <Grid item xs={12} md={12}>
             <AppWelcome
-              title={`Lớp học của bạn!`}
+              title={`Lớp học của tôi !`}
               description="Tiên học lễ, hậu học văn"
               img={
                 <SeoIllustration
@@ -163,7 +163,7 @@ export default function Classes() {
                 sx={{ mr: 1 }}
                 autohighlight="true"
                 onChange={handleSearchChange}
-                placeholder="Search..."
+                placeholder="Tìm kiếm lớp học..."
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">

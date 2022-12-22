@@ -79,17 +79,6 @@ export default function PermissionTableRow({ row, selected, onEditRow, onSelectR
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 140 }}>
         <MenuItem
           onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Xóa
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
             onEditRow();
             handleClosePopover();
           }}
@@ -99,17 +88,6 @@ export default function PermissionTableRow({ row, selected, onEditRow, onSelectR
         </MenuItem>
       </MenuPopover>
 
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Xóa cấp học"
-        content="Bạn có chắc chắn muốn xóa?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Xóa
-          </Button>
-        }
-      />
     </>
   );
 }

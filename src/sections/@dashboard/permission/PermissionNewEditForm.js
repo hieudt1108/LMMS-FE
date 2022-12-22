@@ -125,9 +125,7 @@ export default function PermissionNewEditForm({ isEdit = false, currentPermissio
         enqueueSnackbar('Update Fail');
       }
     }
-
   };
-
 
   return (
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -140,21 +138,15 @@ export default function PermissionNewEditForm({ isEdit = false, currentPermissio
                   display="grid"
                   gridTemplateColumns={{
                     xs: 'repeat(1, 1fr)',
-                    sm: 'repeat(2, 1fr)',
+                    sm: 'repeat(1, 1fr)',
                   }}
               >
                 <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
                   Thông tin quyền
                 </Typography>
-                <div></div>
-                <RHFTextField
-                    name="name"
-                    label="Tên quyền"
-                    id="name"
-                />
                 <RHFTextField
                     name="description"
-                    label="Mô tả"
+                    label="Mô tả quyền"
                     id="description"
 
                 />

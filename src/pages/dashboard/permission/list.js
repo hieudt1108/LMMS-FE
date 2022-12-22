@@ -132,44 +132,6 @@ export default function PermissionListPage() {
     [filter]
   );
 
-  const handleDeleteRow = async (id) => {
-    const response = await deletePermission(id);
-    if (response.status < 400) {
-      setSelected([]);
-      await fetchPermission();
-      enqueueSnackbar('Xóa vai trò thành công');
-    } else {
-      enqueueSnackbar('Xóa vai trò thất bại');
-    }
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-  };
-
-  const handleDeleteRows = async (selected) => {
-    const response = await deletePermission(selected);
-    if (response.status < 400) {
-      setSelected([]);
-      await fetchPermission();
-      enqueueSnackbar('Xóa vai trò thành công');
-    } else {
-      enqueueSnackbar('Xóa vai trò thất bại');
-    }
-
-    if (page > 0) {
-      if (selected.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selected.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selected.length > dataInPage.length) {
-        const newPage = Math.ceil((listPermission.length - selected.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
-    }
-  };
   const handlePageChange = useCallback(
     async (event, pageIndex) => {
       let response = await getAllPermission({
@@ -240,13 +202,6 @@ export default function PermissionListPage() {
                   listPermission.map((row) => row.id)
                 )
               }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={handleOpenConfirm}>
-                    <Iconify icon="eva:trash-2-outline" />
-                  </IconButton>
-                </Tooltip>
-              }
             />
 
             <Scrollbar>
@@ -274,7 +229,6 @@ export default function PermissionListPage() {
                       row={perm}
                       selected={selected.includes(perm.id)}
                       onSelectRow={() => onSelectRow(perm.id)}
-                      onDeleteRow={() => handleDeleteRow(perm.id)}
                       onEditRow={() => handleEditRow(perm.id)}
                     />
                   ))}
@@ -305,28 +259,6 @@ export default function PermissionListPage() {
         </Card>
       </Container>
 
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Xóa"
-        content={
-          <>
-            Bạn có chắc chắn muốn xóa <strong> {selected.length} </strong>?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows(selected);
-              handleCloseConfirm();
-            }}
-          >
-            Xóa
-          </Button>
-        }
-      />
     </>
   );
 }

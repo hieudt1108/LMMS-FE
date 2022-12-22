@@ -135,15 +135,10 @@ export default function GeneralFilePage({ data }) {
   };
 
   const handlePageChange = useCallback(async (event, pageIndex) => {
-    let response = await getAllClass({
-      ...pagingClass,
-      pageIndex: pageIndex,
-    });
-    setPagingClass({ ...pagingClass, pageIndex: pageIndex });
-    dispatch(
-      getClassesRedux({
-        ...pagingClass,
-        pageIndex: pageIndex,
+    await dispatch(
+      getFolderRedux(data.id, data.types[0], {
+        ...data.pagination,
+        CurrentPage: pageIndex,
       })
     );
   }, []);
@@ -239,7 +234,13 @@ export default function GeneralFilePage({ data }) {
         </Grid>
         <Grid item xs={12} justifyContent="flex-end">
           <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center" mt={2}>
-            <Pagination size="small" count={100} rowsperpage={2} onChange={handlePageChange} color="primary" />
+            <Pagination
+              size="small"
+              count={data.pagination.TotalPages}
+              rowsperpage={data.pagination.PageSize}
+              onChange={handlePageChange}
+              color="primary"
+            />
           </Stack>
         </Grid>
       </Container>

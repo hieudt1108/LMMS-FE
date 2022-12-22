@@ -15,6 +15,7 @@ import {
   postFolder,
   updateFolder,
 } from 'src/dataProvider/agent';
+import { PAGE_SIZE } from 'src/config';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,14 @@ const initialState = {
     parentId: 0,
     listFolders: [],
     listDocuments: [],
+    pagination: {
+      TotalCount: 0,
+      PageSize: PAGE_SIZE,
+      CurrentPage: 1,
+      TotalPages: 0,
+      HasNext: false,
+      HasPrevious: false,
+    },
   },
   storeFolder: {
     id: '',
@@ -34,6 +43,14 @@ const initialState = {
     parentId: 0,
     listFolders: [],
     listDocuments: [],
+    pagination: {
+      TotalCount: 0,
+      PageSize: PAGE_SIZE,
+      CurrentPage: 1,
+      TotalPages: 0,
+      HasNext: false,
+      HasPrevious: false,
+    },
   },
   folderUploadDoc: {
     id: '',
@@ -41,6 +58,14 @@ const initialState = {
     parentId: 0,
     listFolders: [],
     listDocuments: [],
+    pagination: {
+      TotalCount: 0,
+      PageSize: PAGE_SIZE,
+      CurrentPage: 1,
+      TotalPages: 0,
+      HasNext: false,
+      HasPrevious: false,
+    },
   },
 
   folderUploadDocToSlotInGeneralFolder: {
@@ -49,6 +74,14 @@ const initialState = {
     parentId: 0,
     listFolders: [],
     listDocuments: [],
+    pagination: {
+      TotalCount: 0,
+      PageSize: PAGE_SIZE,
+      CurrentPage: 1,
+      TotalPages: 0,
+      HasNext: false,
+      HasPrevious: false,
+    },
   },
 
   folderUploadDocToSlot: {
@@ -57,6 +90,14 @@ const initialState = {
     parentId: 0,
     listFolders: [],
     listDocuments: [],
+    pagination: {
+      TotalCount: 0,
+      PageSize: PAGE_SIZE,
+      CurrentPage: 1,
+      TotalPages: 0,
+      HasNext: false,
+      HasPrevious: false,
+    },
   },
 
   folderSaveDocToMyFolder: {
@@ -65,6 +106,14 @@ const initialState = {
     parentId: 0,
     listFolders: [],
     listDocuments: [],
+    pagination: {
+      TotalCount: 0,
+      PageSize: PAGE_SIZE,
+      CurrentPage: 1,
+      TotalPages: 0,
+      HasNext: false,
+      HasPrevious: false,
+    },
   },
 
   newDocument: {
@@ -97,9 +146,9 @@ const slice = createSlice({
 
     getFolderSuccess(state, action) {
       console.log('getFolderSuccess', action);
-      const { folder, nameData } = action.payload;
+      const { folder, nameData, paging } = action.payload;
       state.isLoading = false;
-      state[`${nameData}`] = { ...state[`${nameData}`], ...folder };
+      state[`${nameData}`] = { ...state[`${nameData}`], ...folder, pagination: { ...paging } };
     },
 
     createFolderSuccess(state, action) {
@@ -242,17 +291,37 @@ const returnMessageError = (title) => ({
   variant: 'error',
 });
 
-export function getFolderRedux(params, nameData) {
+export function getFolderRedux(folderId, nameData, paging) {
   return async () => {
     try {
-      console.log('getFolderRedux', params);
-      if ((!params && params !== 0) || !nameData) {
+      console.log('getFolderRedux', folderId);
+      if ((!folderId && folderId !== 0) || !nameData) {
         return returnMessageError(`Không truy cập được thư mục này`);
       }
+      const params = paging
+        ? {
+            folderId,
+            ...paging,
+          }
+        : {
+            folderId,
+            TotalCount: 0,
+            PageSize: PAGE_SIZE,
+            CurrentPage: 1,
+            TotalPages: 0,
+            HasNext: false,
+            HasPrevious: false,
+          };
       dispatch(slice.actions.startLoading());
       const response = await getFolderByID(params);
       console.log('getFolderByID', response);
-      dispatch(slice.actions.getFolderSuccess({ folder: response.data.data, nameData }));
+      dispatch(
+        slice.actions.getFolderSuccess({
+          folder: response.data.data,
+          nameData,
+          paging: JSON.parse(response.headers['x-pagination']),
+        })
+      );
     } catch (error) {
       return returnMessageError(`Có lỗi xảy ra`);
     }

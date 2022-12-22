@@ -189,8 +189,8 @@ function getAllPermission(params) {
 }
 
 // Folder
-function getFolderByID(id) {
-  return getApi(`/Folder/getOne/${id}`);
+function getFolderByID(params) {
+  return getApi(`/Folder/getOne/${params.folderId}?pageIndex=${params.CurrentPage}&pageSize=${params.PageSize}`);
 }
 
 // FILE

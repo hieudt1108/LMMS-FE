@@ -134,14 +134,14 @@ export default function GeneralFilePage({ data }) {
     }
   };
 
-  const handlePageChange = useCallback(async (event, pageIndex) => {
+  const handlePageChange = async (event, pageIndex) => {
     await dispatch(
       getFolderRedux(data.id, data.types[0], {
         ...data.pagination,
         CurrentPage: pageIndex,
       })
     );
-  }, []);
+  };
 
   return (
     <>

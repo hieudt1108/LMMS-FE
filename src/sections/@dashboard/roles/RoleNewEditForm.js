@@ -21,6 +21,7 @@ import {createRole, createSubject, getAllPermission, updateRole, updateSubject} 
 import SubjectNewEditSlot from "../subject/SubjectNewEditSlot";
 import RolesNewEditPermisson from "./RolesNewEditPermission";
 import RolesNewEditPermission from "./RolesNewEditPermission";
+import RolesNewEditMenu from "./RolesNewEditMenu";
 
 // ----------------------------------------------------------------------
 
@@ -29,10 +30,8 @@ RolesNewEditForm.propTypes = {
   currentRoles: PropTypes.object,
 };
 
-export default function RolesNewEditForm({ isEdit = false, currentRoles, permissions }) {
+export default function RolesNewEditForm({ isEdit = false, currentRoles, permissions,menu }) {
   const { push } = useRouter();
-  console.log(permissions)
-
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
@@ -45,6 +44,7 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
         name: currentRoles?.name || '',
         description: currentRoles?.description || '',
         permissionId: currentRoles?.permission || [],
+        menuId: currentRoles?.menu || [],
       }),
       [currentRoles]
   );
@@ -82,11 +82,12 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
           name: data.name,
           description: data.description,
           permissionId: data.permissionId?.map((perm) => perm.id),
+          menuId: data.menuId?.map((menu) => menu.id),
         });
         if (res.status < 400) {
           reset();
           enqueueSnackbar('Tạo vai trò thành công');
-          // push(PATH_DASHBOARD.role.list);
+          push(PATH_DASHBOARD.role.list);
         } else {
           enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
         }
@@ -100,6 +101,7 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
           name: data.name,
           description: data.description,
           permissionId: data.permissionId?.map((perm) => perm.id),
+          menuId: data.menuId?.map((menu) => menu.id),
         });
         if (res.status < 400) {
           reset();
@@ -120,6 +122,14 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
       listPermissionId.push(perm.id);
     });
     setValue('permissionId', listPermissionId);
+  };
+
+  const handleSelectedMenuItems = (data) => {
+    const listMenuId = [];
+    data.map((menu) => {
+      listMenuId.push(menu.id);
+    });
+    setValue('menuId', listMenuId);
   };
 
 
@@ -156,6 +166,16 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
                     render={({ field: { onChange, onBlur, value, name, ref } }) => {
                       return (
                           <RolesNewEditPermission selectedPermissions={value} permissions={permissions} handleSelectedPermission={handleSelectedPermission} />
+                      );
+                    }}
+                />
+                <Controller
+                    name="menuId"
+                    control={control}
+                    defaultValue={[]}
+                    render={({ field: { onChange, onBlur, value, name, ref } }) => {
+                      return (
+                          <RolesNewEditMenu selectedMenuItems={value} menuItems={menu} handleSelectedMenuItems={handleSelectedMenuItems} />
                       );
                     }}
                 />

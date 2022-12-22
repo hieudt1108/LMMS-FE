@@ -12,7 +12,7 @@ import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 // sections
 import RoleNewEditForm from '../../../sections/@dashboard/roles/RoleNewEditForm';
 import {useEffect, useState} from "react";
-import {getAllPermission, getRoleById} from "../../../dataProvider/agent";
+import {getAllMenu, getAllPermission, getRoleById} from "../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ RolesCreatePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function RolesCreatePage() {
     const {themeStretch} = useSettingsContext();
     const [permissions, setPermissions] = useState([]);
-
+    const [menuItems, setMenuItems] = useState([]);
 
     async function fetchPermission() {
         const res = await getAllPermission({pageIndex: 1, pageSize: 100});
@@ -35,8 +35,19 @@ export default function RolesCreatePage() {
         }
     }
 
+    async function fetchMenuItems() {
+        const res = await getAllMenu({pageIndex: 1, pageSize: 100});
+        console.log(res.data.data)
+        if (res.status < 400) {
+            setMenuItems(res.data.data);
+        } else {
+            console.log('error');
+        }
+    }
+
     useEffect(() => {
         fetchPermission();
+        fetchMenuItems();
     }, []);
     return (
         <>
@@ -59,7 +70,7 @@ export default function RolesCreatePage() {
                         {name: 'Tạo mới'},
                     ]}
                 />
-                <RoleNewEditForm permissions={permissions}/>
+                <RoleNewEditForm permissions={permissions} menu={menuItems} />
             </Container>
         </>
     );

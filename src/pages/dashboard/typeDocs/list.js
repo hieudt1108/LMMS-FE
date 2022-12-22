@@ -45,7 +45,13 @@ import {
 // sections
 
 import {useSnackbar} from '../../../components/snackbar';
-import {deleteTypeDocument, getALlRoles, getAllSubject, getAllTypeDocument} from "../../../dataProvider/agent";
+import {
+    deleteTypeDocument,
+    getALlRoles,
+    getAllSubject,
+    getAllTypeDocument,
+    removeTypeDocumentToSubject
+} from "../../../dataProvider/agent";
 import {TypeDocsTableRow, TypeDocsTableToolbar} from "../../../sections/@dashboard/typeDocs/list";
 import error from "eslint-plugin-react/lib/util/error";
 
@@ -108,6 +114,8 @@ export default function TypeDocsListPage() {
 
     const [subject, setSelectedSubject] = useState('all');
 
+    const [moreAction, setMoreAction] = useState(true);
+
     const dataFiltered = applyFilter({
         inputData: listTypeDocuments,
         comparator: getComparator(order, orderBy),
@@ -131,8 +139,6 @@ export default function TypeDocsListPage() {
     const handleCloseConfirm = () => {
         setOpenConfirm(false);
     };
-
-
 
     const handleFilterName = useCallback(
         (event) => {
@@ -158,8 +164,24 @@ export default function TypeDocsListPage() {
     };
 
     const handleChangeSubjects = (event) => {
+        console.log('event.target.value',event.target.value)
         setFilter({...filter, subjectId: event.target.value === 'all' ? '' : event.target.value});
         setSelectedSubject(event.target.value);
+        setMoreAction(event.target.value === 'all')
+
+    };
+
+    const handleRemoveTypeFromSubject = async (id) => {
+        console.log('data',id,subject)
+        const response = await removeTypeDocumentToSubject(id,subject)
+        console.log(response)
+        if (response.status < 400) {
+            setSelected([]);
+            await fetchTypeDocuments();
+            enqueueSnackbar('Gỡ loại tài liệu khỏi môn học thành công');
+        } else {
+            enqueueSnackbar('Gỡ loại tài liệu khỏi môn học thất bại', {variant: 'error'});
+        }
     };
 
     const handlePageChange = (event, newPage) => {
@@ -191,7 +213,7 @@ export default function TypeDocsListPage() {
     };
 
     async function fetchSubjects() {
-        const res = await getAllSubject({pageIndex: 1, pageSize: 10});
+        const res = await getAllSubject({pageIndex: 1, pageSize: 150});
         if (res.status < 400) {
             const transformData = res.data.data.map((tag) => {
                 return {
@@ -310,10 +332,13 @@ export default function TypeDocsListPage() {
                                         <TypeDocsTableRow
                                             key={types.id}
                                             row={types}
+                                            typeId={types.id}
                                             selected={selected.includes(types.id)}
                                             onSelectRow={() => onSelectRow(types.id)}
                                             onDeleteRow={() => handleDeleteRow(types.id)}
+                                            onRemoveTypeFromSubject={() => handleRemoveTypeFromSubject(types.id)}
                                             onEditRow={() => handleEditRow(types.id)}
+                                            moreAction={moreAction}
                                         />
                                     ))}
 

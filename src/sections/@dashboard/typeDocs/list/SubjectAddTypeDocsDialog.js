@@ -13,22 +13,39 @@ import {
   TextField,
   Typography,
   Grid,
-  Card,
+  Card, MenuItem, Alert, FormControl, InputLabel, Select,
 } from '@mui/material';
 // components
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import FormProvider, { RHFAutocomplete } from '../../../../components/hook-form';
-import { getAllSubject, updateSubjectClass } from '../../../../dataProvider/agent';
+import {addTypeDocumentToSubject, getAllSubject, updateSubjectClass} from '../../../../dataProvider/agent';
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
+import {useAuthContext} from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
-export default function ClassAddSubjectDialog({ classID, open, onClose }) {
+export default function SubjectAddTypeDocsDialog({ typeDocsId, open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
+  const { headOfSubject } = useAuthContext();
+
+  const renderMenuItem = useCallback((item) => {
+    if (item && item.length) {
+      return item.map((obj, index) => (
+          <MenuItem value={obj} key={index}>
+            {obj.name}
+          </MenuItem>
+      ));
+    }
+    return (
+        <MenuItem>
+          <Alert severity="error">Không có dữ liệu!</Alert>
+        </MenuItem>
+    );
+  });
 
   const validationSchema = (() => {
     return Yup.object().shape({
@@ -38,15 +55,13 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
 
   const defaultValues = useMemo(
     () => ({
-      tagsId: [],
-      subjectsId: [],
       subjectId: '',
     }),
     []
   );
 
   const methods = useForm({
-    resolver: yupResolver(validationSchema),
+    // resolver: yupResolver(validationSchema),
     defaultValues,
   });
 
@@ -60,40 +75,15 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
     formState: { isSubmitting, errors },
   } = methods;
 
-  const [subjectsData, setSubjectsData] = useState([]);
-
-  useEffect(() => {
-    fetchSubjects();
-  }, []);
-
-  async function fetchSubjects() {
-    const res = await getAllSubject({ pageIndex: 1, pageSize: 150 });
-    if (res.status < 400) {
-      const transformData = res.data.data.map((tag) => {
-        return {
-          label: tag.name,
-          id: tag.id,
-        };
-      });
-      setSubjectsData(transformData);
-    } else {
-      console.log('error fetch api');
-    }
-  }
 
   const onSubmit = async (data) => {
-    let postData = [];
-
-    for (let i = 0; i < data.tagsId.length; i++) {
-      postData.push({
-        subjectId: data.tagsId[i],
-      });
-    }
+    console.log('data',typeDocsId,data.subjectId.props.value.id)
+    const dataAdd = data.subjectId.props.value.id
     try {
-      const res = await updateSubjectClass(classID, postData);
+      const res = await addTypeDocumentToSubject(typeDocsId, dataAdd);
       console.log(res);
       if (res.status < 400) {
-        enqueueSnackbar('Thêm môn học vào lớp học thành công!');
+        enqueueSnackbar('Thêm loại tài liệu vào môn học thành công!');
         onClose();
       } else {
         enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
@@ -108,7 +98,7 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
     <Dialog fullWidth maxWidth="sm" open={open}>
       <DialogActions sx={{ py: 2, px: 3 }}>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Thêm môn học
+          Thêm loại tài liệu vào môn học
         </Typography>
       </DialogActions>
 
@@ -126,22 +116,18 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
                   sm: 'repeat(1, 1fr)',
                 }}
               >
-                <RHFAutocomplete
-                  name="subjectsId"
-                  multiple
-                  onChange={(event, newValue) => {
-                    setValue('subjectsId', newValue);
-                    const tagsId = newValue.map((tag) => tag.id);
-                    setValue('tagsId', tagsId);
-                  }}
-                  options={subjectsData}
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                      <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
-                    ))
-                  }
-                  renderInput={(params) => <TextField label="Môn học" {...params} />}
-                />
+                <FormControl sx={{ minWidth: 180 }} size="small">
+                  <InputLabel id="demo-simple-select-helper-label">Môn học</InputLabel>
+                  <Select
+                      id="subjectsId"
+                      label="Môn học"
+                      onChange={(event, newValue) => {
+                        setValue('subjectId', newValue);
+                      }}
+                  >
+                    {renderMenuItem(headOfSubject)}
+                  </Select>
+                </FormControl>
               </Box>
               <Stack justifyContent="flex-end" direction="row" spacing={1.5} sx={{ mt: 3 }}>
                 <LoadingButton
@@ -154,7 +140,7 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
                   Quay lại
                 </LoadingButton>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  Thêm mới
+                  Thêm
                 </LoadingButton>
               </Stack>
             </Card>

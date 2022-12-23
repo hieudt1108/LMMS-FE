@@ -73,11 +73,7 @@ export default function AppWelcome({ title, description, action, img, ...other }
         </Typography>
 
         <Typography
-          variant="body2"
-          sx={{
-            opacity: 0.8,
-            mb: { xs: 3, xl: 5 },
-          }}
+            paragraph variant="h3" sx={{ whiteSpace: 'pre-line' }}
         >
           {description}
         </Typography>

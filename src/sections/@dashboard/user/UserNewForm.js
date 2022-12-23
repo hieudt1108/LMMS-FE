@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 // next
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // form
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import {Controller, useFieldArray, useForm} from 'react-hook-form';
 // @mui
-import { LoadingButton } from '@mui/lab';
+import {LoadingButton} from '@mui/lab';
 import {
     Alert,
     Autocomplete,
@@ -15,7 +15,7 @@ import {
     Chip,
     Divider,
     FormControl,
-    FormControlLabel,
+    FormControlLabel, FormHelperText,
     Grid, IconButton,
     InputAdornment,
     InputLabel,
@@ -28,21 +28,21 @@ import {
 } from '@mui/material';
 // utils
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import {PATH_DASHBOARD} from '../../../routes/paths';
 import * as Yup from 'yup';
 // assets
 // components
-import { DatePicker } from '@mui/x-date-pickers';
-import FormProvider, { RHFAutocomplete, RHFRadioGroup, RHFTextField } from '../../../components/hook-form';
+import {DatePicker} from '@mui/x-date-pickers';
+import FormProvider, {RHFAutocomplete, RHFRadioGroup, RHFTextField} from '../../../components/hook-form';
 import Iconify from '../../../components/iconify';
-import { useSnackbar } from '../../../components/snackbar';
-import { getALlRoles, getAllSubject, updateUser, createUserAuth } from '../../../dataProvider/agent';
+import {useSnackbar} from '../../../components/snackbar';
+import {getALlRoles, getAllSubject, updateUser, createUserAuth} from '../../../dataProvider/agent';
 import {yupResolver} from "@hookform/resolvers/yup";
 
 // ----------------------------------------------------------------------
 const GENDER_OPTION = [
-    { label: 'Nam', value: '0' },
-    { label: 'Nữ', value: '1' },
+    {label: 'Nam', value: '0'},
+    {label: 'Nữ', value: '1'},
 ];
 
 UserNewForm.propTypes = {
@@ -50,9 +50,9 @@ UserNewForm.propTypes = {
     currentUser: PropTypes.object,
 };
 
-export default function UserNewForm({ isEdit = false, currentUser }) {
-    const { push } = useRouter();
-    const { enqueueSnackbar } = useSnackbar();
+export default function UserNewForm({isEdit = false, currentUser}) {
+    const {push} = useRouter();
+    const {enqueueSnackbar} = useSnackbar();
 
     const validationSchema = (() => {
         if (!isEdit) {
@@ -71,8 +71,14 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                     .email("Email không đúng định dạng")
                     .max(255, "Vượt quá ký tự cho phép")
                     .required("Email không được trống"),
-                phone: Yup.string().required("Không được để trống").matches(/(0[0-9])+([0-9]{8})\b/g,"Số điện thoại phải theo định dạng Ví dụ: 0123456789"),
+                phone: Yup.string().required("Không được để trống").matches(/(0[0-9])+([0-9]{8})\b/g, "Số điện thoại phải theo định dạng Ví dụ: 0123456789"),
                 address: Yup.mixed().notRequired(),
+                id: Yup
+                    .array()
+                    .min(1),
+                items: Yup
+                    .array()
+                    .min(1),
             });
         } else {
             return Yup.object().shape({
@@ -83,8 +89,11 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                     .email("Email không đúng định dạng")
                     .max(255, "Vượt quá ký tự cho phép")
                     .required("Email không được trống"),
-                phone: Yup.string().required("Không được để trống").matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g,"Số điện thoại phải theo định dạng 0123456789"),
+                phone: Yup.string().required("Không được để trống").matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Số điện thoại phải theo định dạng 0123456789"),
                 address: Yup.mixed().notRequired(),
+                items: Yup
+                    .array()
+                    .min(1),
             });
         }
     })();
@@ -124,11 +133,11 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
         setValue,
         getValues,
         handleSubmit,
-        formState: { isSubmitting, errors },
+        formState: {isSubmitting, errors},
     } = methods;
     const values = watch();
 
-    const { fields, append, prepend, remove } = useFieldArray({
+    const {fields, append, prepend, remove} = useFieldArray({
         control,
         name: 'items',
     });
@@ -145,8 +154,8 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                         borderRadius: 0.75,
                         typography: 'body2',
                         textTransform: 'capitalize',
-                        '&:first-of-type': { mt: 0 },
-                        '&:last-of-type': { mb: 0 },
+                        '&:first-of-type': {mt: 0},
+                        '&:last-of-type': {mb: 0},
                     }}
                 >
                     {obj.name}
@@ -176,7 +185,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
     const [userSubjects, setUserSubjects] = useState([]);
 
     async function fetchRoles() {
-        const res = await getALlRoles({ pageIndex: 1, pageSize: 10 });
+        const res = await getALlRoles({pageIndex: 1, pageSize: 10});
         if (res.status < 400) {
             setUserRole(res.data.data);
         } else {
@@ -185,7 +194,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
     }
 
     async function fetchSubject() {
-        const res = await getAllSubject({ pageIndex: 1, pageSize: 100 });
+        const res = await getAllSubject({pageIndex: 1, pageSize: 100});
         if (res.status < 400) {
             setUserSubjects(res.data.data);
         } else {
@@ -228,11 +237,11 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                     enqueueSnackbar('Tạo người dùng thành công');
                     push(PATH_DASHBOARD.user.list);
                 } else {
-                    enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+                    enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
                 }
             } catch (error) {
                 console.log(error);
-                enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+                enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
             }
         } else {
             const res = await updateUser(currentUser.id, {
@@ -251,7 +260,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                 enqueueSnackbar('Cập nhật người dùng thành công');
                 push(PATH_DASHBOARD.user.list);
             } else {
-                enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+                enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
             }
         }
     };
@@ -281,7 +290,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Card sx={{ p: 3 }}>
+                    <Card sx={{p: 3}}>
                         <Box
                             rowGap={3}
                             columnGap={2}
@@ -292,12 +301,12 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                             }}
                         >
                             {!isEdit && (
-                                <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                                <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
                                     Tài khoản
                                 </Typography>
                             )}
                             {!isEdit && <div></div>}
-                            {!isEdit && <RHFTextField name="userName" label="Tên tài khoản" id="userName" />}
+                            {!isEdit && <RHFTextField name="userName" label="Tên tài khoản" id="userName"/>}
                             {!isEdit && (
                                 <RHFTextField
                                     name="password"
@@ -323,14 +332,14 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                                 />
                             )}
 
-                            <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                            <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
                                 Thông tin cá nhân
                             </Typography>
                             <div></div>
-                            <RHFTextField name="firstName" label="Họ" id="firstName" />
-                            <RHFTextField name="lastName" label="Tên" id="lastName" />
-                            <Stack sx={{ ml: 1.5 }}>
-                                <Typography variant="subtitle2" sx={{ color: 'text.secondary', mt: 1 }}>
+                            <RHFTextField name="firstName" label="Họ" id="firstName"/>
+                            <RHFTextField name="lastName" label="Tên" id="lastName"/>
+                            <Stack sx={{ml: 1.5}}>
+                                <Typography variant="subtitle2" sx={{color: 'text.secondary', mt: 1}}>
                                     Giới tính
                                 </Typography>
                                 <RHFRadioGroup
@@ -338,15 +347,15 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                                     options={GENDER_OPTION}
                                     sx={{
                                         mt: 0.5,
-                                        '& .MuiFormControlLabel-root': { mr: 4 },
+                                        '& .MuiFormControlLabel-root': {mr: 4},
                                     }}
                                 />
                             </Stack>
-                            <Stack sx={{ mt: 2.5 }}>
+                            <Stack sx={{mt: 2.5}}>
                                 <Controller
                                     name="birthDate"
                                     control={control}
-                                    render={({ field, fieldState: { error } }) => (
+                                    render={({field, fieldState: {error}}) => (
                                         <DatePicker
                                             label="Sinh nhật"
                                             value={field.value}
@@ -354,31 +363,32 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                                                 field.onChange(newValue);
                                             }}
                                             renderInput={(params) => (
-                                                <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
+                                                <TextField {...params} fullWidth error={!!error}
+                                                           helperText={error?.message}/>
                                             )}
                                         />
                                     )}
                                 />
                             </Stack>
-                            <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                            <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
                                 Thông tin liên hệ
                             </Typography>
 
                             <div></div>
-                            <RHFTextField name="email" label="Email" id="email" />
-                            <RHFTextField name="phone" label="Số điện thoại" id="phone" />
-                            <RHFTextField name="address" label="Địa chỉ" id="address" />
+                            <RHFTextField name="email" label="Email" id="email"/>
+                            <RHFTextField name="phone" label="Số điện thoại" id="phone"/>
+                            <RHFTextField name="address" label="Địa chỉ" id="address"/>
                         </Box>
                         <div></div>
-                        <Stack direction="row" spacing={1.5} sx={{ mt: 4 }}>
-                            <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
+                        <Stack direction="row" spacing={1.5} sx={{mt: 4}}>
+                            <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
                                 Cài đặt tài khoản
                             </Typography>
                             <Button
                                 size="small"
-                                sx={{ display: 'flex', justifyContent: 'flex-start' }}
+                                sx={{display: 'flex', justifyContent: 'flex-start'}}
                                 onClick={handleAdd}
-                                startIcon={<Iconify icon="eva:plus-fill" />}
+                                startIcon={<Iconify icon="eva:plus-fill"/>}
                             >
                                 Thêm bản ghi
                             </Button>
@@ -393,7 +403,7 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                                     <Controller
                                         name="enable"
                                         control={control}
-                                        render={({ field }) => (
+                                        render={({field}) => (
                                             <Switch
                                                 {...field}
                                                 checked={field.value !== 0}
@@ -404,15 +414,15 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                                 }
                                 label={
                                     <>
-                                        <Typography variant="subtitle2" sx={{ mb: 0.5, ml: 1 }}>
+                                        <Typography variant="subtitle2" sx={{mb: 0.5, ml: 1}}>
                                             Vô hiệu hóa/Kích hoạt
                                         </Typography>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
+                                        <Typography variant="body2" sx={{color: 'text.secondary', ml: 1}}>
                                             Xác nhận vô hiệu hóa/kích hoạt người dùng
                                         </Typography>
                                     </>
                                 }
-                                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+                                sx={{mx: 0, mb: 3, width: 1, justifyContent: 'space-between'}}
                             />
                         )}
 
@@ -421,32 +431,45 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                         {fields.map((item, index) => {
                             return (
                                 <div key={item.id}>
-                                    <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                                    <Stack direction="row" spacing={2} sx={{mt: 2}}>
                                         <Grid md={6}>
+                                            <FormControl
+                                                error={!!errors.id}
+                                                fullWidth
+                                            >
                                             <Controller
                                                 control={control}
                                                 name={`items[${index}].id`}
                                                 render={({
-                                                             field: { onChange, onBlur, value, name, ref },
-                                                             fieldState: { invalid, isTouched, isDirty, error },
+                                                             field: {onChange, onBlur, value, name, ref},
+                                                             fieldState: {invalid, isTouched, isDirty, error},
                                                              formState,
                                                          }) => {
                                                     return (
-                                                        <FormControl fullWidth size="medium">
-                                                            <InputLabel>Vai trò</InputLabel>
-                                                            <Select label="Vai trò" onChange={onChange} value={value}>
-                                                                {renderMenuItem(userRole)}
-                                                            </Select>
-                                                        </FormControl>
+                                                        <>
+                                                            <FormControl fullWidth size="medium">
+                                                                <InputLabel>Vai trò</InputLabel>
+                                                                <Select label="Vai trò" onChange={onChange}
+                                                                        value={value}>
+                                                                    {renderMenuItem(userRole)}
+                                                                </Select>
+                                                            </FormControl>
+                                                            {!!error && !value?.length && (
+                                                                <FormHelperText error>
+                                                                    Vai trò không được trống
+                                                                </FormHelperText>
+                                                            )}
+                                                        </>
                                                     );
                                                 }}
                                             />
+                                            </FormControl>
                                         </Grid>
                                         <Grid md={6}>
                                             <Controller
                                                 name={`items[${index}].subjects`}
                                                 control={control}
-                                                render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                                                render={({field: {onChange, onBlur, value, name, ref}}) => (
                                                     <Autocomplete
                                                         value={value}
                                                         disabled={
@@ -461,31 +484,39 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                                                         getOptionLabel={(option) => option.name}
                                                         renderTags={(value, getTagProps) =>
                                                             value.map((option, index) => (
-                                                                <Chip {...getTagProps({ index })} key={index} size="small" label={option.name} />
+                                                                <Chip {...getTagProps({index})} key={index} size="small"
+                                                                      label={option.name}/>
                                                             ))
                                                         }
-                                                        renderInput={(params) => <TextField label="Môn dạy" {...params} />}
+                                                        renderInput={(params) => <TextField
+                                                            label="Môn dạy" {...params} />}
                                                         onChange={(_, data) => onChange(data)}
                                                     />
                                                 )}
                                             />
                                         </Grid>
                                     </Stack>
-                                    <Stack direction="row" spacing={1.5} sx={{ mt: 1 }}>
+                                    <Stack direction="row" spacing={1.5} sx={{mt: 1}}>
                                         <Button
                                             size="small"
                                             color="error"
-                                            startIcon={<Iconify icon="eva:trash-2-outline" />}
+                                            startIcon={<Iconify icon="eva:trash-2-outline"/>}
                                             onClick={() => handleRemove(index)}
                                         >
                                             Gỡ bản ghi
                                         </Button>
                                     </Stack>
-                                    <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+                                    <Divider sx={{my: 3, borderStyle: 'dashed'}}/>
                                 </div>
+
                             );
                         })}
-                        <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                        {errors.items && (
+                            <FormHelperText error>
+                                Không được trống
+                            </FormHelperText>
+                        )}
+                        <Stack alignItems="flex-end" sx={{mt: 3}}>
                             <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                                 {!isEdit ? 'Tạo mới' : 'Cập nhật'}
                             </LoadingButton>

@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head';
 // @mui
-import { Container } from '@mui/material';
+import {Container, Grid} from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // layouts
@@ -11,15 +11,52 @@ import { useSettingsContext } from '../../../components/settings';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 // sections
 import ClassNewEditForm from '../../../sections/@dashboard/class/form/ClassNewEditForm';
+import CheckoutSteps from "../../../sections/@dashboard/class/form/NewClassSteps";
+import NewClassSteps from "../../../sections/@dashboard/class/form/NewClassSteps";
+import {ClassNewStudentExcel, ClassNewSubjectExcel} from "../../../sections/@dashboard/class/form";
+import {useSelector} from "react-redux";
+import ClassAddComplete from "../../../sections/@dashboard/class/form/ClassAddComplete";
+import {useRouter} from "next/router";
+import {dispatch} from "../../../redux/store";
+import {backStep, gotoStep, nextStep, resetAddClass} from "../../../redux/slices/class";
+import {useState} from "react";
 
 // ----------------------------------------------------------------------
 
 ClassCreatePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
+const STEPS = ['Thông tin cơ bản', 'Danh sách thành viên', 'Danh sách môn học'];
 
 export default function ClassCreatePage() {
   const { themeStretch } = useSettingsContext();
+  const { steps } = useSelector((state) => state.class);
+  const {replace} = useRouter();
+  const { activeStep } = steps;
+  const [formData,setFormData] = useState({})
+  const completed = activeStep === STEPS.length;
+
+  console.log('activeStep',activeStep)
+
+    const handleNextStep = () => {
+        dispatch(nextStep());
+    };
+
+    const handleBackStep = () => {
+        dispatch(backStep());
+    };
+
+    const handleGotoStep = (step) => {
+        dispatch(gotoStep(step));
+    };
+
+    const handleReset = () => {
+        if (completed) {
+            dispatch(resetAddClass());
+            replace(PATH_DASHBOARD.class.root);
+        }
+    };
+
 
   return (
     <>
@@ -44,7 +81,39 @@ export default function ClassCreatePage() {
             },
           ]}
         />
-        <ClassNewEditForm />
+          <Grid container justifyContent={completed ? 'center' : 'flex-start'}>
+              <Grid item xs={12}>
+                  <NewClassSteps activeStep={activeStep} steps={STEPS} />
+              </Grid>
+          </Grid>
+          {completed ? (
+              <ClassAddComplete open={completed} onReset={handleReset}/>
+          ) : (
+              <>
+                  {activeStep === 0 && (
+                      <ClassNewEditForm
+                          onNextStep={handleNextStep}
+                          setFormData={setFormData}
+                      />
+                  )}
+                  {activeStep === 1 && (
+                      <ClassNewStudentExcel
+                          onNextStep={handleNextStep}
+                          onBackStep={handleBackStep}
+                          setFormData={setFormData}
+
+                      />
+                  )}
+                  {activeStep === 2 && (
+                      <ClassNewSubjectExcel
+                          onBackStep={handleBackStep}
+                          onNextStep={handleNextStep}
+                          formData = {formData}
+                      />
+                  )}
+              </>
+          )}
+
       </Container>
     </>
   );

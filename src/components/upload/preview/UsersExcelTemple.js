@@ -43,7 +43,7 @@ export default function UsersExcelTemple({files, sx}) {
                 <FileThumbnail file={files}/>
                 <Stack flexGrow={1} sx={{minWidth: 0}}>
                     <Typography variant="subtitle2" noWrap>
-                        ImportManyUser.xlsx
+                        Danh sách mẫu.xlsx
                     </Typography>
                     <Typography variant="caption" sx={{color: 'text.secondary'}}>
                         {fData(9000)}

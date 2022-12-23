@@ -174,21 +174,7 @@ const slice = createSlice({
 // Reducer
 export default slice.reducer;
 
-// Actions
-export const {
-  getCart,
-  addToCart,
-  resetCart,
-  gotoStep,
-  backStep,
-  nextStep,
-  deleteCart,
-  createBilling,
-  applyShipping,
-  applyDiscount,
-  increaseQuantity,
-  decreaseQuantity,
-} = slice.actions;
+
 
 // ----------------------------------------------------------------------
 

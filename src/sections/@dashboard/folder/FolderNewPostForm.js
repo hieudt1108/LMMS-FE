@@ -152,7 +152,7 @@ export default function FolderNewPostForm({ data }) {
           newFolder.typeDocumentId = typeDocuments[index].typeDocumentInEachRecord[0].id;
         }
         if (!_.isEmpty(data.types)) {
-          newFolder.folderId = data.id;
+          newFolder.folderId = data.archiveFolderId;
         } else {
           enqueueSnackbar('Không xác định được thư mục lưu trữ tài liệu', { variant: 'error' });
           continue;

@@ -34,13 +34,13 @@ import { useSnackbar } from 'notistack';
 // };
 
 export default function UploadMyDocumentDialog({ open, onClose }) {
-  const { folderUploadDoc } = useSelector((state) => state.folder);
+  const { folderUploadDoc, storeFolder } = useSelector((state) => state.folder);
   const { enqueueSnackbar } = useSnackbar();
 
   const [currentTab, setCurrentTab] = useState(0);
 
   const handleUploadDocumentToStoreFolder = async (myDocumentId) => {
-    const message = await dispatch(copyDocsToStoreFolderRedux(folderUploadDoc.id, myDocumentId));
+    const message = await dispatch(copyDocsToStoreFolderRedux(storeFolder.id, myDocumentId));
     if (message) {
       enqueueSnackbar(message.title, { variant: message.variant });
     }
@@ -56,6 +56,7 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
           data={{
             handleUploadDocumentToStoreFolder,
             ...folderUploadDoc,
+            archiveFolderId: storeFolder.id,
             handleBackPage: () => {
               dispatch(getFolderRedux(folderUploadDoc.parentId, 'folderUploadDoc'));
             },
@@ -76,6 +77,7 @@ export default function UploadMyDocumentDialog({ open, onClose }) {
           data={{
             handleUploadDocumentToStoreFolder,
             ...folderUploadDoc,
+            archiveFolderId: storeFolder.id,
             handleBackPage: () => {
               dispatch(getFolderRedux(folderUploadDoc.parentId, 'folderUploadDoc'));
             },

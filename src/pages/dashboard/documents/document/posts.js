@@ -126,11 +126,7 @@ export default function DocumentPostsPage() {
     [filter]
   );
   const handlePageChange = useCallback(
-    async (event, pageIndex) => {
-      let response = await getDocumentShareWithMe({
-        ...filter,
-        pageIndex: pageIndex,
-      });
+    (event, pageIndex) => {
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]

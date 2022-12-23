@@ -125,7 +125,6 @@ export default function LevelListPage() {
     setOpenConfirm(false);
   };
 
-
   const handleFilterName = useCallback(
     (event) => {
       setFilter({ ...filter, searchByName: event.target.value });
@@ -173,7 +172,7 @@ export default function LevelListPage() {
   };
 
   const handlePageChange = useCallback(
-    async (event, pageIndex) => {
+    (event, pageIndex) => {
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]

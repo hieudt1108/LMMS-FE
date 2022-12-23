@@ -2,22 +2,18 @@ import PropTypes from 'prop-types';
 import { useCallback, useRef, useState } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Box, Stack, Paper, Avatar, Typography, CardHeader, Grid } from '@mui/material';
+import { Box, Stack, Paper, MenuItem, Typography, CardHeader, Grid, Button } from '@mui/material';
 // utils
 import { fDateTime } from '../../../../utils/formatTime';
 // components
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import SubjectImage from '../../../../utils/SubjectImage';
-import biology from '../../../../../public/assets/images/subjectlist/Biology.png';
-import MenuPopover from '../../../../components/menu-popover';
+
 import Iconify from '../../../../components/iconify';
 import useResponsive from '../../../../hooks/useResponsive';
-import FileThumbnail, { fileFormat } from '../../../../components/file-thumbnail';
-import { FileDetailsDrawer, FileShareDialog } from '../../file';
-import ConfirmDialog from '../../../../components/confirm-dialog';
+
 // import Image from '../../../../components/image';
-import Carousel, { CarouselArrows } from '../../../../components/carousel';
+
 // ----------------------------------------------------------------------
 
 ClassNewestBooking.propTypes = {
@@ -63,22 +59,15 @@ function BookingItem({ item }) {
 
   const { push } = useRouter();
   const isDesktop = useResponsive('up', 'sm');
-  const [openPopover, setOpenPopover] = useState(null);
 
   const handleOnClickSubject = () => {
     push(PATH_DASHBOARD.class.subject(class_id, subjectId));
   };
 
-  const handleOpenPopover = (event) => {
-    setOpenPopover(event.currentTarget);
-  };
-
-  const handleClosePopover = () => {
-    setOpenPopover(null);
-  };
-
   return (
-    <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
+    <Paper
+      sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral', display: 'flex', justifyContent: 'space-between' }}
+    >
       <Stack
         onClick={handleOnClickSubject}
         spacing={2.5}
@@ -116,6 +105,9 @@ function BookingItem({ item }) {
           </Stack>
         </Box>
       </Stack>
+      <Button>
+        <Iconify icon="eva:trash-2-outline" width={28} />
+      </Button>
     </Paper>
   );
 }

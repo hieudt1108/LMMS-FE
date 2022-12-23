@@ -167,7 +167,7 @@ export default function RolesListPage() {
   };
 
   const handlePageChange = useCallback(
-    async (event, pageIndex) => {
+    (event, pageIndex) => {
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]

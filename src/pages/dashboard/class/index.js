@@ -34,10 +34,14 @@ import { getGradesRedux } from 'src/redux/slices/grade';
 // PATH
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import { getFolderRedux } from 'src/redux/slices/folder';
+import { deleteClass } from '../../../dataProvider/agent';
+import { useSnackbar } from '../../../components/snackbar';
 
 Classes.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function Classes() {
   const dispatch = useDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const { pagging, classes } = useSelector((state) => state.class);
   const { programs } = useSelector((state) => state.program);
@@ -78,6 +82,15 @@ export default function Classes() {
     );
   });
 
+  const handlerDelete = async (id) => {
+    const res = await deleteClass(id);
+    if (res.status < 400) {
+      dispatch(getClassesRedux(pagingClass));
+      enqueueSnackbar('Xoá lớp thành công');
+    } else {
+      enqueueSnackbar('Xoá thất bại');
+    }
+  };
   const handleGradeChange = useCallback(
     async (event, value) => {
       setPagingClass({ ...pagingClass, gradeId: value.props.value.id });
@@ -202,7 +215,13 @@ export default function Classes() {
           {classes && classes.length ? (
             classes.map((obj, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
-                <ClassBanner data={obj} title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
+                <ClassBanner
+                  data={obj}
+                  title="Weekly Sales"
+                  handlerDelete={() => handlerDelete(obj.id)}
+                  total={714000}
+                  icon={'ant-design:android-filled'}
+                />
               </Grid>
             ))
           ) : (

@@ -12,7 +12,8 @@ import { PATH_DASHBOARD } from 'src/routes/paths';
 import MenuPopover from '../../../../components/menu-popover';
 import { Stack } from '@mui/system';
 // ----------------------------------------------------------------------
-
+// import { deleteClass } from '../../../../dataProvider/agent';
+// import { useSnackbar } from '../../../../components/snackbar';
 ClassBanner.propTypes = {
   sx: PropTypes.object,
   data: PropTypes.object,
@@ -24,6 +25,7 @@ export default function ClassBanner({
   data,
   color = data ? colors[Math.floor((data.gradeId - 1) / 5)] : 'primary',
   sx,
+  handlerDelete,
   ...other
 }) {
   const router = useRouter();
@@ -80,7 +82,7 @@ export default function ClassBanner({
           Cập nhật
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem onClick={handlerDelete} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" />
           Xóa
         </MenuItem>

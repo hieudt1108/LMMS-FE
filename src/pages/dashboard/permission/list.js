@@ -133,7 +133,7 @@ export default function PermissionListPage() {
   );
 
   const handlePageChange = useCallback(
-    async (event, pageIndex) => {
+    (event, pageIndex) => {
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]
@@ -254,7 +254,6 @@ export default function PermissionListPage() {
           </Box>
         </Card>
       </Container>
-
     </>
   );
 }

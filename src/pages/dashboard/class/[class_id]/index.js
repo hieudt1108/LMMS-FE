@@ -11,6 +11,8 @@ import DashboardLayout from '../../../../layouts/dashboard';
 import { _subjects, _subjectNew, _subjectsOverview, _subjectReview } from '../../../../_mock/arrays';
 // components
 import { useSettingsContext } from '../../../../components/settings';
+import { useSnackbar } from '../../../../components/snackbar';
+
 import Iconify from '../../../../components/iconify';
 // sections
 import { ClassWidgetSummary } from '../../../../sections/@dashboard/class';
@@ -22,9 +24,8 @@ import { BookingIllustration, CheckInIllustration, CheckOutIllustration } from '
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 //API
-import { getClassById } from '../../../../dataProvider/agent';
+import { getClassById, deleteSubjectInClass } from '../../../../dataProvider/agent';
 import ClassAddSubjectDialog from '../../../../sections/@dashboard/class/form/ClassAddSubjectDialog';
-import myclass from 'src/redux/slices/myclass';
 // ----------------------------------------------------------------------
 
 ClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -33,6 +34,8 @@ ClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function ClassDetail() {
   const router = useRouter();
   const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
+
   const {
     query: { class_id },
   } = useRouter();

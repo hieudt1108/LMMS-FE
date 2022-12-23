@@ -132,11 +132,11 @@ export default function GradeListPage() {
   };
 
   const handleFilterLevel = useCallback(
-      (event, newValue) => {
-        setFilter({...filter, levelId: newValue === 'all' ? '' : newValue});
-        setFilterLevel(newValue);
-      },
-      [filter]
+    (event, newValue) => {
+      setFilter({ ...filter, levelId: newValue === 'all' ? '' : newValue });
+      setFilterLevel(newValue);
+    },
+    [filter]
   );
 
   const handleFilterName = useCallback(
@@ -186,7 +186,7 @@ export default function GradeListPage() {
   };
 
   const handlePageChange = useCallback(
-    async (event, pageIndex) => {
+    (event, pageIndex) => {
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]

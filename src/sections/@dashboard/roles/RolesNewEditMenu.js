@@ -49,7 +49,7 @@ export default function RolesNewEditMenu({ selectedMenuItems, handleSelectedMenu
             <Stack sx={{ width: 1 }}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
                     <Typography variant="h6" sx={{ color: 'text.disabled', mb: 1 }}>
-                        Bao gồm những danh mục:
+                        Cho phép truy cập những danh mục:
                     </Typography>
 
                     <Button size="small" startIcon={<Iconify icon="eva:edit-fill" />} onClick={handleOpenForm}>

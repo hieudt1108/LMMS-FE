@@ -39,6 +39,8 @@ export default function AccountGeneral() {
   const UpdateUserSchema = Yup.object().shape({
     firstName: Yup.string().trim().required('Không được để trống'),
     lastName: Yup.string().trim().required('Không được để trống'),
+    phone: Yup.string().required("Không được để trống").matches(/(0[0-9])+([0-9]{8})\b/g,"Số điện thoại phải theo định dạng Ví dụ: 0123456789"),
+
   });
 
   const defaultValues = {
@@ -160,6 +162,7 @@ export default function AccountGeneral() {
               </Typography>
 
               <div></div>
+              <RHFTextField name="email" disabled label="Email" id="email" />
               <RHFTextField name="phone" label="Số điện thoại" id="phone" />
               <RHFTextField name="address" label="Địa chỉ" id="address" />
             </Box>

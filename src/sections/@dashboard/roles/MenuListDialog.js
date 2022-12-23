@@ -43,7 +43,7 @@ export default function MenuListDialog({ selectedMenuItems, menuItems, onClose, 
     }, [selectedMenuItems]);
 
     return (
-        <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
+        <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ pt: 2.5, px: 3 }}>
                 <Typography variant="h6"> Chọn quyền truy cập danh mục cho vai trò </Typography>
 

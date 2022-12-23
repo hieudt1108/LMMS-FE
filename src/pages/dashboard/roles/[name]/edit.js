@@ -62,7 +62,7 @@ export default function RolesEditPage() {
     }
 
     async function fetchMenu() {
-        const res = await getAllMenu({ pageIndex: 1, pageSize: 20 });
+        const res = await getAllMenu({ pageIndex: 1, pageSize: 100 });
         if (res.status < 400) {
             setMenu(res.data.data);
         } else {

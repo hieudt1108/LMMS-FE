@@ -8,7 +8,19 @@ import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 // @mui
 import {LoadingButton} from '@mui/lab';
-import {Box, Button, Card, Chip, Divider, Grid, MenuItem, Stack, TextField, Typography} from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  Chip,
+  Divider, FormControl,
+  FormHelperText,
+  Grid,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography
+} from '@mui/material';
 // utils
 // routes
 import {PATH_DASHBOARD} from '../../../routes/paths';
@@ -36,7 +48,13 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().trim().required('Tên vai trò không được trống'),
-    description: Yup.string().notRequired(),
+    description: Yup.string().trim().max(255, "Tối đa 255 ký tự"),
+    permissionId: Yup
+        .array().of(Yup.string())
+        .min(1),
+    menuId: Yup
+        .array().of(Yup.string())
+        .min(1),
   })
 
   const defaultValues = useMemo(
@@ -60,7 +78,7 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { errors,isSubmitting },
   } = methods;
 
 
@@ -159,16 +177,28 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
                     id="description"
 
                 />
-                <Controller
-                    name="permissionId"
-                    control={control}
-                    defaultValue={[]}
-                    render={({ field: { onChange, onBlur, value, name, ref } }) => {
-                      return (
-                          <RolesNewEditPermission selectedPermissions={value} permissions={permissions} handleSelectedPermission={handleSelectedPermission} />
-                      );
-                    }}
-                />
+                <FormControl
+                    error={!!errors.permissionId}
+                >
+                  <Controller
+                      name="permissionId"
+                      control={control}
+                      defaultValue={[]}
+                      render={({ field: { onChange, onBlur, value, name, ref } }) => {
+                        return (
+                            <RolesNewEditPermission selectedPermissions={value} permissions={permissions} handleSelectedPermission={handleSelectedPermission} />
+                        );
+                      }}
+                  />
+                  {errors.permissionId && (
+                      <FormHelperText error>
+                        Quyền không được trống
+                      </FormHelperText>
+                  )}
+                </FormControl>
+                <FormControl
+                    error={!!errors.menuId}
+                >
                 <Controller
                     name="menuId"
                     control={control}
@@ -179,6 +209,12 @@ export default function RolesNewEditForm({ isEdit = false, currentRoles, permiss
                       );
                     }}
                 />
+                  {errors.menuId && (
+                      <FormHelperText error>
+                        Danh mục không được trống
+                      </FormHelperText>
+                  )}
+                </FormControl>
 
               </Box>
 

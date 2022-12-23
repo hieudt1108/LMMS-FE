@@ -71,8 +71,8 @@ function getMenuItems() {
   return getApi('/Auth/getMenuItems');
 }
 
-function getAllMenu() {
-  return getApi('/Menu/getAll');
+function getAllMenu(params) {
+  return getApi('/Menu/getAll',params);
 }
 
 function getMenuById(id) {

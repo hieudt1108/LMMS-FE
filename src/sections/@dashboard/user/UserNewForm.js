@@ -58,19 +58,32 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
         if (!isEdit) {
             return Yup.object().shape({
                 userName: Yup.string().trim().required('Tên đăng nhập không được trống'),
-                password: Yup.string().trim().required('Mật khẩu không được trống'),
+                password: Yup.string()
+                    .required("Mật khẩu không được để trống")
+                    .matches(
+                        /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+                        "Mật khẩu phải có ít nhất 8 ký tự, một chữ hoa, một số và một ký tự chữ hoa đặc biệt"
+                    ),
                 firstName: Yup.string().trim().required('Không được để trống'),
                 lastName: Yup.string().trim().required('Không được để trống'),
-                email: Yup.string().trim().required('Không được để trống'),
-                phone: Yup.string().notRequired(),
+                email: Yup.string()
+                    .trim()
+                    .email("Email không đúng định dạng")
+                    .max(255, "Vượt quá ký tự cho phép")
+                    .required("Email không được trống"),
+                phone: Yup.string().required("Không được để trống").matches(/(0[0-9])+([0-9]{8})\b/g,"Số điện thoại phải theo định dạng Ví dụ: 0123456789"),
                 address: Yup.mixed().notRequired(),
             });
         } else {
             return Yup.object().shape({
                 firstName: Yup.string().trim().required('Không được để trống'),
                 lastName: Yup.string().trim().required('Không được để trống'),
-                email: Yup.string().trim().required('Không được để trống'),
-                phone: Yup.string().notRequired(),
+                email: Yup.string()
+                    .trim()
+                    .email("Email không đúng định dạng")
+                    .max(255, "Vượt quá ký tự cho phép")
+                    .required("Email không được trống"),
+                phone: Yup.string().required("Không được để trống").matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g,"Số điện thoại phải theo định dạng 0123456789"),
                 address: Yup.mixed().notRequired(),
             });
         }

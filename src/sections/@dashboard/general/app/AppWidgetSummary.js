@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Card, Typography, Stack } from '@mui/material';
+import { Box, Card, Typography, Stack, Avatar } from '@mui/material';
 // utils
 import { fNumber, fPercent } from '../../../../utils/formatNumber';
 // components
 import Iconify from '../../../../components/iconify';
 import Chart from '../../../../components/chart';
+// import Avatar from 'src/theme/overrides/Avatar';
 
 // ----------------------------------------------------------------------
 
@@ -18,81 +19,64 @@ AppWidgetSummary.propTypes = {
   percent: PropTypes.number,
 };
 
-export default function AppWidgetSummary({ title, percent, total, chart, sx, ...other }) {
-  const { colors, series, options } = chart;
-
-  const chartOptions = {
-    colors,
-    chart: {
-      sparkline: {
-        enabled: true,
-      },
-    },
-    plotOptions: {
-      bar: {
-        columnWidth: '68%',
-        borderRadius: 2,
-      },
-    },
-    tooltip: {
-      x: { show: false },
-      y: {
-        formatter: (value) => fNumber(value),
-        title: {
-          formatter: () => '',
-        },
-      },
-      marker: { show: false },
-    },
-    ...options,
-  };
-
+export default function AppWidgetSummary({ title, percent, src, total, chart, sx, ...other }) {
   return (
     <Card sx={{ display: 'flex', alignItems: 'center', p: 3, ...sx }} {...other}>
       <Box sx={{ flexGrow: 1 }}>
-        <Typography variant="subtitle2">{title}</Typography>
+        <Typography sx={{ mb: 1 }} variant="subtitle2">
+          {title}
+        </Typography>
 
-        <TrendingInfo percent={percent} />
+        <Box sx={{ display: 'flex', alignContent: 'center', alignItems: 'center' }}>
+          <Avatar
+            variant="rounded"
+            sx={{ bgcolor: 'background.neutral', width: 48, height: 48, borderRadius: 1.5, mr: 2 }}
+          >
+            {title === 'File khác' ? <>{src}</> : <Box sx={{ width: 36, height: 36 }} component="img" src={src} />}
+          </Avatar>
 
-        <Typography variant="h3">{fNumber(total)}</Typography>
+          {/* <TrendingInfo percent={percent} /> */}
+
+          <Typography variant="h4">{fNumber(total)}</Typography>
+        </Box>
       </Box>
 
-      <Chart type="bar" series={[{ data: series }]} options={chartOptions} width={60} height={36} />
+      {/* <Chart type="bar" series={[{ data: series }]} options={chartOptions} width={60} height={36} /> */}
     </Card>
   );
 }
 
 // ----------------------------------------------------------------------
 
-TrendingInfo.propTypes = {
-  percent: PropTypes.number,
-};
+// TrendingInfo.propTypes = {
+//   percent: PropTypes.number,
+// };
 
-function TrendingInfo({ percent }) {
-  return (
-    <Stack direction="row" alignItems="center" sx={{ mt: 2, mb: 1 }}>
-      <Iconify
-        icon={percent < 0 ? 'eva:trending-down-fill' : 'eva:trending-up-fill'}
-        sx={{
-          mr: 1,
-          p: 0.5,
-          width: 24,
-          height: 24,
-          borderRadius: '50%',
-          color: 'success.main',
-          bgcolor: (theme) => alpha(theme.palette.success.main, 0.16),
-          ...(percent < 0 && {
-            color: 'error.main',
-            bgcolor: (theme) => alpha(theme.palette.error.main, 0.16),
-          }),
-        }}
-      />
+// function TrendingInfo({ percent }) {
+//   return (
+//     <Stack direction="row" alignItems="center" sx={{ mt: 2, mb: 1 }}>
+//       <Iconify
+//         icon={percent < 0 ? 'eva:trending-down-fill' : 'eva:trending-up-fill'}
+//         sx={{
+//           mr: 1,
+//           p: 0.5,
+//           width: 24,
+//           height: 24,
+//           borderRadius: '50%',
+//           color: 'success.main',
+//           bgcolor: (theme) => alpha(theme.palette.success.main, 0.16),
+//           ...(percent < 0 && {
+//             color: 'error.main',
+//             bgcolor: (theme) => alpha(theme.palette.error.main, 0.16),
+//           }),
+//         }}
+//       />
 
-      <Typography component="div" variant="subtitle2">
-        {percent > 0 && '+'}
+//       <Typography component="div" variant="subtitle2">
+//         {percent > 0 && '+'}
 
-        {fPercent(percent)}
-      </Typography>
-    </Stack>
-  );
-}
+//         {fPercent(percent)}
+//       </Typography>
+//     </Stack>
+//   );
+// }

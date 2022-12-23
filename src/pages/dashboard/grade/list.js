@@ -181,11 +181,7 @@ export default function GradeListPage() {
   };
 
   const handlePageChange = useCallback(
-    async (event, pageIndex) => {
-      let response = await getAllGrade({
-        ...filter,
-        pageIndex: pageIndex,
-      });
+    (event, pageIndex) => {
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]

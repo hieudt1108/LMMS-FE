@@ -65,7 +65,14 @@ async function getApi(url, params) {
     return err;
   }
 }
+// REPORT
+function getReport() {
+  return getApi('/Report/getAll');
+}
 
+function getAllDocsReport(params) {
+  return getApi('/Report/getAllDocuments', params);
+}
 // PERM NAV MENU
 function getMenuItems() {
   return getApi('/Auth/getMenuItems');
@@ -348,7 +355,11 @@ async function deleteApi(url) {
 const deleteProgram = (id) => {
   return deleteApi(`Program/${id}`);
 };
-
+// CLASS
+const deleteClass = (id) => {
+  return deleteApi(`Class/${id}`);
+};
+//
 // DOCUMENT
 const deleteDocument = (id) => {
   return deleteApi(`Document/${id}`);
@@ -412,7 +423,10 @@ async function putApi(url, payload) {
     return err;
   }
 }
-
+// SUBJECT IN CLASS
+const deleteSubjectInClass = (id) => {
+  return putApi(`Class/removeSubject/${id}`);
+};
 // PROGRAM
 const updateProgram = (id, payload) => {
   return putApi(`Program/${id}`, payload);
@@ -584,4 +598,8 @@ export {
   deleteFolder,
   updateFolder,
   deleteDocumentInSubject,
+  getReport,
+  getAllDocsReport,
+  deleteClass,
+  deleteSubjectInClass,
 };

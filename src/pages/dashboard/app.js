@@ -2,7 +2,7 @@
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Container, Grid, Stack, Button } from '@mui/material';
+import { Container, Grid, Stack, Button, Typography } from '@mui/material';
 // auth
 import { useAuthContext } from '../../auth/useAuthContext';
 // layouts
@@ -11,21 +11,30 @@ import DashboardLayout from '../../layouts/dashboard';
 import { _appFeatured, _appAuthors, _appInstalled, _appRelated, _appInvoices } from '../../_mock/arrays';
 // components
 import { useSettingsContext } from '../../components/settings';
+import Iconify from '../../components/iconify';
 // sections
 import {
   AppWidget,
   AppWelcome,
   AppFeatured,
-  AppNewInvoice,
-  AppTopAuthors,
-  AppTopRelated,
-  AppAreaInstalled,
+  AppGetAllDocDetail,
   AppWidgetSummary,
   AppCurrentDownload,
   AppTopInstalledCountries,
 } from '../../sections/@dashboard/general/app';
 // assets
 import { SeoIllustration } from '../../assets/illustrations';
+// API
+import { getReport } from '../../dataProvider/agent';
+import { useEffect, useState } from 'react';
+// ICON
+// import IMG_IC from '/assets/icons/files/ic_img.svg';
+// import VIDEO_IC from '/assets/icons/files/ic_video.svg';
+// import DOCX_IC from '/assets/icons/files/ic_document.svg';
+// import AUDIO_IC from '/assets/icons/files/ic_audio.svg';
+// import OTHER_IC from '/assets/icons/files/ic_ai.svg';
+
+// import IMG from '/assets/icons/files/ic_img.svg';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +47,22 @@ export default function GeneralAppPage() {
 
   const theme = useTheme();
 
+  const [reports, setReport] = useState();
+
+  async function fetchReport() {
+    const res = await getReport();
+    if (res.status < 400) {
+      setReport(res.data.data);
+    } else if (res.response) {
+      console.log(`${res.response.status} !`);
+    }
+  }
+
+  console.log('reports: ', reports);
+
+  useEffect(() => {
+    fetchReport();
+  }, []);
   const { themeStretch } = useSettingsContext();
 
   return (
@@ -67,44 +92,64 @@ export default function GeneralAppPage() {
           <Grid item xs={12} md={4}>
             <AppFeatured list={_appFeatured} />
           </Grid>
+          <Grid item xs={12} md={12}>
+            <Typography variant="h4">Thống kê tổng số tài liệu</Typography>
+          </Grid>
 
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={2.4}>
             <AppWidgetSummary
-              title="Total Active Users"
+              title="File Docx"
               percent={2.6}
-              total={18765}
-              chart={{
-                colors: [theme.palette.primary.main],
-                series: [5, 18, 12, 51, 68, 11, 39, 37, 27, 20],
-              }}
+              src="/assets/icons/files/ic_document.svg"
+              total={reports?.typeOfDoc.docs}
             />
+          </Grid>
+
+          <Grid item xs={12} md={2.4}>
+            <AppWidgetSummary
+              title="File images"
+              percent={2.6}
+              src="/assets/icons/files/ic_img.svg"
+              total={reports?.typeOfDoc.image}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={2.4}>
+            <AppWidgetSummary
+              title="Files mp3"
+              percent={2.6}
+              src="/assets/icons/files/ic_audio.svg"
+              total={reports?.typeOfDoc.sound}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={2.4}>
+            <AppWidgetSummary
+              title="Videos"
+              percent={2.6}
+              src="/assets/icons/files/ic_video.svg"
+              total={reports?.typeOfDoc.videos}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={2.4}>
+            <AppWidgetSummary
+              title="File khác"
+              percent={2.6}
+              src={<Iconify icon="eva:file-fill" width={36} sx={{ color: 'text.disabled' }} />}
+              total={reports?.typeOfDoc.others}
+            />
+          </Grid>
+          {/* 
+          <Grid item xs={12} md={4}>
+            <AppWidgetSummary title="Total Installed" percent={0.2} total={4876} />
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <AppWidgetSummary
-              title="Total Installed"
-              percent={0.2}
-              total={4876}
-              chart={{
-                colors: [theme.palette.info.main],
-                series: [20, 41, 63, 33, 28, 35, 50, 46, 11, 26],
-              }}
-            />
-          </Grid>
+            <AppWidgetSummary title="Total Downloads" percent={-0.1} total={678} />
+          </Grid> */}
 
-          <Grid item xs={12} md={4}>
-            <AppWidgetSummary
-              title="Total Downloads"
-              percent={-0.1}
-              total={678}
-              chart={{
-                colors: [theme.palette.warning.main],
-                series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
-              }}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid item xs={12} md={12} lg={12}>
             <AppCurrentDownload
               title="Current Download"
               chart={{
@@ -113,8 +158,10 @@ export default function GeneralAppPage() {
                   theme.palette.info.main,
                   theme.palette.error.main,
                   theme.palette.warning.main,
+                  theme.palette.warning.main,
                 ],
                 series: [
+                  { label: 'Mac', value: 12244 },
                   { label: 'Mac', value: 12244 },
                   { label: 'Window', value: 53345 },
                   { label: 'iOS', value: 44313 },
@@ -123,8 +170,11 @@ export default function GeneralAppPage() {
               }}
             />
           </Grid>
+          <Grid item xs={12} md={12} lg={12}>
+            <AppGetAllDocDetail />
+          </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          {/* <Grid item xs={12} md={6} lg={8}>
             <AppAreaInstalled
               title="Area Installed"
               subheader="(+43%) than last year"
@@ -148,7 +198,7 @@ export default function GeneralAppPage() {
                 ],
               }}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </>

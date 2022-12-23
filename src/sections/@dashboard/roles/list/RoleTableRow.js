@@ -99,7 +99,7 @@ export default function RolesTableRow({ row, selected, onEditRow, onSelectRow, o
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Xóa cấp học"
+        title="Xóa vai trò"
         content="Bạn có chắc chắn muốn xóa?"
         action={
           <Button variant="contained" color="error" onClick={onDeleteRow}>

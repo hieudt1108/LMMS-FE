@@ -125,11 +125,6 @@ export default function LevelListPage() {
     setOpenConfirm(false);
   };
 
-  const handleFilterStatus = (event, newValue) => {
-    setPage(0);
-    setFilterStatus(newValue);
-  };
-
   const handleFilterName = useCallback(
     (event) => {
       setFilter({ ...filter, searchByName: event.target.value });

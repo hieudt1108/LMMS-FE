@@ -54,6 +54,7 @@ export default function FolderNewDocumentPostPage() {
         <FolderNewPostForm
           data={{
             ...folder,
+            archiveFolderId: folder.id,
             handleBackPage: () => {
               dispatch(getFolderRedux(folder.parentId, 'folder'));
             },

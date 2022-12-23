@@ -91,7 +91,7 @@ export default function ClassBanner({
         {data ? data.name : 'Undefined'}
       </Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.64 }}>
-        {data ? data.schoolYear : 'Undefined'}
+        {'Niên khóa: '}{data ? data.schoolYear : 'Undefined'}
       </Typography>
     </Card>
   );

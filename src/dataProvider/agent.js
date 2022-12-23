@@ -78,6 +78,14 @@ function getMenuItems() {
   return getApi('/Auth/getMenuItems');
 }
 
+function getAllMenu(params) {
+  return getApi('/Menu/getAll', params);
+}
+
+function getMenuById(id) {
+  return getApi(`/Menu/getOne/${id}`);
+}
+
 //class ADMIN
 function getAllClass(params) {
   return getApi('/Class/getAll', params);
@@ -196,8 +204,8 @@ function getAllPermission(params) {
 }
 
 // Folder
-function getFolderByID(id) {
-  return getApi(`/Folder/getOne/${id}`);
+function getFolderByID(params) {
+  return getApi(`/Folder/getOne/${params.folderId}?pageIndex=${params.CurrentPage}&pageSize=${params.PageSize}`);
 }
 
 // FILE
@@ -478,6 +486,14 @@ const updateTypeDocument = (id, payload) => {
   return putApi(`TypeDocument/${id}`, payload);
 };
 
+const addTypeDocumentToSubject = (id, subjectId) => {
+  return putApi(`TypeDocument/addTypeDocumentToSubject/${id}?subjectId=${subjectId}`);
+};
+
+const removeTypeDocumentToSubject = (id, subjectId) => {
+  return putApi(`TypeDocument/removeTypeDocumentToSubject/${id}?subjectId=${subjectId}`);
+};
+
 // USER
 const updateUser = (id, payload) => {
   return putApi(`User/${id}`, payload);
@@ -602,4 +618,8 @@ export {
   getAllDocsReport,
   deleteClass,
   deleteSubjectInClass,
+  addTypeDocumentToSubject,
+  removeTypeDocumentToSubject,
+  getAllMenu,
+  getMenuById,
 };

@@ -85,9 +85,9 @@ export default function FolderNewPostForm({ data }) {
           description: '',
           file: '',
           name: '',
-          programId: programs[0]?.id,
-          subjectId: user.subjects[0]?.id,
-          typeDocumentId: typeDocuments[0]?.typeDocumentInEachRecord[0]?.id,
+          programId: '',
+          subjectId: '',
+          typeDocumentId: '',
         },
       ],
     }),
@@ -152,7 +152,7 @@ export default function FolderNewPostForm({ data }) {
           newFolder.typeDocumentId = typeDocuments[index].typeDocumentInEachRecord[0].id;
         }
         if (!_.isEmpty(data.types)) {
-          newFolder.folderId = data.id;
+          newFolder.folderId = data.archiveFolderId;
         } else {
           enqueueSnackbar('Không xác định được thư mục lưu trữ tài liệu', { variant: 'error' });
           continue;
@@ -193,9 +193,9 @@ export default function FolderNewPostForm({ data }) {
       description: '',
       name: '',
       file: '',
-      programId: programs[0].id,
-      subjectId: user.subjects[0].id,
-      typeDocumentId: typeDocuments[fields.length]?.typeDocumentInEachRecord[0].id,
+      programId: '',
+      subjectId: '',
+      typeDocumentId: '',
     });
   };
 
@@ -311,7 +311,7 @@ export default function FolderNewPostForm({ data }) {
                     >
                       <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
                       <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
-                        {!_.isEmpty(typeDocuments[index]) &&
+                        {!_.isEmpty(typeDocuments[index].typeDocumentInEachRecord) &&
                           typeDocuments[index].typeDocumentInEachRecord.map((option) => (
                             <option key={option.id} value={option.id}>
                               {option.name}

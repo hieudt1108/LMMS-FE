@@ -100,13 +100,13 @@ export default function PermissionNewEditForm({ isEdit = false, currentPermissio
         const res = await createPermission(data)
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Create success!');
+          enqueueSnackbar('Tạo quyền thành công!');
           push(PATH_DASHBOARD.permission.list);
         } else {
-          enqueueSnackbar('Create Fail');
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Create Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra!', { variant: 'error' });
       }
     }else{
       try {
@@ -116,18 +116,16 @@ export default function PermissionNewEditForm({ isEdit = false, currentPermissio
         })
         if (res.status < 400) {
           reset();
-          enqueueSnackbar('Update success!');
+          enqueueSnackbar('Cập nhật quyền thành công!');
           push(PATH_DASHBOARD.permission.list);
         } else {
-          enqueueSnackbar('Update Fail');
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar('Update Fail');
+        enqueueSnackbar('Đã có lỗi xảy ra!', { variant: 'error' });
       }
     }
-
   };
-
 
   return (
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -140,21 +138,15 @@ export default function PermissionNewEditForm({ isEdit = false, currentPermissio
                   display="grid"
                   gridTemplateColumns={{
                     xs: 'repeat(1, 1fr)',
-                    sm: 'repeat(2, 1fr)',
+                    sm: 'repeat(1, 1fr)',
                   }}
               >
                 <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
                   Thông tin quyền
                 </Typography>
-                <div></div>
-                <RHFTextField
-                    name="name"
-                    label="Tên quyền"
-                    id="name"
-                />
                 <RHFTextField
                     name="description"
-                    label="Mô tả"
+                    label="Mô tả quyền"
                     id="description"
 
                 />

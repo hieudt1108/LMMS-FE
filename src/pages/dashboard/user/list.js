@@ -45,7 +45,7 @@ import {
 } from '../../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
-import { deleteUser, getALlRoles, getAllUsers } from '../../../dataProvider/agent';
+import { deleteUser, getAllPermission, getALlRoles, getAllUsers } from '../../../dataProvider/agent';
 import { useSnackbar } from '../../../components/snackbar';
 import error from 'eslint-plugin-react/lib/util/error';
 import Label from '../../../components/label';
@@ -110,6 +110,8 @@ export default function UserListPage() {
 
   const [openUploadFile, setOpenUploadFile] = useState(false);
 
+  const [paging, setPaging] = useState();
+
   const initialFilter = {
     pageIndex: 1,
     pageSize: 5,
@@ -118,7 +120,7 @@ export default function UserListPage() {
   };
 
   const [filter, setFilter] = useState(initialFilter);
-  const [paging, setPaging] = useState();
+
   const [listUsers, setListUsers] = useState([]);
   const [role, setSelectedRole] = useState('all');
   const [filterByEmail, setFilterByEmail] = useState('');
@@ -198,7 +200,7 @@ export default function UserListPage() {
   }
 
   const handlePageChange = useCallback(
-    (event, pageIndex) => {
+    async (event, pageIndex) => {
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]
@@ -211,10 +213,12 @@ export default function UserListPage() {
     [filter]
   );
 
-  const handleChangeRoles = (event) => {
-    setFilter({ ...filter, roleId: event.target.value === 'all' ? '' : event.target.value });
-    setSelectedRole(event.target.value);
-  };
+  const handleChangeRoles = useCallback(
+    (event) => {
+      setFilter({ ...filter, roleId: event.target.value === 'all' ? '' : event.target.value });
+    },
+    [filter]
+  );
 
   const handleResetFilter = () => {
     setSelectedRole('all');
@@ -249,11 +253,7 @@ export default function UserListPage() {
       <Container maxWidth={'xl'}>
         <CustomBreadcrumbs
           heading="Danh sách người dùng"
-          links={[
-            { name: 'Trang chủ', href: PATH_DASHBOARD.root },
-            { name: 'Người dùng', href: PATH_DASHBOARD.user.root },
-            { name: 'Danh sách' },
-          ]}
+          links={[{ name: 'Trang chủ', href: PATH_DASHBOARD.root }, { name: 'Danh sách người dùng' }]}
           action={
             <NextLink href={PATH_DASHBOARD.user.new} passHref>
               <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
@@ -350,24 +350,11 @@ export default function UserListPage() {
             <Pagination
               size="small"
               count={paging?.TotalPages}
-              rowsperpage={filter.pageSize}
+              rowsperpage={paging?.PageSize}
               onChange={handlePageChange}
               color="primary"
             />
           </Box>
-
-          {/*
-          <TablePaginationCustom
-            labelRowsPerPage="Hàng trên mỗi trang"
-            // count={paging?.TotalCount}
-            count={100}
-            page={filter?.pageIndex}
-            rowsPerPage={filter.pageSize}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            dense={dense}
-            onChangeDense={onChangeDense}
-          /> */}
         </Card>
       </Container>
       <FileNewUserDialog open={openUploadFile} onClose={handleCloseUploadFile} />
@@ -392,5 +379,3 @@ export default function UserListPage() {
     </>
   );
 }
-
-// ----------------------------------------------------------------------

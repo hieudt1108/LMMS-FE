@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 // next
 import { useRouter } from 'next/router';
 // form
@@ -24,6 +24,7 @@ import { getGradesRedux } from 'src/redux/slices/grade';
 
 // API
 import {createGrade, postClass, updateClass, updateGrade} from '../../../../dataProvider/agent';
+import {Upload} from "../../../../components/upload";
 
 // ----------------------------------------------------------------------
 
@@ -269,7 +270,34 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
                     </MenuItem>
                 ))}
               </RHFSelect>
-
+              {/*<Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>*/}
+              {/*  Danh sách học sinh*/}
+              {/*</Typography>*/}
+              {/*<div></div>*/}
+              {/*<Upload*/}
+              {/*    onCLick={() => {*/}
+              {/*      console.log('upload');*/}
+              {/*    }}*/}
+              {/*    multiple*/}
+              {/*    name=''*/}
+              {/*    indexLocal={index}*/}
+              {/*    error={getValues(`items[${index}].file`) === ''}*/}
+              {/*    files={*/}
+              {/*      getValues(`items[${index}].file`)*/}
+              {/*          ? [*/}
+              {/*            Object.assign(getValues(`items[${index}].file`), {*/}
+              {/*              preview: URL.createObjectURL(Object.assign(getValues(`items[${index}].file`))),*/}
+              {/*            }),*/}
+              {/*          ]*/}
+              {/*          : []*/}
+              {/*    }*/}
+              {/*    handleDrop={handleDrop}*/}
+              {/*    onRemove={handleRemoveFile}*/}
+              {/*/>*/}
+              {/*<Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>*/}
+              {/*  Danh sách môn học*/}
+              {/*</Typography>*/}
+              {/*<div></div>*/}
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

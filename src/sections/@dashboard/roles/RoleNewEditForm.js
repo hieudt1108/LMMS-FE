@@ -115,7 +115,7 @@ export default function RolesNewEditForm({isEdit = false, currentRoles, permissi
         } else {
             try {
                 // return console.log('Form data', data);
-                const res = await updateSubject(currentRoles.id, {
+                const res = await updateRole(currentRoles.id, {
                     name: data.name,
                     description: data.description,
                     permissionId: data.permissionId?.map((perm) => perm.id),

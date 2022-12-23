@@ -16,7 +16,7 @@ import {
     Divider,
     FormControl,
     FormControlLabel,
-    Grid,
+    Grid, IconButton,
     InputAdornment,
     InputLabel,
     MenuItem,
@@ -37,7 +37,6 @@ import FormProvider, { RHFAutocomplete, RHFRadioGroup, RHFTextField } from '../.
 import Iconify from '../../../components/iconify';
 import { useSnackbar } from '../../../components/snackbar';
 import { getALlRoles, getAllSubject, updateUser, createUserAuth } from '../../../dataProvider/agent';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {yupResolver} from "@hookform/resolvers/yup";
 
 // ----------------------------------------------------------------------
@@ -295,11 +294,16 @@ export default function UserNewForm({ isEdit = false, currentUser }) {
                                     InputProps={{
                                         endAdornment: (
                                             <InputAdornment position="end">
-                                                {showPassword ? (
-                                                    <Visibility onClick={togglePasswordVisibility} />
-                                                ) : (
-                                                    <VisibilityOff onClick={togglePasswordVisibility} />
-                                                )}
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={togglePasswordVisibility}
+                                                    edge="end"
+                                                    size="large"
+                                                    color="secondary"
+                                                >
+                                                    <Iconify
+                                                        icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'}/>
+                                                </IconButton>
                                             </InputAdornment>
                                         ),
                                     }}

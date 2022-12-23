@@ -16,7 +16,13 @@ import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
 import RoleNewEditForm from '../../../../sections/@dashboard/roles/RoleNewEditForm';
 import {useEffect, useState} from "react";
-import {getAllPermission, getAllSlot, getRoleById, getTypeDocumentById} from "../../../../dataProvider/agent";
+import {
+    getAllMenu,
+    getAllPermission,
+    getAllSlot,
+    getRoleById,
+    getTypeDocumentById
+} from "../../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +40,7 @@ export default function RolesEditPage() {
 
     const [rolesData, setRolesData] = useState([]);
     const [permissions, setPermissions] = useState([]);
-
+    const [menu, setMenu] = useState([]);
 
     async function fetchRoles() {
         const res = await getRoleById(name);
@@ -55,9 +61,19 @@ export default function RolesEditPage() {
         }
     }
 
+    async function fetchMenu() {
+        const res = await getAllMenu({ pageIndex: 1, pageSize: 20 });
+        if (res.status < 400) {
+            setMenu(res.data.data);
+        } else {
+            console.log('error');
+        }
+    }
+
     useEffect(() => {
         fetchRoles();
         fetchPermission();
+        fetchMenu();
     }, []);
 
   return (
@@ -82,7 +98,7 @@ export default function RolesEditPage() {
           ]}
         />
 
-        <RoleNewEditForm isEdit currentRoles={rolesData} permissions={permissions} />
+        <RoleNewEditForm isEdit currentRoles={rolesData} permissions={permissions} menu={menu} />
       </Container>
     </>
   );

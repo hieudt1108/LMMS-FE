@@ -71,6 +71,14 @@ function getMenuItems() {
   return getApi('/Auth/getMenuItems');
 }
 
+function getAllMenu() {
+  return getApi('/Menu/getAll');
+}
+
+function getMenuById(id) {
+  return getApi(`/Menu/getOne/${id}`);
+}
+
 //class ADMIN
 function getAllClass(params) {
   return getApi('/Class/getAll', params);
@@ -594,4 +602,6 @@ export {
   deleteDocumentInSubject,
   addTypeDocumentToSubject,
   removeTypeDocumentToSubject,
+  getAllMenu,
+  getMenuById,
 };

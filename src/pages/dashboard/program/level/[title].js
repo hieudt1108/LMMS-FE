@@ -49,10 +49,12 @@ LevelLayout.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function LevelLayout() {
   const { themeStretch } = useSettingsContext();
 
-  const { SUBJECTS } = useAuthContext();
+  const { user } = useAuthContext();
   const {
     query: { title },
   } = useRouter();
+
+  console.log('Tài liệu tổng hợp:', user);
 
   const [filter, setFilter] = useState({
     pageIndex: 1,
@@ -193,7 +195,11 @@ export default function LevelLayout() {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {renderMenuItem(SUBJECTS)}
+                {user.subjectTypeDocument?.map((obj, index) => (
+                  <MenuItem value={obj.subject} key={index}>
+                    {obj.subject.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>

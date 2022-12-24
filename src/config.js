@@ -9,6 +9,8 @@ export const PAGE_SIZE = 7;
 export const ROLES_CODE = {
   STUDENT: 'HOCSINH',
   TEACHER: 'TEACHER',
+  ADMIN: 'ADMIN',
+  GVCHUNHIEM: 'GVCHUNHIEM',
 };
 
 export const COGNITO_API = {

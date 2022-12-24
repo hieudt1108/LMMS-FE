@@ -128,11 +128,11 @@ export default function FolderNewPostForm({ classID }) {
     }
     console.log('dataPayload: ', dataPayload);
     const response = await updateClassMember(classID, dataPayload);
-    console.log('response: ', response);
-    if (response instanceof Error) {
-      enqueueSnackbar(`Thêm  thất bại`, { variant: 'error' });
+    console.log('response: ', response.response.data.tite);
+    if (response) {
+      enqueueSnackbar(response.response.data.tite, { variant: 'error' });
     } else {
-      enqueueSnackbar(`Thêm thành công `, { variant: 'success' });
+      enqueueSnackbar(response.response.data.tite, { variant: 'success' });
     }
   };
 

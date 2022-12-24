@@ -181,9 +181,6 @@ export default function FolderNewPostForm({ data }) {
     console.log('handleRemoveFile', indexLocal);
     setValue(`items[${indexLocal}].file`, '');
     setFile('');
-    // const filtered = files.filter((file) => file !== inputFile);
-    // setFiles(filtered);
-    // setValue('file', []);
   };
 
   const handleAdd = async () => {

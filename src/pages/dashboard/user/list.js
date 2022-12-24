@@ -51,6 +51,7 @@ import error from 'eslint-plugin-react/lib/util/error';
 import Label from '../../../components/label';
 import FileNewUserDialog from '../../../sections/@dashboard/file/portal/FileNewUsersDialog';
 import { useMemo } from 'react';
+import { async } from '@firebase/util';
 
 // ----------------------------------------------------------------------
 
@@ -200,7 +201,7 @@ export default function UserListPage() {
   }
 
   const handlePageChange = useCallback(
-    async (event, pageIndex) => {
+    (event, pageIndex) => {
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]
@@ -214,7 +215,7 @@ export default function UserListPage() {
   );
 
   const handleChangeRoles = useCallback(
-    (event) => {
+    async (event, value) => {
       setFilter({ ...filter, roleId: event.target.value === 'all' ? '' : event.target.value });
     },
     [filter]

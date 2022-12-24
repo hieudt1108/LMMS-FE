@@ -31,7 +31,6 @@ import Iconify from "../../../../components/iconify";
 
 ClassNewSubjectExcel.propTypes = {
   onNextStep: PropTypes.func,
-  formData: PropTypes.object,
   onBackStep: PropTypes.func,
 };
 
@@ -39,7 +38,6 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
   const { push } = useRouter();
   const dispatch = useDispatch();
   const [fileSubject, setFileSubject] = useState([]);
-
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
@@ -70,19 +68,44 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
 
   const handleDrop = (acceptedFiles) => {
     try {
-      setValue('fileSubject', acceptedFiles);
-      setFileSubject(acceptedFiles);
+      setValue(`fileSubject`, acceptedFiles[0]);
+      setFileSubject(acceptedFiles[0]);
     } catch (error) {
       console.error('handleDrop', error);
     }
   };
+
   const handleRemoveFile = () => {
-    setValue('fileSubject', '');
-    setFileSubject([]);
+    setValue(`fileSubject`, '');
+    setFileSubject('');
+
   };
 
   const onSubmit = async (data) => {
-    onNextStep();
+    const dataClass = {
+      code: formData?.code,
+      name: formData?.name,
+      size: formData?.size,
+      gradeId: formData?.gradeId,
+      programId: formData?.programId,
+      schoolYear: formData?.schoolYear,
+    }
+    const fileStudentExcel = formData?.file
+    console.log('dataClass',dataClass)
+    console.log('fileStudentExcel',fileStudentExcel)
+    console.log('fileSubjectExcel',data)
+      // try {
+      //   const res = await postClass(dataClass)
+      //   if (res.status < 400) {
+      //     enqueueSnackbar('Tạo lớp học thành công');
+      //
+      //   } else {
+      //     enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+      //   }
+      // } catch (error) {
+      //   enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+      // }
+    // onNextStep();
   };
 
 
@@ -102,22 +125,22 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
                   }}
               >
                 <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
-                  Danh sách môn học {JSON.stringify(formData)}
+                  Danh sách môn học
                 </Typography>
                 <Upload
-                    hasDefault
-                    defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportSubjectClass.xlsx'}
                     onCLick={() => {
                       console.log('upload');
                     }}
+                    hasDefault
+                    defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportSubjectClass.xlsx'}
                     multiple
-                    name='fileSubject'
-                    error={getValues('fileSubject') === ''}
+                    name={`fileSubject`}
+                    error={getValues(`fileSubject`) === ''}
                     files={
-                      getValues('fileSubject')
+                      getValues(`fileSubject`)
                           ? [
-                            Object.assign(getValues('fileSubject'), {
-                              preview: URL.createObjectURL(Object.assign(getValues('fileSubject'))),
+                            Object.assign(getValues(`fileSubject`), {
+                              preview: URL.createObjectURL(Object.assign(getValues(`fileSubject`))),
                             }),
                           ]
                           : []

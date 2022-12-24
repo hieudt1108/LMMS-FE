@@ -52,19 +52,9 @@ export default function ClassNewEditForm({ isEdit = false, currentClass, onNextS
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    code: Yup.string().required('Code is required'),
-    size: Yup.number()
-        .required('ERROR: The number is required!')
-        .test('Is positive?', 'ERROR: The number must be greater than 0!', (value) => value > 0),
-    schoolYear: Yup.string().required('School Year is required'),
-    gradeId: Yup.number()
-        .required('ERROR: The number is required!')
-        .test('Is positive?', 'ERROR: The number must be greater than 0!', (value) => value > 0),
-    programId: Yup.number()
-        .required('ERROR: The number is required!')
-        .test('Is positive?', 'ERROR: The number must be greater than 0!', (value) => value > 0),
-
+    name: Yup.string().required('Không được trống'),
+    code: Yup.string().required('Không được trống'),
+    size: Yup.number().required('Không được trống'),
   })
 
   const defaultValues = useMemo(
@@ -80,7 +70,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass, onNextS
   );
 
   const methods = useForm({
-    // resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema),
     defaultValues,
   });
 

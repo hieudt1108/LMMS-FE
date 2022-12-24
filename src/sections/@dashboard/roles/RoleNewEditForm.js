@@ -166,6 +166,7 @@ export default function RolesNewEditForm({isEdit = false, currentRoles, permissi
                             </Typography>
                             <div></div>
                             <RHFTextField
+                                required
                                 name="name"
                                 label="Tên vai trò"
                                 id="name"

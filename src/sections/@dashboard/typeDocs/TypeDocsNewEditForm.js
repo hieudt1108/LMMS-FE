@@ -114,6 +114,7 @@ export default function TypeDocsNewEditForm({ isEdit = false, currentTypeDocs })
                 <Stack alignItems="flex-end" spacing={1.5}>
                   <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                     <RHFTextField
+                        required
                         name="name"
                         label="Tên loại tài liệu"
                         id="name"

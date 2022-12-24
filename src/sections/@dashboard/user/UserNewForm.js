@@ -306,12 +306,13 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                                 </Typography>
                             )}
                             {!isEdit && <div></div>}
-                            {!isEdit && <RHFTextField name="userName" label="Tên tài khoản" id="userName"/>}
+                            {!isEdit && <RHFTextField name="userName" required label="Tên tài khoản" id="userName"/>}
                             {!isEdit && (
                                 <RHFTextField
                                     name="password"
                                     type={showPassword ? 'text' : 'password'}
                                     label="Mật khẩu"
+                                    required
                                     id="password"
                                     InputProps={{
                                         endAdornment: (
@@ -336,8 +337,8 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                                 Thông tin cá nhân
                             </Typography>
                             <div></div>
-                            <RHFTextField name="firstName" label="Họ" id="firstName"/>
-                            <RHFTextField name="lastName" label="Tên" id="lastName"/>
+                            <RHFTextField name="firstName" required label="Họ" id="firstName"/>
+                            <RHFTextField name="lastName" required label="Tên" id="lastName"/>
                             <Stack sx={{ml: 1.5}}>
                                 <Typography variant="subtitle2" sx={{color: 'text.secondary', mt: 1}}>
                                     Giới tính
@@ -375,7 +376,7 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                             </Typography>
 
                             <div></div>
-                            <RHFTextField name="email" label="Email" id="email"/>
+                            <RHFTextField name="email" required label="Email" id="email"/>
                             <RHFTextField name="phone" label="Số điện thoại" id="phone"/>
                             <RHFTextField name="address" label="Địa chỉ" id="address"/>
                         </Box>

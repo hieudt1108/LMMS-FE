@@ -104,9 +104,7 @@ export default function GeneralAppPage() {
       pageSize: 100,
     });
     if (res.status < 400) {
-      setPaging(JSON.parse(res.headers['x-pagination']));
-
-      setTypeDoc(res.data);
+      setTypeDoc(res.data.data);
     } else {
       console.log(res.message);
     }
@@ -138,12 +136,14 @@ export default function GeneralAppPage() {
   async function fetchReportDoc() {
     const res = await getAllDocsReport(filters);
     if (res.status < 400) {
+      setPaging(JSON.parse(res.headers['x-pagination']));
+
       setReportDocs(res.data.data);
     } else if (res.response) {
       console.log(`${res.response.status} !`);
     }
   }
-  console.log('reportDocs: ', reportDocs);
+  console.log('reportDocs: ', paging);
 
   const handleSearchChange = useCallback(
     (event, value) => {
@@ -197,6 +197,8 @@ export default function GeneralAppPage() {
       </MenuItem>
     );
   });
+
+  console.log('typedoc: ', typeDocs);
 
   const { themeStretch } = useSettingsContext();
 
@@ -296,9 +298,9 @@ export default function GeneralAppPage() {
               }}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          {/* <Grid item xs={12} md={6} lg={6}>
             <AppTopRelated title="Top Related Applications" list={_appRelated} />
-          </Grid>
+          </Grid> */}
 
           {/* 
           <Grid item xs={12} md={4}>
@@ -342,7 +344,7 @@ export default function GeneralAppPage() {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    {renderMenuItem(typeDocs)}
+                    {renderMenuItem(subjects)}
                   </Select>
                 </FormControl>
                 <FormControl sx={{ minWidth: 170 }} size="small">
@@ -351,7 +353,7 @@ export default function GeneralAppPage() {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    {renderMenuItem(subjects)}
+                    {renderMenuItem(typeDocs)}
                   </Select>
                 </FormControl>
               </Stack>

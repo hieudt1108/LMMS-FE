@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import Iconify from '../../../../components/iconify';
 
-export default function ManageUser({ myClass }) {
+export default function ManageUser({ myClass, user }) {
   const {
     query: { myclass_id },
   } = useRouter();
@@ -19,6 +19,7 @@ export default function ManageUser({ myClass }) {
           <CLassDetails
             title="Thông tin học sinh"
             myClass={myClass}
+            user={user}
             tableLabels={[
               { id: 'STT', label: '' },
               { id: 'name', label: 'Họ và tên' },
@@ -33,6 +34,7 @@ export default function ManageUser({ myClass }) {
           <ClassTeacher
             title="Thông tin giáo viên"
             myClass={myClass}
+            user={user}
             tableLabels={[
               { id: 'STT', label: '' },
               { id: 'name', label: 'Họ và tên' },

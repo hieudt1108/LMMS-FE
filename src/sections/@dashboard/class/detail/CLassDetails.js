@@ -39,7 +39,7 @@ CLassDetails.propTypes = {
   tableLabels: PropTypes.array,
 };
 
-export default function CLassDetails({ myClass, title, subheader, tableLabels, tableData, ...other }) {
+export default function CLassDetails({ myClass, user, title, subheader, tableLabels, tableData, ...other }) {
   const {
     query: { myclass_id },
   } = useRouter();
@@ -61,7 +61,7 @@ export default function CLassDetails({ myClass, title, subheader, tableLabels, t
 
             <TableBody>
               {myClass?.members?.map((row, index) => (
-                <BookingDetailsRow key={index} row={row} />
+                <BookingDetailsRow user={user} key={index} row={row} />
               ))}
             </TableBody>
           </Table>
@@ -81,7 +81,7 @@ export default function CLassDetails({ myClass, title, subheader, tableLabels, t
 
 // ----------------------------------------------------------------------
 
-function BookingDetailsRow({ row }) {
+function BookingDetailsRow({ row, user }) {
   const theme = useTheme();
 
   const isLight = theme.palette.mode === 'light';
@@ -140,14 +140,18 @@ function BookingDetailsRow({ row }) {
         )
       )}
 
-      <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
-        <Divider sx={{ borderStyle: 'dashed' }} />
+      {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
+        <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
+          <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" />
-          Xóa
-        </MenuItem>
-      </MenuPopover>
+          <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+            <Iconify icon="eva:trash-2-outline" />
+            Xóa
+          </MenuItem>
+        </MenuPopover>
+      ) : (
+        ''
+      )}
     </>
   );
 }

@@ -54,7 +54,7 @@ AppWelcome.propTypes = {
   description: PropTypes.string,
 };
 
-export default function AppWelcome({ title, description, action, img, ...other }) {
+export default function AppWelcome({ title, description, action, user, img, ...other }) {
   return (
     <StyledRoot {...other}>
       <Stack
@@ -75,8 +75,11 @@ export default function AppWelcome({ title, description, action, img, ...other }
         <Typography paragraph variant="h6" sx={{ whiteSpace: 'pre-line' }}>
           {description}
         </Typography>
-
-        {action && action}
+        {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
+          <> {action && action}</>
+        ) : (
+          ''
+        )}
       </Stack>
 
       {img && img}

@@ -34,6 +34,7 @@ export const PATH_PAGE = {
 
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
+  home: path(ROOTS_DASHBOARD, '/home'),
   fileManager: path(ROOTS_DASHBOARD, '/files-manager'),
   permissionDenied: path(ROOTS_DASHBOARD, '/permission-denied'),
   blank: path(ROOTS_DASHBOARD, '/blank'),

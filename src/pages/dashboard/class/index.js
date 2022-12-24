@@ -36,6 +36,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import { getFolderRedux } from 'src/redux/slices/folder';
 import { deleteClass } from '../../../dataProvider/agent';
 import { useSnackbar } from '../../../components/snackbar';
+import EmptyContent from "../../../components/empty-content";
 
 Classes.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function Classes() {
@@ -225,8 +226,13 @@ export default function Classes() {
               </Grid>
             ))
           ) : (
-            <Grid item xs={12} sm={6} md={4}>
-              <Alert severity="error">This is an error !</Alert>
+            <Grid item xs={12} >
+                <EmptyContent
+                    title="Không có dữ liệu"
+                    sx={{
+                        '& span.MuiBox-root': { height: 160 },
+                    }}
+                />
             </Grid>
           )}
         </Grid>

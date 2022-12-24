@@ -25,6 +25,9 @@ const initialState = {
     programId: '',
     program: {},
   },
+  steps:{
+    activeStep: 0,
+  }
 };
 
 const slice = createSlice({
@@ -58,11 +61,36 @@ const slice = createSlice({
       state.classObj = { ...state.classObj, ...action.payload, teachers, students };
       console.log('getClassSuccess', state.classObj);
     },
+
+    resetAddClass(state) {
+      state.steps.activeStep = 0;
+    },
+
+    backStep(state) {
+      state.steps.activeStep -= 1;
+    },
+
+    nextStep(state) {
+      state.steps.activeStep += 1;
+    },
+
+    gotoStep(state, action) {
+      const step = action.payload;
+      state.steps.activeStep = step;
+    },
+
   },
 });
 
 // Reducer
 export default slice.reducer;
+
+export const {
+  resetAddClass,
+  gotoStep,
+  backStep,
+  nextStep,
+} = slice.actions;
 
 // ----------------------------------------------------------------------
 

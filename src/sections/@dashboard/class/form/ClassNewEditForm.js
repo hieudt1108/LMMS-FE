@@ -31,9 +31,12 @@ import {Upload} from "../../../../components/upload";
 ClassNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
   currentClass: PropTypes.object,
+  onSubmitData: PropTypes.func,
+  onNextStep: PropTypes.func,
+  setFormData: PropTypes.func,
 };
 
-export default function ClassNewEditForm({ isEdit = false, currentClass }) {
+export default function ClassNewEditForm({ isEdit = false, currentClass, onNextStep, onSubmitData,setFormData }) {
   const { push } = useRouter();
   const dispatch = useDispatch();
 
@@ -77,7 +80,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
   );
 
   const methods = useForm({
-    resolver: yupResolver(validationSchema),
+    // resolver: yupResolver(validationSchema),
     defaultValues,
   });
 
@@ -103,40 +106,42 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
 
   const onSubmit = async (data) => {
     console.log('data class',data)
-    if(!isEdit){
-      try {
-        const res = await postClass(data)
-        if (res.status < 400) {
-          reset();
-          enqueueSnackbar('Tạo lớp học thành công');
-          push(PATH_DASHBOARD.class.root);
-        } else {
-          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
-        }
-      } catch (error) {
-        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
-      }
-    }else{
-      try {
-        const res = await updateClass(currentClass.id,{
-          name: data.name,
-          code: data.code,
-          size: data.size,
-          schoolYear: data.schoolYear,
-          gradeId: data.gradeId,
-          programId: data.programId,
-        })
-        if (res.status < 400) {
-          reset();
-          enqueueSnackbar('Cập nhật lớp học thành công');
-          push(PATH_DASHBOARD.class.root);
-        } else {
-          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
-        }
-      } catch (error) {
-        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
-      }
-    }
+    onNextStep();
+    setFormData(data)
+    // if(!isEdit){
+    //   try {
+    //     const res = await postClass(data)
+    //     if (res.status < 400) {
+    //       reset();
+    //       enqueueSnackbar('Tạo lớp học thành công');
+    //
+    //     } else {
+    //       enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+    //     }
+    //   } catch (error) {
+    //     enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+    //   }
+    // }else{
+    //   try {
+    //     const res = await updateClass(currentClass.id,{
+    //       name: data.name,
+    //       code: data.code,
+    //       size: data.size,
+    //       schoolYear: data.schoolYear,
+    //       gradeId: data.gradeId,
+    //       programId: data.programId,
+    //     })
+    //     if (res.status < 400) {
+    //       reset();
+    //       enqueueSnackbar('Cập nhật lớp học thành công');
+    //       push(PATH_DASHBOARD.class.root);
+    //     } else {
+    //       enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+    //     }
+    //   } catch (error) {
+    //     enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+    //   }
+    // }
   };
 
 
@@ -167,13 +172,14 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
                 Thông tin lớp học
               </Typography>
               <div></div>
-              <RHFTextField name="code" label="Mã lớp" id="code" />
-              <RHFTextField name="name" label="Tên lớp" id="name" />
-              <RHFTextField name="size" label="Sĩ số" type="number" id="size" />
+              <RHFTextField name="code" label="Mã lớp"  id="code" />
+              <RHFTextField name="name" label="Tên lớp"  id="name" />
+              <RHFTextField name="size" label="Sĩ số"   type="number" id="size" />
               <RHFSelect
                   id="schoolYear"
                   name="schoolYear"
                   label="Năm học"
+                   
                   InputLabelProps={{ shrink: true }}
                   SelectProps={{
                     native: false,
@@ -210,6 +216,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
                   id="programId"
                   name="programId"
                   label="Chương trình học"
+                   
                   InputLabelProps={{ shrink: true }}
                   SelectProps={{
                     native: false,
@@ -243,6 +250,7 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
                   name="gradeId"
                   label="Khối học"
                   InputLabelProps={{ shrink: true }}
+                   
                   SelectProps={{
                     native: false,
                     MenuProps: {
@@ -270,34 +278,6 @@ export default function ClassNewEditForm({ isEdit = false, currentClass }) {
                     </MenuItem>
                 ))}
               </RHFSelect>
-              {/*<Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>*/}
-              {/*  Danh sách học sinh*/}
-              {/*</Typography>*/}
-              {/*<div></div>*/}
-              {/*<Upload*/}
-              {/*    onCLick={() => {*/}
-              {/*      console.log('upload');*/}
-              {/*    }}*/}
-              {/*    multiple*/}
-              {/*    name=''*/}
-              {/*    indexLocal={index}*/}
-              {/*    error={getValues(`items[${index}].file`) === ''}*/}
-              {/*    files={*/}
-              {/*      getValues(`items[${index}].file`)*/}
-              {/*          ? [*/}
-              {/*            Object.assign(getValues(`items[${index}].file`), {*/}
-              {/*              preview: URL.createObjectURL(Object.assign(getValues(`items[${index}].file`))),*/}
-              {/*            }),*/}
-              {/*          ]*/}
-              {/*          : []*/}
-              {/*    }*/}
-              {/*    handleDrop={handleDrop}*/}
-              {/*    onRemove={handleRemoveFile}*/}
-              {/*/>*/}
-              {/*<Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>*/}
-              {/*  Danh sách môn học*/}
-              {/*</Typography>*/}
-              {/*<div></div>*/}
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

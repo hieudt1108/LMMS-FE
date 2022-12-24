@@ -1,10 +1,17 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback, useMemo} from 'react';
 // @mui
 import { Stack, Dialog, Button, TextField, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 // components
 import Iconify from '../../../../components/iconify';
 import {SingleFilePreview, Upload} from '../../../../components/upload';
+import FormProvider from "../../../../components/hook-form";
+import * as Yup from "yup";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
+import {createManyUser} from "../../../../dataProvider/agent";
+import {useSnackbar} from "../../../../components/snackbar";
+import {LoadingButton} from "@mui/lab";
 
 // ----------------------------------------------------------------------
 
@@ -30,36 +37,69 @@ export default function FileNewUserDialog({
   onChangeFolderName,
   ...other
 }) {
-  const [files, setFiles] = useState([]);
 
+
+  const validationSchema = Yup.object().shape({
+  })
+
+  const defaultValues = useMemo(
+      () => ({
+
+      }),
+      []
+  );
+
+  const methods = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues,
+  });
+
+  const {
+    reset,
+    watch,
+    control,
+    setValue,
+    getValues,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+  const formDataFileUser = new FormData();
+  const [files, setFiles] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     if (!open) {
       setFiles([]);
     }
   }, [open]);
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const newFiles = acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      );
-
-      setFiles([...files, ...newFiles]);
-    },
-    [files]
-  );
-
-  const handleUpload = () => {
-    onClose();
-    console.log('ON UPLOAD');
+  const handleDrop = (acceptedFiles) => {
+    try {
+      setValue(`file`, acceptedFiles[0]);
+      setFiles(acceptedFiles[0]);
+    } catch (error) {
+      console.error('handleDrop', error);
+    }
   };
 
-  const handleRemoveFile = (inputFile) => {
-    const filtered = files.filter((file) => file !== inputFile);
-    setFiles(filtered);
+  const handleRemoveFile = () => {
+    setValue(`file`, '');
+    setFiles('');
+
   };
+
+  const onSubmit = async (data) => {
+      try {
+          formDataFileUser.append('file', data.file);
+          const res = createManyUser(formDataFileUser)
+          enqueueSnackbar('Thêm danh sách người dùng thành công');
+          onClose();
+      }catch (error){
+        enqueueSnackbar(`Đã có lỗi xảy ra!`, { variant: 'error' });
+      }
+  };
+
+
 
   const handleRemoveAllFiles = () => {
     setFiles([]);
@@ -68,35 +108,41 @@ export default function FileNewUserDialog({
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose} {...other}>
       <DialogTitle sx={{ p: (theme) => theme.spacing(3, 3, 2, 3) }}> {title} </DialogTitle>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <DialogContent dividers sx={{ pt: 1, pb: 0, border: 'none' }}>
+          {(onCreate || onUpdate) && (
+            <TextField fullWidth label="Folder name" value={folderName} onChange={onChangeFolderName} sx={{ mb: 3 }} />
+          )}
+          <Upload
+              onCLick={() => {
+                console.log('upload');
+              }}
+              hasDefault
+              defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportManyUser.xlsx'}
+              accept={{ '.xlsx': [] }}
+              multiple
+              name={`file`}
+              error={getValues(`file`) === ''}
+              files={
+                getValues(`file`)
+                    ? [
+                      Object.assign(getValues(`file`), {
+                        preview: URL.createObjectURL(Object.assign(getValues(`file`))),
+                      }),
+                    ]
+                    : []
+              }
+              handleDrop={handleDrop}
+              onRemove={handleRemoveFile}
+          />
+        </DialogContent>
 
-      <DialogContent dividers sx={{ pt: 1, pb: 0, border: 'none' }}>
-        {(onCreate || onUpdate) && (
-          <TextField fullWidth label="Folder name" value={folderName} onChange={onChangeFolderName} sx={{ mb: 3 }} />
-        )}
-
-        <Upload multiple hasDefault defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportManyUser.xlsx'} files={files} onDrop={handleDrop} onRemove={handleRemoveFile} onDelete={handleRemoveFile} />
-
-      </DialogContent>
-
-      <DialogActions>
-        <Button variant="contained" startIcon={<Iconify icon="eva:cloud-upload-fill" />} onClick={handleUpload}>
-          Tải lên
-        </Button>
-
-        {!!files.length && (
-          <Button variant="outlined" color="inherit" onClick={handleRemoveAllFiles}>
-            Gỡ bỏ hết
-          </Button>
-        )}
-
-        {(onCreate || onUpdate) && (
-          <Stack direction="row" justifyContent="flex-end" flexGrow={1}>
-            <Button variant="soft" onClick={onCreate || onUpdate}>
-              {onUpdate ? 'Save' : 'Create'}
-            </Button>
-          </Stack>
-        )}
-      </DialogActions>
+        <DialogActions>
+          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            Tải lên
+          </LoadingButton>
+        </DialogActions>
+      </FormProvider>
     </Dialog>
   );
 }

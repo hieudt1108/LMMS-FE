@@ -66,8 +66,8 @@ export default function FolderNewPostForm({ data }) {
     return Yup.object().shape({
       items: Yup.array().of(
         Yup.object().shape({
-          name: Yup.string().required('Name is require!'),
-          code: Yup.string().required('Code is require!'),
+          name: Yup.string().required('Không được trống!'),
+          code: Yup.string().required('Không được trống!'),
         })
       ),
     });

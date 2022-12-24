@@ -151,6 +151,7 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
                      <div></div>
                     <RHFTextField
                         name="name"
+                        required
                         label="Tên khối học"
                         id="name"
                     />

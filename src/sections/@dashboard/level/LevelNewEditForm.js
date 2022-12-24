@@ -116,6 +116,7 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
                   <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                     <RHFTextField
                         name="name"
+                        required
                         label="Tên cấp học"
                         id="name"
                     />

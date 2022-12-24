@@ -119,6 +119,7 @@ export default function ProgramNewEditForm({ isEdit = false, currentProgram }) {
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                     <RHFTextField
                         name="name"
+                        required
                         label="Tên chương trình"
                         id="name"
                     />

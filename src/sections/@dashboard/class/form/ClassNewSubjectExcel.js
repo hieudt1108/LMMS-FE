@@ -49,6 +49,7 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
   const formDataFileMember = new FormData();
   const formDataFileSubject = new FormData();
   const validationSchema = Yup.object().shape({
+
   })
 
   const defaultValues = useMemo(
@@ -59,7 +60,7 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
   );
 
   const methods = useForm({
-    resolver: yupResolver(validationSchema),
+    // resolver: yupResolver(validationSchema),
     defaultValues,
   });
 
@@ -103,27 +104,32 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
     console.log('fileStudentExcel',fileStudentExcel)
     console.log('fileSubjectExcel',data.fileSubject)
       try {
-        const res = await postClass(dataClass)
-        console.log('postClass',res)
-        if (res.status < 400) {
-          try {
-            formDataFileMember.append('file', fileStudentExcel);
-            formDataFileSubject.append('file', data.fileSubject);
-            const pushFileStudentExcel = await postFileExcelAddMember(res?.data.data.id,formDataFileMember)
-            const pushFileSubjectExcel = await postFileExcelAddSubject(res?.data.data.id,formDataFileSubject)
-            console.log('pushFileStudentExcel',pushFileStudentExcel)
-            console.log('pushFileSubjectExcel',pushFileStudentExcel)
-            if(pushFileStudentExcel.status < 400 && pushFileSubjectExcel.status < 400){
-              enqueueSnackbar('Tạo lớp học thành công');
+        if(fileStudentExcel && data.fileSubject) {
+
+
+          const res = await postClass(dataClass)
+          console.log('postClass', res)
+          if (res.status < 400) {
+            try {
+              formDataFileMember.append('file', fileStudentExcel);
+              formDataFileSubject.append('file', data.fileSubject);
+              const pushFileStudentExcel = await postFileExcelAddMember(res?.data.data.id, formDataFileMember)
+              const pushFileSubjectExcel = await postFileExcelAddSubject(res?.data.data.id, formDataFileSubject)
+              console.log('pushFileStudentExcel', pushFileStudentExcel)
+              console.log('pushFileSubjectExcel', pushFileStudentExcel)
+              if (pushFileStudentExcel.status < 400 && pushFileSubjectExcel.status < 400) {
+                enqueueSnackbar('Tạo lớp học thành công');
+              } else {
+                enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
+              }
+            } catch (error) {
+              enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
             }
-            else {
-              enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
-            }
-          }catch (error) {
-          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
-        }
-        } else {
-          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+          } else {
+            enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
+          }
+        }else{
+          enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
         }
       } catch (error) {
         enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });

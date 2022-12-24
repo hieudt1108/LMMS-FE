@@ -41,6 +41,7 @@ export default function ClassNewStudentExcel({onNextStep, onBackStep,setFormData
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
+
   })
 
   const defaultValues = useMemo(
@@ -51,7 +52,7 @@ export default function ClassNewStudentExcel({onNextStep, onBackStep,setFormData
   );
 
   const methods = useForm({
-    resolver: yupResolver(validationSchema),
+    // resolver: yupResolver(validationSchema),
     defaultValues,
   });
 

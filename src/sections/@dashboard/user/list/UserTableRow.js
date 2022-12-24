@@ -18,6 +18,7 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import {useAuthContext} from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +32,8 @@ UserTableRow.propTypes = {
 
 export default function UserTableRow({ data, selected, onEditRow, onSelectRow, onDeleteRow }) {
   const { id, firstName, lastName, email, roles, gender, phone, address, birthDate, enable } = data;
+
+  const { ROLES } = useAuthContext();
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -46,6 +49,7 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
 
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
+    console.log(ROLES)
   };
 
   const handleClosePopover = () => {
@@ -95,30 +99,42 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
           </IconButton>
         </TableCell>
       </TableRow>
+        {ROLES?.map((role) =>
+            role.name === 'ADMIN' ? (
+            <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 180 }}>
+                <MenuItem
+                    onClick={() => {
+                        handleOpenConfirm();
+                        handleClosePopover();
+                    }}
+                    sx={{ color: 'error.main' }}
+                >
+                    <Iconify icon="eva:alert-circle-outline" />
+                    {!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
 
-      <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 140 }}>
-        <MenuItem
-          onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:alert-circle-outline" />
-            {!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                </MenuItem>
 
-        </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        onEditRow();
+                        handleClosePopover();
+                    }}
+                >
+                    <Iconify icon="eva:edit-fill" />
+                    Cập nhật
+                </MenuItem>
+                <MenuItem
 
-          <MenuItem
-              onClick={() => {
-                  onEditRow();
-                  handleClosePopover();
-              }}
-          >
-              <Iconify icon="eva:edit-fill" />
-              Cập nhật
-          </MenuItem>
-      </MenuPopover>
+                >
+                  <Iconify icon="eva:refresh-outline" />
+                  Reset mật khẩu
+                </MenuItem>
+            </MenuPopover>
+            ) : (
+                <></>
+            )
+            )}
+
 
         <ConfirmDialog
             open={openConfirm}

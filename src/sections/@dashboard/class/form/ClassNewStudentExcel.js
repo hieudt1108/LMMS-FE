@@ -114,7 +114,7 @@ export default function ClassNewStudentExcel({onNextStep, onBackStep,setFormData
                   }}
                   hasDefault
                   defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportMemberClass.xlsx'}
-                  accept={{ 'image/*': [] }}
+                  accept={{ '.xlsx': [] }}
                   multiple
                   name={`file`}
                   error={getValues(`file`) === ''}

@@ -43,6 +43,7 @@ export default function ClassTeacher({ myClass, title, subheader, tableLabels, t
   const {
     query: { myclass_id },
   } = useRouter();
+  console.log('myClass',myClass)
   const { push } = useRouter();
   const handleOnClickSubject = () => {
     push(PATH_DASHBOARD.myclass.addMember(myclass_id));
@@ -70,11 +71,11 @@ export default function ClassTeacher({ myClass, title, subheader, tableLabels, t
 
       <Divider />
 
-      <Box sx={{ p: 2, textAlign: 'right' }}>
-        <Button size="small" color="inherit" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>
-          Xem tất cả
-        </Button>
-      </Box>
+      {/*<Box sx={{ p: 2, textAlign: 'right' }}>*/}
+      {/*  <Button size="small" color="inherit" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>*/}
+      {/*    Xem tất cả*/}
+      {/*  </Button>*/}
+      {/*</Box>*/}
     </Card>
   );
 }
@@ -104,7 +105,7 @@ function BookingDetailsRow({ row }) {
   return (
     <>
       {row?.roleInClasses?.map((role) =>
-        role.role === 'GIAOVIEN' ? (
+        role.role === 'GVCHUNHIEM' ? (
           <TableRow>
             <TableCell>
               <Stack direction="row" alignItems="center" spacing={2}>

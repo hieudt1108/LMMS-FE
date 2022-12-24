@@ -23,7 +23,14 @@ import { getProgramsRedux } from 'src/redux/slices/program';
 import { getGradesRedux } from 'src/redux/slices/grade';
 
 // API
-import {createGrade, postClass, updateClass, updateGrade} from '../../../../dataProvider/agent';
+import {
+  createGrade,
+  postClass,
+  postFileExcelAddMember,
+  postFileExcelAddSubject,
+  updateClass,
+  updateGrade
+} from '../../../../dataProvider/agent';
 import {Upload} from "../../../../components/upload";
 import Iconify from "../../../../components/iconify";
 
@@ -39,7 +46,8 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
   const dispatch = useDispatch();
   const [fileSubject, setFileSubject] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-
+  const formDataFileMember = new FormData();
+  const formDataFileSubject = new FormData();
   const validationSchema = Yup.object().shape({
   })
 
@@ -93,18 +101,33 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
     const fileStudentExcel = formData?.file
     console.log('dataClass',dataClass)
     console.log('fileStudentExcel',fileStudentExcel)
-    console.log('fileSubjectExcel',data)
-      // try {
-      //   const res = await postClass(dataClass)
-      //   if (res.status < 400) {
-      //     enqueueSnackbar('Tạo lớp học thành công');
-      //
-      //   } else {
-      //     enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
-      //   }
-      // } catch (error) {
-      //   enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
-      // }
+    console.log('fileSubjectExcel',data.fileSubject)
+      try {
+        const res = await postClass(dataClass)
+        console.log('postClass',res)
+        if (res.status < 400) {
+          try {
+            formDataFileMember.append('file', fileStudentExcel);
+            formDataFileSubject.append('file', data.fileSubject);
+            const pushFileStudentExcel = await postFileExcelAddMember(res?.data.data.id,formDataFileMember)
+            const pushFileSubjectExcel = await postFileExcelAddSubject(res?.data.data.id,formDataFileSubject)
+            console.log('pushFileStudentExcel',pushFileStudentExcel)
+            console.log('pushFileSubjectExcel',pushFileStudentExcel)
+            if(pushFileStudentExcel.status < 400 && pushFileSubjectExcel.status < 400){
+              enqueueSnackbar('Tạo lớp học thành công');
+            }
+            else {
+              enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+            }
+          }catch (error) {
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+        }
+        } else {
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+        }
+      } catch (error) {
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+      }
     // onNextStep();
   };
 
@@ -132,6 +155,7 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
                       console.log('upload');
                     }}
                     hasDefault
+                    accept={{ '.xlsx': [] }}
                     defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportSubjectClass.xlsx'}
                     multiple
                     name={`fileSubject`}

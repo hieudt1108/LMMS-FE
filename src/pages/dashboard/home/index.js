@@ -3,16 +3,16 @@ import Head from 'next/head';
 // @mui
 import {alpha, styled, useTheme} from '@mui/material/styles';
 import {Container, Grid, Stack, Button, Typography} from '@mui/material';
-import DashboardLayout from "../../layouts/dashboard";
-import {bgGradient} from "../../utils/cssStyles";
-import {useAuthContext} from "../../auth/useAuthContext";
-import {useSettingsContext} from "../../components/settings";
-import useResponsive from "../../hooks/useResponsive";
-import {AppFeatured, AppWelcome} from "../../sections/@dashboard/general/app";
-import {SeoIllustration} from "../../assets/illustrations";
-import {_appFeatured} from "../../_mock/arrays";
-import {MotionContainer, varFade} from "../../components/animate";
-import Image from '../../components/image';
+import DashboardLayout from "../../../layouts/dashboard";
+import {bgGradient} from "../../../utils/cssStyles";
+import {useAuthContext} from "../../../auth/useAuthContext";
+import {useSettingsContext} from "../../../components/settings";
+import useResponsive from "../../../hooks/useResponsive";
+import {AppFeatured, AppWelcome} from "../../../sections/@dashboard/general/app";
+import {SeoIllustration} from "../../../assets/illustrations";
+import {_appFeatured} from "../../../_mock/arrays";
+import {MotionContainer, varFade} from "../../../components/animate";
+import Image from '../../../components/image';
 import { m } from 'framer-motion';
 
 // ----------------------------------------------------------------------

@@ -70,11 +70,11 @@ export default function CLassDetails({ myClass, title, subheader, tableLabels, t
 
       <Divider />
 
-      <Box sx={{ p: 2, textAlign: 'right' }}>
-        <Button size="small" color="inherit" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>
-          Xem tất cả
-        </Button>
-      </Box>
+      {/*<Box sx={{ p: 2, textAlign: 'right' }}>*/}
+      {/*  <Button size="small" color="inherit" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>*/}
+      {/*    Xem tất cả*/}
+      {/*  </Button>*/}
+      {/*</Box>*/}
     </Card>
   );
 }

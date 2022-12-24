@@ -195,7 +195,7 @@ export default function LevelLayout() {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {user.subjectTypeDocument?.map((obj, index) => (
+                {user.subjects?.map((obj, index) => (
                   <MenuItem value={obj.subject} key={index}>
                     {obj.subject.name}
                   </MenuItem>

@@ -91,9 +91,13 @@ export default function FileNewUserDialog({
   const onSubmit = async (data) => {
       try {
           formDataFileUser.append('file', data.file);
-          const res = createManyUser(formDataFileUser)
-          enqueueSnackbar('Thêm danh sách người dùng thành công');
-          onClose();
+          const res = await createManyUser(formDataFileUser)
+          if(res.status < 400){
+            enqueueSnackbar('Thêm danh sách người dùng thành công');
+            onClose();
+          }else{
+            enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
+          }
       }catch (error){
         enqueueSnackbar(`Đã có lỗi xảy ra!`, { variant: 'error' });
       }

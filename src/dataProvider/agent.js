@@ -251,12 +251,12 @@ const postClass = (payload) => {
   return postApi('Class', payload);
 };
 
-const postFileExcelAddMember = (id,payload) => {
-  return postApi(`Class/UploadExcelAddMember?id=${id}`, payload,1);
+const postFileExcelAddMember = (id, payload) => {
+  return postApi(`Class/UploadExcelAddMember?id=${id}`, payload, 1);
 };
 
-const postFileExcelAddSubject = (id,payload) => {
-  return postApi(`Class/UploadExcelAddSubject?id=${id}`, payload,1);
+const postFileExcelAddSubject = (id, payload) => {
+  return postApi(`Class/UploadExcelAddSubject?id=${id}`, payload, 1);
 };
 
 // GRADE
@@ -305,7 +305,7 @@ const createUserAuth = (payload) => {
 };
 
 const createManyUser = (payload) => {
-  return postApi('User/UploadExcel', payload,1);
+  return postApi('User/UploadExcel', payload, 1);
 };
 
 // ROLE

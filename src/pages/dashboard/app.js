@@ -2,7 +2,22 @@
 import Head from 'next/head';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Container, Grid, Stack, Button, Typography } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Typography,
+  Alert,
+  Pagination,
+  Button,
+  Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+  TextField,
+  InputAdornment,
+} from '@mui/material';
 // auth
 import { useAuthContext } from '../../auth/useAuthContext';
 // layouts
@@ -17,7 +32,10 @@ import {
   AppWidget,
   AppWelcome,
   AppFeatured,
-  AppGetAllDocDetail,
+  AppNewInvoice,
+  AppTopAuthors,
+  AppTopRelated,
+  AppAreaInstalled,
   AppWidgetSummary,
   AppCurrentDownload,
   AppTopInstalledCountries,
@@ -25,8 +43,14 @@ import {
 // assets
 import { SeoIllustration } from '../../assets/illustrations';
 // API
-import { getReport } from '../../dataProvider/agent';
-import { useEffect, useState } from 'react';
+import {
+  getReport,
+  getAllDocsReport,
+  getAllTypeDocument,
+  getAllSubject,
+  getAllProgram,
+} from '../../dataProvider/agent';
+import React, { useEffect, useCallback, useState } from 'react';
 // ICON
 // import IMG_IC from '/assets/icons/files/ic_img.svg';
 // import VIDEO_IC from '/assets/icons/files/ic_video.svg';
@@ -49,6 +73,22 @@ export default function GeneralAppPage() {
 
   const [reports, setReport] = useState();
 
+  const [filters, setFilter] = useState({
+    pageIndex: 1,
+    pageSize: 7,
+    programId: '',
+    typeDocumentId: '',
+    subjectId: '',
+    searchByName: '',
+  });
+
+  const [paging, setPaging] = useState();
+
+  const [reportDocs, setReportDocs] = useState([]);
+  const [typeDocs, setTypeDoc] = useState([]);
+  const [subjects, setSubject] = useState([]);
+  const [programs, setPrograms] = useState([]);
+
   async function fetchReport() {
     const res = await getReport();
     if (res.status < 400) {
@@ -58,11 +98,106 @@ export default function GeneralAppPage() {
     }
   }
 
-  console.log('reports: ', reports);
+  async function fetchAllTypeDoc() {
+    const res = await getAllTypeDocument({
+      pageIndex: 1,
+      pageSize: 100,
+    });
+    if (res.status < 400) {
+      setPaging(JSON.parse(res.headers['x-pagination']));
 
+      setTypeDoc(res.data);
+    } else {
+      console.log(res.message);
+    }
+  }
+
+  async function fetchAllSubject() {
+    const res = await getAllSubject({
+      pageIndex: 1,
+      pageSize: 100,
+    });
+    if (res.status < 400) {
+      setSubject(res.data.data);
+    } else {
+      console.log(res.message);
+    }
+  }
+  async function fetchAllProgram() {
+    const res = await getAllProgram({
+      pageIndex: 1,
+      pageSize: 100,
+    });
+    if (res.status < 400) {
+      setPrograms(res.data.data);
+    } else {
+      console.log(res.message);
+    }
+  }
+
+  async function fetchReportDoc() {
+    const res = await getAllDocsReport(filters);
+    if (res.status < 400) {
+      setReportDocs(res.data.data);
+    } else if (res.response) {
+      console.log(`${res.response.status} !`);
+    }
+  }
+  console.log('reportDocs: ', reportDocs);
+
+  const handleSearchChange = useCallback(
+    (event, value) => {
+      setFilter({ ...filters, searchByName: event.target.value });
+    },
+    [filters]
+  );
+
+  const handleFilterDocType = useCallback(
+    (event, value) => {
+      setFilter({ ...filters, typeDocumentId: event.target.value.id });
+    },
+    [filters]
+  );
+
+  const handleFilterSubject = useCallback(
+    (event, value) => {
+      setFilter({ ...filters, subjectId: event.target.value.id });
+    },
+    [filters]
+  );
+
+  const handleFilterProgram = useCallback(
+    (event, value) => {
+      setFilter({ ...filters, programId: event.target.value.id });
+    },
+    [filters]
+  );
   useEffect(() => {
     fetchReport();
+
+    fetchAllTypeDoc();
+    fetchAllSubject();
+    fetchAllProgram();
   }, []);
+
+  useEffect(() => {
+    fetchReportDoc();
+  }, [filters]);
+  const renderMenuItem = useCallback((item) => {
+    if (item && item.length) {
+      return item.map((obj, index) => (
+        <MenuItem value={obj} key={index}>
+          {obj.name}
+        </MenuItem>
+      ));
+    }
+    return (
+      <MenuItem>
+        <Alert severity="error">This is an error !</Alert>
+      </MenuItem>
+    );
+  });
+
   const { themeStretch } = useSettingsContext();
 
   return (
@@ -140,18 +275,9 @@ export default function GeneralAppPage() {
               total={reports?.typeOfDoc.others}
             />
           </Grid>
-          {/* 
-          <Grid item xs={12} md={4}>
-            <AppWidgetSummary title="Total Installed" percent={0.2} total={4876} />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <AppWidgetSummary title="Total Downloads" percent={-0.1} total={678} />
-          </Grid> */}
-
-          <Grid item xs={12} md={12} lg={12}>
+          <Grid item xs={12} md={12} lg={6}>
             <AppCurrentDownload
-              title="Current Download"
+              title="Dung lượng"
               chart={{
                 colors: [
                   theme.palette.primary.main,
@@ -170,8 +296,81 @@ export default function GeneralAppPage() {
               }}
             />
           </Grid>
-          <Grid item xs={12} md={12} lg={12}>
-            <AppGetAllDocDetail />
+          <Grid item xs={12} md={6} lg={6}>
+            <AppTopRelated title="Top Related Applications" list={_appRelated} />
+          </Grid>
+
+          {/* 
+          <Grid item xs={12} md={4}>
+            <AppWidgetSummary title="Total Installed" percent={0.2} total={4876} />
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <AppWidgetSummary title="Total Downloads" percent={-0.1} total={678} />
+          </Grid> */}
+
+          <Grid item xs={12} lg={12}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Stack direction="row">
+                <TextField
+                  size="small"
+                  sx={{ mr: 3, ml: 2 }}
+                  autohighlight="true"
+                  onChange={handleSearchChange}
+                  placeholder="Tìm kiếm tài liệu..."
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+
+                <FormControl sx={{ minWidth: 170, mr: 3 }} size="small">
+                  <InputLabel id="demo-simple-select-helper-label">Chương trình học</InputLabel>
+                  <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterProgram}>
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {renderMenuItem(programs)}
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ minWidth: 170, mr: 3 }} size="small">
+                  <InputLabel id="demo-simple-select-helper-label">Môn học</InputLabel>
+                  <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterDocType}>
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {renderMenuItem(typeDocs)}
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ minWidth: 170 }} size="small">
+                  <InputLabel id="demo-simple-select-helper-label">Loại tài liệu</InputLabel>
+                  <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterSubject}>
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {renderMenuItem(subjects)}
+                  </Select>
+                </FormControl>
+              </Stack>
+            </Stack>
+          </Grid>
+          <Grid item xs={12} lg={12}>
+            <AppNewInvoice
+              title="Thống kê tài liệu"
+              tableData={reportDocs}
+              tableLabels={[
+                { id: 'code', label: 'Code Document' },
+                { id: 'name', label: 'Tên tài liệu' },
+                { id: 'createDate', label: 'Ngày tạo' },
+                { id: 'userDto', label: 'Người tạo' },
+                { id: 'email', label: 'Email' },
+                { id: 'phone', label: 'Phone' },
+                { id: '' },
+              ]}
+            />
           </Grid>
 
           {/* <Grid item xs={12} md={6} lg={8}>

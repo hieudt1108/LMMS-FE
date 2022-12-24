@@ -51,7 +51,7 @@ import error from 'eslint-plugin-react/lib/util/error';
 import Label from '../../../components/label';
 import FileNewUserDialog from '../../../sections/@dashboard/file/portal/FileNewUsersDialog';
 import { useMemo } from 'react';
-import {useAuthContext} from "../../../auth/useAuthContext";
+import { useAuthContext } from '../../../auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -201,7 +201,7 @@ export default function UserListPage() {
   }
 
   const handlePageChange = useCallback(
-    async (event, pageIndex) => {
+    (event, pageIndex) => {
       setFilter({ ...filter, pageIndex: pageIndex });
     },
     [filter]
@@ -215,7 +215,7 @@ export default function UserListPage() {
   );
 
   const handleChangeRoles = useCallback(
-    (event) => {
+    async (event, value) => {
       setFilter({ ...filter, roleId: event.target.value === 'all' ? '' : event.target.value });
     },
     [filter]
@@ -253,34 +253,33 @@ export default function UserListPage() {
 
       <Container maxWidth={'xl'}>
         {ROLES?.map((role) =>
-            role.name === 'ADMIN' ? (
-              <CustomBreadcrumbs
-                heading="Danh sách người dùng"
-                links={[{ name: 'Trang chủ', href: PATH_DASHBOARD.root }, { name: 'Danh sách người dùng' }]}
-
-                action={
-                  <NextLink href={PATH_DASHBOARD.user.new} passHref>
-                    <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                      Thêm nguời dùng
-                    </Button>
-                  </NextLink>
-                }
-                action2={
-                  <Button
-                    variant="contained"
-                    startIcon={<Iconify icon="eva:cloud-upload-fill" />}
-                    onClick={handleOpenUploadFile}
-                  >
-                    Import danh sách
+          role.name === 'ADMIN' ? (
+            <CustomBreadcrumbs
+              heading="Danh sách người dùng"
+              links={[{ name: 'Trang chủ', href: PATH_DASHBOARD.root }, { name: 'Danh sách người dùng' }]}
+              action={
+                <NextLink href={PATH_DASHBOARD.user.new} passHref>
+                  <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                    Thêm nguời dùng
                   </Button>
-                }
-              />
-            ) : (
-                <CustomBreadcrumbs
-                    heading="Danh sách người dùng"
-                    links={[{ name: 'Trang chủ', href: PATH_DASHBOARD.root }, { name: 'Danh sách người dùng' }]}
-                />
-            )
+                </NextLink>
+              }
+              action2={
+                <Button
+                  variant="contained"
+                  startIcon={<Iconify icon="eva:cloud-upload-fill" />}
+                  onClick={handleOpenUploadFile}
+                >
+                  Import danh sách
+                </Button>
+              }
+            />
+          ) : (
+            <CustomBreadcrumbs
+              heading="Danh sách người dùng"
+              links={[{ name: 'Trang chủ', href: PATH_DASHBOARD.root }, { name: 'Danh sách người dùng' }]}
+            />
+          )
         )}
 
         <Card>

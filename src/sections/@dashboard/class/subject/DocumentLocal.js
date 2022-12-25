@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 // @mui
-import { Card, Typography, Stack, Avatar, Box, Button } from '@mui/material';
+import {Card, Typography, Stack, Avatar, Box, Button, Alert} from '@mui/material';
 
 import useResponsive from '../../../../hooks/useResponsive';
 // components
@@ -34,19 +34,29 @@ export default function DocumentLocal({ data, documentInClass, handleOpenFormUpl
           )}
         </Stack>
         <Stack spacing={2}>
-          {documentInClass?.map(
-            (doc, index) =>
-              doc.slotId === null && (
-                <Stack spacing={2}>
-                  <FileGeneralRecentCard
-                    key={index}
-                    file={doc}
-                    onDelete={() => console.log('DELETE', doc.id)}
-                    data={{ ...data, index }}
-                  />
-                </Stack>
+            {documentInClass && documentInClass?.length ? (
+              documentInClass?.map(
+                (doc, index) =>
+                  doc.slotId === null && (
+                    <Stack spacing={2}>
+                      <FileGeneralRecentCard
+                        key={index}
+                        file={doc}
+                        onDelete={() => console.log('DELETE', doc.id)}
+                        data={{ ...data, index }}
+                      />
+                    </Stack>
+                  )
               )
-          )}
+            ) : (
+            <Stack alignItems="center"
+                   justifyContent="center"
+            >
+                <Alert severity="info">
+                    Chưa có tài liệu chung cho môn học này
+                </Alert>
+            </Stack>
+            )}
         </Stack>
       </Card>
     </>

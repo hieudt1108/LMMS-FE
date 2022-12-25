@@ -55,7 +55,7 @@ export default function GeneralFilePage({ data }) {
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { id, name, parentId, listFolders, listDocuments } = data;
-  console.log('GeneralFilePage', data);
+  console.log('GeneralFilePagelistDocuments', listDocuments);
 
   const { themeStretch } = useSettingsContext();
 

@@ -35,6 +35,8 @@ export default function DocumentPostCard({ documents }) {
 
   const [openPopupSaveInMyFolder, setOpenPopupSaveInMyFolder] = useState(false);
 
+  console.log('documents',documents)
+
   const handleClosePopupSaveInMyFolder = () => {
     setOpenPopupSaveInMyFolder(false);
   };

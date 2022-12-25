@@ -59,7 +59,6 @@ export default function ClassTeacher({
   const handleOnClickSubject = () => {
     push(PATH_DASHBOARD.myclass.addMember(myclass_id));
   };
-
   return (
     <Card {...other}>
       <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
@@ -143,6 +142,16 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
 
             <TableCell>
               {row.firstName} {row.lastName}
+            </TableCell>
+            <TableCell>
+              {role.role === null || '' ? (
+                      <Label></Label>
+                  ) : (
+                      <Label key={role.id} variant="soft" color={'success'} sx={{ textTransform: 'capitalize' }}>
+                        {role.role}
+                      </Label>
+
+              )}
             </TableCell>
             <TableCell>{role.subject}</TableCell>
             <TableCell>{row.email}</TableCell>

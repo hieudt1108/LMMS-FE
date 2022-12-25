@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
-import { Card, Typography, MenuItem, IconButton } from '@mui/material';
+import {Card, Typography, MenuItem, IconButton, Button} from '@mui/material';
 // utils
 import { bgGradient } from '../../../../utils/cssStyles';
 // components
@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 import MenuPopover from '../../../../components/menu-popover';
 import { Stack } from '@mui/system';
+import ConfirmDialog from "../../../../components/confirm-dialog";
 // ----------------------------------------------------------------------
 // import { deleteClass } from '../../../../dataProvider/agent';
 // import { useSnackbar } from '../../../../components/snackbar';
@@ -34,6 +35,17 @@ export default function ClassBanner({
 
   console.log('user', user);
   const [openPopover, setOpenPopover] = useState(null);
+
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const handleOpenConfirm = () => {
+     setOpenConfirm(true);
+  };
+
+  const handleCloseConfirm = () => {
+      setOpenConfirm(false);
+  };
+
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
   };
@@ -50,6 +62,7 @@ export default function ClassBanner({
   }, []);
 
   return (
+      <>
     <Card
       sx={{
         py: 5,
@@ -91,7 +104,7 @@ export default function ClassBanner({
         <MenuItem
             onClick={() => {
                 handleClosePopover();
-                handlerDelete();
+                handleOpenConfirm();
             }}
           sx={{ color: 'error.main' }}
         >
@@ -107,5 +120,24 @@ export default function ClassBanner({
         {data ? data.schoolYear : 'Undefined'}
       </Typography>
     </Card>
+    <ConfirmDialog
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        title={'Xóa lớp học'}
+        content={'Bạn có chắc chắn muốn xóa lớp học này!'}
+        action={
+            <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                    handlerDelete();
+                    handleCloseConfirm();
+                }}
+            >
+                {'Xóa'}
+            </Button>
+        }
+    />
+      </>
   );
 }

@@ -42,6 +42,7 @@ export default function ManageUser({ fetchMyClass, classID, myClass, user }) {
             tableLabels={[
               { id: 'STT', label: '' },
               { id: 'name', label: 'Họ và tên' },
+              { id: 'role', label: 'Vai trò' },
               { id: 'Subject', label: 'Môn dạy' },
               { id: 'email', label: 'E-mail' },
               { id: 'gender', label: 'Giới tính' },

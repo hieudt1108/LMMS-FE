@@ -37,7 +37,7 @@ import FormProvider, {RHFAutocomplete, RHFRadioGroup, RHFTextField} from '../../
 import Iconify from '../../../components/iconify';
 import {useSnackbar} from '../../../components/snackbar';
 import {getALlRoles, getAllSubject, updateUser, createUserAuth} from '../../../dataProvider/agent';
-import {yupResolver} from "@hookform/resolvers/dist/yup";
+import {yupResolver} from "@hookform/resolvers/yup";
 
 // ----------------------------------------------------------------------
 const GENDER_OPTION = [

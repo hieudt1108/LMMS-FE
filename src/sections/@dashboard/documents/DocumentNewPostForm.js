@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect } from 'react';
 // next
 import { useRouter } from 'next/router';
 // form
-import {yupResolver} from "@hookform/resolvers/dist/yup";
+import {yupResolver} from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';

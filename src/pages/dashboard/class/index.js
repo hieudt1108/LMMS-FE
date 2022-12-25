@@ -88,12 +88,18 @@ export default function Classes() {
 
   const handlerDelete = async (id) => {
     const res = await deleteClass(id);
-    if (res.status < 400) {
-      dispatch(getClassesRedux(pagingClass));
-      enqueueSnackbar('Xoá lớp thành công');
-    } else {
-      enqueueSnackbar('Xoá thất bại');
+    try{
+        if (res.status < 400) {
+            dispatch(getClassesRedux(pagingClass));
+            enqueueSnackbar('Xoá lớp thành công');
+        } else {
+            enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
+        }
+    }catch (error){
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
     }
+
+
   };
   const handleGradeChange = useCallback(
     async (event, value) => {
@@ -146,7 +152,7 @@ export default function Classes() {
   return (
     <React.Fragment>
       <Head>
-        <title> Class: List ALl Class</title>
+        <title> Hệ thống quản lý Học liệu</title>
       </Head>
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3} sx={{ marginBottom: '50px' }}>

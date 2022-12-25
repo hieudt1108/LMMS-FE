@@ -5,7 +5,7 @@ import {useEffect, useMemo, useState} from 'react';
 import {useRouter} from 'next/router';
 // form
 import {Controller, useForm} from 'react-hook-form';
-import {yupResolver} from "@hookform/resolvers/dist/yup";
+import {yupResolver} from "@hookform/resolvers/yup";
 // @mui
 import {LoadingButton} from '@mui/lab';
 import {

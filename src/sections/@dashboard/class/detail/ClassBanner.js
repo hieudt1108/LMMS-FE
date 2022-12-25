@@ -89,7 +89,10 @@ export default function ClassBanner({
         </MenuItem>
 
         <MenuItem
-          onClick={handlerDelete}
+            onClick={() => {
+                handleClosePopover();
+                handlerDelete();
+            }}
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="eva:trash-2-outline" />

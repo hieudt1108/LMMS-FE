@@ -99,6 +99,8 @@ export default function UserListPage() {
 
   const { push } = useRouter();
 
+  const { user } = useAuthContext();
+
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterName, setFilterName] = useState('');
@@ -125,7 +127,7 @@ export default function UserListPage() {
   const [listUsers, setListUsers] = useState([]);
   const [role, setSelectedRole] = useState('all');
   const [filterByEmail, setFilterByEmail] = useState('');
-  const { ROLES } = useAuthContext();
+
   const denseHeight = dense ? 52 : 72;
 
   const getLengthByStatus = (status) => listUsers?.filter((user) => user.enable === status).length;
@@ -252,8 +254,8 @@ export default function UserListPage() {
       </Head>
 
       <Container maxWidth={'xl'}>
-        {ROLES?.map((role) =>
-          role.name === 'ADMIN' ? (
+        {user?.roles.find((role) => role.name === 'ADMIN') ? (
+
             <CustomBreadcrumbs
               heading="Danh sách người dùng"
               links={[{ name: 'Trang chủ', href: PATH_DASHBOARD.root }, { name: 'Danh sách người dùng' }]}
@@ -279,8 +281,8 @@ export default function UserListPage() {
               heading="Danh sách người dùng"
               links={[{ name: 'Trang chủ', href: PATH_DASHBOARD.root }, { name: 'Danh sách người dùng' }]}
             />
-          )
-        )}
+
+          )}
 
         <Card>
           <Divider />

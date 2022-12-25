@@ -3,7 +3,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import _ from 'lodash';
 // next
 // form
-import {yupResolver} from "@hookform/resolvers/dist/yup";
+import {yupResolver} from "@hookform/resolvers/yup";
 import {useFieldArray, useForm} from 'react-hook-form';
 // @mui
 import {LoadingButton} from '@mui/lab';

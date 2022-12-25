@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import {useRouter} from "next/router";
 import {useSnackbar} from "notistack";
 import {LoadingButton} from "@mui/lab";
-import {yupResolver} from "@hookform/resolvers/dist/yup";
+import {yupResolver} from "@hookform/resolvers/yup";
 
 export default function ClassAddStudentXls() {
     const {push} = useRouter();

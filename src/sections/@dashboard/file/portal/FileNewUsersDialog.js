@@ -8,7 +8,7 @@ import {SingleFilePreview, Upload} from '../../../../components/upload';
 import FormProvider from "../../../../components/hook-form";
 import * as Yup from "yup";
 import {useForm} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/dist/yup";
+import {yupResolver} from "@hookform/resolvers/yup";
 import {createManyUser} from "../../../../dataProvider/agent";
 import {useSnackbar} from "../../../../components/snackbar";
 import {LoadingButton} from "@mui/lab";

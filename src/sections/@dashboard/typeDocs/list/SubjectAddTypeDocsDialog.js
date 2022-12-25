@@ -22,7 +22,7 @@ import {addTypeDocumentToSubject, getAllSubject, updateSubjectClass} from '../..
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
-import {yupResolver} from "@hookform/resolvers/dist/yup";
+import {yupResolver} from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab';
 import {useAuthContext} from "../../../../auth/useAuthContext";
 

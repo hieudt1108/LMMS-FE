@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 // next
 import { useRouter } from 'next/router';
 // form
-import {yupResolver} from "@hookform/resolvers/dist/yup";
+import { yupResolver } from '@hookform/resolvers/dist/yup';
 import { useFieldArray, useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
@@ -128,11 +128,11 @@ export default function FolderNewPostForm({ classID }) {
     }
     console.log('dataPayload: ', dataPayload);
     const response = await updateClassMember(classID, dataPayload);
-    console.log('response: ', response.response.data.tite);
-    if (response) {
-      enqueueSnackbar(response.response.data.tite, { variant: 'error' });
+    console.log('response data: ', response.response);
+    if (response.status) {
+      enqueueSnackbar(`Thêm người dùng thành công ${response.response?.data.title}`, { variant: 'error' });
     } else {
-      enqueueSnackbar(response.response.data.tite, { variant: 'success' });
+      enqueueSnackbar(`Thêm người dùng thất bại ${response.response?.data.title}`, { variant: 'success' });
     }
   };
 

@@ -22,12 +22,12 @@ import { getAllSubject, updateSubjectClass } from '../../../../dataProvider/agen
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
-import {yupResolver} from "@hookform/resolvers/dist/yup";
+import { yupResolver } from '@hookform/resolvers/dist/yup';
 import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 
-export default function ClassAddSubjectDialog({ classID, open, onClose }) {
+export default function ClassAddSubjectDialog({ fetchMyClass, classID, open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = (() => {
@@ -93,6 +93,7 @@ export default function ClassAddSubjectDialog({ classID, open, onClose }) {
       const res = await updateSubjectClass(classID, postData);
       console.log(res);
       if (res.status < 400) {
+        await fetchMyClass();
         enqueueSnackbar('Thêm môn học vào lớp học thành công!');
         onClose();
       } else {

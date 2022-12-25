@@ -51,15 +51,6 @@ import {
   getAllProgram,
 } from '../../dataProvider/agent';
 import React, { useEffect, useCallback, useState } from 'react';
-// ICON
-// import IMG_IC from '/assets/icons/files/ic_img.svg';
-// import VIDEO_IC from '/assets/icons/files/ic_video.svg';
-// import DOCX_IC from '/assets/icons/files/ic_document.svg';
-// import AUDIO_IC from '/assets/icons/files/ic_audio.svg';
-// import OTHER_IC from '/assets/icons/files/ic_ai.svg';
-
-// import IMG from '/assets/icons/files/ic_img.svg';
-
 // ----------------------------------------------------------------------
 
 GeneralAppPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -143,7 +134,7 @@ export default function GeneralAppPage() {
       console.log(`${res.response.status} !`);
     }
   }
-  console.log('reportDocs: ', paging);
+  console.log('reportDocs: ', reports?.totalOfDocsCapacity);
 
   const handleSearchChange = useCallback(
     (event, value) => {
@@ -159,6 +150,12 @@ export default function GeneralAppPage() {
     [filters]
   );
 
+  const handlePageChange = useCallback(
+    (event, pageIndex) => {
+      setFilter({ ...filters, pageIndex: pageIndex });
+    },
+    [filters]
+  );
   const handleFilterSubject = useCallback(
     (event, value) => {
       setFilter({ ...filters, subjectId: event.target.value.id });
@@ -198,8 +195,6 @@ export default function GeneralAppPage() {
     );
   });
 
-  console.log('typedoc: ', typeDocs);
-
   const { themeStretch } = useSettingsContext();
 
   return (
@@ -210,25 +205,6 @@ export default function GeneralAppPage() {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            <AppWelcome
-              title={`Chào mừng quay trở lại! \n ${user?.firstName} ${user?.lastName}`}
-              description="Hệ thống quản lí dạy và học tích hợp với hệ sinh thái học liệu số mang lại tiện ích đầy đủ."
-              img={
-                <SeoIllustration
-                  sx={{
-                    p: 3,
-                    width: 360,
-                    margin: { xs: 'auto', md: 'inherit' },
-                  }}
-                />
-              }
-            />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <AppFeatured list={_appFeatured} />
-          </Grid>
           <Grid item xs={12} md={12}>
             <Typography variant="h4">Thống kê tổng số tài liệu</Typography>
           </Grid>
@@ -277,9 +253,15 @@ export default function GeneralAppPage() {
               total={reports?.typeOfDoc.others}
             />
           </Grid>
-          <Grid item xs={12} md={12} lg={6}>
+
+          <Grid sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }} item xs={12} md={12}>
+            <div></div>
+            <Typography variant="h6">Tổng dung lượng: {reports?.totalOfDocsCapacity} GB</Typography>
+          </Grid>
+          {/* <Grid item xs={12} md={12} lg={6}>
             <AppCurrentDownload
               title="Dung lượng"
+              totalCap={reports?.totalOfDocsCapacity}
               chart={{
                 colors: [
                   theme.palette.primary.main,
@@ -289,26 +271,17 @@ export default function GeneralAppPage() {
                   theme.palette.warning.main,
                 ],
                 series: [
-                  { label: 'Mac', value: 12244 },
-                  { label: 'Mac', value: 12244 },
-                  { label: 'Window', value: 53345 },
-                  { label: 'iOS', value: 44313 },
-                  { label: 'Android', value: 78343 },
+                  { label: 'Docx', value: 12244 },
+                  { label: 'Images', value: 12244 },
+                  { label: 'Mp3', value: 53345 },
+                  { label: 'Videos', value: 44313 },
+                  { label: 'Other', value: 78343 },
                 ],
               }}
             />
           </Grid>
-          {/* <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} lg={6}>
             <AppTopRelated title="Top Related Applications" list={_appRelated} />
-          </Grid> */}
-
-          {/* 
-          <Grid item xs={12} md={4}>
-            <AppWidgetSummary title="Total Installed" percent={0.2} total={4876} />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <AppWidgetSummary title="Total Downloads" percent={-0.1} total={678} />
           </Grid> */}
 
           <Grid item xs={12} lg={12}>
@@ -316,7 +289,7 @@ export default function GeneralAppPage() {
               <Stack direction="row">
                 <TextField
                   size="small"
-                  sx={{ mr: 3, ml: 2 }}
+                  sx={{ mr: 3, ml: 1 }}
                   autohighlight="true"
                   onChange={handleSearchChange}
                   placeholder="Tìm kiếm tài liệu..."
@@ -360,9 +333,12 @@ export default function GeneralAppPage() {
             </Stack>
           </Grid>
           <Grid item xs={12} lg={12}>
+            <div></div>
             <AppNewInvoice
               title="Thống kê tài liệu"
               tableData={reportDocs}
+              handlePageChange={() => handlePageChange()}
+              paging={paging}
               tableLabels={[
                 { id: 'code', label: 'Code Document' },
                 { id: 'name', label: 'Tên tài liệu' },

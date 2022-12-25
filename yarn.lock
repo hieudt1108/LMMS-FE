@@ -752,10 +752,10 @@
     protobufjs "^7.0.0"
     yargs "^16.2.0"
 
-"@hookform/resolvers@^2.9.8":
-  version "2.9.8"
-  resolved "https://registry.npmjs.org/@hookform/resolvers/-/resolvers-2.9.8.tgz"
-  integrity sha512-iVVjH0USq+1TqDdGkWe2M1x7Wn5OFPgVRo7CbWFsXTqqXqCaZtZcnzJu+UhljCWbthFWxWGXKLGYUDPZ04oVvQ==
+"@hookform/resolvers@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-1.3.0.tgz#b2b0ff3b4b6b104e0df1954e58098e0a9cb6195d"
+  integrity sha512-NF+KJYDiFjnGAqhM92vG5kFJFCZFFjO5VxcByf06o6FrG7BEta5NDBhqVsIAMSfMNsn1kWfSKX1TkDT21xq9Hg==
 
 "@humanwhocodes/config-array@^0.10.5":
   version "0.10.7"
@@ -3497,7 +3497,7 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
   integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
 
-lodash@>=4.17.21, lodash@^4.17.4:
+lodash@>=4.17.21, lodash@^4.17.21, lodash@^4.17.4:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -3506,11 +3506,6 @@ lodash@^3.5.0:
   version "3.10.1"
   resolved "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
   integrity sha512-9mDDwqVIma6OZX79ZlDACZl8sBm0TEnkf99zV3iMA4GzkIT/9hiqP5mY0HoT1iNLCrKc/R1HByV+yJfRWVJryQ==
-
-lodash@^4.17.21:
-  version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 long@^4.0.0:
   version "4.0.0"

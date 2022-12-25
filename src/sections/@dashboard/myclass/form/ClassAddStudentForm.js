@@ -4,7 +4,7 @@ import FormProvider, {RHFAutocomplete} from '../../../../components/hook-form';
 // API
 import {getALlRoles, getAllSubject, getAllUsers} from '../../../../dataProvider/agent';
 import {useForm} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
+import {yupResolver} from "@hookform/resolvers/dist/yup";
 import * as Yup from 'yup';
 import {LoadingButton} from '@mui/lab';
 import {useRouter} from 'next/router';

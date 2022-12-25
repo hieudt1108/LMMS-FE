@@ -38,7 +38,6 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
 
   const defaultValues = useMemo(
       () => ({
-        fileSubject: [],
       }),
       []
   );

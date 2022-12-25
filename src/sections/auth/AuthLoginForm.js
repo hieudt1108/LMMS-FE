@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import NextLink from 'next/link';
 // form
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {yupResolver} from "@hookform/resolvers/dist/yup";
 // @mui
 import { Link, Stack, Alert, IconButton, InputAdornment, TextField, MenuItem } from '@mui/material';
 import { LoadingButton } from '@mui/lab';

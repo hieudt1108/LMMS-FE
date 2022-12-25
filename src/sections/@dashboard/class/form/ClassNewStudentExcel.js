@@ -36,7 +36,6 @@ export default function ClassNewStudentExcel({onNextStep, onBackStep,setFormData
 
   const defaultValues = useMemo(
       () => ({
-        file: [],
       }),
       []
   );

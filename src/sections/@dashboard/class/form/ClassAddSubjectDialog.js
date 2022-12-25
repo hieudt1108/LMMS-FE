@@ -22,7 +22,7 @@ import { getAllSubject, updateSubjectClass } from '../../../../dataProvider/agen
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {yupResolver} from "@hookform/resolvers/dist/yup";
 import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------

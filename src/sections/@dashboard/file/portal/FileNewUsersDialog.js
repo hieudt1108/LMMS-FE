@@ -8,7 +8,7 @@ import {SingleFilePreview, Upload} from '../../../../components/upload';
 import FormProvider from "../../../../components/hook-form";
 import * as Yup from "yup";
 import {useForm} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
+import {yupResolver} from "@hookform/resolvers/dist/yup";
 import {createManyUser} from "../../../../dataProvider/agent";
 import {useSnackbar} from "../../../../components/snackbar";
 import {LoadingButton} from "@mui/lab";
@@ -90,6 +90,9 @@ export default function FileNewUserDialog({
 
   const onSubmit = async (data) => {
       try {
+          if(data.file == undefined){
+            return enqueueSnackbar(`Bạn chưa thêm file danh sách!`, { variant: 'error' });
+          }
           formDataFileUser.append('file', data.file);
           const res = await createManyUser(formDataFileUser)
           if(res.status < 400){

@@ -101,6 +101,13 @@ export default function UserListPage() {
 
   const { user } = useAuthContext();
 
+  const [filter, setFilter] = useState({
+    pageIndex: 1,
+    pageSize: 5,
+    searchByEmail: '',
+    roleId: '',
+  });
+
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterName, setFilterName] = useState('');
@@ -115,17 +122,10 @@ export default function UserListPage() {
 
   const [paging, setPaging] = useState();
 
-  const initialFilter = {
-    pageIndex: 1,
-    pageSize: 5,
-    searchByEmail: '',
-    roleId: '',
-  };
-
-  const [filter, setFilter] = useState(initialFilter);
-
   const [listUsers, setListUsers] = useState([]);
+
   const [role, setSelectedRole] = useState('all');
+
   const [filterByEmail, setFilterByEmail] = useState('');
 
   const denseHeight = dense ? 52 : 72;
@@ -216,12 +216,12 @@ export default function UserListPage() {
     [filter]
   );
 
-  const handleChangeRoles = useCallback(
-    async (event, value) => {
-      setFilter({ ...filter, roleId: event.target.value === 'all' ? '' : event.target.value });
-    },
-    [filter]
-  );
+  const handleChangeRoles = (event) => {
+    console.log('event.target.value', event.target.value);
+    setFilter({ ...filter, roleId: event.target.value === 'all' ? '' : event.target.value });
+    setSelectedRole(event.target.value);
+  };
+
 
   const handleResetFilter = () => {
     setSelectedRole('all');

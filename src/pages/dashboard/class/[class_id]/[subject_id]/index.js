@@ -17,6 +17,7 @@ import { getFolderRedux, getFolderUploadDocToSlotInGeneralFolderRedux } from 'sr
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import { getDocumentInClassRedux, getSubjectRedux } from 'src/redux/slices/subject';
+import {useAuthContext} from "../../../../../auth/useAuthContext";
 
 index.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -25,10 +26,11 @@ const data = {
   menuDocument: ['preview', 'download', 'delete'],
 };
 
+
 export default function index() {
   const { themeStretch } = useSettingsContext();
   const { subject, documentInClass } = useSelector((state) => state.subject);
-  console.log('index', documentInClass);
+  const { user } = useAuthContext();
 
   const [docs, setDocs] = useState([]);
 

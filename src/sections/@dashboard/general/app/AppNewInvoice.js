@@ -54,7 +54,9 @@ export default function AppNewInvoice({
             <TableHeadCustom headLabel={tableLabels} />
 
             <TableBody>
-              {tableData?.length && tableData.map((row) => <AppNewInvoiceRow key={row.id} row={row} />)}
+              {tableData?.map((row) => (
+                <AppNewInvoiceRow key={row.id} row={row} />
+              ))}
             </TableBody>
           </Table>
         </Scrollbar>
@@ -62,7 +64,8 @@ export default function AppNewInvoice({
 
       <Divider />
 
-      <Box direction="row" justifyContent="flex-end" alignItems="center" sx={{ p: 2, textAlign: 'right' }}>
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
+        <></>
         <Pagination
           size="small"
           count={paging?.TotalPages}
@@ -135,11 +138,6 @@ function AppNewInvoiceRow({ row }) {
         <MenuItem onClick={handleDownload}>
           <Iconify icon="eva:download-fill" />
           Download
-        </MenuItem>
-
-        <MenuItem onClick={handlePrint}>
-          <Iconify icon="eva:printer-fill" />
-          Print
         </MenuItem>
 
         <MenuItem onClick={handleShare}>

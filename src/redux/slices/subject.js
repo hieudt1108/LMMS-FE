@@ -53,12 +53,12 @@ const slice = createSlice({
     getSubjectSuccess(state, action) {
       const { subject } = action.payload;
       state.isLoading = false;
-      state.subject = { ...state.subject, ...subject };
+      state.subject = { ...subject };
     },
     getDocumentInClassSuccess(state, action) {
       const { document } = action.payload;
       state.isLoading = false;
-      state.documentInClass = [...state.documentInClass, ...document];
+      state.documentInClass = [...document];
     },
 
     postDocumentsInSlotSuccess(state, action) {

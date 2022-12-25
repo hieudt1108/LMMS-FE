@@ -72,7 +72,7 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
     ) {
       setOpenConfirmAddDocument(true);
       return;
-    } else if (data.types.find((type) => type === 'folder')) {
+    } else if (data.types.find((type) => type === 'folder') || data.types.find((type) => type === 'storeFolder')) {
       const message = await dispatch(getOneDocumentRedux(file.id));
       console.log('message', message);
       if (message && message.variant) {
@@ -80,6 +80,8 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
       } else {
         setOpenDetails(true);
       }
+    } else {
+      enqueueSnackbar('Không thực hiện được thao tác này', { variant: 'error' });
     }
   };
 
@@ -123,17 +125,8 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
       setOpenConfirmDeleteFile(false);
       handleClosePopover();
       return;
-    }
-
-    if (data.types.find((type) => type === 'storeFolder')) {
-      const message = await dispatch(deleteDocumentInStoreFolderRedux(file.id));
-      if (message) {
-        enqueueSnackbar(message.title, { variant: message.variant });
-      }
-      setOpenConfirmDeleteFile(false);
-      handleClosePopover();
-    } else if (data.types.find((type) => type === 'folder')) {
-      const message = await dispatch(deleteDocumentInFolderRedux(file.id));
+    } else if (data.types.find((type) => type === 'folder') || data.types.find((type) => type === 'storeFolder')) {
+      const message = await dispatch(deleteDocumentInFolderRedux(file.id, data.types[0]));
       if (message) {
         enqueueSnackbar(message.title, { variant: message.variant });
       }

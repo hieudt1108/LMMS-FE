@@ -201,9 +201,9 @@ const slice = createSlice({
     },
 
     deleteDocumentInFolderSuccess(state, action) {
-      const { documentID } = action.payload;
+      const { documentID, nameData } = action.payload;
       state.isLoading = false;
-      state.folder.listDocuments = state.folder.listDocuments.filter((item) => item.id !== documentID);
+      state[`${nameData}`].listDocuments = state[`${nameData}`].listDocuments.filter((item) => item.id !== documentID);
     },
     deleteDocumentInStoreFolderSuccess(state, action) {
       const { documentID } = action.payload;
@@ -428,7 +428,7 @@ export function createDocumentInitialRedux() {
   };
 }
 
-export function deleteDocumentInFolderRedux(documentID) {
+export function deleteDocumentInFolderRedux(documentID, nameData) {
   return async () => {
     try {
       if (!documentID) {
@@ -440,7 +440,7 @@ export function deleteDocumentInFolderRedux(documentID) {
         return returnMessageError(`${response.response.data.title}`);
       }
 
-      dispatch(slice.actions.deleteDocumentInFolderSuccess({ documentID }));
+      dispatch(slice.actions.deleteDocumentInFolderSuccess({ documentID, nameData }));
 
       return returnMessageSuccess('Xóa tài liệu thành công');
     } catch (error) {

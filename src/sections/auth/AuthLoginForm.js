@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import NextLink from 'next/link';
 // form
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {yupResolver} from "@hookform/resolvers/dist/yup";
 // @mui
 import { Link, Stack, Alert, IconButton, InputAdornment, TextField, MenuItem } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -26,8 +26,8 @@ export default function AuthLoginForm() {
   const [data, setData] = useState({});
 
   const LoginSchema = Yup.object().shape({
-    name: Yup.string().required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    name: Yup.string().required('Không được trống'),
+    password: Yup.string().required('Không được trống'),
   });
 
   const methods = useForm({

@@ -34,9 +34,9 @@ export default function ClassCreatePage() {
   const {replace} = useRouter();
   const { activeStep } = steps;
   const [formData,setFormData] = useState({})
-  const completed = activeStep === STEPS.length;
+  const [formDataStepOne,setFormDataStepOne] = useState({})
+  const [completed,setCompleted] = useState(false)
 
-  console.log('activeStep',activeStep)
 
     const handleNextStep = () => {
         dispatch(nextStep());
@@ -94,20 +94,22 @@ export default function ClassCreatePage() {
                       <ClassNewEditForm
                           onNextStep={handleNextStep}
                           setFormData={setFormData}
+                          setFormDataStepOne={setFormDataStepOne}
+                          formDataStepOne = {formDataStepOne}
                       />
                   )}
                   {activeStep === 1 && (
                       <ClassNewStudentExcel
                           onNextStep={handleNextStep}
                           onBackStep={handleBackStep}
-                          setFormData={setFormData}
-
+                          formData = {formData}
                       />
                   )}
                   {activeStep === 2 && (
                       <ClassNewSubjectExcel
                           onBackStep={handleBackStep}
                           onNextStep={handleNextStep}
+                          setCompleted={setCompleted}
                           formData = {formData}
                       />
                   )}

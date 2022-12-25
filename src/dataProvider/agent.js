@@ -251,6 +251,14 @@ const postClass = (payload) => {
   return postApi('Class', payload);
 };
 
+const postFileExcelAddMember = (id, payload) => {
+  return postApi(`Class/UploadExcelAddMember?id=${id}`, payload, 1);
+};
+
+const postFileExcelAddSubject = (id, payload) => {
+  return postApi(`Class/UploadExcelAddSubject?id=${id}`, payload, 1);
+};
+
 // GRADE
 const postGrade = () => {
   return postApi('Grade');
@@ -294,6 +302,10 @@ const createSlot = (payload) => {
 // User Auth
 const createUserAuth = (payload) => {
   return postApi('Auth/registerSingleUser', payload);
+};
+
+const createManyUser = (payload) => {
+  return postApi('User/UploadExcel', payload, 1);
 };
 
 // ROLE
@@ -432,8 +444,12 @@ async function putApi(url, payload) {
   }
 }
 // SUBJECT IN CLASS
-const deleteSubjectInClass = (id) => {
-  return putApi(`Class/removeSubject/${id}`);
+const deleteSubjectInClass = (id, payload) => {
+  return putApi(`Class/removeSubject/${id}`, payload);
+};
+// MEMBER IN CLASS
+const removeMemberInClass = (id, payload) => {
+  return putApi(`Class/updateRemoveMember/${id}`, payload);
 };
 // PROGRAM
 const updateProgram = (id, payload) => {
@@ -622,4 +638,8 @@ export {
   removeTypeDocumentToSubject,
   getAllMenu,
   getMenuById,
+  postFileExcelAddMember,
+  postFileExcelAddSubject,
+  createManyUser,
+  removeMemberInClass,
 };

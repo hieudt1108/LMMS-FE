@@ -36,6 +36,8 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import { getFolderRedux } from 'src/redux/slices/folder';
 import { deleteClass } from '../../../dataProvider/agent';
 import { useSnackbar } from '../../../components/snackbar';
+import EmptyContent from '../../../components/empty-content';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 Classes.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function Classes() {
@@ -47,6 +49,8 @@ export default function Classes() {
   const { programs } = useSelector((state) => state.program);
   const { grades } = useSelector((state) => state.grade);
   console.log('Classes', pagging);
+
+  const { user } = useAuthContext();
 
   const [pagingClass, setPagingClass] = React.useState({
     pageIndex: 1,
@@ -159,6 +163,7 @@ export default function Classes() {
                   }}
                 />
               }
+              user={user}
               action={
                 <NextLink href={PATH_DASHBOARD.class.new} passHref>
                   <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
@@ -189,7 +194,7 @@ export default function Classes() {
                 <InputLabel id="demo-simple-select-helper-label">Khối</InputLabel>
                 <Select id="demo-simple-select-helper" value={grade} label="Khối" onChange={handleGradeChange}>
                   <MenuItem value="">
-                    <em>None</em>
+                    <em>Tất cả</em>
                   </MenuItem>
                   {renderMenuItem(grades)}
                 </Select>
@@ -204,7 +209,7 @@ export default function Classes() {
                   onChange={handleProgramChange}
                 >
                   <MenuItem value="">
-                    <em>None</em>
+                    <em>Tất cả</em>
                   </MenuItem>
                   {renderMenuItem(programs)}
                 </Select>
@@ -217,16 +222,20 @@ export default function Classes() {
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <ClassBanner
                   data={obj}
-                  title="Weekly Sales"
+                  user={user}
                   handlerDelete={() => handlerDelete(obj.id)}
-                  total={714000}
                   icon={'ant-design:android-filled'}
                 />
               </Grid>
             ))
           ) : (
-            <Grid item xs={12} sm={6} md={4}>
-              <Alert severity="error">This is an error !</Alert>
+            <Grid item xs={12}>
+              <EmptyContent
+                title="Không có dữ liệu"
+                sx={{
+                  '& span.MuiBox-root': { height: 160 },
+                }}
+              />
             </Grid>
           )}
         </Grid>

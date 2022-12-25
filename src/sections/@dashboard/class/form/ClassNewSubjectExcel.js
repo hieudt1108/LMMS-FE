@@ -1,29 +1,22 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 // next
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // form
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {useForm} from 'react-hook-form';
 // @mui
-import { LoadingButton } from '@mui/lab';
-import {Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, MenuItem, Button} from '@mui/material';
+import {LoadingButton} from '@mui/lab';
+import {Box, Button, Card, Grid, Stack, Typography} from '@mui/material';
 // utils
-import { fData } from '../../../../utils/formatNumber';
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
 // components
-import Label from '../../../../components/label';
-import { useSnackbar } from '../../../../components/snackbar';
-import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { getProgramsRedux } from 'src/redux/slices/program';
-import { getGradesRedux } from 'src/redux/slices/grade';
+import {useSnackbar} from '../../../../components/snackbar';
+import FormProvider from '../../../../components/hook-form';
+import {useDispatch} from 'react-redux';
 
 // API
-import {createGrade, postClass, updateClass, updateGrade} from '../../../../dataProvider/agent';
+import {postClass, postFileExcelAddMember, postFileExcelAddSubject} from '../../../../dataProvider/agent';
 import {Upload} from "../../../../components/upload";
 import Iconify from "../../../../components/iconify";
 
@@ -31,29 +24,26 @@ import Iconify from "../../../../components/iconify";
 
 ClassNewSubjectExcel.propTypes = {
   onNextStep: PropTypes.func,
-  formData: PropTypes.object,
   onBackStep: PropTypes.func,
+  setCompleted: PropTypes.func,
 };
 
-export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
+export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData,setCompleted}) {
   const { push } = useRouter();
   const dispatch = useDispatch();
   const [fileSubject, setFileSubject] = useState([]);
-
   const { enqueueSnackbar } = useSnackbar();
+  const formDataFileMember = new FormData();
+  const formDataFileSubject = new FormData();
 
-  const validationSchema = Yup.object().shape({
-  })
 
   const defaultValues = useMemo(
       () => ({
-
       }),
       []
   );
 
   const methods = useForm({
-    resolver: yupResolver(validationSchema),
     defaultValues,
   });
 
@@ -70,19 +60,37 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
 
   const handleDrop = (acceptedFiles) => {
     try {
-      setValue('fileSubject', acceptedFiles);
-      setFileSubject(acceptedFiles);
+      setValue(`fileSubject`, acceptedFiles[0]);
+      setFileSubject(acceptedFiles[0]);
     } catch (error) {
       console.error('handleDrop', error);
     }
   };
+
   const handleRemoveFile = () => {
-    setValue('fileSubject', '');
-    setFileSubject([]);
+    setValue(`fileSubject`, '');
+    setFileSubject('');
+
   };
 
   const onSubmit = async (data) => {
     onNextStep();
+    formDataFileSubject.append('file', data?.fileSubject);
+    try {
+      if(data.fileSubject === undefined){
+        return enqueueSnackbar(`Bạn chưa thêm file danh sách!`, { variant: 'error' });
+      }
+      const pushFileSubjectExcel = await postFileExcelAddSubject(formData?.id, formDataFileSubject)
+      if(pushFileSubjectExcel.status < 400){
+        enqueueSnackbar('Thêm danh sách môn học thành công');
+        setCompleted(true)
+        onNextStep();
+      }else{
+        enqueueSnackbar(`${pushFileSubjectExcel.response.data.title}`, {variant: 'error'});
+      }
+    }catch (error) {
+      enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
+    }
   };
 
 
@@ -102,22 +110,23 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
                   }}
               >
                 <Typography variant="h6" sx={{color: 'text.disabled', mb: 1}}>
-                  Danh sách môn học {JSON.stringify(formData)}
+                  Danh sách môn học
                 </Typography>
                 <Upload
-                    hasDefault
-                    defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportSubjectClass.xlsx'}
                     onCLick={() => {
                       console.log('upload');
                     }}
+                    hasDefault
+                    accept={{ '.xlsx': [] }}
+                    defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportSubjectClass.xlsx'}
                     multiple
-                    name='fileSubject'
-                    error={getValues('fileSubject') === ''}
+                    name={`fileSubject`}
+                    error={getValues(`fileSubject`) === ''}
                     files={
-                      getValues('fileSubject')
+                      getValues(`fileSubject`)
                           ? [
-                            Object.assign(getValues('fileSubject'), {
-                              preview: URL.createObjectURL(Object.assign(getValues('fileSubject'))),
+                            Object.assign(getValues(`fileSubject`), {
+                              preview: URL.createObjectURL(Object.assign(getValues(`fileSubject`))),
                             }),
                           ]
                           : []

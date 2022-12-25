@@ -1,15 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Card, Stack } from '@mui/material';
-import FormProvider from '../../../../components/hook-form';
+import React from 'react';
 // API
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-import { LoadingButton } from '@mui/lab';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 import ClassNewEditMemberDetails from './ClassNewEditMemberDetails';
-import { updateClassMember } from 'src/dataProvider/agent';
 
 export default function ClassAddStudentForm({ isEdit = false, classID }) {
   const { push } = useRouter();

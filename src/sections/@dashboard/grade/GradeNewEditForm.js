@@ -5,7 +5,7 @@ import {useEffect, useMemo, useState} from 'react';
 import {useRouter} from 'next/router';
 // form
 import {Controller, useForm} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
+import {yupResolver} from "@hookform/resolvers/dist/yup";
 // @mui
 import {LoadingButton} from '@mui/lab';
 import {Box, Button, Card, Chip, Divider, Grid, MenuItem, Stack, TextField, Typography} from '@mui/material';
@@ -35,7 +35,7 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
   const validationSchema = Yup.object().shape({
     name: Yup.string().trim().required('Tên cấp học không được trống'),
     description: Yup.string().notRequired(),
-    levelId:  Yup.string().trim().required('Phải chọn trạng thái'),
+    levelId:  Yup.string().trim().required('Phải chọn cấp học'),
   })
 
   const defaultValues = useMemo(
@@ -151,6 +151,7 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
                      <div></div>
                     <RHFTextField
                         name="name"
+                        required
                         label="Tên khối học"
                         id="name"
                     />

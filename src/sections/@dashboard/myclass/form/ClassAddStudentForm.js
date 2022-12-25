@@ -1,16 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Box, Card, Chip, FormControlLabel, Grid, Stack, Switch, TextField, Typography, Alert } from '@mui/material';
-import FormProvider, { RHFAutocomplete, RHFRadioGroup, RHFTextField } from '../../../../components/hook-form';
+import React, {useEffect, useMemo, useState} from 'react';
+import {Alert, Box, Chip, Grid, Stack, TextField, Typography} from '@mui/material';
+import FormProvider, {RHFAutocomplete} from '../../../../components/hook-form';
 // API
-import { createUserAuth, getALlRoles, getAllSubject, updateUser, getAllUsers } from '../../../../dataProvider/agent';
-import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {getALlRoles, getAllSubject, getAllUsers} from '../../../../dataProvider/agent';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from "@hookform/resolvers/dist/yup";
 import * as Yup from 'yup';
-import { DatePicker } from '@mui/x-date-pickers';
-import { LoadingButton } from '@mui/lab';
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-import { useRouter } from 'next/router';
-import { useSnackbar } from '../../../../components/snackbar';
+import {LoadingButton} from '@mui/lab';
+import {useRouter} from 'next/router';
+import {useSnackbar} from '../../../../components/snackbar';
 
 export default function ClassAddStudentForm({ isEdit = false }) {
   const { push } = useRouter();

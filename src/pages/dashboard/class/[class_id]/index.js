@@ -26,6 +26,8 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 //API
 import { getClassById, deleteSubjectInClass } from '../../../../dataProvider/agent';
 import ClassAddSubjectDialog from '../../../../sections/@dashboard/class/form/ClassAddSubjectDialog';
+import { useAuthContext } from 'src/auth/useAuthContext';
+
 // ----------------------------------------------------------------------
 
 ClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -35,6 +37,7 @@ export default function ClassDetail() {
   const router = useRouter();
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
+  const { user } = useAuthContext();
 
   const {
     query: { class_id },
@@ -61,13 +64,13 @@ export default function ClassDetail() {
       id: 1,
       value: 'description',
       label: 'Quản lý môn học',
-      component: <ManageSubject myClass={myClass} />,
+      component: <ManageSubject fetchMyClass={() => fetchMyClass()} classID={class_id} user={user} myClass={myClass} />,
     },
     {
       id: 2,
       value: 'reviews',
       label: `Quản lý người dùng`,
-      component: <ManageUser myClass={myClass} />,
+      component: <ManageUser fetchMyClass={() => fetchMyClass()} classID={class_id} user={user} myClass={myClass} />,
     },
   ];
 
@@ -95,7 +98,7 @@ export default function ClassDetail() {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Grid container spacing={3} mb={2}>
+        {/* <Grid container spacing={3} mb={2}>
           <Grid item xs={12} md={4}>
             <ClassWidgetSummary title="Giáo viên" total={myClass?.members.length} icon={<BookingIllustration />} />
           </Grid>
@@ -107,25 +110,40 @@ export default function ClassDetail() {
           <Grid item xs={12} md={4}>
             <ClassWidgetSummary title="Tài liệu" total={124000} icon={<CheckOutIllustration />} />
           </Grid>
-        </Grid>
+        </Grid> */}
 
-        {currentTab === 'reviews' ? (
-          <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button onClick={handleOnClickAddMember} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-              Thêm thành viên
-            </Button>
-            <div></div>
-          </Box>
+        {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
+          <>
+            {currentTab === 'reviews' ? (
+              <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  onClick={handleOnClickAddMember}
+                  variant="contained"
+                  startIcon={<Iconify icon="eva:plus-fill" />}
+                >
+                  Thêm thành viên
+                </Button>
+                <div></div>
+              </Box>
+            ) : (
+              <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
+                <Button onClick={handleOpenAddSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                  Thêm môn học
+                </Button>
+                <div></div>
+              </Box>
+            )}
+          </>
         ) : (
-          <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button onClick={handleOpenAddSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-              Thêm môn học
-            </Button>
-            <div></div>
-          </Box>
+          ''
         )}
 
-        <ClassAddSubjectDialog classID={class_id} open={openAddSubject} onClose={handleCloseAddSubject} />
+        <ClassAddSubjectDialog
+          fetchMyClass={() => fetchMyClass()}
+          classID={class_id}
+          open={openAddSubject}
+          onClose={handleCloseAddSubject}
+        />
 
         <Card>
           <Tabs

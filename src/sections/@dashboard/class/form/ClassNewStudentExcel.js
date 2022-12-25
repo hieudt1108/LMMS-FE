@@ -1,59 +1,47 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 // next
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // form
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {useForm} from 'react-hook-form';
 // @mui
-import { LoadingButton } from '@mui/lab';
-import {Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, MenuItem, Button} from '@mui/material';
+import {LoadingButton} from '@mui/lab';
+import {Box, Button, Card, Grid, Stack, Typography} from '@mui/material';
 // utils
-import { fData } from '../../../../utils/formatNumber';
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
 // components
-import Label from '../../../../components/label';
-import { useSnackbar } from '../../../../components/snackbar';
-import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { getProgramsRedux } from 'src/redux/slices/program';
-import { getGradesRedux } from 'src/redux/slices/grade';
+import {useSnackbar} from '../../../../components/snackbar';
+import FormProvider from '../../../../components/hook-form';
+import {useDispatch} from 'react-redux';
 
 // API
-import {createGrade, postClass, updateClass, updateGrade} from '../../../../dataProvider/agent';
 import {Upload} from "../../../../components/upload";
 import Iconify from "../../../../components/iconify";
+import {postFileExcelAddMember} from "../../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
 ClassNewStudentExcel.propTypes = {
   onNextStep: PropTypes.func,
   onBackStep: PropTypes.func,
-  setFormData: PropTypes.func,
 };
 
-export default function ClassNewStudentExcel({onNextStep, onBackStep,setFormData}) {
+export default function ClassNewStudentExcel({onNextStep, onBackStep, formData}) {
+  console.log('ClassNewStudentExcel',formData)
   const { push } = useRouter();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const formData = new FormData();
-
-  const validationSchema = Yup.object().shape({
-  })
+  const formDataFileMember = new FormData();
 
   const defaultValues = useMemo(
       () => ({
-
       }),
       []
   );
 
   const methods = useForm({
-    resolver: yupResolver(validationSchema),
     defaultValues,
   });
 
@@ -78,18 +66,29 @@ export default function ClassNewStudentExcel({onNextStep, onBackStep,setFormData
     }
   };
 
-  const handleRemoveFile = (indexLocal) => {
+  const handleRemoveFile = () => {
     setValue(`file`, '');
     setFiles('');
 
   };
 
   const onSubmit = async (data) => {
-    console.log(data)
     const fileStudent = getValues(`file`)
-    console.log('fileStudent',fileStudent)
-    setFormData(prev=>{return {...prev, ...fileStudent}})
-    onNextStep();
+    formDataFileMember.append('file', data?.file);
+    try {
+      if(data.file === undefined){
+        return enqueueSnackbar(`Bạn chưa thêm file danh sách!`, { variant: 'error' });
+      }
+      const pushFileStudentExcel = await postFileExcelAddMember(formData?.id, formDataFileMember)
+      if(pushFileStudentExcel.status < 400){
+        enqueueSnackbar('Thêm danh sách thành viên lớp học thành công');
+        onNextStep();
+      }else{
+        enqueueSnackbar(`${pushFileStudentExcel.response.data.title}`, {variant: 'error'});
+      }
+    }catch (error) {
+      enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
+    }
   };
 
 
@@ -118,6 +117,7 @@ export default function ClassNewStudentExcel({onNextStep, onBackStep,setFormData
                   }}
                   hasDefault
                   defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportMemberClass.xlsx'}
+                  accept={{ '.xlsx': [] }}
                   multiple
                   name={`file`}
                   error={getValues(`file`) === ''}

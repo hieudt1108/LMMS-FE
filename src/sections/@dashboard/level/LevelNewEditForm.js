@@ -5,7 +5,7 @@ import {useEffect, useMemo} from 'react';
 import {useRouter} from 'next/router';
 // form
 import {useForm} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
+import {yupResolver} from "@hookform/resolvers/dist/yup";
 // @mui
 import {LoadingButton} from '@mui/lab';
 import {Button, Card, Divider, Grid, Stack, Typography} from '@mui/material';
@@ -116,6 +116,7 @@ export default function LevelNewEditForm({ isEdit = false, currentLevel }) {
                   <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                     <RHFTextField
                         name="name"
+                        required
                         label="Tên cấp học"
                         id="name"
                     />

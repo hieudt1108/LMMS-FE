@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import Iconify from '../../../../components/iconify';
 
-export default function ManageUser({ myClass }) {
+export default function ManageUser({ fetchMyClass, classID, myClass, user }) {
   const {
     query: { myclass_id },
   } = useRouter();
@@ -17,8 +17,11 @@ export default function ManageUser({ myClass }) {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <CLassDetails
+            fetchMyClass={() => fetchMyClass()}
             title="Thông tin học sinh"
             myClass={myClass}
+            classID={classID}
+            user={user}
             tableLabels={[
               { id: 'STT', label: '' },
               { id: 'name', label: 'Họ và tên' },
@@ -31,8 +34,11 @@ export default function ManageUser({ myClass }) {
         </Grid>
         <Grid item xs={12}>
           <ClassTeacher
+            fetchMyClass={() => fetchMyClass()}
             title="Thông tin giáo viên"
             myClass={myClass}
+            classID={classID}
+            user={user}
             tableLabels={[
               { id: 'STT', label: '' },
               { id: 'name', label: 'Họ và tên' },

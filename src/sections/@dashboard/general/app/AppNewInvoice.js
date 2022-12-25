@@ -15,9 +15,10 @@ import {
   CardHeader,
   IconButton,
   TableContainer,
+  Pagination,
 } from '@mui/material';
 // utils
-import { fCurrency } from '../../../../utils/formatNumber';
+import { fDate } from '../../../../utils/formatTime';
 // components
 import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
@@ -34,20 +35,26 @@ AppNewInvoice.propTypes = {
   tableLabels: PropTypes.array,
 };
 
-export default function AppNewInvoice({ title, subheader, tableData, tableLabels, ...other }) {
+export default function AppNewInvoice({
+  handlePageChange,
+  title,
+  paging,
+  subheader,
+  tableData,
+  tableLabels,
+  ...other
+}) {
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} sx={{ mb: 3 }} />
 
       <TableContainer sx={{ overflow: 'unset' }}>
         <Scrollbar>
-          <Table sx={{ minWidth: 720 }}>
+          <Table>
             <TableHeadCustom headLabel={tableLabels} />
 
             <TableBody>
-              {tableData.map((row) => (
-                <AppNewInvoiceRow key={row.id} row={row} />
-              ))}
+              {tableData?.length && tableData.map((row) => <AppNewInvoiceRow key={row.id} row={row} />)}
             </TableBody>
           </Table>
         </Scrollbar>
@@ -55,26 +62,20 @@ export default function AppNewInvoice({ title, subheader, tableData, tableLabels
 
       <Divider />
 
-      <Box sx={{ p: 2, textAlign: 'right' }}>
-        <Button size="small" color="inherit" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>
-          View All
-        </Button>
+      <Box direction="row" justifyContent="flex-end" alignItems="center" sx={{ p: 2, textAlign: 'right' }}>
+        <Pagination
+          size="small"
+          count={paging?.TotalPages}
+          rowsperpage={paging?.PageSize}
+          onChange={handlePageChange}
+          color="primary"
+        />
       </Box>
     </Card>
   );
 }
 
 // ----------------------------------------------------------------------
-
-AppNewInvoiceRow.propTypes = {
-  row: PropTypes.shape({
-    id: PropTypes.string,
-    price: PropTypes.number,
-    status: PropTypes.string,
-    category: PropTypes.string,
-  }),
-};
-
 function AppNewInvoiceRow({ row }) {
   const [openPopover, setOpenPopover] = useState(null);
 
@@ -109,22 +110,19 @@ function AppNewInvoiceRow({ row }) {
   return (
     <>
       <TableRow>
-        <TableCell>{`INV-${row.id}`}</TableCell>
+        <TableCell>{row.document.code}</TableCell>
 
-        <TableCell>{row.category}</TableCell>
+        <TableCell>{row.document.name}</TableCell>
 
-        <TableCell>{fCurrency(row.price)}</TableCell>
+        <TableCell>{fDate(row.document.createDate)}</TableCell>
 
         <TableCell>
-          <Label
-            variant="soft"
-            color={
-              (row.status === 'in_progress' && 'warning') || (row.status === 'out_of_date' && 'error') || 'success'
-            }
-          >
-            {sentenceCase(row.status)}
-          </Label>
+          {row.userDto.firstName} {row.userDto.lastName}
         </TableCell>
+
+        <TableCell>{row.userDto.email}</TableCell>
+
+        <TableCell>{row.userDto.phone}</TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

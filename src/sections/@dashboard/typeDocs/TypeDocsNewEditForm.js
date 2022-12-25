@@ -5,7 +5,7 @@ import {useEffect, useMemo} from 'react';
 import {useRouter} from 'next/router';
 // form
 import {useForm} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
+import {yupResolver} from "@hookform/resolvers/dist/yup";
 // @mui
 import {LoadingButton} from '@mui/lab';
 import {Button, Card, Divider, Grid, Stack, Typography} from '@mui/material';
@@ -114,6 +114,7 @@ export default function TypeDocsNewEditForm({ isEdit = false, currentTypeDocs })
                 <Stack alignItems="flex-end" spacing={1.5}>
                   <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                     <RHFTextField
+                        required
                         name="name"
                         label="Tên loại tài liệu"
                         id="name"

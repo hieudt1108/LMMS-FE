@@ -10,8 +10,10 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 import Iconify from '../../../../components/iconify';
+import { useSnackbar } from '../../../../components/snackbar';
 import useResponsive from '../../../../hooks/useResponsive';
 
+import { deleteSubjectInClass } from '../../../../dataProvider/agent';
 // import Image from '../../../../components/image';
 
 // ----------------------------------------------------------------------
@@ -23,8 +25,10 @@ ClassNewestBooking.propTypes = {
   subheader: PropTypes.number,
 };
 
-export default function ClassNewestBooking({ myClass, title, subheader, sx, ...other }) {
+export default function ClassNewestBooking({ fetchMyClass, classID, myClass, title, user, subheader, sx, ...other }) {
   const theme = useTheme();
+
+  // console.log('classID: ', classID);
 
   return (
     <Box sx={{ py: 2, ...sx }} {...other}>
@@ -40,7 +44,13 @@ export default function ClassNewestBooking({ myClass, title, subheader, sx, ...o
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 12, sm: 12, md: 12 }}>
         {myClass?.subjects?.map((item, index) => (
           <Grid item xs={2} sm={12} md={12} key={index}>
-            <BookingItem key={item.subjectId} item={item} />
+            <BookingItem
+              fetchMyClass={() => fetchMyClass()}
+              classID={classID}
+              user={user}
+              key={item.subjectId}
+              item={item}
+            />
           </Grid>
         ))}
       </Grid>
@@ -50,9 +60,24 @@ export default function ClassNewestBooking({ myClass, title, subheader, sx, ...o
 
 // ----------------------------------------------------------------------
 
-function BookingItem({ item }) {
+function BookingItem({ fetchMyClass, item, user, classID }) {
   const { code, name, subjectId, teacherFirstName, teacherLastName, totalDocs } = item;
+  const { enqueueSnackbar } = useSnackbar();
+  const [openConfirmDeleteFile, setOpenConfirmDeleteFile] = useState(false);
 
+  const handlerDelete = async () => {
+    const res = await deleteSubjectInClass(classID, [
+      {
+        subjectId: item.subjectId,
+      },
+    ]);
+    if (res.status < 400) {
+      await fetchMyClass();
+      enqueueSnackbar('Xoá lớp thành công');
+    } else {
+      enqueueSnackbar('Xoá thất bại', { variant: 'error' });
+    }
+  };
   const {
     query: { class_id },
   } = useRouter();
@@ -94,20 +119,19 @@ function BookingItem({ item }) {
           )}
           <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
             <Stack direction="row" alignItems="center" spacing={1}>
-              <Iconify icon="ic:round-vpn-key" width={16} />
-              <Typography variant="caption">Số tiết học: {50}</Typography>
-            </Stack>
-
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Iconify icon="eva:people-fill" width={16} />
+              <Iconify icon="material-symbols:edit-document" width={16} />
               <Typography variant="caption">Số tài liệu: {totalDocs}</Typography>
             </Stack>
           </Stack>
         </Box>
       </Stack>
-      <Button>
-        <Iconify icon="eva:trash-2-outline" width={28} />
-      </Button>
+      {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
+        <Button onClick={handlerDelete}>
+          <Iconify icon="eva:trash-2-outline" width={28} />
+        </Button>
+      ) : (
+        ''
+      )}
     </Paper>
   );
 }

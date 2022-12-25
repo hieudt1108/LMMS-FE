@@ -49,7 +49,7 @@ LevelLayout.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default function LevelLayout() {
   const { themeStretch } = useSettingsContext();
 
-  const { SUBJECTS } = useAuthContext();
+  const { user } = useAuthContext();
   const {
     query: { title },
   } = useRouter();
@@ -98,7 +98,7 @@ export default function LevelLayout() {
       pageSize: 100,
     });
     if (res.status < 400) {
-      setTypeDoc(res.data);
+      setTypeDoc(res.data.data);
     } else {
       console.log(res.message);
     }
@@ -121,6 +121,7 @@ export default function LevelLayout() {
   const handleFilterSubject = useCallback(
     (event, value) => {
       setFilter({ ...filter, subjectId: event.target.value.id });
+      console.log('handleFilterSubject: ', event.target.value.id);
     },
     [filter]
   );
@@ -178,22 +179,26 @@ export default function LevelLayout() {
                 ),
               }}
             />
-            {/* <FormControl sx={{ minWidth: 180, mr: 2 }} size="small">
+            <FormControl sx={{ minWidth: 180, mr: 2 }} size="small">
               <InputLabel id="demo-simple-select-helper-label">Loại tài liệu</InputLabel>
               <Select id="demo-simple-select-helper" label="TypeDocument" onChange={handleFilterDocType}>
                 <MenuItem value="">
-                  <em>None</em>
+                  <em>Tất cả</em>
                 </MenuItem>
                 {renderMenuItem(typeDocs)}
               </Select>
-            </FormControl> */}
+            </FormControl>
             <FormControl sx={{ minWidth: 180 }} size="small">
               <InputLabel id="demo-simple-select-helper-label">Môn học</InputLabel>
               <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterSubject}>
                 <MenuItem value="">
-                  <em>None</em>
+                  <em>Tất cả</em>
                 </MenuItem>
-                {renderMenuItem(SUBJECTS)}
+                {user.subjects?.map((obj, index) => (
+                  <MenuItem value={obj} key={index}>
+                    {obj.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>

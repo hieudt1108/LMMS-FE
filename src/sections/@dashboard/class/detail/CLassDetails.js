@@ -29,7 +29,8 @@ import MenuPopover from '../../../../components/menu-popover';
 import { TableHeadCustom } from '../../../../components/table';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-
+import { useSnackbar } from '../../../../components/snackbar';
+import { removeMemberInClass } from '../../../../dataProvider/agent';
 // ----------------------------------------------------------------------
 
 CLassDetails.propTypes = {
@@ -39,7 +40,17 @@ CLassDetails.propTypes = {
   tableLabels: PropTypes.array,
 };
 
-export default function CLassDetails({ myClass, title, subheader, tableLabels, tableData, ...other }) {
+export default function CLassDetails({
+  classID,
+  fetchMyClass,
+  myClass,
+  user,
+  title,
+  subheader,
+  tableLabels,
+  tableData,
+  ...other
+}) {
   const {
     query: { myclass_id },
   } = useRouter();
@@ -61,7 +72,13 @@ export default function CLassDetails({ myClass, title, subheader, tableLabels, t
 
             <TableBody>
               {myClass?.members?.map((row, index) => (
-                <BookingDetailsRow key={index} row={row} />
+                <BookingDetailsRow
+                  fetchMyClass={() => fetchMyClass()}
+                  classID={classID}
+                  user={user}
+                  key={index}
+                  row={row}
+                />
               ))}
             </TableBody>
           </Table>
@@ -69,24 +86,36 @@ export default function CLassDetails({ myClass, title, subheader, tableLabels, t
       </TableContainer>
 
       <Divider />
-
-      <Box sx={{ p: 2, textAlign: 'right' }}>
-        <Button size="small" color="inherit" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>
-          Xem tất cả
-        </Button>
-      </Box>
     </Card>
   );
 }
 
 // ----------------------------------------------------------------------
 
-function BookingDetailsRow({ row }) {
+function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
   const theme = useTheme();
 
   const isLight = theme.palette.mode === 'light';
 
   const [openPopover, setOpenPopover] = useState(null);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handlerDelete = async () => {
+    const res = await removeMemberInClass(classID, [
+      {
+        userId: row.id,
+      },
+    ]);
+    if (res.status < 400) {
+      await fetchMyClass();
+      handleClosePopover();
+      // console.log('status: ', res);
+      enqueueSnackbar(`Xoá người dùng ${res.data.message}`);
+    } else {
+      enqueueSnackbar('Xoá thất bại', { variant: 'error' });
+    }
+  };
 
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
@@ -140,14 +169,18 @@ function BookingDetailsRow({ row }) {
         )
       )}
 
-      <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
-        <Divider sx={{ borderStyle: 'dashed' }} />
+      {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
+        <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
+          <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" />
-          Xóa
-        </MenuItem>
-      </MenuPopover>
+          <MenuItem onClick={handlerDelete} sx={{ color: 'error.main' }}>
+            <Iconify icon="eva:trash-2-outline" />
+            Xóa
+          </MenuItem>
+        </MenuPopover>
+      ) : (
+        ''
+      )}
     </>
   );
 }

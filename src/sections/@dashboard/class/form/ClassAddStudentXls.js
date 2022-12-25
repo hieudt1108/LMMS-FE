@@ -4,11 +4,11 @@ import {Box, Stack, Card, Grid, Typography} from '@mui/material';
 import FormProvider, {RHFUpload} from "../../../../components/hook-form";
 import {Upload} from "../../../../components/upload";
 import {useForm} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import {useRouter} from "next/router";
 import {useSnackbar} from "notistack";
 import {LoadingButton} from "@mui/lab";
+import {yupResolver} from "@hookform/resolvers/dist/yup";
 
 export default function ClassAddStudentXls() {
     const {push} = useRouter();

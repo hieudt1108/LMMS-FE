@@ -25,12 +25,14 @@ export default function ClassBanner({
   data,
   color = data ? colors[Math.floor((data.gradeId - 1) / 5)] : 'primary',
   sx,
+  user,
   handlerDelete,
   ...other
 }) {
   const router = useRouter();
   const theme = useTheme();
 
+  console.log('user', user);
   const [openPopover, setOpenPopover] = useState(null);
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
@@ -65,11 +67,15 @@ export default function ClassBanner({
       }}
       {...other}
     >
-      <Stack direction="row" alignItems="center" sx={{ top: 8, right: 8, position: 'absolute' }}>
-        <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
-      </Stack>
+      {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
+        <Stack direction="row" alignItems="center" sx={{ top: 8, right: 8, position: 'absolute' }}>
+          <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Stack>
+      ) : (
+        ''
+      )}
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
         <MenuItem
@@ -82,7 +88,10 @@ export default function ClassBanner({
           Cập nhật
         </MenuItem>
 
-        <MenuItem onClick={handlerDelete} sx={{ color: 'error.main' }}>
+        <MenuItem
+          onClick={handlerDelete}
+          sx={{ color: 'error.main' }}
+        >
           <Iconify icon="eva:trash-2-outline" />
           Xóa
         </MenuItem>
@@ -91,7 +100,8 @@ export default function ClassBanner({
         {data ? data.name : 'Undefined'}
       </Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.64 }}>
-        {'Niên khóa: '}{data ? data.schoolYear : 'Undefined'}
+        {'Niên khóa: '}
+        {data ? data.schoolYear : 'Undefined'}
       </Typography>
     </Card>
   );

@@ -30,7 +30,7 @@ import { useAuthContext } from 'src/auth/useAuthContext';
 
 const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFolder, sx, ...other }) => {
   const { user } = useAuthContext();
-  console.log('FileGeneralRecentCard', data);
+  console.log('FileGeneralRecentCards', file);
   const { enqueueSnackbar } = useSnackbar();
 
   const isDesktop = useResponsive('up', 'sm');

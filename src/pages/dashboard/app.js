@@ -277,7 +277,7 @@ export default function GeneralAppPage() {
                   }}
                 />
 
-                <FormControl sx={{ minWidth: 170, mr: 3 }} size="small">
+                <FormControl sx={{ minWidth: 200, mr: 3 }} size="small">
                   <InputLabel id="demo-simple-select-helper-label">Chương trình học</InputLabel>
                   <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterProgram}>
                     <MenuItem value="">
@@ -308,7 +308,6 @@ export default function GeneralAppPage() {
             </Stack>
           </Grid>
           <Grid item xs={12} lg={12}>
-            <div></div>
             <AppNewInvoice
               title="Thống kê tài liệu"
               tableData={reportDocs}

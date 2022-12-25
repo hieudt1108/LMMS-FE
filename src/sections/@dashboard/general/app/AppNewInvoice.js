@@ -25,6 +25,14 @@ import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 import MenuPopover from '../../../../components/menu-popover';
 import { TableHeadCustom } from '../../../../components/table';
+import {dispatch} from "../../../../redux/store";
+import {getOneDocumentRedux, startDownloadFileRedux} from "../../../../redux/slices/document";
+import {FileShareDialog} from "../../file";
+import {URL_GLOBAL} from "../../../../config";
+import {useSnackbar} from "../../../../components/snackbar";
+import ConfirmDialog from "../../../../components/confirm-dialog";
+import {deleteDocumentInSubjectRedux} from "../../../../redux/slices/subject";
+import {deleteDocumentInFolderRedux, deleteDocumentInStoreFolderRedux} from "../../../../redux/slices/folder";
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +62,9 @@ export default function AppNewInvoice({
             <TableHeadCustom headLabel={tableLabels} />
 
             <TableBody>
-              {tableData?.length && tableData.map((row) => <AppNewInvoiceRow key={row.id} row={row} />)}
+              {tableData?.map((row) => (
+                <AppNewInvoiceRow key={row.id} row={row} />
+              ))}
             </TableBody>
           </Table>
         </Scrollbar>
@@ -62,7 +72,8 @@ export default function AppNewInvoice({
 
       <Divider />
 
-      <Box direction="row" justifyContent="flex-end" alignItems="center" sx={{ p: 2, textAlign: 'right' }}>
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
+        <></>
         <Pagination
           size="small"
           count={paging?.TotalPages}
@@ -77,8 +88,10 @@ export default function AppNewInvoice({
 
 // ----------------------------------------------------------------------
 function AppNewInvoiceRow({ row }) {
+  const { enqueueSnackbar } = useSnackbar();
   const [openPopover, setOpenPopover] = useState(null);
-
+  const [openShare, setOpenShare] = useState(false);
+  const [openConfirmDeleteFile, setOpenConfirmDeleteFile] = useState(false);
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
   };
@@ -87,24 +100,35 @@ function AppNewInvoiceRow({ row }) {
     setOpenPopover(null);
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     handleClosePopover();
-    console.log('DOWNLOAD', row.id);
+    handleClosePopover();
+    const message = await dispatch(startDownloadFileRedux(row.document, URL_GLOBAL.DOWNLOAD_FILE));
+    if (message) {
+      enqueueSnackbar(message.title, { variant: message.variant });
+    }
   };
 
-  const handlePrint = () => {
+
+  const handleOpenShare = async () => {
     handleClosePopover();
-    console.log('PRINT', row.id);
+    console.log('row.document.id',row.document.id)
+    // await dispatch(getOneDocumentRedux(row.document.id));
+    setOpenShare(true);
   };
 
-  const handleShare = () => {
-    handleClosePopover();
-    console.log('SHARE', row.id);
+  const handleCloseShare = () => {
+    setOpenShare(false);
   };
 
-  const handleDelete = () => {
-    handleClosePopover();
-    console.log('DELETE', row.id);
+  const handleDeleteFile = async () => {
+      const message = await dispatch(deleteDocumentInFolderRedux(row.document.id));
+      if (message) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+        setOpenConfirmDeleteFile(false);
+      } else {
+      enqueueSnackbar(`Đã có lỗi xảy ra`, { variant: `error` });
+    }
   };
 
   return (
@@ -134,26 +158,49 @@ function AppNewInvoiceRow({ row }) {
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
         <MenuItem onClick={handleDownload}>
           <Iconify icon="eva:download-fill" />
-          Download
+          Tải xuống
         </MenuItem>
 
-        <MenuItem onClick={handlePrint}>
-          <Iconify icon="eva:printer-fill" />
-          Print
-        </MenuItem>
-
-        <MenuItem onClick={handleShare}>
+        <MenuItem onClick={handleOpenShare}>
           <Iconify icon="eva:share-fill" />
-          Share
+          Chia sẻ
         </MenuItem>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+        <MenuItem
+            onClick={() => {
+              handleClosePopover();
+              setOpenConfirmDeleteFile(true);
+            }}
+            sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" />
-          Delete
+          Xóa
         </MenuItem>
       </MenuPopover>
+      {openShare && (
+          <FileShareDialog
+              file={row.document}
+              open={openShare}
+              data={row.document}
+              onClose={() => {
+                handleCloseShare();
+              }}
+          />
+      )}
+      {openConfirmDeleteFile && (
+          <ConfirmDialog
+              open={openConfirmDeleteFile}
+              onClose={() => setOpenConfirmDeleteFile(false)}
+              title="Xóa Tài Liệu"
+              content="Bạn có chắc chắn muốn xóa tài liệu này?"
+              action={
+                <Button variant="contained" color="error" onClick={handleDeleteFile}>
+                  Xóa
+                </Button>
+              }
+          />
+      )}
     </>
   );
 }

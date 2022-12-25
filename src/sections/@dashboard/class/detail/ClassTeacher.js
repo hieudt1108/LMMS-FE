@@ -31,7 +31,7 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useSnackbar } from '../../../../components/snackbar';
 import { removeMemberInClass } from '../../../../dataProvider/agent';
-import ConfirmDialog from "../../../../components/confirm-dialog";
+import ConfirmDialog from '../../../../components/confirm-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ export default function ClassTeacher({
   const handleOnClickSubject = () => {
     push(PATH_DASHBOARD.myclass.addMember(myclass_id));
   };
-  console.log('myClass',myClass)
+  console.log('myClass', myClass);
   return (
     <Card {...other}>
       <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
@@ -114,13 +114,13 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
         userId: row.id,
       },
     ]);
+    console.log('Status: ', res?.response.data.title);
     if (res.status < 400) {
       await fetchMyClass();
       handleClosePopover();
-      // console.log('status: ', res);
       enqueueSnackbar(`Xoá người dùng ${res.data.message}`);
     } else {
-      enqueueSnackbar('Xoá thất bại', { variant: 'error' });
+      enqueueSnackbar(`Xoá thất bại, ${res?.response.data.title}`, { variant: 'error' });
     }
   };
   const isLight = theme.palette.mode === 'light';
@@ -146,8 +146,12 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
         role.role === 'GVCHUNHIEM' || role.role === 'GIAOVIEN' ? (
           <TableRow>
             <TableCell>
-              <Stack direction="row" alignItems="center" spacing={2}>
-                <Avatar src={`http://lmms.site:7070/assets/images/avatars/avatar_${(1 - row.gender) * 10 + (row.id % 10) + 1}.jpg`} />
+              <Stack direction="row" alignItems="center">
+                <Avatar
+                  src={`http://lmms.site:7070/assets/images/avatars/avatar_${
+                    (1 - row.gender) * 10 + (row.id % 10) + 1
+                  }.jpg`}
+                />
                 <Typography variant="subtitle2">{row.name}</Typography>
               </Stack>
             </TableCell>
@@ -157,12 +161,11 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
             </TableCell>
             <TableCell>
               {role.role === null || '' ? (
-                      <Label></Label>
-                  ) : (
-                      <Label key={role.id} variant="soft" color={'success'} sx={{ textTransform: 'capitalize' }}>
-                        {role.role}
-                      </Label>
-
+                <Label></Label>
+              ) : (
+                <Label key={role.id} variant="soft" color={'success'} sx={{ textTransform: 'capitalize' }}>
+                  {role.role}
+                </Label>
               )}
             </TableCell>
             <TableCell>{role.subject}</TableCell>
@@ -202,24 +205,23 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
         ''
       )}
       <ConfirmDialog
-          open={openConfirm}
-          onClose={handleCloseConfirm}
-          title={'Xóa thành viên'}
-          content={'Bạn có chắc chắn muốn xóa thành viên này!'}
-          action={
-            <Button
-                variant="contained"
-                color="error"
-                onClick={() => {
-                  handlerDelete();
-                  handleCloseConfirm();
-                }}
-            >
-              {'Xóa'}
-            </Button>
-          }
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        title={'Xóa thành viên'}
+        content={'Bạn có chắc chắn muốn xóa thành viên này!'}
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              handlerDelete();
+              handleCloseConfirm();
+            }}
+          >
+            {'Xóa'}
+          </Button>
+        }
       />
     </>
-
   );
 }

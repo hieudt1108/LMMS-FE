@@ -155,6 +155,7 @@ export function getOneDocumentRedux(id) {
           subjectDetail: detailProgramAndSubject[1].data.data,
         })
       );
+      returnMessageSuccess('Truy cập thành công');
     } catch (error) {
       console.log('error', error);
       return returnMessageError('Truy cập thư mục bị lỗi!');

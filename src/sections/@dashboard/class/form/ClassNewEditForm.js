@@ -20,7 +20,8 @@ import {getProgramsRedux} from 'src/redux/slices/program';
 import {getGradesRedux} from 'src/redux/slices/grade';
 
 // API
-import {updateClass} from '../../../../dataProvider/agent';
+import {postClass, updateClass} from '../../../../dataProvider/agent';
+import _ from "lodash";
 
 // ----------------------------------------------------------------------
 
@@ -85,24 +86,44 @@ export default function ClassNewEditForm({ isEdit = false, currentClass, onNextS
     if (isEdit && currentClass) {
       reset(defaultValues);
     }
-    if (!isEdit) {
-        if(formDataStepOne){
-            setValue('code',formDataStepOne?.code)
-            setValue('name',formDataStepOne?.name)
-            setValue('size',formDataStepOne?.size)
-            setValue('schoolYear',formDataStepOne?.schoolYear)
-            setValue('programId',formDataStepOne?.programId)
-            setValue('gradeId',formDataStepOne?.gradeId)
-        }
+    if (!isEdit && !_.isEmpty(formDataStepOne)) {
+        setValue('code',formDataStepOne?.code)
+        setValue('name',formDataStepOne?.name)
+        setValue('size',formDataStepOne?.size)
+        setValue('schoolYear',formDataStepOne?.schoolYear)
+        setValue('programId',formDataStepOne?.programId)
+        setValue('gradeId',formDataStepOne?.gradeId)
     }
   }, [isEdit, currentClass]);
-
+    console.log('setFormDataStepOne',formDataStepOne)
 
   const onSubmit = async (data) => {
+      console.log('data',data)
     if(!isEdit){
-        onNextStep();
-        setFormData(data)
-        setFormDataStepOne(data)
+        const dataClass = {
+            code: data?.code,
+            name: data?.name,
+            size: data?.size,
+            gradeId: data?.gradeId,
+            programId: data?.programId,
+            schoolYear: data?.schoolYear,
+        }
+        try {
+            const res = await postClass(dataClass)
+            if (res.status < 400) {
+                console.log('postClass',res)
+                enqueueSnackbar('Tạo lớp học thành công');
+                setFormData(res.data.data)
+                if(_.isEmpty(formDataStepOne)){
+                    setFormDataStepOne(data)
+                }
+                onNextStep();
+            }else {
+                enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
+            }
+        } catch (error) {
+            enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+        }
     }else{
       try {
         const res = await updateClass(currentClass.id,{

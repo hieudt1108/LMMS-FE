@@ -194,7 +194,7 @@ export default function Classes() {
                 <InputLabel id="demo-simple-select-helper-label">Khối</InputLabel>
                 <Select id="demo-simple-select-helper" value={grade} label="Khối" onChange={handleGradeChange}>
                   <MenuItem value="">
-                    <em>None</em>
+                    <em>Tất cả</em>
                   </MenuItem>
                   {renderMenuItem(grades)}
                 </Select>
@@ -209,7 +209,7 @@ export default function Classes() {
                   onChange={handleProgramChange}
                 >
                   <MenuItem value="">
-                    <em>None</em>
+                    <em>Tất cả</em>
                   </MenuItem>
                   {renderMenuItem(programs)}
                 </Select>

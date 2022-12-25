@@ -25,9 +25,10 @@ import Iconify from "../../../../components/iconify";
 ClassNewSubjectExcel.propTypes = {
   onNextStep: PropTypes.func,
   onBackStep: PropTypes.func,
+  setCompleted: PropTypes.func,
 };
 
-export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
+export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData,setCompleted}) {
   const { push } = useRouter();
   const dispatch = useDispatch();
   const [fileSubject, setFileSubject] = useState([]);
@@ -73,50 +74,23 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
   };
 
   const onSubmit = async (data) => {
-    const dataClass = {
-      code: formData?.code,
-      name: formData?.name,
-      size: formData?.size,
-      gradeId: formData?.gradeId,
-      programId: formData?.programId,
-      schoolYear: formData?.schoolYear,
-    }
-    const fileStudentExcel = formData?.file
-    console.log('dataClass',dataClass)
-    console.log('fileStudentExcel',fileStudentExcel)
-    console.log('fileSubjectExcel',data.fileSubject)
-      try {
-        if(fileStudentExcel && data.fileSubject) {
-
-
-          const res = await postClass(dataClass)
-          console.log('postClass', res)
-          if (res.status < 400) {
-            try {
-              formDataFileMember.append('file', fileStudentExcel);
-              formDataFileSubject.append('file', data.fileSubject);
-              const pushFileStudentExcel = await postFileExcelAddMember(res?.data.data.id, formDataFileMember)
-              const pushFileSubjectExcel = await postFileExcelAddSubject(res?.data.data.id, formDataFileSubject)
-              console.log('pushFileStudentExcel', pushFileStudentExcel)
-              console.log('pushFileSubjectExcel', pushFileStudentExcel)
-              if (pushFileStudentExcel.status < 400 && pushFileSubjectExcel.status < 400) {
-                enqueueSnackbar('Tạo lớp học thành công');
-              } else {
-                enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
-              }
-            } catch (error) {
-              enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
-            }
-          } else {
-            enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
-          }
-        }else{
-          enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
-        }
-      } catch (error) {
-        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+    onNextStep();
+    formDataFileSubject.append('file', data?.fileSubject);
+    try {
+      if(data.fileSubject === undefined){
+        return enqueueSnackbar(`Bạn chưa thêm file danh sách!`, { variant: 'error' });
       }
-    // onNextStep();
+      const pushFileSubjectExcel = await postFileExcelAddSubject(formData?.id, formDataFileSubject)
+      if(pushFileSubjectExcel.status < 400){
+        enqueueSnackbar('Thêm danh sách môn học thành công');
+        setCompleted(true)
+        onNextStep();
+      }else{
+        enqueueSnackbar(`${pushFileSubjectExcel.response.data.title}`, {variant: 'error'});
+      }
+    }catch (error) {
+      enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
+    }
   };
 
 

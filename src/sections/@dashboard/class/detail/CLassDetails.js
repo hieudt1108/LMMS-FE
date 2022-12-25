@@ -137,7 +137,7 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
           <TableRow>
             <TableCell>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <Avatar alt={row.name} src={row.name} />
+                <Avatar src={`http://lmms.site:7070/assets/images/avatars/avatar_${(1 - row.gender) * 10 + (row.id % 10) + 1}.jpg`} />
                 <Typography variant="subtitle2">{row.name}</Typography>
               </Stack>
             </TableCell>

@@ -523,6 +523,10 @@ const changePasswordUserAuth = (payload) => {
   return putApi('Auth/resetPassword', payload);
 };
 
+const changePasswordAdmin = (id) => {
+  return putApi(`Auth/resetPasswordAdmin/${id}`);
+};
+
 const updateShareDocs = (id, payload) => {
   return putApi(`Document/updateShareDocs/${id}`, payload);
 };
@@ -647,4 +651,5 @@ export {
   createManyUser,
   removeMemberInClass,
   updateProfile,
+  changePasswordAdmin,
 };

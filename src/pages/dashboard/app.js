@@ -311,6 +311,7 @@ export default function GeneralAppPage() {
             <AppNewInvoice
               title="Thống kê tài liệu"
               tableData={reportDocs}
+              setReportDocs={fetchReportDoc}
               handlePageChange={handlePageChange}
               paging={paging}
               tableLabels={[

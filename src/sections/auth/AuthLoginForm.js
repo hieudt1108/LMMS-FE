@@ -26,8 +26,8 @@ export default function AuthLoginForm() {
   const [data, setData] = useState({});
 
   const LoginSchema = Yup.object().shape({
-    name: Yup.string().required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    name: Yup.string().required('Không được trống'),
+    password: Yup.string().required('Không được trống'),
   });
 
   const methods = useForm({

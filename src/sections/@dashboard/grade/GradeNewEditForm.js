@@ -35,7 +35,7 @@ export default function GradeNewEditForm({ isEdit = false, currentGrade }) {
   const validationSchema = Yup.object().shape({
     name: Yup.string().trim().required('Tên cấp học không được trống'),
     description: Yup.string().notRequired(),
-    levelId:  Yup.string().trim().required('Phải chọn trạng thái'),
+    levelId:  Yup.string().trim().required('Phải chọn cấp học'),
   })
 
   const defaultValues = useMemo(

@@ -1,36 +1,22 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 // next
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // form
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {useForm} from 'react-hook-form';
 // @mui
-import { LoadingButton } from '@mui/lab';
-import {Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, MenuItem, Button} from '@mui/material';
+import {LoadingButton} from '@mui/lab';
+import {Box, Button, Card, Grid, Stack, Typography} from '@mui/material';
 // utils
-import { fData } from '../../../../utils/formatNumber';
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
 // components
-import Label from '../../../../components/label';
-import { useSnackbar } from '../../../../components/snackbar';
-import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { getProgramsRedux } from 'src/redux/slices/program';
-import { getGradesRedux } from 'src/redux/slices/grade';
+import {useSnackbar} from '../../../../components/snackbar';
+import FormProvider from '../../../../components/hook-form';
+import {useDispatch} from 'react-redux';
 
 // API
-import {
-  createGrade,
-  postClass,
-  postFileExcelAddMember,
-  postFileExcelAddSubject,
-  updateClass,
-  updateGrade
-} from '../../../../dataProvider/agent';
+import {postClass, postFileExcelAddMember, postFileExcelAddSubject} from '../../../../dataProvider/agent';
 import {Upload} from "../../../../components/upload";
 import Iconify from "../../../../components/iconify";
 
@@ -48,19 +34,16 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData}) {
   const { enqueueSnackbar } = useSnackbar();
   const formDataFileMember = new FormData();
   const formDataFileSubject = new FormData();
-  const validationSchema = Yup.object().shape({
 
-  })
 
   const defaultValues = useMemo(
       () => ({
-
+        fileSubject: [],
       }),
       []
   );
 
   const methods = useForm({
-    // resolver: yupResolver(validationSchema),
     defaultValues,
   });
 

@@ -1,34 +1,31 @@
 import * as Yup from 'yup';
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import _ from 'lodash';
 // next
-import { useRouter } from 'next/router';
 // form
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useFieldArray, useForm } from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {useFieldArray, useForm} from 'react-hook-form';
 // @mui
-import { LoadingButton } from '@mui/lab';
-import { Grid, Card, Stack, Typography, Divider, Button, Alert } from '@mui/material';
+import {LoadingButton} from '@mui/lab';
+import {Button, Card, Divider, Grid, Stack, Typography} from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
 //components
-import { useSnackbar } from '../../../components/snackbar';
-import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload } from '../../../components/hook-form';
+import {useSnackbar} from '../../../components/snackbar';
+import FormProvider, {RHFSelect, RHFTextField} from '../../../components/hook-form';
 // ----------------------------------------------------------------------
-import { postDocument, postFile } from '../../../dataProvider/agent';
-import { useSelector } from 'react-redux';
-import { dispatch } from 'src/redux/store';
+import {postFile} from '../../../dataProvider/agent';
+import {useSelector} from 'react-redux';
+import {dispatch} from 'src/redux/store';
 import {
   createDocumentInitialRedux,
   createDocumentInSubjectRedux,
   createDocumentRedux,
   getTypeDocumentBySubjectRedux,
   removeTypeDocumentByIndexRedux,
-  uploadDocumentRedux,
 } from 'src/redux/slices/folder';
-import { Upload } from '../../../components/upload';
+import {Upload} from '../../../components/upload';
 import Iconify from 'src/components/iconify';
-import { useAuthContext } from 'src/auth/useAuthContext';
+import {useAuthContext} from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 function TextCode() {

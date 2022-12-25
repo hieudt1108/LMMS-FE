@@ -1,42 +1,39 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 // next
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 // form
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 // @mui
-import { LoadingButton } from '@mui/lab';
-import {Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, MenuItem} from '@mui/material';
+import {LoadingButton} from '@mui/lab';
+import {Box, Card, Grid, MenuItem, Stack, Typography} from '@mui/material';
 // utils
-import { fData } from '../../../../utils/formatNumber';
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
+import {PATH_DASHBOARD} from '../../../../routes/paths';
 // components
-import Label from '../../../../components/label';
-import { useSnackbar } from '../../../../components/snackbar';
-import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { getProgramsRedux } from 'src/redux/slices/program';
-import { getGradesRedux } from 'src/redux/slices/grade';
+import {useSnackbar} from '../../../../components/snackbar';
+import FormProvider, {RHFSelect, RHFTextField} from '../../../../components/hook-form';
+import {useDispatch, useSelector} from 'react-redux';
+import {getProgramsRedux} from 'src/redux/slices/program';
+import {getGradesRedux} from 'src/redux/slices/grade';
 
 // API
-import {createGrade, postClass, updateClass, updateGrade} from '../../../../dataProvider/agent';
-import {Upload} from "../../../../components/upload";
+import {updateClass} from '../../../../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
 ClassNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
   currentClass: PropTypes.object,
-  onSubmitData: PropTypes.func,
   onNextStep: PropTypes.func,
   setFormData: PropTypes.func,
+  setFormDataStepOne: PropTypes.func,
+  formDataStepOne: PropTypes.object,
 };
 
-export default function ClassNewEditForm({ isEdit = false, currentClass, onNextStep, onSubmitData,setFormData }) {
+export default function ClassNewEditForm({ isEdit = false, currentClass, onNextStep,setFormData,setFormDataStepOne,formDataStepOne }) {
   const { push } = useRouter();
   const dispatch = useDispatch();
 
@@ -89,49 +86,44 @@ export default function ClassNewEditForm({ isEdit = false, currentClass, onNextS
       reset(defaultValues);
     }
     if (!isEdit) {
-      reset(defaultValues);
+        if(formDataStepOne){
+            setValue('code',formDataStepOne?.code)
+            setValue('name',formDataStepOne?.name)
+            setValue('size',formDataStepOne?.size)
+            setValue('schoolYear',formDataStepOne?.schoolYear)
+            setValue('programId',formDataStepOne?.programId)
+            setValue('gradeId',formDataStepOne?.gradeId)
+        }
     }
   }, [isEdit, currentClass]);
 
 
   const onSubmit = async (data) => {
-    console.log('data class',data)
-    onNextStep();
-    setFormData(data)
-    // if(!isEdit){
-    //   try {
-    //     const res = await postClass(data)
-    //     if (res.status < 400) {
-    //       reset();
-    //       enqueueSnackbar('Tạo lớp học thành công');
-    //
-    //     } else {
-    //       enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
-    //     }
-    //   } catch (error) {
-    //     enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
-    //   }
-    // }else{
-    //   try {
-    //     const res = await updateClass(currentClass.id,{
-    //       name: data.name,
-    //       code: data.code,
-    //       size: data.size,
-    //       schoolYear: data.schoolYear,
-    //       gradeId: data.gradeId,
-    //       programId: data.programId,
-    //     })
-    //     if (res.status < 400) {
-    //       reset();
-    //       enqueueSnackbar('Cập nhật lớp học thành công');
-    //       push(PATH_DASHBOARD.class.root);
-    //     } else {
-    //       enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
-    //     }
-    //   } catch (error) {
-    //     enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
-    //   }
-    // }
+    if(!isEdit){
+        onNextStep();
+        setFormData(data)
+        setFormDataStepOne(data)
+    }else{
+      try {
+        const res = await updateClass(currentClass.id,{
+          name: data.name,
+          code: data.code,
+          size: data.size,
+          schoolYear: data.schoolYear,
+          gradeId: data.gradeId,
+          programId: data.programId,
+        })
+        if (res.status < 400) {
+          reset();
+          enqueueSnackbar('Cập nhật lớp học thành công');
+          push(PATH_DASHBOARD.class.root);
+        } else {
+          enqueueSnackbar(`${res.response.data.title}`, { variant: 'error' });
+        }
+      } catch (error) {
+        enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+      }
+    }
   };
 
 

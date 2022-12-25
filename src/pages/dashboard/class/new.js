@@ -34,6 +34,7 @@ export default function ClassCreatePage() {
   const {replace} = useRouter();
   const { activeStep } = steps;
   const [formData,setFormData] = useState({})
+  const [formDataStepOne,setFormDataStepOne] = useState({})
   const completed = activeStep === STEPS.length;
 
   console.log('activeStep',activeStep)
@@ -94,6 +95,8 @@ export default function ClassCreatePage() {
                       <ClassNewEditForm
                           onNextStep={handleNextStep}
                           setFormData={setFormData}
+                          setFormDataStepOne={setFormDataStepOne}
+                          formDataStepOne = {formDataStepOne}
                       />
                   )}
                   {activeStep === 1 && (

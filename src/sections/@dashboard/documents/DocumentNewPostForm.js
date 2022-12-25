@@ -30,23 +30,6 @@ const SORT_OPTIONS = [
   { id: 2, name: 'Được Share' },
 ];
 
-// const TAGS_OPTION = [
-//   'Toy Story 3',
-//   'Logan',
-//   'Full Metal Jacket',
-//   'Dangal',
-//   'The Sting',
-//   '2001: A Space Odyssey',
-//   "Singin' in the Rain",
-//   'Toy Story',
-//   'Bicycle Thieves',
-//   'The Kid',
-//   'Inglourious Basterds',
-//   'Snatch',
-//   '3 Idiots',
-// ];
-
-// ----------------------------------------------------------------------
 
 export default function DocumentNewPostForm() {
   const { push } = useRouter();

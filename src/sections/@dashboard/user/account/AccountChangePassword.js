@@ -1,31 +1,37 @@
 import * as Yup from 'yup';
 // form
-import {yupResolver} from '@hookform/resolvers/yup';
-import {useForm} from 'react-hook-form';
 
 // @mui
 import {
-    Stack,
-    Card,
-    Grid,
     Box,
+    Card,
+    FormHelperText,
+    Grid,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    List,
     ListItem,
     ListItemIcon,
     ListItemText,
-    List,
-    Typography,
-    InputLabel, OutlinedInput, InputAdornment, IconButton, FormHelperText
+    OutlinedInput,
+    Stack,
+    Typography
 } from '@mui/material';
 import {LoadingButton} from '@mui/lab';
 // components
 import Iconify from '../../../../components/iconify';
 import {useSnackbar} from '../../../../components/snackbar';
-import FormProvider, {RHFTextField} from '../../../../components/hook-form';
 import {useState} from "react";
 import {Formik} from "formik";
-import {changePasswordUserAuth, createUserAuth} from "../../../../dataProvider/agent";
-import {PATH_DASHBOARD} from "../../../../routes/paths";
-import {isLowercaseChar, isUppercaseChar, minLength, isNumber, isSpecialChar} from "../../../../utils/password-validation";
+import {changePasswordUserAuth} from "../../../../dataProvider/agent";
+import {
+    isLowercaseChar,
+    isNumber,
+    isSpecialChar,
+    isUppercaseChar,
+    minLength
+} from "../../../../utils/password-validation";
 
 // ----------------------------------------------------------------------
 

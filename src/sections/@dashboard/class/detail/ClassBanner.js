@@ -89,11 +89,7 @@ export default function ClassBanner({
         </MenuItem>
 
         <MenuItem
-          onClick={() => {
-            if (window.confirm('Xoá lớp học')) {
-              this.handlerDelete;
-            }
-          }}
+          onClick={handlerDelete}
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="eva:trash-2-outline" />

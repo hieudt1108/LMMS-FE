@@ -73,8 +73,12 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
       setOpenConfirmAddDocument(true);
       return;
     } else if (data.types.find((type) => type === 'folder')) {
-      await dispatch(getOneDocumentRedux(file.id));
-      setOpenDetails(true);
+      const message = await dispatch(getOneDocumentRedux(file.id));
+      if (message.variant) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      } else {
+        setOpenDetails(true);
+      }
     }
   };
 

@@ -135,11 +135,14 @@ export function getOneDocumentRedux(id) {
   return async () => {
     try {
       if (!id) {
-        return;
+        return returnMessageError('Truy cập thư mục bị lỗi!');
       }
       dispatch(slice.actions.startLoading());
       const response = await getDocumentById(id);
       console.log('getOneDocumentRedux', response);
+      if (response instanceof Error) {
+        return returnMessageError(`${response.response.data.title}`);
+      }
       const document = response.data.data;
       const detailProgramAndSubject = await Promise.all([
         getProgramById(document.programId),
@@ -152,13 +155,9 @@ export function getOneDocumentRedux(id) {
           subjectDetail: detailProgramAndSubject[1].data.data,
         })
       );
-      // return {
-      //   ...document,
-      //   programDetail: detailProgramAndSubject[0].data.data,
-      //   subjectDetail: detailProgramAndSubject[1].data.data,
-      // };
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      console.log('error', error);
+      return returnMessageError('Truy cập thư mục bị lỗi!');
     }
   };
 }

@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 // next
 import { useRouter } from 'next/router';
 // form
-import {yupResolver} from "@hookform/resolvers/yup";
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useFieldArray, useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
@@ -84,10 +84,6 @@ export default function FolderNewPostForm({ classID }) {
     name: 'items',
   });
 
-  useEffect(() => {
-    dispatch(getUsersRedux({ pageIndex: 1, pageSize: 100 }, 0));
-  }, []);
-
   const onSubmit = async ({ items }) => {
     console.log('onSubmit: ', items, addUserInCLass);
 
@@ -164,6 +160,11 @@ export default function FolderNewPostForm({ classID }) {
   };
   console.log('FolderNewPostForm', getValues('items'), addUserInCLass);
 
+  const handleSearchPosts = async (value) => {
+    console.log('handleSearchPosts', value);
+    await dispatch(getUsersRedux({ pageIndex: 1, pageSize: 20, searchByName: value }, 0));
+  };
+
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -181,6 +182,7 @@ export default function FolderNewPostForm({ classID }) {
                       <Autocomplete
                         id="size-small-filled"
                         name={`items[${index}].userId`}
+                        onInputChange={(event, value) => handleSearchPosts(value)}
                         onChange={(event, userHandle) => handlerUserChange(event, index, userHandle)}
                         sx={{ width: '643px' }}
                         options={addUserInCLass[index].users}

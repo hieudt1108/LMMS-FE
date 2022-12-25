@@ -18,6 +18,8 @@ import { useEffect, useState } from 'react';
 // import { getClassRedux } from 'src/redux/slices/class';
 import ClassAddStudentForm from '../../../../sections/@dashboard/class/form/ClassAddStudentForm';
 import ClassAddStudentXls from '../../../../sections/@dashboard/class/form/ClassAddStudentXls';
+import { dispatch } from 'src/redux/store';
+import { getUsersRedux } from 'src/redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +35,10 @@ export default function addStudent() {
   const [currentTab, setCurrentTab] = useState('description');
 
   const { themeStretch } = useSettingsContext();
+
+  useEffect(() => {
+    dispatch(getUsersRedux({ pageIndex: 1, pageSize: 100 }, 0));
+  }, []);
 
   const TABS = [
     {

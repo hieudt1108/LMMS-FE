@@ -22,7 +22,7 @@ import FormProvider, {
   RHFRadioGroup,
 } from '../../../../components/hook-form';
 import { DatePicker } from '@mui/x-date-pickers';
-import { updateUser } from '../../../../dataProvider/agent';
+import {updateProfile, updateUser} from '../../../../dataProvider/agent';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ export default function AccountGeneral() {
       roles: roles,
     };
     try {
-      const res = await updateUser(user.id, dataPut);
+      const res = await updateProfile(user.id, dataPut);
       if (res.status < 400) {
         enqueueSnackbar('Cập nhật thành công');
         window.location.reload();
@@ -124,8 +124,8 @@ export default function AccountGeneral() {
                 Thông tin cá nhân
               </Typography>
               <div></div>
-              <RHFTextField name="firstName" label="Họ" id="firstName" />
-              <RHFTextField name="lastName" label="Tên" id="lastName" />
+              <RHFTextField name="firstName" required label="Họ" id="firstName" />
+              <RHFTextField name="lastName" required label="Tên" id="lastName" />
               <Stack sx={{ ml: 1.5 }}>
                 <Typography variant="subtitle2" sx={{ color: 'text.secondary', mt: 1 }}>
                   Giới tính

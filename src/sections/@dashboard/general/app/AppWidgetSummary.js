@@ -32,7 +32,7 @@ export default function AppWidgetSummary({ title, percent, src, total, chart, sx
             variant="rounded"
             sx={{ bgcolor: 'background.neutral', width: 48, height: 48, borderRadius: 1.5, mr: 2 }}
           >
-            {title === 'File khác' ? <>{src}</> : <Box sx={{ width: 36, height: 36 }} component="img" src={src} />}
+            {title === 'Tài liệu khác' ? <>{src}</> : <Box sx={{ width: 36, height: 36 }} component="img" src={src} />}
           </Avatar>
 
           {/* <TrendingInfo percent={percent} /> */}
@@ -46,37 +46,3 @@ export default function AppWidgetSummary({ title, percent, src, total, chart, sx
   );
 }
 
-// ----------------------------------------------------------------------
-
-// TrendingInfo.propTypes = {
-//   percent: PropTypes.number,
-// };
-
-// function TrendingInfo({ percent }) {
-//   return (
-//     <Stack direction="row" alignItems="center" sx={{ mt: 2, mb: 1 }}>
-//       <Iconify
-//         icon={percent < 0 ? 'eva:trending-down-fill' : 'eva:trending-up-fill'}
-//         sx={{
-//           mr: 1,
-//           p: 0.5,
-//           width: 24,
-//           height: 24,
-//           borderRadius: '50%',
-//           color: 'success.main',
-//           bgcolor: (theme) => alpha(theme.palette.success.main, 0.16),
-//           ...(percent < 0 && {
-//             color: 'error.main',
-//             bgcolor: (theme) => alpha(theme.palette.error.main, 0.16),
-//           }),
-//         }}
-//       />
-
-//       <Typography component="div" variant="subtitle2">
-//         {percent > 0 && '+'}
-
-//         {fPercent(percent)}
-//       </Typography>
-//     </Stack>
-//   );
-// }

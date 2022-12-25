@@ -19,6 +19,8 @@ import Iconify from '../../../../components/iconify';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
 import {useAuthContext} from "../../../../auth/useAuthContext";
+import {changePasswordAdmin} from "../../../../dataProvider/agent";
+import {useSnackbar} from "../../../../components/snackbar";
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +39,11 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
+  const [openConfirmResetPassword, setOpenConfirmResetPassword] = useState(false);
+
   const [openPopover, setOpenPopover] = useState(null);
+
+  const {enqueueSnackbar} = useSnackbar();
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -45,6 +51,14 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
+  };
+
+  const handleOpenConfirmResetPassword = () => {
+    setOpenConfirmResetPassword(true);
+  };
+
+  const handleCloseConfirmResetPassword = () => {
+    setOpenConfirmResetPassword(false);
   };
 
   const handleOpenPopover = (event) => {
@@ -55,6 +69,19 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
+
+    const handleResetUser = async (idUser) => {
+        try{
+            const responseReset = await changePasswordAdmin(idUser)
+            if(responseReset.status < 400){
+                enqueueSnackbar('Reset mật khẩu người dùng thành công');
+            }else{
+                enqueueSnackbar(`${responseReset.response.data.title}`, {variant: 'error'});
+            }
+        }catch (error){
+            enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
+        }
+    };
 
   return (
     <>
@@ -102,17 +129,7 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
         {ROLES?.map((role) =>
             role.name === 'ADMIN' ? (
             <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 180 }}>
-                <MenuItem
-                    onClick={() => {
-                        handleOpenConfirm();
-                        handleClosePopover();
-                    }}
-                    sx={{ color: 'error.main' }}
-                >
-                    <Iconify icon="eva:alert-circle-outline" />
-                    {!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
 
-                </MenuItem>
 
                 <MenuItem
                     onClick={() => {
@@ -124,36 +141,66 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
                     Cập nhật
                 </MenuItem>
                 <MenuItem
-
+                    onClick={() => {
+                        handleOpenConfirmResetPassword();
+                        handleClosePopover();
+                    }}
                 >
                   <Iconify icon="eva:refresh-outline" />
                   Reset mật khẩu
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        handleOpenConfirm();
+                        handleClosePopover();
+                    }}
+                    sx={{ color: 'error.main' }}
+                >
+                    <Iconify icon="eva:alert-circle-outline" />
+                    {!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
+
                 </MenuItem>
             </MenuPopover>
             ) : (
                 <></>
             )
             )}
-
-
-        <ConfirmDialog
-            open={openConfirm}
-            onClose={handleCloseConfirm}
-            title={!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
-            content={!enable ? 'Bạn có chắc chắn vô hiệu hóa người dùng này?' : 'Bạn có chắc chắn cho phép người dùng này hoạt động?'}
-            action={
-                <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => {
-                        onDeleteRow();
-                        handleCloseConfirm();
-                    }}
-                >
-                    {!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
-                </Button>
-            }
-        />
+            <ConfirmDialog
+                open={openConfirm}
+                onClose={handleCloseConfirm}
+                title={!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                content={!enable ? 'Bạn có chắc chắn vô hiệu hóa người dùng này?' : 'Bạn có chắc chắn cho phép người dùng này hoạt động?'}
+                action={
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => {
+                            onDeleteRow();
+                            handleCloseConfirm();
+                        }}
+                    >
+                        {!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                    </Button>
+                }
+            />
+            <ConfirmDialog
+                open={openConfirmResetPassword}
+                onClose={handleCloseConfirmResetPassword}
+                title={'Reset mật khẩu'}
+                content={'Bạn có chắc chắn reset mật khẩu của người dùng này?'}
+                action={
+                  <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => {
+                        handleResetUser(id)
+                        handleCloseConfirmResetPassword();
+                      }}
+                  >
+                    Reset
+                  </Button>
+                }
+            />
     </>
   );
 }

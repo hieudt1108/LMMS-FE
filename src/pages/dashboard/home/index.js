@@ -86,7 +86,7 @@ export default function GeneralHomePage() {
                                 <Stack sx={{mt:10,mb:5}}>
                                     <m.div variants={varFade().inUp}>
                                         <Typography variant="h5" sx={{ color: 'text.secondary' }}>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                                             Hệ thống quản lí dạy và học tích hợp
                                             <br />với hệ sinh thái học liệu số mang lại tiện ích đầy đủ.
 

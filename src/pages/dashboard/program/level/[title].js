@@ -35,7 +35,7 @@ import LevelSecond from '../../../../sections/@dashboard/program/level/LevelSeco
 import Head from 'next/head';
 import Iconify from '../../../../components/iconify';
 // api
-import { getAllDocument, getAllTypeDocument, getAllSubject } from '../../../../dataProvider/agent';
+import {getAllDocument, getAllTypeDocument, getAllSubject, getProgramById} from '../../../../dataProvider/agent';
 import { DocumentPostCard } from '../../../../sections/@dashboard/documents';
 
 import { useAuthContext } from 'src/auth/useAuthContext';
@@ -62,6 +62,8 @@ export default function LevelLayout() {
     typeDocumentId: '',
     subjectId: '',
   });
+
+  const [program, setProgram] = useState([])
 
   const renderMenuItem = useCallback((item) => {
     if (item && item.length) {
@@ -103,6 +105,14 @@ export default function LevelLayout() {
       console.log(res.message);
     }
   }
+  async function fetchProgram() {
+    const res = await getProgramById(title);
+    if (res.status < 400) {
+      setProgram(res.data.data);
+    } else {
+      console.log(res.message);
+    }
+  }
 
   const handleSearchChange = useCallback(
     (event, value) => {
@@ -138,6 +148,7 @@ export default function LevelLayout() {
 
   useEffect(() => {
     fetchAllTypeDoc();
+    fetchProgram();
     // fetchAllSubject();
   }, []);
   return (
@@ -159,7 +170,7 @@ export default function LevelLayout() {
               href: PATH_DASHBOARD.program.choose,
             },
             {
-              name: title,
+              name: program.name,
             },
           ]}
         />

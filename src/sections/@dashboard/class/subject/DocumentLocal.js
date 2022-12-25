@@ -11,14 +11,17 @@ import Iconify from '../../../../components/iconify';
 import { fData } from '../../../../utils/formatNumber';
 import UploadDocToSlot from '../../myclass/popupdiaglog/UploadDocToSlot';
 import { FileGeneralRecentCard } from '../../general/file';
+import {useAuthContext} from "../../../../auth/useAuthContext";
 
 const GB = 1000000000 * 24;
 
 export default function DocumentLocal({ data, documentInClass, handleOpenFormUploadDocToSlot }) {
+  const { user } = useAuthContext();
   return (
     <>
       <Card sx={{ p: 3, cursor: 'pointer' }}>
         <Stack direction="row" alignItems="center" display="flex" justifyContent="flex-end">
+          {user?.roles.find((role) => role.name !== 'HOCSINH') ? (
           <Button
             size="small"
             onClick={() => handleOpenFormUploadDocToSlot(0)}
@@ -26,6 +29,9 @@ export default function DocumentLocal({ data, documentInClass, handleOpenFormUpl
           >
             Thêm tài liệu chung
           </Button>
+          ) : (
+              <></>
+          )}
         </Stack>
         <Stack spacing={2}>
           {documentInClass?.map(

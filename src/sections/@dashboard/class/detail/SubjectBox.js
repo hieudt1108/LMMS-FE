@@ -14,6 +14,8 @@ import { useSnackbar } from '../../../../components/snackbar';
 import useResponsive from '../../../../hooks/useResponsive';
 
 import { deleteSubjectInClass } from '../../../../dataProvider/agent';
+import {imageSubject} from "../../../../components/file-thumbnail";
+import ConfirmDialog from "../../../../components/confirm-dialog";
 // import Image from '../../../../components/image';
 
 // ----------------------------------------------------------------------
@@ -63,7 +65,15 @@ export default function ClassNewestBooking({ fetchMyClass, classID, myClass, tit
 function BookingItem({ fetchMyClass, item, user, classID }) {
   const { code, name, subjectId, teacherFirstName, teacherLastName, totalDocs } = item;
   const { enqueueSnackbar } = useSnackbar();
-  const [openConfirmDeleteFile, setOpenConfirmDeleteFile] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+  };
 
   const handlerDelete = async () => {
     const res = await deleteSubjectInClass(classID, [
@@ -90,6 +100,7 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
   };
 
   return (
+      <>
     <Paper
       sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral', display: 'flex', justifyContent: 'space-between' }}
     >
@@ -99,7 +110,7 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
         sx={{ p: 1, display: 'flex', cursor: 'pointer', flexDirection: 'row' }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
-          <img src="/assets/images/subjectlist/Biology.png" width={120} />
+          <img src={imageSubject(code)} width={120} />
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Stack direction="row" alignItems="center">
@@ -126,12 +137,31 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
         </Box>
       </Stack>
       {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
-        <Button onClick={handlerDelete}>
+        <Button onClick={handleOpenConfirm}>
           <Iconify icon="eva:trash-2-outline" width={28} />
         </Button>
       ) : (
         ''
       )}
     </Paper>
+    <ConfirmDialog
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        title={'Xóa môn học'}
+        content={'Bạn có chắc chắn muốn xóa môn học này!'}
+        action={
+          <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                handlerDelete();
+                handleCloseConfirm();
+              }}
+          >
+            {'Xóa'}
+          </Button>
+        }
+    />
+      </>
   );
 }

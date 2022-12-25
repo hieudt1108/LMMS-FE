@@ -515,8 +515,16 @@ const updateUser = (id, payload) => {
   return putApi(`User/${id}`, payload);
 };
 
+const updateProfile = (id, payload) => {
+  return putApi(`Auth/editMyProfile/${id}`, payload);
+};
+
 const changePasswordUserAuth = (payload) => {
   return putApi('Auth/resetPassword', payload);
+};
+
+const changePasswordAdmin = (id) => {
+  return putApi(`Auth/resetPasswordAdmin/${id}`);
 };
 
 const updateShareDocs = (id, payload) => {
@@ -642,4 +650,6 @@ export {
   postFileExcelAddSubject,
   createManyUser,
   removeMemberInClass,
+  updateProfile,
+  changePasswordAdmin,
 };

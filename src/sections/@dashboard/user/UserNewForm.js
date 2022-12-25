@@ -240,7 +240,6 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                     enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
                 }
             } catch (error) {
-                console.log(error);
                 enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
             }
         } else {

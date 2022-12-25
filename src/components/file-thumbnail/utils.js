@@ -139,6 +139,70 @@ export function fileThumb(fileUrl) {
   return thumb;
 }
 
+export function imageSubject(codeSubject) {
+  let imageURL;
+
+  switch (codeSubject) {
+    case 'AMNHAC':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/amnhac.png';
+      break;
+    case 'DAODUC':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/daoduc.png';
+      break;
+    case 'GDCD':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/gdcd.png';
+      break;
+    case 'THEDUC':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/theduc.png';
+      break;
+    case 'TRAINGHIEM':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/trainghiem.png';
+      break;
+    case 'KHOAHOC':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/khoahoc.png';
+      break;
+    case 'KHTN':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/khoahoctunhien.png';
+      break;
+    case 'LICHSUDIALY':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/lichsudialy.png';
+      break;
+    case 'MITHUAT':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/mythuat.png';
+      break;
+    case 'ANH1':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/ngoaingu1.png';
+      break;
+    case 'ANH2':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/ngoaingu1.png';
+      break;
+    case 'NGUVAN':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/nguvan.png';
+      break;
+    case 'TD1':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/theduc1.png';
+      break;
+    case 'TIENGDANTOC':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/dantoc.png';
+      break;
+    case 'TIENGVIET':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/tiengviet.png';
+      break;
+    case 'TINHOCCONGNGHE':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/tinhoc.png';
+      break;
+    case 'TOAN':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/toan.png';
+      break;
+    case 'TNXH':
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/tunhien.png';
+      break;
+    default:
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/chuaro.png';
+  }
+  return imageURL;
+}
+
 // ----------------------------------------------------------------------
 
 export function fileTypeByUrl(fileUrl = '') {

@@ -31,6 +31,7 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useSnackbar } from '../../../../components/snackbar';
 import { removeMemberInClass } from '../../../../dataProvider/agent';
+import ConfirmDialog from "../../../../components/confirm-dialog";
 
 // ----------------------------------------------------------------------
 
@@ -59,7 +60,7 @@ export default function ClassTeacher({
   const handleOnClickSubject = () => {
     push(PATH_DASHBOARD.myclass.addMember(myclass_id));
   };
-
+  console.log('myClass',myClass)
   return (
     <Card {...other}>
       <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
@@ -96,6 +97,16 @@ export default function ClassTeacher({
 function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
+
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+  };
 
   const handlerDelete = async () => {
     const res = await removeMemberInClass(classID, [
@@ -136,13 +147,23 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
           <TableRow>
             <TableCell>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <Avatar alt={row.name} src={row.name} />
+                <Avatar src={`http://lmms.site:7070/assets/images/avatars/avatar_${(1 - row.gender) * 10 + (row.id % 10) + 1}.jpg`} />
                 <Typography variant="subtitle2">{row.name}</Typography>
               </Stack>
             </TableCell>
 
             <TableCell>
               {row.firstName} {row.lastName}
+            </TableCell>
+            <TableCell>
+              {role.role === null || '' ? (
+                      <Label></Label>
+                  ) : (
+                      <Label key={role.id} variant="soft" color={'success'} sx={{ textTransform: 'capitalize' }}>
+                        {role.role}
+                      </Label>
+
+              )}
             </TableCell>
             <TableCell>{role.subject}</TableCell>
             <TableCell>{row.email}</TableCell>
@@ -172,7 +193,7 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
         <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
           <Divider sx={{ borderStyle: 'dashed' }} />
 
-          <MenuItem onClick={handlerDelete} sx={{ color: 'error.main' }}>
+          <MenuItem onClick={handleOpenConfirm} sx={{ color: 'error.main' }}>
             <Iconify icon="eva:trash-2-outline" />
             Xóa
           </MenuItem>
@@ -180,6 +201,25 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
       ) : (
         ''
       )}
+      <ConfirmDialog
+          open={openConfirm}
+          onClose={handleCloseConfirm}
+          title={'Xóa thành viên'}
+          content={'Bạn có chắc chắn muốn xóa thành viên này!'}
+          action={
+            <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  handlerDelete();
+                  handleCloseConfirm();
+                }}
+            >
+              {'Xóa'}
+            </Button>
+          }
+      />
     </>
+
   );
 }

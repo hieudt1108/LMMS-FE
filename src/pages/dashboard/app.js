@@ -211,7 +211,7 @@ export default function GeneralAppPage() {
 
           <Grid item xs={12} md={2.4}>
             <AppWidgetSummary
-              title="File Docx"
+              title="Tài liệu docx"
               percent={2.6}
               src="/assets/icons/files/ic_document.svg"
               total={reports?.typeOfDoc.docs}
@@ -220,7 +220,7 @@ export default function GeneralAppPage() {
 
           <Grid item xs={12} md={2.4}>
             <AppWidgetSummary
-              title="File images"
+              title="Tài liệu ảnh"
               percent={2.6}
               src="/assets/icons/files/ic_img.svg"
               total={reports?.typeOfDoc.image}
@@ -229,7 +229,7 @@ export default function GeneralAppPage() {
 
           <Grid item xs={12} md={2.4}>
             <AppWidgetSummary
-              title="Files mp3"
+              title="Tài liệu âm thanh"
               percent={2.6}
               src="/assets/icons/files/ic_audio.svg"
               total={reports?.typeOfDoc.sound}
@@ -238,7 +238,7 @@ export default function GeneralAppPage() {
 
           <Grid item xs={12} md={2.4}>
             <AppWidgetSummary
-              title="Videos"
+              title="Tài liệu video"
               percent={2.6}
               src="/assets/icons/files/ic_video.svg"
               total={reports?.typeOfDoc.videos}
@@ -247,7 +247,7 @@ export default function GeneralAppPage() {
 
           <Grid item xs={12} md={2.4}>
             <AppWidgetSummary
-              title="File khác"
+              title="Tài liệu khác"
               percent={2.6}
               src={<Iconify icon="eva:file-fill" width={36} sx={{ color: 'text.disabled' }} />}
               total={reports?.typeOfDoc.others}
@@ -258,31 +258,6 @@ export default function GeneralAppPage() {
             <div></div>
             <Typography variant="h6">Tổng dung lượng: {reports?.totalOfDocsCapacity} GB</Typography>
           </Grid>
-          {/* <Grid item xs={12} md={12} lg={6}>
-            <AppCurrentDownload
-              title="Dung lượng"
-              totalCap={reports?.totalOfDocsCapacity}
-              chart={{
-                colors: [
-                  theme.palette.primary.main,
-                  theme.palette.info.main,
-                  theme.palette.error.main,
-                  theme.palette.warning.main,
-                  theme.palette.warning.main,
-                ],
-                series: [
-                  { label: 'Docx', value: 12244 },
-                  { label: 'Images', value: 12244 },
-                  { label: 'Mp3', value: 53345 },
-                  { label: 'Videos', value: 44313 },
-                  { label: 'Other', value: 78343 },
-                ],
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <AppTopRelated title="Top Related Applications" list={_appRelated} />
-          </Grid> */}
 
           <Grid item xs={12} lg={12}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -306,25 +281,25 @@ export default function GeneralAppPage() {
                   <InputLabel id="demo-simple-select-helper-label">Chương trình học</InputLabel>
                   <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterProgram}>
                     <MenuItem value="">
-                      <em>None</em>
+                      <em>Tất cả</em>
                     </MenuItem>
                     {renderMenuItem(programs)}
                   </Select>
                 </FormControl>
                 <FormControl sx={{ minWidth: 170, mr: 3 }} size="small">
                   <InputLabel id="demo-simple-select-helper-label">Môn học</InputLabel>
-                  <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterDocType}>
+                  <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterSubject}>
                     <MenuItem value="">
-                      <em>None</em>
+                      <em>Tất cả</em>
                     </MenuItem>
                     {renderMenuItem(subjects)}
                   </Select>
                 </FormControl>
                 <FormControl sx={{ minWidth: 170 }} size="small">
                   <InputLabel id="demo-simple-select-helper-label">Loại tài liệu</InputLabel>
-                  <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterSubject}>
+                  <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterDocType}>
                     <MenuItem value="">
-                      <em>None</em>
+                      <em>Tất cả</em>
                     </MenuItem>
                     {renderMenuItem(typeDocs)}
                   </Select>
@@ -337,45 +312,19 @@ export default function GeneralAppPage() {
             <AppNewInvoice
               title="Thống kê tài liệu"
               tableData={reportDocs}
-              handlePageChange={() => handlePageChange()}
+              handlePageChange={handlePageChange}
               paging={paging}
               tableLabels={[
-                { id: 'code', label: 'Code Document' },
+                { id: 'code', label: 'Mã tài liệu' },
                 { id: 'name', label: 'Tên tài liệu' },
                 { id: 'createDate', label: 'Ngày tạo' },
                 { id: 'userDto', label: 'Người tạo' },
                 { id: 'email', label: 'Email' },
-                { id: 'phone', label: 'Phone' },
+                { id: 'phone', label: 'Số điện thoại' },
                 { id: '' },
               ]}
             />
           </Grid>
-
-          {/* <Grid item xs={12} md={6} lg={8}>
-            <AppAreaInstalled
-              title="Area Installed"
-              subheader="(+43%) than last year"
-              chart={{
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-                series: [
-                  {
-                    year: '2019',
-                    data: [
-                      { name: 'Asia', data: [10, 41, 35, 51, 49, 62, 69, 91, 148] },
-                      { name: 'America', data: [10, 34, 13, 56, 77, 88, 99, 77, 45] },
-                    ],
-                  },
-                  {
-                    year: '2020',
-                    data: [
-                      { name: 'Asia', data: [148, 91, 69, 62, 49, 51, 35, 41, 10] },
-                      { name: 'America', data: [45, 77, 99, 88, 77, 56, 13, 34, 10] },
-                    ],
-                  },
-                ],
-              }}
-            />
-          </Grid> */}
         </Grid>
       </Container>
     </>

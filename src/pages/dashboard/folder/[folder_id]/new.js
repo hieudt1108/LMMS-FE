@@ -12,6 +12,11 @@ import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 // sections
 import { FolderNewPostForm } from '../../../../sections/@dashboard/folder';
 import { useSelector } from 'react-redux';
+import { dispatch } from 'src/redux/store';
+import { createDocumentInitialRedux } from 'src/redux/slices/folder';
+import { useEffect } from 'react';
+import { useAuthContext } from 'src/auth/useAuthContext';
+import { useRouter } from 'next/router';
 
 // ----------------------------------------------------------------------
 
@@ -20,8 +25,16 @@ FolderNewDocumentPostPage.getLayout = (page) => <DashboardLayout>{page}</Dashboa
 // ----------------------------------------------------------------------
 
 export default function FolderNewDocumentPostPage() {
+  const { push } = useRouter();
   const { themeStretch } = useSettingsContext();
   const { folder } = useSelector((state) => state.folder);
+
+  useEffect(() => {
+    if (!folder.id) {
+      push(PATH_DASHBOARD.folder.root);
+    }
+    dispatch(createDocumentInitialRedux());
+  }, [dispatch]);
 
   return (
     <>
@@ -50,7 +63,6 @@ export default function FolderNewDocumentPostPage() {
             },
           ]}
         />
-
         <FolderNewPostForm
           data={{
             ...folder,

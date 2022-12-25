@@ -23,6 +23,7 @@ import { useRouter } from 'next/router';
 import { dispatch } from 'src/redux/store';
 import { useSelector } from 'react-redux';
 import {
+  createDocumentInitialRedux,
   createFolderRedux,
   createStoreFolderRedux,
   getFolderRedux,
@@ -35,6 +36,7 @@ import DataGridBasic from 'src/sections/_examples/mui/data-grid/DataGridBasic';
 import UploadMyDocumentDialog from '../storeFolder/UploadMyDocumentDialog';
 import PopupGetFolder from '../general/getFiletoDocPrivate/PopupGetFolder';
 import UploadNewDocToSlotDialog from '../myclass/popupdiaglog/UploadNewDocToSlot';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -47,6 +49,8 @@ GeneralFilePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 // ----------------------------------------------------------------------
 
 export default function GeneralFilePage({ data }) {
+  const { user } = useAuthContext();
+  const { newDocument } = useSelector((state) => state.folder);
   const theme = useTheme();
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -84,6 +88,7 @@ export default function GeneralFilePage({ data }) {
 
   const handleOpenFormUploadDocument = async () => {
     await dispatch(getFolderRedux(0, 'folderUploadDoc'));
+    await dispatch(createDocumentInitialRedux());
     setOpenFormUploadDocument(true);
   };
 
@@ -212,7 +217,8 @@ export default function GeneralFilePage({ data }) {
                   (data.panel.find((panel) => panel === 'folder') && handleOpenUploadFile) ||
                   (data.panel.find((panel) => panel === 'storeFolder') && handleOpenFormUploadDocument) ||
                   (data.panel.find((panel) => panel === 'popupUploadDocToSlot') &&
-                    (() => {
+                    (async () => {
+                      await dispatch(createDocumentInitialRedux());
                       setOpenPopupUploadNewDocToSlot(true);
                     }))
                 }

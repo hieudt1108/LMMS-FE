@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { dispatch } from '../../../../redux/store';
-import { FolderNewPostForm, GeneralFilePage } from '../../folder';
+import { GeneralFilePage } from '../../folder';
 import { copyDocsToFolderRedux, getFolderRedux } from 'src/redux/slices/folder';
 import { postDocumentsInSlotRedux } from 'src/redux/slices/subject';
 import { useSnackbar } from 'notistack';

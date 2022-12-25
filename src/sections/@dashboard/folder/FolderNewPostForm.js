@@ -51,16 +51,12 @@ function TextCode() {
 export default function FolderNewPostForm({ data }) {
   const { newDocument } = useSelector((state) => state.folder);
   const { user } = useAuthContext();
-
-  const { id, programs, typeDocuments } = newDocument.init;
+  const { programs } = newDocument.init;
   const formData = new FormData();
 
-  useEffect(() => {
-    dispatch(createDocumentInitialRedux());
-    if (!_.isEmpty(user)) {
-      dispatch(getTypeDocumentBySubjectRedux(user.subjects[0].id, 0));
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(createDocumentInitialRedux());
+  // }, [dispatch]);
 
   const validationSchema = (() => {
     return Yup.object().shape({
@@ -74,29 +70,25 @@ export default function FolderNewPostForm({ data }) {
   })();
 
   const [file, setFile] = useState([]);
+  const [reRender, setReRender] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const defaultValues = useMemo(
-    () => ({
+  const methods = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
       items: [
         {
           code: `${TextCode()}-${TextCode()}-${TextCode()}-${TextCode()}`,
           description: '',
           file: '',
           name: '',
-          programId: '',
-          subjectId: '',
-          typeDocumentId: '',
+          programId: _.get(programs, '0') ? _.get(programs, '0').id : '',
+          subjectId: _.get(user, 'subjects.0') ? _.get(user, 'subjects.0').id : '',
+          typeDocumentId: _.get(user, `subjects.0.typeDocuments.0`) ? _.get(user, `subjects.0.typeDocuments.0`).id : '',
         },
       ],
-    }),
-    [dispatch]
-  );
-
-  const methods = useForm({
-    resolver: yupResolver(validationSchema),
-    defaultValues,
+    },
   });
 
   const {
@@ -112,7 +104,7 @@ export default function FolderNewPostForm({ data }) {
     control,
     name: 'items',
   });
-  console.log('FolderNewPostForm', newDocument, fields);
+  console.log('FolderNewPostForm', getValues('items'), user, programs, newDocument);
 
   const handleDrop = (acceptedFiles, index) => {
     try {
@@ -143,13 +135,22 @@ export default function FolderNewPostForm({ data }) {
         newFolder.size = response.data.size;
 
         if (!newFolder.programId) {
+          if (!programs.length) {
+            enqueueSnackbar('Không có chương trình học', { variant: 'error' });
+            continue;
+          }
           newFolder.programId = programs[0].id;
         }
         if (!newFolder.subjectId) {
+          if (!user.subjects.length) {
+            enqueueSnackbar('Người dùng này không có môn học', { variant: 'error' });
+            continue;
+          }
           newFolder.subjectId = user.subjects[0].id;
         }
         if (!newFolder.typeDocumentId) {
-          newFolder.typeDocumentId = typeDocuments[index].typeDocumentInEachRecord[0].id;
+          enqueueSnackbar('Môn học này không có loại tài liệu', { variant: 'error' });
+          continue;
         }
         if (!_.isEmpty(data.types)) {
           newFolder.folderId = data.archiveFolderId;
@@ -157,20 +158,19 @@ export default function FolderNewPostForm({ data }) {
           enqueueSnackbar('Không xác định được thư mục lưu trữ tài liệu', { variant: 'error' });
           continue;
         }
+        let message;
         if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
-          const message = await dispatch(createDocumentInSubjectRedux(newFolder));
+          message = await dispatch(createDocumentInSubjectRedux(newFolder));
           await data.handleAddDocumentToSlot(message.documentId);
-          if (message) {
-            enqueueSnackbar(message.title, { variant: message.variant });
-          }
         } else {
-          const message = await dispatch(createDocumentRedux(newFolder));
-          if (message) {
-            enqueueSnackbar(message.title, { variant: message.variant });
+          message = await dispatch(createDocumentRedux(newFolder));
+        }
+        if (message) {
+          enqueueSnackbar(message.title, { variant: message.variant });
+          if (!message.variant) {
+            remove(index);
           }
         }
-        await dispatch(removeTypeDocumentByIndexRedux(index));
-        remove(index);
       } catch (error) {
         console.error(`onSubmit error at index: ${index}`, error);
       }
@@ -187,27 +187,57 @@ export default function FolderNewPostForm({ data }) {
   };
 
   const handleAdd = async () => {
-    await dispatch(getTypeDocumentBySubjectRedux(user.subjects[0].id, fields.length));
+    // await dispatch(getTypeDocumentBySubjectRedux(user.subjects[0].id, fields.length));
     prepend({
       code: `${TextCode()}-${TextCode()}-${TextCode()}-${TextCode()}`,
       description: '',
       name: '',
       file: '',
-      programId: '',
-      subjectId: '',
-      typeDocumentId: '',
+      programId: _.get(programs, '0') ? _.get(programs, '0').id : '',
+      subjectId: _.get(user, 'subjects.0') ? _.get(user, 'subjects.0').id : '',
+      typeDocumentId: _.get(user, `subjects.0.typeDocuments.0`) ? _.get(user, `subjects.0.typeDocuments.0`).id : '',
     });
   };
 
   const handleRemove = async (index) => {
-    await dispatch(removeTypeDocumentByIndexRedux(index));
+    // await dispatch(removeTypeDocumentByIndexRedux(index));
     remove(index);
   };
 
   const handlerSubjectChange = async (event, index) => {
-    console.log('handlerUserChange', event.target.value);
+    console.log(
+      'handlerUserChange',
+      event.target.name,
+      event.target.value,
+      _.findIndex(user.subjects, {
+        id: Number.parseInt(event.target.value),
+      }),
+      _.get(
+        user,
+        `subjects.${_.findIndex(user.subjects, {
+          id: Number.parseInt(event.target.value),
+        })}.typeDocuments.0`
+      )
+    );
     setValue(event.target.name, event.target.value);
-    await dispatch(getTypeDocumentBySubjectRedux(event.target.value));
+    setValue(
+      `items[${index}].typeDocumentId`,
+      _.get(
+        user,
+        `subjects.${_.findIndex(user.subjects, {
+          id: Number.parseInt(event.target.value),
+        })}.typeDocuments.0`
+      )
+        ? _.get(
+            user,
+            `subjects.${_.findIndex(user.subjects, {
+              id: Number.parseInt(event.target.value),
+            })}.typeDocuments.0`
+          ).id + ''
+        : ''
+    );
+    setReRender({ [event.target.name]: event.target.value });
+    // await dispatch(getTypeDocumentBySubjectRedux(event.target.value));
   };
   return (
     <>
@@ -275,11 +305,12 @@ export default function FolderNewPostForm({ data }) {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Chương Trình</span>
                       <RHFSelect name={`items[${index}].programId`} placeholder="Chương trình">
-                        {programs.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
+                        {!_.isEmpty(programs) &&
+                          programs.map((option) => (
+                            <option key={option.id} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
                       </RHFSelect>
                     </div>
                     <div
@@ -295,11 +326,12 @@ export default function FolderNewPostForm({ data }) {
                         onChange={(event) => handlerSubjectChange(event, index)}
                         placeholder="Môn học"
                       >
-                        {user.subjects.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
+                        {_.get(user, `subjects`) &&
+                          user.subjects.map((option) => (
+                            <option key={option.id} value={option.id}>
+                              {option.name}
+                            </option>
+                          ))}
                       </RHFSelect>
                     </div>
                     <div
@@ -311,12 +343,55 @@ export default function FolderNewPostForm({ data }) {
                     >
                       <span style={{ fontSize: '0.875rem', fontWeight: 400, width: '200px' }}>Loại</span>
                       <RHFSelect name={`items[${index}].typeDocumentId`} placeholder="Loại tài liệu">
-                        {!_.isEmpty(typeDocuments[index].typeDocumentInEachRecord) &&
-                          typeDocuments[index].typeDocumentInEachRecord.map((option) => (
-                            <option key={option.id} value={option.id}>
-                              {option.name}
-                            </option>
-                          ))}
+                        {
+                          // _.has(user, 'subjects') &&
+                          //   !_.isEmpty(user.subjects) &&
+                          //   Number.parseInt(getValues(`items[${index}].subjectId`)) &&
+                          //   _.findIndex(user.subjects, {
+                          //     id: Number.parseInt(getValues(`items[${index}].subjectId`)),
+                          //   }) &&
+                          //   user.subjects[
+                          //     _.findIndex(user.subjects, {
+                          //       id: Number.parseInt(getValues(`items[${index}].subjectId`)),
+                          //     })
+                          //   ].typeDocuments.map((option) => (
+                          //     <option key={option.id} value={option.id}>
+                          //       {option.name}
+                          //     </option>
+                          //   ))
+                          _.get(
+                            user,
+                            `subjects.${_.findIndex(user.subjects, {
+                              id: Number.parseInt(getValues(`items[${index}].subjectId`))
+                                ? Number.parseInt(getValues(`items[${index}].subjectId`))
+                                : 0,
+                            })}.typeDocuments`
+                          ) &&
+                            _.get(
+                              user,
+                              `subjects.${_.findIndex(user.subjects, {
+                                id: Number.parseInt(getValues(`items[${index}].subjectId`)),
+                              })}.typeDocuments`
+                            ).map((option) => (
+                              <option key={option.id} value={option.id}>
+                                {option.name}
+                              </option>
+                            ))
+
+                          // getValues(`items[${index}].programId`) ? () : (user.subjects[0].typeDocuments
+                          //   .map((option) => (
+                          //     <option key={option.id} value={option.id}>
+                          //       {option.name}
+                          //     </option>
+                          //   )))
+
+                          // !_.isEmpty(typeDocuments[index].typeDocumentInEachRecord) &&
+                          //   typeDocuments[index].typeDocumentInEachRecord.map((option) => (
+                          //     <option key={option.id} value={option.id}>
+                          //       {option.name}
+                          //     </option>
+                          //   ))
+                        }
                       </RHFSelect>
                     </div>
                   </Stack>

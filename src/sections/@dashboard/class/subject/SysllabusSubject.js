@@ -28,6 +28,9 @@ import { dispatch } from '../../../../redux/store';
 import { startDownloadFileRedux } from '../../../../redux/slices/document';
 import { FileGeneralRecentCard } from '../../general/file';
 import { useSelector } from 'react-redux';
+import {useAuthContext} from "../../../../auth/useAuthContext";
+import CustomBreadcrumbs from "../../../../components/custom-breadcrumbs";
+import {PATH_DASHBOARD} from "../../../../routes/paths";
 
 export default function SysllabusSubject({
   data,
@@ -41,7 +44,7 @@ export default function SysllabusSubject({
   const { createBy, createDate, id, isDeleted, name, updateBy, updateDate } = document;
   const [openPreview, setOpenPreview] = useState(false);
   const [openPopover, setOpenPopover] = useState(null);
-
+  const { user } = useAuthContext();
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
   };
@@ -62,10 +65,10 @@ export default function SysllabusSubject({
     <>
       <Card sx={{ p: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 3 }}>
-          <Typography variant="overline" sx={{ color: 'text.secondary' }}>
+          <Typography variant="h6" sx={{ color: 'text.secondary' }}>
             {name}
           </Typography>
-
+          {user?.roles.find((role) => role.name !== 'HOCSINH') ? (
           <Button
             size="small"
             onClick={() => handleOpenFormUploadDocToSlot(id)}
@@ -73,17 +76,13 @@ export default function SysllabusSubject({
           >
             Thêm tài liệu
           </Button>
+          ) : (
+            <></>
+          )}
         </Stack>
 
         <Stack spacing={3}>
           <Stack key={''} spacing={1}>
-            <Typography variant="body2" sx={{ mb: 2 }}>
-              <Box component="span" sx={{ color: 'text.secondary', mr: 0.5 }}>
-                Ngày tạo:
-              </Box>
-              {format(new Date(createDate), 'dd/MM/yyyy')}
-            </Typography>
-
             {documentInClass?.map((doc, index) =>
               doc?.slotId === id ? (
                 <Stack key={doc.id} spacing={2}>

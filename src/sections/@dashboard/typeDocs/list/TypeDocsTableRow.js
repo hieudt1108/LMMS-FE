@@ -103,16 +103,7 @@ export default function TypeDocsTableRow({ row, selected,typeId, onEditRow, onSe
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 200 }}>
         {moreAction && (
             <>
-        <MenuItem
-          onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Xóa
-        </MenuItem>
+
 
         <MenuItem
           onClick={() => {
@@ -128,6 +119,16 @@ export default function TypeDocsTableRow({ row, selected,typeId, onEditRow, onSe
         >
           <Iconify icon="eva:plus-outline" />
           Thêm vào môn học
+        </MenuItem>
+        <MenuItem
+            onClick={() => {
+              handleOpenConfirm();
+              handleClosePopover();
+            }}
+            sx={{ color: 'error.main' }}
+        >
+          <Iconify icon="eva:trash-2-outline" />
+          Xóa
         </MenuItem>
             </>
         )}

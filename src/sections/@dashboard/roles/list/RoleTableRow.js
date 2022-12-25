@@ -76,23 +76,22 @@ export default function RolesTableRow({ row, selected, onEditRow, onSelectRow, o
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 140 }}>
         <MenuItem
           onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Xóa
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
             onEditRow();
             handleClosePopover();
           }}
         >
           <Iconify icon="eva:edit-fill" />
           Cập nhật
+        </MenuItem>
+        <MenuItem
+            onClick={() => {
+              handleOpenConfirm();
+              handleClosePopover();
+            }}
+            sx={{ color: 'error.main' }}
+        >
+          <Iconify icon="eva:trash-2-outline" />
+          Xóa
         </MenuItem>
       </MenuPopover>
 

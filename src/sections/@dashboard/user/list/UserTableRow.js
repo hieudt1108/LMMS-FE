@@ -129,17 +129,7 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
         {ROLES?.map((role) =>
             role.name === 'ADMIN' ? (
             <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 180 }}>
-                <MenuItem
-                    onClick={() => {
-                        handleOpenConfirm();
-                        handleClosePopover();
-                    }}
-                    sx={{ color: 'error.main' }}
-                >
-                    <Iconify icon="eva:alert-circle-outline" />
-                    {!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
 
-                </MenuItem>
 
                 <MenuItem
                     onClick={() => {
@@ -158,6 +148,17 @@ export default function UserTableRow({ data, selected, onEditRow, onSelectRow, o
                 >
                   <Iconify icon="eva:refresh-outline" />
                   Reset mật khẩu
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        handleOpenConfirm();
+                        handleClosePopover();
+                    }}
+                    sx={{ color: 'error.main' }}
+                >
+                    <Iconify icon="eva:alert-circle-outline" />
+                    {!enable ? 'Vô hiệu hóa' : 'Kích hoạt'}
+
                 </MenuItem>
             </MenuPopover>
             ) : (

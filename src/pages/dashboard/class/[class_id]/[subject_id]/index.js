@@ -73,7 +73,8 @@ export default function index() {
           heading="Khung chương trình"
           links={[
             { name: 'Trang chủ', href: PATH_DASHBOARD.root },
-            { name: 'Môn học', href: PATH_DASHBOARD.class.detail(class_id) },
+            { name: 'Danh sách môn học', href: PATH_DASHBOARD.class.detail(class_id) },
+            { name: `Môn học ${subject.name}` },
             { name: 'Khung chương trình' },
           ]}
         />

@@ -31,6 +31,7 @@ import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useSnackbar } from '../../../../components/snackbar';
 import { removeMemberInClass } from '../../../../dataProvider/agent';
+import ConfirmDialog from "../../../../components/confirm-dialog";
 
 // ----------------------------------------------------------------------
 
@@ -96,6 +97,16 @@ export default function ClassTeacher({
 function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
+
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+  };
 
   const handlerDelete = async () => {
     const res = await removeMemberInClass(classID, [
@@ -182,7 +193,7 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
         <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
           <Divider sx={{ borderStyle: 'dashed' }} />
 
-          <MenuItem onClick={handlerDelete} sx={{ color: 'error.main' }}>
+          <MenuItem onClick={handleOpenConfirm} sx={{ color: 'error.main' }}>
             <Iconify icon="eva:trash-2-outline" />
             Xóa
           </MenuItem>
@@ -190,6 +201,25 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
       ) : (
         ''
       )}
+      <ConfirmDialog
+          open={openConfirm}
+          onClose={handleCloseConfirm}
+          title={'Xóa thành viên'}
+          content={'Bạn có chắc chắn muốn xóa thành viên này!'}
+          action={
+            <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  handlerDelete();
+                  handleCloseConfirm();
+                }}
+            >
+              {'Xóa'}
+            </Button>
+          }
+      />
     </>
+
   );
 }

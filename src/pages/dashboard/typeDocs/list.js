@@ -59,7 +59,7 @@ import error from 'eslint-plugin-react/lib/util/error';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Tên loại tài liệu', align: 'left' },
-  { id: 'description', label: 'Mô tả', align: 'left' },
+  { id: 'description', label: 'Ngày tạo', align: 'left' },
   { id: '' },
 ];
 

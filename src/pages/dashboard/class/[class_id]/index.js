@@ -27,6 +27,7 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { getClassById, deleteSubjectInClass } from '../../../../dataProvider/agent';
 import ClassAddSubjectDialog from '../../../../sections/@dashboard/class/form/ClassAddSubjectDialog';
 import { useAuthContext } from 'src/auth/useAuthContext';
+import CustomBreadcrumbs from "../../../../components/custom-breadcrumbs";
 
 // ----------------------------------------------------------------------
 
@@ -98,19 +99,12 @@ export default function ClassDetail() {
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        {/* <Grid container spacing={3} mb={2}>
-          <Grid item xs={12} md={4}>
-            <ClassWidgetSummary title="Giáo viên" total={myClass?.members.length} icon={<BookingIllustration />} />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <ClassWidgetSummary title="Học sinh" total={myClass?.members.length} icon={<CheckInIllustration />} />
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <ClassWidgetSummary title="Tài liệu" total={124000} icon={<CheckOutIllustration />} />
-          </Grid>
-        </Grid> */}
+        <CustomBreadcrumbs
+            heading={`Lớp ${myClass?.name}`}
+            links={[
+              { name: 'Thông tin lớp học' },
+            ]}
+        />
 
         {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
           <>

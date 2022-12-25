@@ -7,7 +7,20 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useFieldArray, useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Grid, Card, Stack, Typography, Divider, Button, TextField, Chip, Autocomplete } from '@mui/material';
+import {
+  Grid,
+  Card,
+  Stack,
+  Typography,
+  Divider,
+  Button,
+  TextField,
+  Chip,
+  Autocomplete,
+  InputAdornment,
+  Avatar,
+  Link,
+} from '@mui/material';
 import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
 import FormProvider, { RHFSwitch, RHFTextField, RHFSelect, RHFUpload, RHFAutocomplete } from 'src/components/hook-form';
@@ -28,6 +41,8 @@ import {
 import { getRolesRedux } from 'src/redux/slices/roles';
 import { object } from 'prop-types';
 import { useSnackbar } from 'notistack';
+import SearchNotFound from 'src/components/search-not-found/SearchNotFound';
+import { CustomTextField } from 'src/components/custom-input';
 
 // ----------------------------------------------------------------------
 const checkArray = (arrayName) => {
@@ -154,15 +169,26 @@ export default function FolderNewPostForm({ classID }) {
   }, []);
 
   const handlerUserChange = (event, index, userHandle) => {
-    // console.log('handlerUserChange', userHandle, event.target.name, event.target.value, index);
-    setValue(`items[${index}].userId`, userHandle?.id);
-    dispatch(filterSubjectRedux({ users: addUserInCLass[index]?.users, userId: userHandle?.id, index }));
+    console.log('handlerUserChange', userHandle, event.target.name, event.target.value, index);
+    // setValue(`items[${index}].userId`, userHandle?.id);
+    // dispatch(filterSubjectRedux({ users: addUserInCLass[index]?.users, userId: userHandle?.id, index }));
   };
   console.log('FolderNewPostForm', getValues('items'), addUserInCLass);
 
-  const handleSearchPosts = async (value) => {
+  const handleSearchAddUserInClass = async (value) => {
     console.log('handleSearchPosts', value);
     await dispatch(getUsersRedux({ pageIndex: 1, pageSize: 20, searchByName: value }, 0));
+  };
+
+  const handleGotoProduct = (user) => {
+    console.log('handleGotoProduct', user);
+    dispatch(handleSearchUserRedux(user));
+  };
+
+  const handleKeyUp = (event) => {
+    if (event.key === 'Enter') {
+      handleGotoProduct(searchProducts);
+    }
   };
 
   return (
@@ -180,33 +206,81 @@ export default function FolderNewPostForm({ classID }) {
                       </Typography>
 
                       <Autocomplete
-                        id="size-small-filled"
+                        size="small"
                         name={`items[${index}].userId`}
-                        onInputChange={(event, value) => handleSearchPosts(value)}
-                        onChange={(event, userHandle) => handlerUserChange(event, index, userHandle)}
-                        sx={{ width: '643px' }}
+                        autoHighlight
+                        popupIcon={null}
                         options={addUserInCLass[index].users}
-                        getOptionLabel={(user) => `${user.email} - ${user.firstName} ${user.lastName}`}
-                        // defaultValue={addUserInCLass[index].users[0]}
+                        onInputChange={(event, value) => handleSearchAddUserInClass(value)}
+                        getOptionLabel={(post) => post.title}
+                        noOptionsText={<SearchNotFound query={addUserInCLass[index].users} />}
                         isOptionEqualToValue={(option, value) => option.id === value.id}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              variant="outlined"
-                              label={option.firstName}
-                              size="small"
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
+                        componentsProps={{
+                          popper: {
+                            sx: {
+                              width: `280px !important`,
+                            },
+                          },
+                          paper: {
+                            sx: {
+                              '& .MuiAutocomplete-option': {
+                                px: `8px !important`,
+                              },
+                            },
+                          },
+                        }}
                         renderInput={(params) => (
-                          <TextField
+                          <CustomTextField
                             {...params}
-                            // variant="filled"
-                            // label="Size small"
-                            placeholder="Tìm kiếmm người dùng..."
+                            width={220}
+                            placeholder="Search..."
+                            onKeyUp={handleKeyUp}
+                            InputProps={{
+                              ...params.InputProps,
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <Iconify icon="eva:search-fill" sx={{ ml: 1, color: 'text.disabled' }} />
+                                </InputAdornment>
+                              ),
+                            }}
                           />
                         )}
+                        renderOption={(props, user, { inputValue }) => {
+                          console.log('renderOption', props);
+                          const { cover, gender, id, firstName, lastName, email } = user;
+                          const matches = match(`${firstName} ${lastName}`, inputValue);
+                          const parts = parse(`${firstName} ${lastName}`, matches);
+
+                          return (
+                            <li {...props}>
+                              <Avatar
+                                src={`http://lmms.site:7070/assets/images/avatars/avatar_${
+                                  (1 - gender) * 10 + (id % 10) + 1
+                                }.jpg`}
+                              />
+
+                              <Link
+                                underline="none"
+                                onClick={(event, userHandle) => handlerUserChange(event, index, userHandle)}
+                              >
+                                {parts.map((part, index) => (
+                                  <Typography
+                                    key={index}
+                                    component="span"
+                                    variant="subtitle2"
+                                    color={part.highlight ? 'primary' : 'textPrimary'}
+                                  >
+                                    {part.text}
+                                  </Typography>
+                                ))}
+                                <br />
+                                <Typography component="span" variant="subtitle2" color={'textPrimary'}>
+                                  {email}
+                                </Typography>
+                              </Link>
+                            </li>
+                          );
+                        }}
                       />
                     </div>
 

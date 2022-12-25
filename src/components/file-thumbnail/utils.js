@@ -171,7 +171,7 @@ export function imageSubject(codeSubject) {
       imageURL = 'http://lmms.site:7070/assets/images/subjectlists/mythuat.png';
       break;
     case 'ANH1':
-      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/ngoaingu1.png';
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/ngoaingu1.jpg';
       break;
     case 'ANH2':
       imageURL = 'http://lmms.site:7070/assets/images/subjectlists/ngoaingu1.png';
@@ -186,7 +186,7 @@ export function imageSubject(codeSubject) {
       imageURL = 'http://lmms.site:7070/assets/images/subjectlists/dantoc.png';
       break;
     case 'TIENGVIET':
-      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/tiengviet.png';
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/tiengviet.jpg';
       break;
     case 'TINHOCCONGNGHE':
       imageURL = 'http://lmms.site:7070/assets/images/subjectlists/tinhoc.png';

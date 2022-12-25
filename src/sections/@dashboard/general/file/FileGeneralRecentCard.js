@@ -30,7 +30,7 @@ import { useAuthContext } from 'src/auth/useAuthContext';
 
 const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFolder, sx, ...other }) => {
   const { user } = useAuthContext();
-  console.log('FileGeneralRecentCard', user);
+  console.log('FileGeneralRecentCard', data);
   const { enqueueSnackbar } = useSnackbar();
 
   const isDesktop = useResponsive('up', 'sm');
@@ -74,7 +74,8 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
       return;
     } else if (data.types.find((type) => type === 'folder')) {
       const message = await dispatch(getOneDocumentRedux(file.id));
-      if (message.variant) {
+      console.log('message', message);
+      if (message && message.variant) {
         enqueueSnackbar(message.title, { variant: message.variant });
       } else {
         setOpenDetails(true);

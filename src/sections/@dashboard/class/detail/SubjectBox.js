@@ -25,18 +25,11 @@ ClassNewestBooking.propTypes = {
   subheader: PropTypes.number,
 };
 
-export default function ClassNewestBooking({ myClass, title, user, subheader, sx, ...other }) {
+export default function ClassNewestBooking({ fetchMyClass, classID, myClass, title, user, subheader, sx, ...other }) {
   const theme = useTheme();
-  const { enqueueSnackbar } = useSnackbar();
 
-  const handlerDelete = async (id) => {
-    const res = await deleteSubjectInClass(id);
-    if (res.status < 400) {
-      enqueueSnackbar('Xoá lớp thành công');
-    } else {
-      enqueueSnackbar('Xoá thất bại');
-    }
-  };
+  // console.log('classID: ', classID);
+
   return (
     <Box sx={{ py: 2, ...sx }} {...other}>
       <CardHeader
@@ -52,7 +45,8 @@ export default function ClassNewestBooking({ myClass, title, user, subheader, sx
         {myClass?.subjects?.map((item, index) => (
           <Grid item xs={2} sm={12} md={12} key={index}>
             <BookingItem
-              handlerDelete={() => handlerDelete(item.subjectId)}
+              fetchMyClass={() => fetchMyClass()}
+              classID={classID}
               user={user}
               key={item.subjectId}
               item={item}
@@ -66,9 +60,24 @@ export default function ClassNewestBooking({ myClass, title, user, subheader, sx
 
 // ----------------------------------------------------------------------
 
-function BookingItem({ item, user, handlerDelete }) {
+function BookingItem({ fetchMyClass, item, user, classID }) {
   const { code, name, subjectId, teacherFirstName, teacherLastName, totalDocs } = item;
+  const { enqueueSnackbar } = useSnackbar();
+  const [openConfirmDeleteFile, setOpenConfirmDeleteFile] = useState(false);
 
+  const handlerDelete = async () => {
+    const res = await deleteSubjectInClass(classID, [
+      {
+        subjectId: item.subjectId,
+      },
+    ]);
+    if (res.status < 400) {
+      await fetchMyClass();
+      enqueueSnackbar('Xoá lớp thành công');
+    } else {
+      enqueueSnackbar('Xoá thất bại', { variant: 'error' });
+    }
+  };
   const {
     query: { class_id },
   } = useRouter();
@@ -110,12 +119,7 @@ function BookingItem({ item, user, handlerDelete }) {
           )}
           <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
             <Stack direction="row" alignItems="center" spacing={1}>
-              <Iconify icon="ic:round-vpn-key" width={16} />
-              <Typography variant="caption">Số tiết học: {50}</Typography>
-            </Stack>
-
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Iconify icon="eva:people-fill" width={16} />
+              <Iconify icon="material-symbols:edit-document" width={16} />
               <Typography variant="caption">Số tài liệu: {totalDocs}</Typography>
             </Stack>
           </Stack>

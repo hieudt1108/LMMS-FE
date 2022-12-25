@@ -39,7 +39,7 @@ AppCurrentDownload.propTypes = {
   subheader: PropTypes.string,
 };
 
-export default function AppCurrentDownload({ title, subheader, chart, ...other }) {
+export default function AppCurrentDownload({ totalCap, title, subheader, chart, ...other }) {
   const theme = useTheme();
 
   const { colors, series, options } = chart;

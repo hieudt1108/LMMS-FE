@@ -29,6 +29,8 @@ import MenuPopover from '../../../../components/menu-popover';
 import { TableHeadCustom } from '../../../../components/table';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+import { useSnackbar } from '../../../../components/snackbar';
+import { removeMemberInClass } from '../../../../dataProvider/agent';
 
 // ----------------------------------------------------------------------
 
@@ -39,11 +41,20 @@ ClassTeacher.propTypes = {
   tableLabels: PropTypes.array,
 };
 
-export default function ClassTeacher({ myClass, user, title, subheader, tableLabels, tableData, ...other }) {
+export default function ClassTeacher({
+  classID,
+  fetchMyClass,
+  myClass,
+  user,
+  title,
+  subheader,
+  tableLabels,
+  tableData,
+  ...other
+}) {
   const {
     query: { myclass_id },
   } = useRouter();
-  console.log('myClass', myClass);
   const { push } = useRouter();
   const handleOnClickSubject = () => {
     push(PATH_DASHBOARD.myclass.addMember(myclass_id));
@@ -62,7 +73,13 @@ export default function ClassTeacher({ myClass, user, title, subheader, tableLab
 
             <TableBody>
               {myClass?.members?.map((row, index) => (
-                <BookingDetailsRow user={user} key={index} row={row} />
+                <BookingDetailsRow
+                  fetchMyClass={() => fetchMyClass()}
+                  user={user}
+                  classID={classID}
+                  key={index}
+                  row={row}
+                />
               ))}
             </TableBody>
           </Table>
@@ -70,21 +87,31 @@ export default function ClassTeacher({ myClass, user, title, subheader, tableLab
       </TableContainer>
 
       <Divider />
-
-      {/*<Box sx={{ p: 2, textAlign: 'right' }}>*/}
-      {/*  <Button size="small" color="inherit" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>*/}
-      {/*    Xem tất cả*/}
-      {/*  </Button>*/}
-      {/*</Box>*/}
     </Card>
   );
 }
 
 // ----------------------------------------------------------------------
 
-function BookingDetailsRow({ row, user }) {
+function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
   const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
 
+  const handlerDelete = async () => {
+    const res = await removeMemberInClass(classID, [
+      {
+        userId: row.id,
+      },
+    ]);
+    if (res.status < 400) {
+      await fetchMyClass();
+      handleClosePopover();
+      // console.log('status: ', res);
+      enqueueSnackbar(`Xoá người dùng ${res.data.message}`);
+    } else {
+      enqueueSnackbar('Xoá thất bại', { variant: 'error' });
+    }
+  };
   const isLight = theme.palette.mode === 'light';
 
   const [openPopover, setOpenPopover] = useState(null);
@@ -105,7 +132,7 @@ function BookingDetailsRow({ row, user }) {
   return (
     <>
       {row?.roleInClasses?.map((role) =>
-        role.role === 'GVCHUNHIEM' ? (
+        role.role === 'GVCHUNHIEM' || role.role === 'GIAOVIEN' ? (
           <TableRow>
             <TableCell>
               <Stack direction="row" alignItems="center" spacing={2}>
@@ -145,7 +172,7 @@ function BookingDetailsRow({ row, user }) {
         <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
           <Divider sx={{ borderStyle: 'dashed' }} />
 
-          <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+          <MenuItem onClick={handlerDelete} sx={{ color: 'error.main' }}>
             <Iconify icon="eva:trash-2-outline" />
             Xóa
           </MenuItem>

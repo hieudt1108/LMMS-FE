@@ -444,8 +444,12 @@ async function putApi(url, payload) {
   }
 }
 // SUBJECT IN CLASS
-const deleteSubjectInClass = (id) => {
-  return putApi(`Class/removeSubject/${id}`);
+const deleteSubjectInClass = (id, payload) => {
+  return putApi(`Class/removeSubject/${id}`, payload);
+};
+// MEMBER IN CLASS
+const removeMemberInClass = (id, payload) => {
+  return putApi(`Class/updateRemoveMember/${id}`, payload);
 };
 // PROGRAM
 const updateProgram = (id, payload) => {
@@ -637,4 +641,5 @@ export {
   postFileExcelAddMember,
   postFileExcelAddSubject,
   createManyUser,
+  removeMemberInClass,
 };

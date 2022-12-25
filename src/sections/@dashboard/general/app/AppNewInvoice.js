@@ -15,6 +15,7 @@ import {
   CardHeader,
   IconButton,
   TableContainer,
+  Pagination,
 } from '@mui/material';
 // utils
 import { fDate } from '../../../../utils/formatTime';
@@ -34,7 +35,15 @@ AppNewInvoice.propTypes = {
   tableLabels: PropTypes.array,
 };
 
-export default function AppNewInvoice({ title, subheader, tableData, tableLabels, ...other }) {
+export default function AppNewInvoice({
+  handlePageChange,
+  title,
+  paging,
+  subheader,
+  tableData,
+  tableLabels,
+  ...other
+}) {
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} sx={{ mb: 3 }} />
@@ -53,10 +62,14 @@ export default function AppNewInvoice({ title, subheader, tableData, tableLabels
 
       <Divider />
 
-      <Box sx={{ p: 2, textAlign: 'right' }}>
-        <Button size="small" color="inherit" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>
-          View All
-        </Button>
+      <Box direction="row" justifyContent="flex-end" alignItems="center" sx={{ p: 2, textAlign: 'right' }}>
+        <Pagination
+          size="small"
+          count={paging?.TotalPages}
+          rowsperpage={paging?.PageSize}
+          onChange={handlePageChange}
+          color="primary"
+        />
       </Box>
     </Card>
   );

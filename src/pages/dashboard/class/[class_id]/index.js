@@ -64,13 +64,13 @@ export default function ClassDetail() {
       id: 1,
       value: 'description',
       label: 'Quản lý môn học',
-      component: <ManageSubject user={user} myClass={myClass} />,
+      component: <ManageSubject fetchMyClass={() => fetchMyClass()} classID={class_id} user={user} myClass={myClass} />,
     },
     {
       id: 2,
       value: 'reviews',
       label: `Quản lý người dùng`,
-      component: <ManageUser user={user} myClass={myClass} />,
+      component: <ManageUser fetchMyClass={() => fetchMyClass()} classID={class_id} user={user} myClass={myClass} />,
     },
   ];
 
@@ -138,7 +138,12 @@ export default function ClassDetail() {
           ''
         )}
 
-        <ClassAddSubjectDialog classID={class_id} open={openAddSubject} onClose={handleCloseAddSubject} />
+        <ClassAddSubjectDialog
+          fetchMyClass={() => fetchMyClass()}
+          classID={class_id}
+          open={openAddSubject}
+          onClose={handleCloseAddSubject}
+        />
 
         <Card>
           <Tabs

@@ -33,6 +33,7 @@ import {useSnackbar} from "../../../../components/snackbar";
 import ConfirmDialog from "../../../../components/confirm-dialog";
 import {deleteDocumentInSubjectRedux} from "../../../../redux/slices/subject";
 import {deleteDocumentInFolderRedux, deleteDocumentInStoreFolderRedux} from "../../../../redux/slices/folder";
+import {deleteDocument} from "../../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ export default function AppNewInvoice({
   title,
   paging,
   subheader,
+  setReportDocs,
   tableData,
   tableLabels,
   ...other
@@ -63,7 +65,7 @@ export default function AppNewInvoice({
 
             <TableBody>
               {tableData?.map((row) => (
-                <AppNewInvoiceRow key={row.id} row={row} />
+                <AppNewInvoiceRow key={row.id} row={row} setReports={setReportDocs} />
               ))}
             </TableBody>
           </Table>
@@ -87,7 +89,7 @@ export default function AppNewInvoice({
 }
 
 // ----------------------------------------------------------------------
-function AppNewInvoiceRow({ row }) {
+function AppNewInvoiceRow({ row,setReports }) {
   const { enqueueSnackbar } = useSnackbar();
   const [openPopover, setOpenPopover] = useState(null);
   const [openShare, setOpenShare] = useState(false);
@@ -113,7 +115,7 @@ function AppNewInvoiceRow({ row }) {
   const handleOpenShare = async () => {
     handleClosePopover();
     console.log('row.document.id',row.document.id)
-    // await dispatch(getOneDocumentRedux(row.document.id));
+    await dispatch(getOneDocumentRedux(row.document.id));
     setOpenShare(true);
   };
 
@@ -122,12 +124,17 @@ function AppNewInvoiceRow({ row }) {
   };
 
   const handleDeleteFile = async () => {
-      const message = await dispatch(deleteDocumentInFolderRedux(row.document.id));
-      if (message) {
-        enqueueSnackbar(message.title, { variant: message.variant });
+    try{
+      const message = await deleteDocument(row.document.id);
+      if (message.status < 400) {
+        enqueueSnackbar('Xóa tài liệu thành công', { variant: 'success' });
         setOpenConfirmDeleteFile(false);
+        setReports();
       } else {
-      enqueueSnackbar(`Đã có lỗi xảy ra`, { variant: `error` });
+        enqueueSnackbar(`${message.response.data.title}`, {variant: 'error'});
+      }
+    }catch (e) {
+      enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
     }
   };
 

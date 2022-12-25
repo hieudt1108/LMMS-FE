@@ -183,7 +183,7 @@ export default function LevelLayout() {
               <InputLabel id="demo-simple-select-helper-label">Loại tài liệu</InputLabel>
               <Select id="demo-simple-select-helper" label="TypeDocument" onChange={handleFilterDocType}>
                 <MenuItem value="">
-                  <em>None</em>
+                  <em>Tất cả</em>
                 </MenuItem>
                 {renderMenuItem(typeDocs)}
               </Select>
@@ -192,7 +192,7 @@ export default function LevelLayout() {
               <InputLabel id="demo-simple-select-helper-label">Môn học</InputLabel>
               <Select id="demo-simple-select-helper" label="Subject" onChange={handleFilterSubject}>
                 <MenuItem value="">
-                  <em>None</em>
+                  <em>Tất cả</em>
                 </MenuItem>
                 {user.subjects?.map((obj, index) => (
                   <MenuItem value={obj} key={index}>

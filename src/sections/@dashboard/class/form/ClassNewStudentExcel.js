@@ -18,21 +18,22 @@ import {useDispatch} from 'react-redux';
 // API
 import {Upload} from "../../../../components/upload";
 import Iconify from "../../../../components/iconify";
+import {postFileExcelAddMember} from "../../../../dataProvider/agent";
 
 // ----------------------------------------------------------------------
 
 ClassNewStudentExcel.propTypes = {
   onNextStep: PropTypes.func,
   onBackStep: PropTypes.func,
-  setFormData: PropTypes.func,
 };
 
-export default function ClassNewStudentExcel({onNextStep, onBackStep,setFormData}) {
+export default function ClassNewStudentExcel({onNextStep, onBackStep, formData}) {
+  console.log('ClassNewStudentExcel',formData)
   const { push } = useRouter();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-
+  const formDataFileMember = new FormData();
 
   const defaultValues = useMemo(
       () => ({
@@ -73,8 +74,21 @@ export default function ClassNewStudentExcel({onNextStep, onBackStep,setFormData
 
   const onSubmit = async (data) => {
     const fileStudent = getValues(`file`)
-    setFormData(prev=>{return {...prev, ...data}})
-    onNextStep();
+    formDataFileMember.append('file', data?.file);
+    try {
+      if(data.file === undefined){
+        return enqueueSnackbar(`Bạn chưa thêm file danh sách!`, { variant: 'error' });
+      }
+      const pushFileStudentExcel = await postFileExcelAddMember(formData?.id, formDataFileMember)
+      if(pushFileStudentExcel.status < 400){
+        enqueueSnackbar('Thêm danh sách thành viên lớp học thành công');
+        onNextStep();
+      }else{
+        enqueueSnackbar(`${pushFileStudentExcel.response.data.title}`, {variant: 'error'});
+      }
+    }catch (error) {
+      enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
+    }
   };
 
 

@@ -35,9 +35,8 @@ export default function ClassCreatePage() {
   const { activeStep } = steps;
   const [formData,setFormData] = useState({})
   const [formDataStepOne,setFormDataStepOne] = useState({})
-  const completed = activeStep === STEPS.length;
+  const [completed,setCompleted] = useState(false)
 
-  console.log('activeStep',activeStep)
 
     const handleNextStep = () => {
         dispatch(nextStep());
@@ -103,14 +102,14 @@ export default function ClassCreatePage() {
                       <ClassNewStudentExcel
                           onNextStep={handleNextStep}
                           onBackStep={handleBackStep}
-                          setFormData={setFormData}
-
+                          formData = {formData}
                       />
                   )}
                   {activeStep === 2 && (
                       <ClassNewSubjectExcel
                           onBackStep={handleBackStep}
                           onNextStep={handleNextStep}
+                          setCompleted={setCompleted}
                           formData = {formData}
                       />
                   )}

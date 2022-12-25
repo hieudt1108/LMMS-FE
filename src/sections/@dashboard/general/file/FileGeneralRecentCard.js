@@ -72,7 +72,7 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
     ) {
       setOpenConfirmAddDocument(true);
       return;
-    } else if (data.types.find((type) => type === 'folder') || data.types.find((type) => type === 'storeFolder')) {
+    } else if (data.types.find((type) => type === 'folder')) {
       const message = await dispatch(getOneDocumentRedux(file.id));
       console.log('message', message);
       if (message && message.variant) {
@@ -181,7 +181,7 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
             alignItems="center"
             sx={{ typography: 'caption', color: 'text.disabled', mt: 0.5 }}
           >
-            <Box> {fileFormat(file.typeFile)} </Box>
+            <Box> {`${file.programName}-${file.subjectName}-${file.typeDocumentName}`} </Box>
           </Stack>
         </Stack>
 

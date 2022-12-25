@@ -144,18 +144,18 @@ export function getOneDocumentRedux(id) {
         return returnMessageError(`${response.response.data.title}`);
       }
       const document = response.data.data;
-      const detailProgramAndSubject = await Promise.all([
-        getProgramById(document.programId),
-        getSubjectById(document.subjectId),
-      ]);
+      // const detailProgramAndSubject = await Promise.all([
+      //   getProgramById(document.programId),
+      //   getSubjectById(document.subjectId),
+      // ]);
       dispatch(
         slice.actions.getOneDocumentSuccess({
           ...document,
-          programDetail: detailProgramAndSubject[0].data.data,
-          subjectDetail: detailProgramAndSubject[1].data.data,
+          // programDetail: detailProgramAndSubject[0].data.data,
+          // subjectDetail: detailProgramAndSubject[1].data.data,
         })
       );
-      returnMessageSuccess('Truy cập thành công');
+      return returnMessageSuccess('Truy cập thành công');
     } catch (error) {
       console.log('error', error);
       return returnMessageError('Truy cập thư mục bị lỗi!');

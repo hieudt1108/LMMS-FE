@@ -375,7 +375,7 @@ export default function FolderNewPostForm({ classID }) {
                       /> */}
                     </div>
 
-                    {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) && (
+                    {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) ? (
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Typography variant="subtitle2" gutterBottom sx={{ marginRight: '25px' }}>
                           Vai trò
@@ -393,6 +393,8 @@ export default function FolderNewPostForm({ classID }) {
                           ))}
                         </RHFSelect>
                       </div>
+                    ) : (
+                      ''
                     )}
 
                     {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].subjects) ? (

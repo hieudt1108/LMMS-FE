@@ -95,6 +95,7 @@ export default function ClassTeacher({
 // ----------------------------------------------------------------------
 
 function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
+  console.log('BookingDetailsRow', row);
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
 

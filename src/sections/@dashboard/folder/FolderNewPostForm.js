@@ -1,21 +1,21 @@
 import * as Yup from 'yup';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 // next
 // form
-import {yupResolver} from "@hookform/resolvers/yup";
-import {useFieldArray, useForm} from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useFieldArray, useForm } from 'react-hook-form';
 // @mui
-import {LoadingButton} from '@mui/lab';
-import {Button, Card, Divider, Grid, Stack, Typography} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Button, Card, Divider, Grid, Stack, Typography } from '@mui/material';
 // routes
 //components
-import {useSnackbar} from '../../../components/snackbar';
-import FormProvider, {RHFSelect, RHFTextField} from '../../../components/hook-form';
+import { useSnackbar } from '../../../components/snackbar';
+import FormProvider, { RHFSelect, RHFTextField } from '../../../components/hook-form';
 // ----------------------------------------------------------------------
-import {postFile} from '../../../dataProvider/agent';
-import {useSelector} from 'react-redux';
-import {dispatch} from 'src/redux/store';
+import { postFile } from '../../../dataProvider/agent';
+import { useSelector } from 'react-redux';
+import { dispatch } from 'src/redux/store';
 import {
   createDocumentInitialRedux,
   createDocumentInSubjectRedux,
@@ -23,9 +23,9 @@ import {
   getTypeDocumentBySubjectRedux,
   removeTypeDocumentByIndexRedux,
 } from 'src/redux/slices/folder';
-import {Upload} from '../../../components/upload';
+import { Upload } from '../../../components/upload';
 import Iconify from 'src/components/iconify';
-import {useAuthContext} from 'src/auth/useAuthContext';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 function TextCode() {
@@ -49,7 +49,6 @@ export default function FolderNewPostForm({ data }) {
   const { newDocument } = useSelector((state) => state.folder);
   const { user } = useAuthContext();
   const { programs } = newDocument.init;
-  const formData = new FormData();
 
   // useEffect(() => {
   //   dispatch(createDocumentInitialRedux());
@@ -118,8 +117,9 @@ export default function FolderNewPostForm({ data }) {
     for (let index = items.length - 1; index >= 0; --index) {
       try {
         const newFolder = items[index];
-
-        formData.append('File', getValues(`items[${index}].file`));
+        const formData = new FormData();
+        formData.append('File', newFolder.file);
+        console.log('formData', formData);
         const response = await postFile(formData);
         if (response.status !== 200) {
           enqueueSnackbar(`Tạo tài liệu${newFolder.code} thất bại`, { variant: 'error' });

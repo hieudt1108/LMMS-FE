@@ -142,10 +142,10 @@ export default function FolderNewPostForm({ classID }) {
     console.log('dataPayload: ', dataPayload);
     const response = await updateClassMember(classID, dataPayload);
     console.log('response data: ', response.response);
-    if (response.status) {
-      enqueueSnackbar(`Thêm người dùng thành công ${response.response?.data.title}`, { variant: 'error' });
+    if (response instanceof Error) {
+      enqueueSnackbar(` ${response.response?.data.title}`, { variant: 'error' });
     } else {
-      enqueueSnackbar(`Thêm người dùng thất bại ${response.response?.data.title}`, { variant: 'success' });
+      enqueueSnackbar(` ${response.response?.data.title}`, { variant: 'success' });
     }
   };
 
@@ -395,7 +395,7 @@ export default function FolderNewPostForm({ classID }) {
                       </div>
                     )}
 
-                    {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].subjects) && (
+                    {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].subjects) ? (
                       <div
                         style={{
                           display: 'flex',
@@ -425,6 +425,8 @@ export default function FolderNewPostForm({ classID }) {
                           }}
                         />
                       </div>
+                    ) : (
+                      ''
                     )}
                   </Stack>
                 </Card>

@@ -217,10 +217,9 @@ export default function FolderNewPostForm({ classID }) {
                         inputLabel={'hello'}
                         onInputChange={(event, value, reason) => handleSearchAddUserInClass(value, reason)}
                         onChange={(event, userHandle) => handlerUserChange(event, index, userHandle)}
-                        getOptionLabel={(user) => ` ${user.firstName} ${user.lastName}`}
+                        getOptionLabel={(user) => ` ${user.firstName} ${user.lastName} `}
                         // -------------------------------------------
                         autoHighlight
-                        getOptionLabel={(option) => option.label}
                         renderOption={(props, user, { inputValue }) => {
                           const { cover, gender, id, firstName, lastName, email } = user;
                           const matches = match(`${firstName} ${lastName}`, inputValue);

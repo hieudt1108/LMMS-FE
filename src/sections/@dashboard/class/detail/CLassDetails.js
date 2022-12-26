@@ -110,12 +110,12 @@ export default function CLassDetails({
           <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
             <TableHeadCustom headLabel={tableLabels} />
             <TableBody>
-              {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+              {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
                 <BookingDetailsRow
                   fetchMyClass={() => fetchMyClass()}
                   classID={classID}
                   user={user}
-                  key={row.id}
+                  key={index}
                   row={row}
                 />
               ))}

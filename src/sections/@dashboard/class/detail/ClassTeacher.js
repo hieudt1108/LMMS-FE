@@ -87,7 +87,7 @@ export default function ClassTeacher({
   });
 
   const countMemberIsTeacher = (data) => {
-    let countTeacher = 0
+    var countTeacher = 0
     for (let i = 0; i < data.length; i++) {
       if (data[i].roleInClasses[0].role === 'GVCHUNHIEM' || data[i].roleInClasses[0].role === 'GIAOVIEN') {
         countTeacher++;
@@ -105,7 +105,7 @@ export default function ClassTeacher({
       <TableContainer sx={{ overflow: 'unset' }}>
         <Scrollbar>
           <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-            <TableHeadCustom headLabel={tableLabels} />
+            <TableHeadCustom order={order} orderBy={orderBy} headLabel={tableLabels} />
 
             <TableBody>
               {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
@@ -181,7 +181,7 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
 
   const handleDelete = () => {
     handleClosePopover();
-    console.log('DELETE', row.id);
+    console.log('DELETE', row.subject);
   };
 
   return (
@@ -212,7 +212,13 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
                 </Label>
               )}
             </TableCell>
-            <TableCell>{role.subject}</TableCell>
+
+              {role?.subject?.map((su) =>
+                  <TableCell>
+                    {su.name}
+                  </TableCell>
+              )}
+
             <TableCell>{row.email}</TableCell>
 
             <TableCell>

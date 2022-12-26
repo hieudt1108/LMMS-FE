@@ -176,10 +176,10 @@ export default function FolderNewPostForm({ classID }) {
     dispatch(filterSubjectRedux({ user: userHandle, index }));
   };
 
-  const handleSearchAddUserInClass = async (value, reason) => {
+  const handleSearchAddUserInClass = async (value, reason, index) => {
     console.log('handleSearchAddUserInClass', value, reason);
     if (reason === 'input') {
-      await dispatch(getAllUsersWithInfoRedux({ pageIndex: 1, pageSize: 20, searchByName: value }, 0));
+      await dispatch(getAllUsersWithInfoRedux({ pageIndex: 1, pageSize: 20, searchByName: value }, index));
     }
   };
 
@@ -215,27 +215,61 @@ export default function FolderNewPostForm({ classID }) {
                         sx={{ width: '643px' }}
                         options={addUserInCLass[index].users}
                         inputLabel={'hello'}
-                        onInputChange={(event, value, reason) => handleSearchAddUserInClass(value, reason)}
+                        onInputChange={(event, value, reason) => handleSearchAddUserInClass(value, reason, index)}
                         onChange={(event, userHandle) => handlerUserChange(event, index, userHandle)}
                         getOptionLabel={(user) => ` ${user.firstName} ${user.lastName}`}
                         // -------------------------------------------
                         autoHighlight
-                        getOptionLabel={(option) => option.label}
                         renderOption={(props, user, { inputValue }) => {
                           const { cover, gender, id, firstName, lastName, email } = user;
                           const matches = match(`${firstName} ${lastName}`, inputValue);
                           const parts = parse(`${firstName} ${lastName}`, matches);
                           return (
-                            <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                            <li {...props}>
                               <Avatar
                                 src={`http://lmms.site:7070/assets/images/avatars/avatar_${
                                   (1 - gender) * 10 + (id % 10) + 1
                                 }.jpg`}
                               />
-                              <Typography component="span" variant="subtitle2" color={'textPrimary'}>
-                                {email}
-                              </Typography>
-                            </Box>
+
+                              <Link underline="none">
+                                {parts.map((part, index) => (
+                                  <Typography
+                                    key={index}
+                                    component="span"
+                                    variant="subtitle2"
+                                    color={part.highlight ? 'primary' : 'textPrimary'}
+                                  >
+                                    {part.text}
+                                  </Typography>
+                                ))}
+                                <br />
+                                <Typography component="span" variant="subtitle2" color={'textPrimary'}>
+                                  {email}
+                                </Typography>
+                              </Link>
+                            </li>
+                            // <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                            //   <Avatar
+                            //     src={`http://lmms.site:7070/assets/images/avatars/avatar_${
+                            //       (1 - gender) * 10 + (id % 10) + 1
+                            //     }.jpg`}
+                            //   />
+                            //   {parts.map((part, index) => (
+                            //     <Typography
+                            //       key={index}
+                            //       component="span"
+                            //       variant="subtitle2"
+                            //       color={part.highlight ? 'primary' : 'textPrimary'}
+                            //     >
+                            //       {part.text}
+                            //     </Typography>
+                            //   ))}
+                            //   <br />
+                            //   <Typography component="span" variant="subtitle2" color={'textPrimary'}>
+                            //     {email}
+                            //   </Typography>
+                            // </Box>
                           );
                         }}
                         renderInput={(params) => (

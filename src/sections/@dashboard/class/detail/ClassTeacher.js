@@ -114,7 +114,6 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
         userId: row.id,
       },
     ]);
-    console.log('Status: ', res?.response.data.title);
     if (res.status < 400) {
       await fetchMyClass();
       handleClosePopover();

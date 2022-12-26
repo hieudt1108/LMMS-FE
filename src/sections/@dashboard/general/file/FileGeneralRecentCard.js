@@ -182,8 +182,8 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
             alignItems="center"
             sx={{ typography: 'caption', color: 'text.disabled', mt: 0.5 }}
           >
-            {data.types[0] === 'folderShareForMe' ? (
-              <Box> {`${file.typeFile}`} </Box>
+            {data.types[0] === 'folderShareForMe' || data.types[0] === 'folderUploadDocToSlot' ? (
+              <Box> {`Loại file: ${file.typeFile}`} </Box>
             ) : (
               <Box> {`${file.programName}-${file.subjectName}-${file.typeDocumentName}`} </Box>
             )}

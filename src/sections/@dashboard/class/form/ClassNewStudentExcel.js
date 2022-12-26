@@ -25,9 +25,10 @@ import {postFileExcelAddMember} from "../../../../dataProvider/agent";
 ClassNewStudentExcel.propTypes = {
   onNextStep: PropTypes.func,
   onBackStep: PropTypes.func,
+  onGotoStep: PropTypes.func,
 };
 
-export default function ClassNewStudentExcel({onNextStep, onBackStep, formData}) {
+export default function ClassNewStudentExcel({onNextStep, onBackStep, formData,onGotoStep}) {
   console.log('ClassNewStudentExcel',formData)
   const { push } = useRouter();
   const dispatch = useDispatch();
@@ -141,6 +142,7 @@ export default function ClassNewStudentExcel({onNextStep, onBackStep, formData})
             </Stack>
           </Card>
         </Grid>
+        <Stack direction='row'>
           <Button
               size="small"
               color="inherit"
@@ -148,8 +150,18 @@ export default function ClassNewStudentExcel({onNextStep, onBackStep, formData})
               sx={{mt:2}}
               startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
           >
-              Trở về
+            Trở về
           </Button>
+          <Button
+              size="small"
+              color="inherit"
+              onClick={onNextStep}
+              sx={{mt:2,ml:3}}
+              endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
+          >
+            Tiếp theo
+          </Button>
+        </Stack>
       </Grid>
     </FormProvider>
   );

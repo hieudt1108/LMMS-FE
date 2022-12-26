@@ -51,7 +51,7 @@ export default function addStudent() {
       id: 2,
       value: 'reviews',
       label: `Thêm thành viên từ danh sách Excel`,
-      component: <ClassAddStudentXls />,
+      component: <ClassAddStudentXls classID={class_id}/>,
     },
   ];
 

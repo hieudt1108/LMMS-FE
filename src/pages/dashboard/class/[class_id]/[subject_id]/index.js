@@ -26,6 +26,11 @@ const data = {
   menuDocument: ['preview', 'download', 'delete'],
 };
 
+const dataForStudent = {
+  types: ['folderUploadDocToSlot'],
+  menuDocument: ['preview', 'download'],
+};
+
 
 export default function index() {
   const { themeStretch } = useSettingsContext();
@@ -100,15 +105,27 @@ export default function index() {
                 {' '}
                 Tài liệu từng tiết:
               </Typography>
-              {subject?.listSlots?.map((element, index) => (
-                <SysllabusSubject
-                  document={element}
-                  data={{ ...data, class_id: class_id, subject_id: subject_id }}
-                  key={index}
-                  documentInClass={documentInClass}
-                  handleOpenFormUploadDocToSlot={handleOpenFormUploadDocToSlot}
-                />
-              ))}
+              {user?.roles.find((role) => role.name !== 'HOCSINH') ? (
+                  subject?.listSlots?.map((element, index) => (
+                    <SysllabusSubject
+                      document={element}
+                      data={{ ...data, class_id: class_id, subject_id: subject_id }}
+                      key={index}
+                      documentInClass={documentInClass}
+                      handleOpenFormUploadDocToSlot={handleOpenFormUploadDocToSlot}
+                    />
+                  ))
+                ) : (
+                  subject?.listSlots?.map((element, index) => (
+                  <SysllabusSubject
+                      document={element}
+                      data={{ ...dataForStudent, class_id: class_id, subject_id: subject_id }}
+                      key={index}
+                      documentInClass={documentInClass}
+                      handleOpenFormUploadDocToSlot={handleOpenFormUploadDocToSlot}
+                  />
+                  ))
+                )}
             </Stack>
           </Grid>
         </Grid>

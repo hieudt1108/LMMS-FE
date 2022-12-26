@@ -218,7 +218,7 @@ export default function FolderNewPostForm({ classID }) {
                         inputLabel={'hello'}
                         onInputChange={(event, value, reason) => handleSearchAddUserInClass(value, reason, index)}
                         onChange={(event, userHandle) => handlerUserChange(event, index, userHandle)}
-                        getOptionLabel={(user) => ` ${user.firstName} ${user.lastName}`}
+                        getOptionLabel={(user) => ` ${user.firstName} ${user.lastName} `}
                         // -------------------------------------------
                         autoHighlight
                         renderOption={(props, user, { inputValue }) => {

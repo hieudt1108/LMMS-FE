@@ -25,7 +25,7 @@ import ConfirmDialog from 'src/components/confirm-dialog';
 import { ROLES_CODE, URL_GLOBAL } from '../../../../config';
 import { deleteDocumentInSubjectRedux } from 'src/redux/slices/subject';
 import { useAuthContext } from 'src/auth/useAuthContext';
-import Label from "../../../../components/label";
+import Label from '../../../../components/label';
 
 // ----------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
     } else if (data.types.find((type) => type === 'folder') || data.types.find((type) => type === 'storeFolder')) {
       const message = await dispatch(deleteDocumentInFolderRedux(file.id, data.types[0]));
       if (message) {
-        enqueueSnackbar(message.title, { variant: message.variant });
+        enqueueSnackbar(`Xoá tài liệu thành công ${message.title}`, { variant: message.variant });
       }
       setOpenConfirmDeleteFile(false);
       handleClosePopover();
@@ -182,12 +182,11 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
             alignItems="center"
             sx={{ typography: 'caption', color: 'text.disabled', mt: 0.5 }}
           >
-              {data.types[0] === 'folderShareForMe' || data.types[0] === 'folderUploadDocToSlot' ? (
-                  <Box> {`Loại file: ${file.typeFile}`} </Box>
-              ) : (
-                  <Box> {`${file.programName}-${file.subjectName}-${file.typeDocumentName}`} </Box>
-              )}
-
+            {data.types[0] === 'folderShareForMe' || data.types[0] === 'folderUploadDocToSlot' ? (
+              <Box> {`Loại file: ${file.typeFile}`} </Box>
+            ) : (
+              <Box> {`${file.programName}-${file.subjectName}-${file.typeDocumentName}`} </Box>
+            )}
           </Stack>
         </Stack>
 
@@ -265,21 +264,24 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
           </MenuItem>
         )}
 
-        {data?.menuDocument.find((element) => element === 'delete') && (
-          <>
-            <Divider sx={{ borderStyle: 'dashed' }} />
+        {data?.menuDocument.find((element) => element === 'delete') &&
+          (user.roles.find((role) => role.name === ROLES_CODE.STUDENT) ? (
+            ''
+          ) : (
+            <>
+              <Divider sx={{ borderStyle: 'dashed' }} />
 
-            <MenuItem
-              onClick={() => {
-                setOpenConfirmDeleteFile(true);
-              }}
-              sx={{ color: 'error.main' }}
-            >
-              <Iconify icon="eva:trash-2-outline" />
-              Xóa
-            </MenuItem>
-          </>
-        )}
+              <MenuItem
+                onClick={() => {
+                  setOpenConfirmDeleteFile(true);
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="eva:trash-2-outline" />
+                Xóa
+              </MenuItem>
+            </>
+          ))}
       </MenuPopover>
 
       {openDetails && (

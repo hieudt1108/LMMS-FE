@@ -14,8 +14,8 @@ import { useSnackbar } from '../../../../components/snackbar';
 import useResponsive from '../../../../hooks/useResponsive';
 
 import { deleteSubjectInClass } from '../../../../dataProvider/agent';
-import {imageSubject} from "../../../../components/file-thumbnail";
-import ConfirmDialog from "../../../../components/confirm-dialog";
+import { imageSubject } from '../../../../components/file-thumbnail';
+import ConfirmDialog from '../../../../components/confirm-dialog';
 // import Image from '../../../../components/image';
 
 // ----------------------------------------------------------------------
@@ -30,7 +30,7 @@ ClassNewestBooking.propTypes = {
 export default function ClassNewestBooking({ fetchMyClass, classID, myClass, title, user, subheader, sx, ...other }) {
   const theme = useTheme();
 
-  // console.log('classID: ', classID);
+  console.log('myClass.Subject: ', myClass?.subjects);
 
   return (
     <Box sx={{ py: 2, ...sx }} {...other}>
@@ -45,7 +45,7 @@ export default function ClassNewestBooking({ fetchMyClass, classID, myClass, tit
       />
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 12, sm: 12, md: 12 }}>
         {myClass?.subjects?.map((item, index) => (
-          <Grid item xs={2} sm={12} md={12} key={index}>
+          <Grid item xs={12} sm={12} md={12} key={index}>
             <BookingItem
               fetchMyClass={() => fetchMyClass()}
               classID={classID}
@@ -63,7 +63,7 @@ export default function ClassNewestBooking({ fetchMyClass, classID, myClass, tit
 // ----------------------------------------------------------------------
 
 function BookingItem({ fetchMyClass, item, user, classID }) {
-  const { code, name, subjectId, teacherFirstName, teacherLastName, totalDocs } = item;
+  const { code, name, subjectId, totalDocs, totalSlots } = item;
   const { enqueueSnackbar } = useSnackbar();
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -100,68 +100,78 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
   };
 
   return (
-      <>
-    <Paper
-      sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral', display: 'flex', justifyContent: 'space-between' }}
-    >
-      <Stack
-        onClick={handleOnClickSubject}
-        spacing={2.5}
-        sx={{ p: 1, display: 'flex', cursor: 'pointer', flexDirection: 'row' }}
+    <>
+      <Paper
+        sx={{
+          mx: 1.5,
+          borderRadius: 2,
+          bgcolor: 'background.neutral',
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
-          <img src={imageSubject(code)} width={120} />
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Stack direction="row" alignItems="center">
-            <div>
-              <Typography variant="subtitle2">{name}</Typography>
-            </div>
-          </Stack>
-          {teacherFirstName && teacherLastName && (
+        <Stack
+          onClick={handleOnClickSubject}
+          spacing={3}
+          sx={{ p: 1, display: 'flex', cursor: 'pointer', flexDirection: 'row' }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
+            <img src={imageSubject(code)} width={100} />
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Stack direction="row" alignItems="center">
+              <div>
+                <Typography variant="subtitle2">{name}</Typography>
+              </div>
+            </Stack>
             <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography variant="subtitle2">{`Giáo viên dạy:  ${teacherFirstName} ${teacherLastName}`}</Typography>
+              {item?.teacher &&
+                item?.teacher.map((tc) => (
+                  <Typography variant="subtitle2">
+                    Giáo viên dạy: {tc.firstName} {tc.lastName}
+                  </Typography>
+                ))}
             </Stack>
-          )}
-          {!teacherFirstName && !teacherLastName && (
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography variant="subtitle2">{`Giáo viên dạy: Chưa có`}</Typography>
+            <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Iconify icon="material-symbols:edit-document" width={16} />
+                <Typography variant="caption">Số tài liệu: {totalDocs}</Typography>
+              </Stack>
             </Stack>
-          )}
-          <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Iconify icon="material-symbols:edit-document" width={16} />
-              <Typography variant="caption">Số tài liệu: {totalDocs}</Typography>
+            <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Iconify icon="material-symbols:edit-document" width={16} />
+                <Typography variant="caption">Số tiết dạy: {totalSlots}</Typography>
+              </Stack>
             </Stack>
-          </Stack>
-        </Box>
-      </Stack>
-      {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
-        <Button onClick={handleOpenConfirm}>
-          <Iconify icon="eva:trash-2-outline" width={28} />
-        </Button>
-      ) : (
-        ''
-      )}
-    </Paper>
-    <ConfirmDialog
+          </Box>
+        </Stack>
+        {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
+          <Button onClick={handleOpenConfirm}>
+            <Iconify icon="eva:trash-2-outline" width={28} />
+          </Button>
+        ) : (
+          ''
+        )}
+      </Paper>
+      <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
         title={'Xóa môn học'}
         content={'Bạn có chắc chắn muốn xóa môn học này!'}
         action={
           <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                handlerDelete();
-                handleCloseConfirm();
-              }}
+            variant="contained"
+            color="error"
+            onClick={() => {
+              handlerDelete();
+              handleCloseConfirm();
+            }}
           >
             {'Xóa'}
           </Button>
         }
-    />
-      </>
+      />
+    </>
   );
 }

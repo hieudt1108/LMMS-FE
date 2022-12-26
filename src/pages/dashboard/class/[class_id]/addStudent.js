@@ -47,12 +47,12 @@ export default function addStudent() {
       label: 'Thêm thành viên vào lớp học',
       component: <ClassAddStudentForm classID={class_id} />,
     },
-    // {
-    //   id: 2,
-    //   value: 'reviews',
-    //   label: `Thêm thành viên từ danh sách Excel`,
-    //   component: <ClassAddStudentXls />,
-    // },
+    {
+      id: 2,
+      value: 'reviews',
+      label: `Thêm thành viên từ danh sách Excel`,
+      component: <ClassAddStudentXls classID={class_id}/>,
+    },
   ];
 
   return (

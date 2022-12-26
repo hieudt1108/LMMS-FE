@@ -77,6 +77,7 @@ export default function ClassTeacher({
   } = useTable();
 
   const { push } = useRouter();
+
   const handleOnClickSubject = () => {
     push(PATH_DASHBOARD.myclass.addMember(myclass_id));
   };
@@ -87,7 +88,7 @@ export default function ClassTeacher({
   });
 
   const countMemberIsTeacher = (data) => {
-    var countTeacher = 0
+    let countTeacher = 0
     for (let i = 0; i < data.length; i++) {
       if (data[i].roleInClasses[0].role === 'GVCHUNHIEM' || data[i].roleInClasses[0].role === 'GIAOVIEN') {
         countTeacher++;

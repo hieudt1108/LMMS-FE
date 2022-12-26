@@ -13,7 +13,6 @@ import {createManyUser, postFileExcelAddMember} from "../../../../dataProvider/a
 import {PATH_DASHBOARD} from "../../../../routes/paths";
 
 export default function ClassAddStudentXls(classID) {
-    console.log('classID',classID)
     const {push} = useRouter();
 
     const formDataFileUser = new FormData();
@@ -74,10 +73,10 @@ export default function ClassAddStudentXls(classID) {
                 return enqueueSnackbar(`Bạn chưa thêm file danh sách!`, { variant: 'error' });
             }
             formDataFileUser.append('file', data.file);
-            const res = await postFileExcelAddMember(classID.classID, formDataFileUser)
+            const res = await postFileExcelAddMember(classID?.classID, formDataFileUser)
             if(res.status < 400){
                 enqueueSnackbar('Thêm danh sách thành viên vào lớp học thành công');
-                push(PATH_DASHBOARD.class.detail(classID.classID));
+                push(PATH_DASHBOARD.class.detail(classID?.classID));
             }else{
                 enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
             }

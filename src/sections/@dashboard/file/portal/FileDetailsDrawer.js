@@ -102,9 +102,11 @@ export default function FileDetailsDrawer({
                 {toggleCategories && getOne ? (
                   <>
                     <Stack spacing={1.5}>
-                      <Row label="Chương trình học" value={getOne.programDetail?.name} />
+                      <Row label="Chương trình học" value={getOne.programName} />
 
-                      <Row label="Môn học" value={getOne.subjectDetail?.name} />
+                      <Row label="Môn học" value={getOne.subjectName} />
+
+                      <Row label="Loại tài liệu" value={getOne.typeDocumentName} />
                     </Stack>
                   </>
                 ) : (
@@ -120,7 +122,7 @@ export default function FileDetailsDrawer({
                 {toggleProperties && (
                   <>
                     <Stack spacing={1.5}>
-                      <Row label="Kích thước" value={fData(getOne.size)} />
+                      <Row label="Kích thước" value={`${getOne.size} MB`} />
 
                       <Row label="Ngày tạo" value={fDateTime(getOne.createDate)} />
 

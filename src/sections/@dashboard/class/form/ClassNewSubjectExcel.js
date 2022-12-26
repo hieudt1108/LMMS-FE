@@ -25,10 +25,11 @@ import Iconify from "../../../../components/iconify";
 ClassNewSubjectExcel.propTypes = {
   onNextStep: PropTypes.func,
   onBackStep: PropTypes.func,
+  onGotoStep: PropTypes.func,
   setCompleted: PropTypes.func,
 };
 
-export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData,setCompleted}) {
+export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData,setCompleted,onGotoStep}) {
   const { push } = useRouter();
   const dispatch = useDispatch();
   const [fileSubject, setFileSubject] = useState([]);
@@ -144,15 +145,29 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData,set
             </Card>
 
           </Grid>
-          <Button
-              size="small"
-              color="inherit"
-              onClick={onBackStep}
-              sx={{mt:2}}
-              startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
-          >
-            Trở về
-          </Button>
+          <Stack direction='row'>
+            <Button
+                size="small"
+                color="inherit"
+                onClick={onBackStep}
+                sx={{mt:2}}
+                startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
+            >
+              Trở về
+            </Button>
+            <Button
+                size="small"
+                color="inherit"
+                onClick={() => {
+                  setCompleted(true);
+                  onNextStep();
+                }}
+                sx={{mt:2,ml:3}}
+                endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
+            >
+              Kết thúc
+            </Button>
+          </Stack>
         </Grid>
       </FormProvider>
   );

@@ -33,6 +33,7 @@ export default function ClassCreatePage() {
   const { steps } = useSelector((state) => state.class);
   const {replace} = useRouter();
   const { activeStep } = steps;
+  console.log('activeStep',activeStep)
   const [formData,setFormData] = useState({})
   const [formDataStepOne,setFormDataStepOne] = useState({})
   const [completed,setCompleted] = useState(false)
@@ -103,6 +104,7 @@ export default function ClassCreatePage() {
                           onNextStep={handleNextStep}
                           onBackStep={handleBackStep}
                           formData = {formData}
+                          onGotoStep={handleGotoStep}
                       />
                   )}
                   {activeStep === 2 && (
@@ -111,6 +113,7 @@ export default function ClassCreatePage() {
                           onNextStep={handleNextStep}
                           setCompleted={setCompleted}
                           formData = {formData}
+                          onGotoStep={handleGotoStep}
                       />
                   )}
               </>

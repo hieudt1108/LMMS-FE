@@ -97,7 +97,7 @@ export default function ClassBanner({
             handleEditClass(data.id);
           }}
         >
-          <Iconify icon="eva:link-2-fill" />
+          <Iconify icon="eva:edit-fill" />
           Cập nhật
         </MenuItem>
 

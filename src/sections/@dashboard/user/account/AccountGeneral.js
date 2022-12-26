@@ -93,7 +93,7 @@ export default function AccountGeneral() {
       roles: roles,
     };
     try {
-      const res = await updateProfile(user.id, dataPut);
+      const res = await updateProfile(dataPut);
       if (res.status < 400) {
         enqueueSnackbar('Cập nhật thành công');
         window.location.reload();

@@ -518,8 +518,8 @@ const updateUser = (id, payload) => {
   return putApi(`User/${id}`, payload);
 };
 
-const updateProfile = (id, payload) => {
-  return putApi(`Auth/editMyProfile/${id}`, payload);
+const updateProfile = (payload) => {
+  return putApi('Auth/editMyProfile', payload);
 };
 
 const changePasswordUserAuth = (payload) => {

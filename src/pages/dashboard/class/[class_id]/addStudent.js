@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react';
 import ClassAddStudentForm from '../../../../sections/@dashboard/class/form/ClassAddStudentForm';
 import ClassAddStudentXls from '../../../../sections/@dashboard/class/form/ClassAddStudentXls';
 import { dispatch } from 'src/redux/store';
-import { getUsersRedux } from 'src/redux/slices/user';
+import { getAllUsersWithInfoRedux, getUsersRedux } from 'src/redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ export default function addStudent() {
   const { themeStretch } = useSettingsContext();
 
   useEffect(() => {
-    dispatch(getUsersRedux({ pageIndex: 1, pageSize: 100 }, 0));
+    dispatch(getAllUsersWithInfoRedux({ pageIndex: 1, pageSize: 20 }, 0));
   }, []);
 
   const TABS = [

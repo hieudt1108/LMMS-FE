@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from '../../utils/axios';
 //
 import { dispatch } from '../store';
-import { getAllUsers } from 'src/dataProvider/agent';
+import { getAllUsers, getAllUsersWithInfo } from 'src/dataProvider/agent';
 
 const initialState = {
   isLoading: false,
@@ -59,6 +59,24 @@ const slice = createSlice({
         };
       });
     },
+    getAllUsersWithInfoSuccess(state, action) {
+      console.log('getAllUsersWithInfoSuccess: ', action);
+      const { response, index, pagination } = action.payload;
+      state.isLoading = false;
+      state.paginationHeader = JSON.parse(response.headers['x-pagination']);
+      state.addUserInCLass = state.addUserInCLass.map((item, indexItem) => {
+        if (indexItem !== index) {
+          return item;
+        }
+        return {
+          ...item,
+          users: response.data.data,
+          roles: response.data.data.roles,
+          subjects: response.data.data.subjects,
+          pagination,
+        };
+      });
+    },
 
     getUserByRoleIdSuccess(state, action) {
       const { users, pagination, index } = action.payload;
@@ -79,9 +97,12 @@ const slice = createSlice({
       });
     },
     filterSubjectSuccess(state, action) {
-      const { users, userId, index } = action.payload;
-      const user = users.filter((data) => data.id === userId);
-      const userTransfer = user[0].subjects.map((data) => {
+      console.log('filterSubjectSuccess', action);
+      const { user, index } = action.payload;
+      if (!user.subjects) {
+        return;
+      }
+      const userTransfer = user.subjects.map((data) => {
         return { id: data.id, label: data.name };
       });
       state.isLoading = false;
@@ -92,7 +113,7 @@ const slice = createSlice({
         return {
           ...item,
           subjects: userTransfer,
-          roles: user[0].roles,
+          roles: user.roles,
         };
       });
       // state.addUserInCLass = [
@@ -148,6 +169,28 @@ export function getUsersRedux(params, index) {
       // console.log("test redux: ", )
       dispatch(
         slice.actions.getUserSuccess({
+          pagination: params,
+          response: response,
+          index,
+        })
+      );
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getAllUsersWithInfoRedux(params, index) {
+  return async () => {
+    try {
+      if (!params) {
+        return dispatch(slice.actions.getUserSuccess([]));
+      }
+      dispatch(slice.actions.startLoading());
+      const response = await getAllUsersWithInfo(params);
+      // console.log("test redux: ", )
+      dispatch(
+        slice.actions.getAllUsersWithInfoSuccess({
           pagination: params,
           response: response,
           index,

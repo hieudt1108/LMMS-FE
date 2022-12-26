@@ -140,6 +140,9 @@ function getLevelById(id) {
 function getAllUsers(params) {
   return getApi('/User/getAll', params);
 }
+function getAllUsersWithInfo(params) {
+  return getApi('/User/getAllUserWithInfor', params);
+}
 
 function getUserById(id) {
   return getApi(`/User/getOne/${id}`);
@@ -652,4 +655,5 @@ export {
   removeMemberInClass,
   updateProfile,
   changePasswordAdmin,
+  getAllUsersWithInfo,
 };

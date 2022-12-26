@@ -261,7 +261,7 @@ const slice = createSlice({
     postCopyDocsToStoreFolderSuccess(state, action) {
       console.log('postCopyDocsToFolderSuccess', action);
       state.isLoading = false;
-      state.storeFolder.listDocuments = [...state.storeFolder.listDocuments, action.payload];
+      state.storeFolder.listDocuments = [action.payload, ...state.storeFolder.listDocuments];
     },
 
     createDocumentSuccess(state, action) {

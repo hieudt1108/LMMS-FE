@@ -180,7 +180,7 @@ export function imageSubject(codeSubject) {
       imageURL = 'http://lmms.site:7070/assets/images/subjectlists/nguvan.png';
       break;
     case 'TD1':
-      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/theduc1.png';
+      imageURL = 'http://lmms.site:7070/assets/images/subjectlists/theduc1.jpg';
       break;
     case 'TIENGDANTOC':
       imageURL = 'http://lmms.site:7070/assets/images/subjectlists/dantoc.png';

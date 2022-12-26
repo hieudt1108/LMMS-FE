@@ -30,7 +30,7 @@ ClassNewestBooking.propTypes = {
 export default function ClassNewestBooking({ fetchMyClass, classID, myClass, title, user, subheader, sx, ...other }) {
   const theme = useTheme();
 
-  // console.log('classID: ', classID);
+  console.log('myClass.Subject: ', myClass?.subjects);
 
   return (
     <Box sx={{ py: 2, ...sx }} {...other}>
@@ -63,7 +63,7 @@ export default function ClassNewestBooking({ fetchMyClass, classID, myClass, tit
 // ----------------------------------------------------------------------
 
 function BookingItem({ fetchMyClass, item, user, classID }) {
-  const { code, name, subjectId, teacherFirstName, teacherLastName, totalDocs, totalSlots } = item;
+  const { code, name, subjectId, totalDocs, totalSlots } = item;
   const { enqueueSnackbar } = useSnackbar();
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -124,16 +124,14 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
                 <Typography variant="subtitle2">{name}</Typography>
               </div>
             </Stack>
-            {teacherFirstName && teacherLastName && (
-              <Stack direction="row" alignItems="center" spacing={2}>
-                <Typography variant="subtitle2">{`Giáo viên dạy:  ${teacherFirstName} ${teacherLastName}`}</Typography>
-              </Stack>
-            )}
-            {!teacherFirstName && !teacherLastName && (
-              <Stack direction="row" alignItems="center" spacing={2}>
-                <Typography variant="subtitle2">{`Giáo viên dạy: Chưa có`}</Typography>
-              </Stack>
-            )}
+            <Stack direction="row" alignItems="center" spacing={2}>
+              {item?.teacher &&
+                item?.teacher.map((tc) => (
+                  <Typography variant="subtitle2">
+                    Giáo viên dạy: {tc.firstName} {tc.lastName}
+                  </Typography>
+                ))}
+            </Stack>
             <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Iconify icon="material-symbols:edit-document" width={16} />

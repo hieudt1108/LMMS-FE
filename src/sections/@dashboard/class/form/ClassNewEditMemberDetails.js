@@ -45,6 +45,7 @@ import { object } from 'prop-types';
 import { useSnackbar } from 'notistack';
 import SearchNotFound from 'src/components/search-not-found/SearchNotFound';
 import { CustomTextField } from 'src/components/custom-input';
+import Label from "../../../../components/label";
 
 // ----------------------------------------------------------------------
 const checkArray = (arrayName) => {
@@ -221,12 +222,13 @@ export default function FolderNewPostForm({ classID }) {
                         // -------------------------------------------
                         autoHighlight
                         renderOption={(props, user, { inputValue }) => {
-                          const { cover, gender, id, firstName, lastName, email } = user;
+                          const { cover, gender, id, firstName, lastName, email, roles } = user;
                           const matches = match(`${firstName} ${lastName}`, inputValue);
                           const parts = parse(`${firstName} ${lastName}`, matches);
                           return (
                             <li {...props}>
                               <Avatar
+                                  sx={{mr:2}}
                                 src={`http://lmms.site:7070/assets/images/avatars/avatar_${
                                   (1 - gender) * 10 + (id % 10) + 1
                                 }.jpg`}
@@ -241,41 +243,35 @@ export default function FolderNewPostForm({ classID }) {
                                     color={part.highlight ? 'primary' : 'textPrimary'}
                                   >
                                     {part.text}
+
                                   </Typography>
+
                                 ))}
+                                {roles && roles.length ? (
+                                    roles.map((r) =>
+                                        r === null || '' ? (
+                                            <Label sx={{ml:1}}></Label>
+                                        ) : (
+                                            <Label key={r.id} variant="soft" color={'success'} sx={{ ml:1,textTransform: 'capitalize' }}>
+                                              {r.name}
+                                            </Label>
+                                        )
+                                    )
+                                ):(
+                                    <></>
+                                )}
                                 <br />
                                 <Typography component="span" variant="subtitle2" color={'textPrimary'}>
                                   {email}
                                 </Typography>
                               </Link>
                             </li>
-                            // <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                            //   <Avatar
-                            //     src={`http://lmms.site:7070/assets/images/avatars/avatar_${
-                            //       (1 - gender) * 10 + (id % 10) + 1
-                            //     }.jpg`}
-                            //   />
-                            //   {parts.map((part, index) => (
-                            //     <Typography
-                            //       key={index}
-                            //       component="span"
-                            //       variant="subtitle2"
-                            //       color={part.highlight ? 'primary' : 'textPrimary'}
-                            //     >
-                            //       {part.text}
-                            //     </Typography>
-                            //   ))}
-                            //   <br />
-                            //   <Typography component="span" variant="subtitle2" color={'textPrimary'}>
-                            //     {email}
-                            //   </Typography>
-                            // </Box>
                           );
                         }}
                         renderInput={(params) => (
                           <CustomTextField
                             {...params}
-                            placeholder="Search..."
+                            placeholder="Tìm kiếm người dùng..."
                             InputProps={{
                               ...params.InputProps,
                               startAdornment: (
@@ -375,7 +371,7 @@ export default function FolderNewPostForm({ classID }) {
                       /> */}
                     </div>
 
-                    {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) && (
+                    {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) ? (
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Typography variant="subtitle2" gutterBottom sx={{ marginRight: '25px' }}>
                           Vai trò
@@ -393,6 +389,8 @@ export default function FolderNewPostForm({ classID }) {
                           ))}
                         </RHFSelect>
                       </div>
+                    ) : (
+                      ''
                     )}
 
                     {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].subjects) ? (

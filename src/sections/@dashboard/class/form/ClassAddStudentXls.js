@@ -9,45 +9,43 @@ import {useRouter} from "next/router";
 import {useSnackbar} from "notistack";
 import {LoadingButton} from "@mui/lab";
 import {yupResolver} from "@hookform/resolvers/yup";
+import {createManyUser, postFileExcelAddMember} from "../../../../dataProvider/agent";
+import {PATH_DASHBOARD} from "../../../../routes/paths";
 
-export default function ClassAddStudentXls() {
+export default function ClassAddStudentXls(classID) {
     const {push} = useRouter();
 
-    const {enqueueSnackbar} = useSnackbar();
+    const formDataFileUser = new FormData();
 
     const [files, setFiles] = useState([]);
 
-    const NewUsersSchema = Yup.object().shape({
-        file: Yup.array().min(1, 'Images is required'),
-    });
+    const { enqueueSnackbar } = useSnackbar();
+
+    const validationSchema = Yup.object().shape({
+    })
 
     const defaultValues = useMemo(
         () => ({
-            file: [],
+
         }),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
 
     const methods = useForm({
-        resolver: yupResolver(NewUsersSchema),
+        resolver: yupResolver(validationSchema),
         defaultValues,
     });
 
     const {
         reset,
         watch,
+        control,
         setValue,
         getValues,
         handleSubmit,
-        formState: {isSubmitting},
+        formState: { isSubmitting },
     } = methods;
 
-    const values = watch();
-
-    const onSubmit = async () => {
-
-    };
 
     useEffect(() => {
         if (!open) {
@@ -55,23 +53,36 @@ export default function ClassAddStudentXls() {
         }
     }, [open]);
 
-    const handleDrop = useCallback(
-        (acceptedFiles) => {
-            const newFiles = acceptedFiles.map((file) =>
-                Object.assign(file, {
-                    preview: URL.createObjectURL(file),
-                })
-            );
+    const handleDrop = (acceptedFiles) => {
+        try {
+            setValue(`file`, acceptedFiles[0]);
+            setFiles(acceptedFiles[0]);
+        } catch (error) {
+            console.error('handleDrop', error);
+        }
+    };
 
-            setFiles([...files, ...newFiles]);
-        },
-        [files]
-    );
+    const handleRemoveFile = () => {
+        setValue(`file`, '');
+        setFiles('');
+    };
 
-
-    const handleRemoveFile = (inputFile) => {
-        const filtered = files.filter((file) => file !== inputFile);
-        setFiles(filtered);
+    const onSubmit = async (data) => {
+        try {
+            if(data.file === undefined){
+                return enqueueSnackbar(`Bạn chưa thêm file danh sách!`, { variant: 'error' });
+            }
+            formDataFileUser.append('file', data.file);
+            const res = await postFileExcelAddMember(classID?.classID, formDataFileUser)
+            if(res.status < 400){
+                enqueueSnackbar('Thêm danh sách thành viên vào lớp học thành công');
+                push(PATH_DASHBOARD.class.detail(classID?.classID));
+            }else{
+                enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
+            }
+        }catch (error){
+            enqueueSnackbar(`Đã có lỗi xảy ra!`, { variant: 'error' });
+        }
     };
 
     return (
@@ -86,12 +97,25 @@ export default function ClassAddStudentXls() {
                                 </Typography>
 
                                 <Upload
-                                    accept={{ 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [] }}
+                                    onCLick={() => {
+                                        console.log('upload');
+                                    }}
+                                    hasDefault
+                                    defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportMemberClass.xlsx'}
+                                    accept={{ '.xlsx': [] }}
                                     multiple
-                                    hasDefault={true}
-                                    defaultFile={'http://lmms.site:7070/assets/images/subjects/ImportManyUser.xlsx'}
-                                    files={files}
-                                    onDrop={handleDrop}
+                                    name={`file`}
+                                    error={getValues(`file`) === ''}
+                                    files={
+                                        getValues(`file`)
+                                            ? [
+                                                Object.assign(getValues(`file`), {
+                                                    preview: URL.createObjectURL(Object.assign(getValues(`file`))),
+                                                }),
+                                            ]
+                                            : []
+                                    }
+                                    handleDrop={handleDrop}
                                     onRemove={handleRemoveFile}
                                 />
                             </Stack>

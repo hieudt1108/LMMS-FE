@@ -406,8 +406,8 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                                         render={({field}) => (
                                             <Switch
                                                 {...field}
-                                                checked={field.value !== 0}
-                                                onChange={(event) => field.onChange(event.target.checked ? 1 : 0)}
+                                                checked={field.value !== 1}
+                                                onChange={(event) => field.onChange(event.target.checked ? 0 : 1)}
                                             />
                                         )}
                                     />

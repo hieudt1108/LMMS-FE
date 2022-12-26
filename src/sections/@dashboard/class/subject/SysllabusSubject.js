@@ -84,29 +84,31 @@ export default function SysllabusSubject({
 
                 <Stack spacing={3}>
                     <Stack key={''} spacing={1}>
-                        {documentInClass && documentInClass?.length ? (
-                            documentInClass?.map((doc, index) =>
+
+                        {documentInClass?.map((doc, index) =>
                                 doc?.slotId === id ? (
-                                    <Stack key={doc.id} spacing={2}>
-                                        <FileGeneralRecentCard
-                                            data={{...data, slotId: id, index: index}}
-                                            file={doc}
-                                            onDelete={() => console.log('DELETE', doc.id)}
-                                        />
-                                    </Stack>
+                                    doc ? (
+                                        <Stack key={doc.id} spacing={2}>
+                                            <FileGeneralRecentCard
+                                                data={{...data, slotId: id, index: index}}
+                                                file={doc}
+                                                onDelete={() => console.log('DELETE', doc.id)}
+                                            />
+                                        </Stack>
+                                    ) : (
+                                        <Stack alignItems="center"
+                                               justifyContent="center"
+                                        >
+                                            <Alert severity="info">
+                                            Chưa có tài liệu cho tiết học này
+                                            </Alert>
+                                        </Stack>
+                                    )
+
                                 ) : (
                                     ''
-                                )
-                            )
-                        ) : (
-                            <Stack alignItems="center"
-                                   justifyContent="center"
-                            >
-                                <Alert severity="info">
-                                    Chưa có tài liệu cho tiết học này
-                                </Alert>
-                            </Stack>
-                        )}
+                                ))
+                        }
                     </Stack>
                 </Stack>
             </Card>

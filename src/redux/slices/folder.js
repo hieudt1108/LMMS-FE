@@ -432,7 +432,7 @@ export function deleteDocumentInFolderRedux(documentID, dataName) {
   return async () => {
     try {
       if (!documentID) {
-        return returnMessageError('Xóa tài liệu không thành công');
+        return returnMessageError('');
       }
       dispatch(slice.actions.startLoading());
       const response = await deleteDocument(documentID);
@@ -442,7 +442,7 @@ export function deleteDocumentInFolderRedux(documentID, dataName) {
 
       dispatch(slice.actions.deleteDocumentInFolderSuccess({ documentID, dataName }));
 
-      return returnMessageSuccess('Xóa tài liệu thành công');
+      return returnMessageSuccess('');
     } catch (error) {
       console.log('error', error);
       return returnMessageError(`${error.message}`);

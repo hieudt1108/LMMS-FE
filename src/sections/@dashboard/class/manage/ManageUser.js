@@ -14,7 +14,7 @@ export default function ManageUser({ fetchMyClass, classID, myClass, user }) {
 
   return (
     <>
-      <Grid sx={{ mt: 3 }} container spacing={3}>
+      <Grid sx={{ mt: 1 }} container spacing={3}>
         <Grid item xs={12}>
           <ClassTeacher
             fetchMyClass={() => fetchMyClass()}

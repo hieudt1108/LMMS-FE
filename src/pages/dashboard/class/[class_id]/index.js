@@ -27,8 +27,8 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { getClassById, deleteSubjectInClass } from '../../../../dataProvider/agent';
 import ClassAddSubjectDialog from '../../../../sections/@dashboard/class/form/ClassAddSubjectDialog';
 import { useAuthContext } from 'src/auth/useAuthContext';
-import CustomBreadcrumbs from "../../../../components/custom-breadcrumbs";
-
+import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
+import LoadingScreen from '../../../../components/loading-screen';
 // ----------------------------------------------------------------------
 
 ClassDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -40,6 +40,7 @@ export default function ClassDetail() {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
 
+  const [loading, setLoading] = useState(false);
   const {
     query: { class_id },
   } = useRouter();
@@ -58,7 +59,11 @@ export default function ClassDetail() {
   }
 
   useEffect(() => {
+    setLoading(true);
     fetchMyClass();
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   }, [class_id]);
   const TABS = [
     {
@@ -98,77 +103,80 @@ export default function ClassDetail() {
         <title> Hệ thống quản lý Học liệu</title>
       </Head>
 
-      <Container maxWidth={themeStretch ? false : 'xl'}>
-        <CustomBreadcrumbs
-            heading={`Lớp ${myClass?.name}`}
-            links={[
-              { name: 'Thông tin lớp học' },
-            ]}
-        />
+      {loading ? (
+        <LoadingScreen />
+      ) : (
+        <Container maxWidth={themeStretch ? false : 'xl'}>
+          <CustomBreadcrumbs heading={`Lớp ${myClass?.name}`} links={[{ name: 'Thông tin lớp học' }]} />
 
-        {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
-          <>
-            {currentTab === 'reviews' ? (
-              <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
-                <Button
-                  onClick={handleOnClickAddMember}
-                  variant="contained"
-                  startIcon={<Iconify icon="eva:plus-fill" />}
-                >
-                  Thêm thành viên
-                </Button>
-                <div></div>
-              </Box>
-            ) : (
-              <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
-                <Button onClick={handleOpenAddSubject} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                  Thêm môn học
-                </Button>
-                <div></div>
-              </Box>
-            )}
-          </>
-        ) : (
-          ''
-        )}
-
-        <ClassAddSubjectDialog
-          fetchMyClass={() => fetchMyClass()}
-          classID={class_id}
-          open={openAddSubject}
-          onClose={handleCloseAddSubject}
-        />
-
-        <Card>
-          <Tabs
-            value={currentTab}
-            onChange={(event, newValue) => setCurrentTab(newValue)}
-            sx={{ px: 3, bgcolor: 'background.neutral' }}
-          >
-            {TABS.map((tab) => (
-              <Tab key={tab.id} value={tab.value} label={tab.label} />
-            ))}
-          </Tabs>
-
-          <Divider />
-
-          {TABS.map(
-            (tab) =>
-              tab.value === currentTab && (
-                <Box
-                  key={tab.id}
-                  sx={{
-                    ...(currentTab === 'description' && {
-                      p: 3,
-                    }),
-                  }}
-                >
-                  {tab.component}
+          {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
+            <>
+              {currentTab === 'reviews' ? (
+                <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
+                    onClick={handleOnClickAddMember}
+                    variant="contained"
+                    startIcon={<Iconify icon="eva:plus-fill" />}
+                  >
+                    Thêm thành viên
+                  </Button>
+                  <div></div>
                 </Box>
-              )
+              ) : (
+                <Box sx={{ p: 3, display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
+                    onClick={handleOpenAddSubject}
+                    variant="contained"
+                    startIcon={<Iconify icon="eva:plus-fill" />}
+                  >
+                    Thêm môn học
+                  </Button>
+                  <div></div>
+                </Box>
+              )}
+            </>
+          ) : (
+            ''
           )}
-        </Card>
-      </Container>
+
+          <ClassAddSubjectDialog
+            fetchMyClass={() => fetchMyClass()}
+            classID={class_id}
+            open={openAddSubject}
+            onClose={handleCloseAddSubject}
+          />
+
+          <Card>
+            <Tabs
+              value={currentTab}
+              onChange={(event, newValue) => setCurrentTab(newValue)}
+              sx={{ px: 3, bgcolor: 'background.neutral' }}
+            >
+              {TABS.map((tab) => (
+                <Tab key={tab.id} value={tab.value} label={tab.label} />
+              ))}
+            </Tabs>
+
+            <Divider />
+
+            {TABS.map(
+              (tab) =>
+                tab.value === currentTab && (
+                  <Box
+                    key={tab.id}
+                    sx={{
+                      ...(currentTab === 'description' && {
+                        p: 3,
+                      }),
+                    }}
+                  >
+                    {tab.component}
+                  </Box>
+                )
+            )}
+          </Card>
+        </Container>
+      )}
     </>
   );
 }

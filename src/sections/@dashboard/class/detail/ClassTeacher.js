@@ -26,7 +26,7 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 import MenuPopover from '../../../../components/menu-popover';
-import {getComparator, TableHeadCustom, TablePaginationCustom, useTable} from '../../../../components/table';
+import { getComparator, TableHeadCustom, TablePaginationCustom, useTable } from '../../../../components/table';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useSnackbar } from '../../../../components/snackbar';
@@ -88,14 +88,14 @@ export default function ClassTeacher({
   });
 
   const countMemberIsTeacher = (data) => {
-    let countTeacher = 0
+    let countTeacher = 0;
     for (let i = 0; i < data.length; i++) {
       if (data[i].roleInClasses[0].role === 'GVCHUNHIEM' || data[i].roleInClasses[0].role === 'GIAOVIEN') {
         countTeacher++;
       }
     }
     return countTeacher;
-  }
+  };
 
   return (
     <Card {...other}>
@@ -109,7 +109,7 @@ export default function ClassTeacher({
             <TableHeadCustom order={order} orderBy={orderBy} headLabel={tableLabels} />
 
             <TableBody>
-              {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
+              {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
                 <BookingDetailsRow
                   fetchMyClass={() => fetchMyClass()}
                   user={user}
@@ -123,15 +123,15 @@ export default function ClassTeacher({
         </Scrollbar>
       </TableContainer>
       <TablePaginationCustom
-          labelRowsPerPage='Hàng trên mỗi trang'
-          count={countMemberIsTeacher(myClass?.members)}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          onPageChange={onChangePage}
-          onRowsPerPageChange={onChangeRowsPerPage}
-          //
-          dense={dense}
-          onChangeDense={onChangeDense}
+        labelRowsPerPage="Hàng trên mỗi trang"
+        count={countMemberIsTeacher(myClass?.members)}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={onChangePage}
+        onRowsPerPageChange={onChangeRowsPerPage}
+        //
+        dense={dense}
+        onChangeDense={onChangeDense}
       />
       <Divider />
     </Card>
@@ -163,7 +163,7 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
     if (res.status < 400) {
       await fetchMyClass();
       handleClosePopover();
-      enqueueSnackbar(`Xoá người dùng ${res.data.message}`);
+      enqueueSnackbar(`Xoá người dùng thành công`);
     } else {
       enqueueSnackbar(`Xoá thất bại, ${res?.response.data.title}`, { variant: 'error' });
     }
@@ -215,14 +215,7 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
             </TableCell>
 
             <TableCell>
-              {role?.subject?.map((su) =>
-                  su.name === null || '' ?
-                  (
-                      <Label></Label>
-                  ) : (
-                       <Label>{su.name}</Label>
-                  )
-              )}
+              {role?.subject?.map((su) => (su.name === null || '' ? <Label></Label> : <Label>{su.name}</Label>))}
             </TableCell>
 
             <TableCell>{row.email}</TableCell>
@@ -282,7 +275,7 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
   );
 }
 
-function applyFilter({ inputData, comparator}) {
+function applyFilter({ inputData, comparator }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -292,7 +285,6 @@ function applyFilter({ inputData, comparator}) {
   });
 
   inputData = stabilizedThis.map((el) => el[0]);
-
 
   return inputData;
 }

@@ -26,7 +26,7 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 import MenuPopover from '../../../../components/menu-popover';
-import { TableHeadCustom } from '../../../../components/table';
+import {getComparator, TableHeadCustom, TablePaginationCustom, useTable} from '../../../../components/table';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useSnackbar } from '../../../../components/snackbar';
@@ -56,11 +56,46 @@ export default function ClassTeacher({
   const {
     query: { myclass_id },
   } = useRouter();
+
+  const {
+    dense,
+    page,
+    order,
+    orderBy,
+    rowsPerPage,
+    setPage,
+    //
+    selected,
+    setSelected,
+    onSelectRow,
+    onSelectAllRows,
+    //
+    onSort,
+    onChangeDense,
+    onChangePage,
+    onChangeRowsPerPage,
+  } = useTable();
+
   const { push } = useRouter();
   const handleOnClickSubject = () => {
     push(PATH_DASHBOARD.myclass.addMember(myclass_id));
   };
-  console.log('myClass', myClass);
+
+  const dataFiltered = applyFilter({
+    inputData: myClass?.members,
+    comparator: getComparator(order, orderBy),
+  });
+
+  const countMemberIsTeacher = (data) => {
+    let countTeacher = 0
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].roleInClasses[0].role === 'GVCHUNHIEM' || data[i].roleInClasses[0].role === 'GIAOVIEN') {
+        countTeacher++;
+      }
+    }
+    return countTeacher;
+  }
+
   return (
     <Card {...other}>
       <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
@@ -69,11 +104,11 @@ export default function ClassTeacher({
 
       <TableContainer sx={{ overflow: 'unset' }}>
         <Scrollbar>
-          <Table sx={{ minWidth: 960 }}>
+          <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
             <TableHeadCustom headLabel={tableLabels} />
 
             <TableBody>
-              {myClass?.members?.map((row, index) => (
+              {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
                 <BookingDetailsRow
                   fetchMyClass={() => fetchMyClass()}
                   user={user}
@@ -86,7 +121,17 @@ export default function ClassTeacher({
           </Table>
         </Scrollbar>
       </TableContainer>
-
+      <TablePaginationCustom
+          labelRowsPerPage='Hàng trên mỗi trang'
+          count={countMemberIsTeacher(myClass?.members)}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={onChangePage}
+          onRowsPerPageChange={onChangeRowsPerPage}
+          //
+          dense={dense}
+          onChangeDense={onChangeDense}
+      />
       <Divider />
     </Card>
   );
@@ -95,7 +140,6 @@ export default function ClassTeacher({
 // ----------------------------------------------------------------------
 
 function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
-  console.log('BookingDetailsRow', row);
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -224,4 +268,19 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
       />
     </>
   );
+}
+
+function applyFilter({ inputData, comparator}) {
+  const stabilizedThis = inputData.map((el, index) => [el, index]);
+
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+
+  inputData = stabilizedThis.map((el) => el[0]);
+
+
+  return inputData;
 }

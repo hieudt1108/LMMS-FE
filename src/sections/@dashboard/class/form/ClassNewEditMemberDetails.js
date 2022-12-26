@@ -45,7 +45,7 @@ import { object } from 'prop-types';
 import { useSnackbar } from 'notistack';
 import SearchNotFound from 'src/components/search-not-found/SearchNotFound';
 import { CustomTextField } from 'src/components/custom-input';
-import Label from "../../../../components/label";
+import Label from '../../../../components/label';
 
 // ----------------------------------------------------------------------
 const checkArray = (arrayName) => {
@@ -146,7 +146,7 @@ export default function FolderNewPostForm({ classID }) {
     if (response instanceof Error) {
       enqueueSnackbar(` ${response.response?.data.title}`, { variant: 'error' });
     } else {
-      enqueueSnackbar(` ${response.response?.data.title}`, { variant: 'success' });
+      enqueueSnackbar(`Thêm người dùng thành công`, { variant: 'success' });
     }
   };
 
@@ -228,7 +228,7 @@ export default function FolderNewPostForm({ classID }) {
                           return (
                             <li {...props}>
                               <Avatar
-                                  sx={{mr:2}}
+                                sx={{ mr: 2 }}
                                 src={`http://lmms.site:7070/assets/images/avatars/avatar_${
                                   (1 - gender) * 10 + (id % 10) + 1
                                 }.jpg`}
@@ -243,22 +243,25 @@ export default function FolderNewPostForm({ classID }) {
                                     color={part.highlight ? 'primary' : 'textPrimary'}
                                   >
                                     {part.text}
-
                                   </Typography>
-
                                 ))}
                                 {roles && roles.length ? (
-                                    roles.map((r) =>
-                                        r === null || '' ? (
-                                            <Label sx={{ml:1}}></Label>
-                                        ) : (
-                                            <Label key={r.id} variant="soft" color={'success'} sx={{ ml:1,textTransform: 'capitalize' }}>
-                                              {r.name}
-                                            </Label>
-                                        )
+                                  roles.map((r) =>
+                                    r === null || '' ? (
+                                      <Label sx={{ ml: 1 }}></Label>
+                                    ) : (
+                                      <Label
+                                        key={r.id}
+                                        variant="soft"
+                                        color={'success'}
+                                        sx={{ ml: 1, textTransform: 'capitalize' }}
+                                      >
+                                        {r.name}
+                                      </Label>
                                     )
-                                ):(
-                                    <></>
+                                  )
+                                ) : (
+                                  <></>
                                 )}
                                 <br />
                                 <Typography component="span" variant="subtitle2" color={'textPrimary'}>

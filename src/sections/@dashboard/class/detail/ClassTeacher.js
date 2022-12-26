@@ -214,11 +214,16 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
               )}
             </TableCell>
 
+            <TableCell>
               {role?.subject?.map((su) =>
-                  <TableCell>
-                    {su.name}
-                  </TableCell>
+                  su.name === null || '' ?
+                  (
+                      <Label></Label>
+                  ) : (
+                       <Label>{su.name}</Label>
+                  )
               )}
+            </TableCell>
 
             <TableCell>{row.email}</TableCell>
 

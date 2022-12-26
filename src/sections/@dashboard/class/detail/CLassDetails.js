@@ -26,12 +26,13 @@ import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 import MenuPopover from '../../../../components/menu-popover';
-import {getComparator, TableHeadCustom, TablePaginationCustom, useTable} from '../../../../components/table';
+import { getComparator, TableHeadCustom, TablePaginationCustom, useTable } from '../../../../components/table';
 import { useRouter } from 'next/router';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useSnackbar } from '../../../../components/snackbar';
 import { removeMemberInClass } from '../../../../dataProvider/agent';
-import ConfirmDialog from "../../../../components/confirm-dialog";
+import ConfirmDialog from '../../../../components/confirm-dialog';
+import { ROLES_CODE } from 'src/config';
 // ----------------------------------------------------------------------
 
 CLassDetails.propTypes = {
@@ -81,20 +82,22 @@ export default function CLassDetails({
   };
 
   const dataFiltered = applyFilter({
-    inputData: myClass?.members,
+    inputData: myClass?.members?.filter((object) =>
+      object?.roleInClasses?.find((roleInClass) => roleInClass.role === ROLES_CODE.STUDENT)
+    ),
     comparator: getComparator(order, orderBy),
   });
+  console.log('page', page, rowsPerPage, dataFiltered, myClass?.members);
 
   const countMemberIsStudent = (data) => {
-    let countStudent = 0
+    let countStudent = 0;
     for (let i = 0; i < data.length; i++) {
-      if (data[i].roleInClasses[0].role === "HOCSINH") {
+      if (data[i].roleInClasses[0].role === 'HOCSINH') {
         countStudent++;
       }
     }
     return countStudent;
-  }
-
+  };
 
   return (
     <Card {...other}>
@@ -121,23 +124,21 @@ export default function CLassDetails({
         </Scrollbar>
       </TableContainer>
       <TablePaginationCustom
-          labelRowsPerPage='Hàng trên mỗi trang'
-          count={countMemberIsStudent(myClass?.members)}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          onPageChange={onChangePage}
-          onRowsPerPageChange={onChangeRowsPerPage}
-          //
-          dense={dense}
-          onChangeDense={onChangeDense}
+        labelRowsPerPage="Hàng trên mỗi trang"
+        count={countMemberIsStudent(myClass?.members)}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={onChangePage}
+        onRowsPerPageChange={onChangeRowsPerPage}
+        //
+        dense={dense}
+        onChangeDense={onChangeDense}
       />
 
       <Divider />
     </Card>
   );
 }
-
-
 
 // ----------------------------------------------------------------------
 
@@ -177,7 +178,7 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
 
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
-    console.log(row.id)
+    console.log(row.id);
   };
 
   const handleClosePopover = () => {
@@ -196,7 +197,11 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
           <TableRow>
             <TableCell>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <Avatar src={`http://lmms.site:7070/assets/images/avatars/avatar_${(1 - row.gender) * 10 + (row.id % 10) + 1}.jpg`} />
+                <Avatar
+                  src={`http://lmms.site:7070/assets/images/avatars/avatar_${
+                    (1 - row.gender) * 10 + (row.id % 10) + 1
+                  }.jpg`}
+                />
                 <Typography variant="subtitle2">{row.name}</Typography>
               </Stack>
             </TableCell>
@@ -241,28 +246,28 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
         ''
       )}
       <ConfirmDialog
-          open={openConfirm}
-          onClose={handleCloseConfirm}
-          title={'Xóa môn học'}
-          content={'Bạn có chắc chắn muốn xóa môn học này!'}
-          action={
-            <Button
-                variant="contained"
-                color="error"
-                onClick={() => {
-                  handlerDelete();
-                  handleCloseConfirm();
-                }}
-            >
-              {'Xóa'}
-            </Button>
-          }
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        title={'Xóa môn học'}
+        content={'Bạn có chắc chắn muốn xóa môn học này!'}
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              handlerDelete();
+              handleCloseConfirm();
+            }}
+          >
+            {'Xóa'}
+          </Button>
+        }
       />
     </>
   );
 }
 
-function applyFilter({ inputData, comparator}) {
+function applyFilter({ inputData, comparator }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -272,7 +277,6 @@ function applyFilter({ inputData, comparator}) {
   });
 
   inputData = stabilizedThis.map((el) => el[0]);
-
 
   return inputData;
 }

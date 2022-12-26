@@ -53,6 +53,7 @@ export default function UploadDocToSlot({ open, onClose, slotId, classId, subjec
             handleAddDocumentToSlot,
             onClose: onClose,
             ...folderUploadDocToSlot,
+            archiveFolderId: folderUploadDocToSlot.id,
             handleBackPage: () => {
               dispatch(getFolderRedux(folderUploadDocToSlot.parentId, 'folderUploadDocToSlot'));
             },
@@ -79,6 +80,7 @@ export default function UploadDocToSlot({ open, onClose, slotId, classId, subjec
             handleAddDocumentToSlot,
             onClose: onClose,
             ...folderUploadDocToSlotInGeneralFolder,
+            archiveFolderId: folderUploadDocToSlotInGeneralFolder.id,
             handleBackPage: () => {
               dispatch(
                 getFolderRedux(folderUploadDocToSlotInGeneralFolder.parentId, 'folderUploadDocToSlotInGeneralFolder')

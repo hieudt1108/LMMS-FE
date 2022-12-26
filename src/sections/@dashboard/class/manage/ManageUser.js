@@ -14,7 +14,7 @@ export default function ManageUser({ fetchMyClass, classID, myClass, user }) {
 
   return (
     <>
-      <Grid container spacing={3}>
+      <Grid sx={{ mt: 3 }} container spacing={3}>
         <Grid item xs={12}>
           <ClassTeacher
             fetchMyClass={() => fetchMyClass()}
@@ -23,7 +23,7 @@ export default function ManageUser({ fetchMyClass, classID, myClass, user }) {
             classID={classID}
             user={user}
             tableLabels={[
-              { id: 'STT', label: '' },
+              { id: 'STT', label: 'Ảnh' },
               { id: 'name', label: 'Họ và tên' },
               { id: 'role', label: 'Vai trò' },
               { id: 'Subject', label: 'Môn dạy' },

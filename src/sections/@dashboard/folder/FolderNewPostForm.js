@@ -100,7 +100,7 @@ export default function FolderNewPostForm({ data }) {
     control,
     name: 'items',
   });
-  console.log('FolderNewPostForm', getValues('items'), user, programs, newDocument);
+  console.log('FolderNewPostForm', getValues('items'), data, programs, newDocument);
 
   const handleDrop = (acceptedFiles, index) => {
     try {
@@ -156,8 +156,11 @@ export default function FolderNewPostForm({ data }) {
           continue;
         }
         let message;
-        if (data.types.find((type) => type === 'folderUploadDocToSlot')) {
-          message = await dispatch(createDocumentInSubjectRedux(newFolder));
+        if (
+          data.types.find((type) => type === 'folderUploadDocToSlot') ||
+          data.types.find((type) => type === 'folderUploadDocToSlotInGeneralFolder')
+        ) {
+          message = await dispatch(createDocumentInSubjectRedux(newFolder, data.types[0]));
           await data.handleAddDocumentToSlot(message.documentId);
         } else {
           message = await dispatch(createDocumentRedux(newFolder));

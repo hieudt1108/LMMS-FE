@@ -146,9 +146,9 @@ const slice = createSlice({
 
     getFolderSuccess(state, action) {
       console.log('getFolderSuccess', action);
-      const { folder, nameData, paging } = action.payload;
+      const { folder, dataName, paging } = action.payload;
       state.isLoading = false;
-      state[`${nameData}`] = { ...state[`${nameData}`], ...folder, pagination: { ...paging } };
+      state[`${dataName}`] = { ...state[`${dataName}`], ...folder, pagination: { ...paging } };
     },
 
     createFolderSuccess(state, action) {
@@ -201,9 +201,9 @@ const slice = createSlice({
     },
 
     deleteDocumentInFolderSuccess(state, action) {
-      const { documentID, nameData } = action.payload;
+      const { documentID, dataName } = action.payload;
       state.isLoading = false;
-      state[`${nameData}`].listDocuments = state[`${nameData}`].listDocuments.filter((item) => item.id !== documentID);
+      state[`${dataName}`].listDocuments = state[`${dataName}`].listDocuments.filter((item) => item.id !== documentID);
     },
     deleteDocumentInStoreFolderSuccess(state, action) {
       const { documentID } = action.payload;
@@ -270,10 +270,10 @@ const slice = createSlice({
       state.storeFolder.listDocuments = [...state.storeFolder.listDocuments, document];
     },
     createDocumentInSubjectSuccess(state, action) {
-      const { document } = action.payload;
+      const { document, dataName } = action.payload;
       console.log('createDocumentInSubjectSuccess', document);
       state.isLoading = false;
-      state.folderUploadDocToSlot.listDocuments = [...state.folderUploadDocToSlot.listDocuments, document];
+      state[dataName].listDocuments = [...state[dataName].listDocuments, document];
     },
   },
 });
@@ -291,11 +291,11 @@ const returnMessageError = (title) => ({
   variant: 'error',
 });
 
-export function getFolderRedux(folderId, nameData, paging) {
+export function getFolderRedux(folderId, dataName, paging) {
   return async () => {
     try {
       console.log('getFolderRedux', folderId);
-      if ((!folderId && folderId !== 0) || !nameData) {
+      if ((!folderId && folderId !== 0) || !dataName) {
         return returnMessageError(`Không truy cập được thư mục này`);
       }
       const params = paging
@@ -318,7 +318,7 @@ export function getFolderRedux(folderId, nameData, paging) {
       dispatch(
         slice.actions.getFolderSuccess({
           folder: response.data.data,
-          nameData,
+          dataName,
           paging: JSON.parse(response.headers['x-pagination']),
         })
       );
@@ -428,7 +428,7 @@ export function createDocumentInitialRedux() {
   };
 }
 
-export function deleteDocumentInFolderRedux(documentID, nameData) {
+export function deleteDocumentInFolderRedux(documentID, dataName) {
   return async () => {
     try {
       if (!documentID) {
@@ -440,7 +440,7 @@ export function deleteDocumentInFolderRedux(documentID, nameData) {
         return returnMessageError(`${response.response.data.title}`);
       }
 
-      dispatch(slice.actions.deleteDocumentInFolderSuccess({ documentID, nameData }));
+      dispatch(slice.actions.deleteDocumentInFolderSuccess({ documentID, dataName }));
 
       return returnMessageSuccess('Xóa tài liệu thành công');
     } catch (error) {
@@ -624,7 +624,7 @@ export function createDocumentRedux(data) {
   };
 }
 
-export function createDocumentInSubjectRedux(data) {
+export function createDocumentInSubjectRedux(data, dataName) {
   return async () => {
     try {
       if (!data.file) {
@@ -637,7 +637,7 @@ export function createDocumentInSubjectRedux(data) {
       if (responsePostDocument instanceof Error) {
         return returnMessageError(`${responsePostDocument.response.data.title}`);
       }
-      dispatch(slice.actions.createDocumentInSubjectSuccess({ document: responsePostDocument.data.data }));
+      dispatch(slice.actions.createDocumentInSubjectSuccess({ document: responsePostDocument.data.data, dataName }));
       return {
         title: `Tạo tài liệu${data.code} thành công`,
         documentId: responsePostDocument.data.data.id,

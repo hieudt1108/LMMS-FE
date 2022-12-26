@@ -25,6 +25,7 @@ import ConfirmDialog from 'src/components/confirm-dialog';
 import { ROLES_CODE, URL_GLOBAL } from '../../../../config';
 import { deleteDocumentInSubjectRedux } from 'src/redux/slices/subject';
 import { useAuthContext } from 'src/auth/useAuthContext';
+import Label from "../../../../components/label";
 
 // ----------------------------------------------------------------------
 
@@ -181,7 +182,12 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
             alignItems="center"
             sx={{ typography: 'caption', color: 'text.disabled', mt: 0.5 }}
           >
-            <Box> {`${file.programName}-${file.subjectName}-${file.typeDocumentName}`} </Box>
+              {data.types[0] === 'folderShareForMe' ? (
+                  <Box> {`${file.typeFile}`} </Box>
+              ) : (
+                  <Box> {`${file.programName}-${file.subjectName}-${file.typeDocumentName}`} </Box>
+              )}
+
           </Stack>
         </Stack>
 

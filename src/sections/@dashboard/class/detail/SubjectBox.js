@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useCallback, useRef, useState } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import {Box, Stack, Paper, MenuItem, Typography, CardHeader, Grid, Button, Checkbox} from '@mui/material';
+import { Box, Stack, Paper, MenuItem, Typography, CardHeader, Grid, Button, Checkbox } from '@mui/material';
 // utils
 import { fDateTime } from '../../../../utils/formatTime';
 // components
@@ -94,7 +94,13 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
   const isDesktop = useResponsive('up', 'sm');
 
   const handleOnClickSubject = () => {
-    push(PATH_DASHBOARD.class.subject(class_id, subjectId));
+    push(
+      PATH_DASHBOARD.class.subject(
+        class_id,
+        subjectId,
+        !!item.teacher.find((teacherInSubject) => teacherInSubject.id === user.id)
+      )
+    );
   };
 
   return (
@@ -144,24 +150,20 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
             </Stack>
           </Box>
         </Stack>
-          <Stack sx={{mr:2}} direction = 'row' alignItems = 'center' spacing = {3}>
-              {item?.teacher &&
-                  item?.teacher.map((tc) => (
-                      user?.subjects.find((su) => su.name === name && (user?.id === tc.id)) ? (
-                      <Iconify sx={{ color: 'orange' }} icon="eva:star-fill" />
-                      ) : (
-                          ''
-                      )
-                  ))}
-              {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
-                  <Button onClick={handleOpenConfirm}>
-                      <Iconify icon="eva:trash-2-outline" width={28} />
-                  </Button>
-              ) : (
-                  ''
-              )}
-          </Stack>
-
+        <Stack sx={{ mr: 2 }} direction="row" alignItems="center" spacing={3}>
+          {item.teacher.find((teacherInSubject) => teacherInSubject.id === user.id) ? (
+            <Iconify sx={{ color: 'orange' }} icon="eva:star-fill" />
+          ) : (
+            ''
+          )}
+          {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
+            <Button onClick={handleOpenConfirm}>
+              <Iconify icon="eva:trash-2-outline" width={28} />
+            </Button>
+          ) : (
+            ''
+          )}
+        </Stack>
       </Paper>
       <ConfirmDialog
         open={openConfirm}

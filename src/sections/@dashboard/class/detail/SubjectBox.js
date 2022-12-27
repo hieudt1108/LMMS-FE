@@ -128,13 +128,13 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
                 <Typography variant="subtitle2">{name}</Typography>
               </div>
             </Stack>
-            <Stack direction="row" alignItems="center" spacing={2}>
+            <Stack direction="column" alignItems="center" spacing={2}>
               {item?.teacher &&
                 item?.teacher.map((tc) => (
                   <Typography variant="subtitle2">
                     Giáo viên dạy: {tc.firstName} {tc.lastName}
                   </Typography>
-                ))}
+              ))}
             </Stack>
             <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
               <Stack direction="row" alignItems="center" spacing={1}>

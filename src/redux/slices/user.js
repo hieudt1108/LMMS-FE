@@ -124,6 +124,12 @@ const slice = createSlice({
       // state.subjects = [...state.subjects.slice(0, index), userTransfer, ...state.subjects.slice(index + 1)];
     },
 
+    deleteAddUserInCLassSuccess(state, action) {
+      const { index } = action.payload;
+      state.isLoading = false;
+      state.addUserInCLass = state.addUserInCLass.filter((item, indexItem) => indexItem !== index);
+    },
+
     createAddUserInCLassSuccess(state, action) {
       console.log('createAddUserInCLassSuccess');
       state.isLoading = false;
@@ -219,6 +225,18 @@ export function getUsersByRoleIdRedux(params, index) {
       );
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function deleteAddUserInCLassRedux(index) {
+  return async () => {
+    try {
+      dispatch(slice.actions.startLoading());
+      dispatch(slice.actions.deleteAddUserInCLassSuccess({ index }));
+      return returnMessageSuccess('Thêm người dùng vào lớp học thành công');
+    } catch (error) {
+      return returnMessageError(`${error.message}`);
     }
   };
 }

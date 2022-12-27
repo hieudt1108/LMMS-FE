@@ -34,6 +34,7 @@ import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import {
   createAddUserInCLassRedux,
+  deleteAddUserInCLassRedux,
   filterSubjectRedux,
   getAllUsersWithInfoRedux,
   getUsersByRoleIdRedux,
@@ -46,6 +47,7 @@ import { useSnackbar } from 'notistack';
 import SearchNotFound from 'src/components/search-not-found/SearchNotFound';
 import { CustomTextField } from 'src/components/custom-input';
 import Label from '../../../../components/label';
+import { indexedDBLocalPersistence } from 'firebase/auth';
 
 // ----------------------------------------------------------------------
 const checkArray = (arrayName) => {
@@ -150,9 +152,9 @@ export default function FolderNewPostForm({ classID }) {
     }
   };
 
-  const handleAdd = (index) => {
-    dispatch(createAddUserInCLassRedux());
-    dispatch(getUsersRedux({ pageIndex: 1, pageSize: 100 }, index));
+  const handleAdd = async (index) => {
+    await dispatch(createAddUserInCLassRedux());
+    await dispatch(getAllUsersWithInfoRedux({ pageIndex: 1, pageSize: 20 }, index));
     append({
       userId: '',
       roleId: '',
@@ -160,7 +162,8 @@ export default function FolderNewPostForm({ classID }) {
     });
   };
 
-  const handleRemove = (index) => {
+  const handleRemove = async (index) => {
+    await dispatch(deleteAddUserInCLassRedux(indexedDBLocalPersistence));
     remove(index);
   };
 
@@ -200,7 +203,7 @@ export default function FolderNewPostForm({ classID }) {
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         {fields.map((item, index) => (
-          <div key={index}>
+          <div key={item.id}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>
                 <Card sx={{ p: 3 }}>
@@ -286,92 +289,6 @@ export default function FolderNewPostForm({ classID }) {
                           />
                         )}
                       />
-
-                      {/* <Autocomplete
-                        size="small"
-                        sx={{ width: '643px' }}
-                        name={`items[${index}].userId`}
-                        autoHighlight
-                        popupIcon={null}
-                        options={addUserInCLass[index].users}
-                        onInputChange={(event, value, reason) => handleSearchAddUserInClass(value, reason)}
-                        onChange={(event, userHandle) => handlerUserChange(event, index, userHandle)}
-                        getOptionLabel={(user) => ` ${user.firstName} ${user.lastName}`}
-                        noOptionsText={<SearchNotFound query={addUserInCLass[index].users} />}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              variant="outlined"
-                              label={option.firstName}
-                              size="small"
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        // componentsProps={{
-                        //   popper: {
-                        //     sx: {
-                        //       width: `280px !important`,
-                        //     },
-                        //   },
-                        //   paper: {
-                        //     sx: {
-                        //       '& .MuiAutocomplete-option': {
-                        //         px: `8px !important`,
-                        //       },
-                        //     },
-                        //   },
-                        // }}
-                        renderInput={(params) => (
-                          <CustomTextField
-                            {...params}
-                            width={220}
-                            placeholder="Search..."
-                            onKeyUp={handleKeyUp}
-                            InputProps={{
-                              ...params.InputProps,
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <Iconify icon="eva:search-fill" sx={{ ml: 1, color: 'text.disabled' }} />
-                                </InputAdornment>
-                              ),
-                            }}
-                          />
-                        )}
-                        renderOption={(props, user, { inputValue }) => {
-                          const { cover, gender, id, firstName, lastName, email } = user;
-                          const matches = match(`${firstName} ${lastName}`, inputValue);
-                          const parts = parse(`${firstName} ${lastName}`, matches);
-
-                          return (
-                            <li {...props}>
-                              <Avatar
-                                src={`http://lmms.site:7070/assets/images/avatars/avatar_${
-                                  (1 - gender) * 10 + (id % 10) + 1
-                                }.jpg`}
-                              />
-
-                              <Link underline="none">
-                                {parts.map((part, index) => (
-                                  <Typography
-                                    key={index}
-                                    component="span"
-                                    variant="subtitle2"
-                                    color={part.highlight ? 'primary' : 'textPrimary'}
-                                  >
-                                    {part.text}
-                                  </Typography>
-                                ))}
-                                <br />
-                                <Typography component="span" variant="subtitle2" color={'textPrimary'}>
-                                  {email}
-                                </Typography>
-                              </Link>
-                            </li>
-                          );
-                        }}
-                      /> */}
                     </div>
 
                     {checkArray(addUserInCLass) && checkArray(addUserInCLass[index].roles) ? (
@@ -385,8 +302,8 @@ export default function FolderNewPostForm({ classID }) {
                           placeholder="Quyền"
                           onChange={(event) => handlerRoleChange(event, index)}
                         >
-                          {addUserInCLass[index].roles.map((option, index) => (
-                            <option key={index} value={option.id}>
+                          {addUserInCLass[index].roles.map((option) => (
+                            <option key={option.id} value={option.id}>
                               {option.name}
                             </option>
                           ))}
@@ -417,8 +334,8 @@ export default function FolderNewPostForm({ classID }) {
                           }}
                           options={addUserInCLass[index].subjects.length ? addUserInCLass[index].subjects : []}
                           renderTags={(value, getTagProps) =>
-                            value.map((option, index) => (
-                              <Chip {...getTagProps({ index })} key={index} size="small" label={option.label} />
+                            value.map((option, indexItem) => (
+                              <Chip {...getTagProps({ indexItem })} key={indexItem} size="small" label={option.label} />
                             ))
                           }
                           renderInput={(params) => {

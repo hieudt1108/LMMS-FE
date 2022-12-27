@@ -317,6 +317,7 @@ export default function GeneralAppPage() {
               tableLabels={[
                 { id: 'code', label: 'Mã tài liệu' },
                 { id: 'name', label: 'Tên tài liệu' },
+                { id: 'folder', label: 'Thuộc tệp tài liệu' },
                 { id: 'createDate', label: 'Ngày tạo' },
                 { id: 'userDto', label: 'Người tạo' },
                 { id: 'email', label: 'Email' },

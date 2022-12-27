@@ -162,13 +162,15 @@ function AppNewInvoiceRow({ row,setReports }) {
       enqueueSnackbar('Đã có lỗi xảy ra', {variant: 'error'});
     }
   };
-
+console.log(row)
   return (
     <>
       <TableRow>
         <TableCell>{row.document.code}</TableCell>
 
         <TableCell>{row.document.name}</TableCell>
+
+        <TableCell>{row.folderName}</TableCell>
 
         <TableCell>{fDateTime(row.document.createDate)}</TableCell>
 

@@ -74,17 +74,22 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
   };
 
   const handlerDelete = async () => {
-    const res = await deleteSubjectInClass(classID, [
-      {
-        subjectId: item.subjectId,
-      },
-    ]);
-    if (res.status < 400) {
-      await fetchMyClass();
-      enqueueSnackbar('Xoá lớp thành công');
-    } else {
-      enqueueSnackbar('Xoá thất bại', { variant: 'error' });
-    }
+      try {
+          const res = await deleteSubjectInClass(classID, [
+              {
+                  subjectId: item.subjectId,
+              },
+          ]);
+          if (res.status < 400) {
+              await fetchMyClass();
+              enqueueSnackbar('Xoá môn học thành công');
+          } else {
+              enqueueSnackbar(`${res.response.data.title}`, {variant: 'error'});
+          }
+      }catch (error){
+          enqueueSnackbar('Đã có lỗi xảy ra', { variant: 'error' });
+      }
+
   };
   const {
     query: { class_id },

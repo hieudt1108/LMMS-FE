@@ -170,7 +170,7 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
       await fetchMyClass();
       handleClosePopover();
       // console.log('status: ', res);
-      enqueueSnackbar(`Xoá người dùng ${res.data.message}`);
+      enqueueSnackbar(`Xoá thành viên khỏi lớp học thành công`);
     } else {
       enqueueSnackbar('Xoá thất bại', { variant: 'error' });
     }

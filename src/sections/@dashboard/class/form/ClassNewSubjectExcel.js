@@ -75,7 +75,6 @@ export default function ClassNewSubjectExcel({onNextStep,onBackStep,formData,set
   };
 
   const onSubmit = async (data) => {
-    onNextStep();
     formDataFileSubject.append('file', data?.fileSubject);
     try {
       if(data.fileSubject === undefined){

@@ -60,7 +60,18 @@ export default function AuthLoginForm() {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
-        {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
+          {!!errors.afterSubmit ?
+              (errors.afterSubmit.message === `Cannot read properties of undefined (reading 'accessToken')` ? (
+                      <Alert severity="error">
+                            Vui lòng thử lại sau vài giây
+                      </Alert>
+              ) : (
+                      <Alert severity="error">
+                            {errors.afterSubmit.message}
+                      </Alert>
+              )
+              ):
+              ('')}
 
         <RHFTextField name="name" label="Tên đăng nhập" />
 
@@ -81,11 +92,7 @@ export default function AuthLoginForm() {
       </Stack>
 
       <Stack alignItems="flex-end" sx={{ my: 2 }}>
-        <NextLink href={PATH_AUTH.resetPassword} passHref>
-          <Link variant="body2" color="inherit" underline="always">
-            Quên mật khẩu
-          </Link>
-        </NextLink>
+
       </Stack>
 
       <LoadingButton

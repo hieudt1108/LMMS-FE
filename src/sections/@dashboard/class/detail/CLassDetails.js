@@ -209,7 +209,7 @@ function BookingDetailsRow({ row, user, classID, fetchMyClass }) {
             <TableCell>
               {row.firstName} {row.lastName}
             </TableCell>
-            <TableCell>{format(new Date(row.birthDate), 'dd MMM yyyy')}</TableCell>
+            <TableCell>{format(new Date(row.birthDate), 'dd/MM/yyyy')}</TableCell>
             <TableCell>{row.email}</TableCell>
 
             <TableCell>

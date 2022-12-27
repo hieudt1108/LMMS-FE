@@ -18,7 +18,7 @@ import {
   Pagination,
 } from '@mui/material';
 // utils
-import { fDate } from '../../../../utils/formatTime';
+import {fDate, fDateTime} from '../../../../utils/formatTime';
 // components
 import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
@@ -170,7 +170,7 @@ function AppNewInvoiceRow({ row,setReports }) {
 
         <TableCell>{row.document.name}</TableCell>
 
-        <TableCell>{fDate(row.document.createDate)}</TableCell>
+        <TableCell>{fDateTime(row.document.createDate)}</TableCell>
 
         <TableCell>
           {row.userDto.firstName} {row.userDto.lastName}

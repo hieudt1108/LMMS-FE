@@ -67,7 +67,7 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
       data.types.find(
         (type) =>
           type === 'folderUploadDoc' ||
-          type === 'folderUploadDocToSlot' ||
+          (type === 'folderUploadDocToSlot' && data.panel) ||
           type === 'folderUploadDocToSlotInGeneralFolder'
       )
     ) {

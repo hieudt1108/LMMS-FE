@@ -154,12 +154,12 @@ const slice = createSlice({
     createFolderSuccess(state, action) {
       console.log('createFolderSuccess', action);
       state.isLoading = false;
-      state.folder.listFolders = [...state.folder.listFolders, action.payload];
+      state.folder.listFolders = [action.payload, ...state.folder.listFolders];
     },
     createStoreFolderSuccess(state, action) {
       console.log('createFolderSuccess', action);
       state.isLoading = false;
-      state.storeFolder.listFolders = [...state.storeFolder.listFolders, action.payload];
+      state.storeFolder.listFolders = [action.payload, ...state.storeFolder.listFolders];
     },
 
     createDocumentInitialSuccess(state, action) {
@@ -267,13 +267,13 @@ const slice = createSlice({
     createDocumentSuccess(state, action) {
       const { document } = action.payload;
       state.isLoading = false;
-      state.storeFolder.listDocuments = [...state.storeFolder.listDocuments, document];
+      state.storeFolder.listDocuments = [document, ...state.storeFolder.listDocuments];
     },
     createDocumentInSubjectSuccess(state, action) {
       const { document, dataName } = action.payload;
       console.log('createDocumentInSubjectSuccess', document);
       state.isLoading = false;
-      state[dataName].listDocuments = [...state[dataName].listDocuments, document];
+      state[dataName].listDocuments = [document, ...state[dataName].listDocuments];
     },
   },
 });

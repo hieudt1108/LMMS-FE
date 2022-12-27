@@ -128,7 +128,7 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
                 <Typography variant="subtitle2">{name}</Typography>
               </div>
             </Stack>
-            <Stack direction="column" alignItems="center" spacing={2}>
+            <Stack direction="column" alignItems="center">
               {item?.teacher &&
                 item?.teacher.map((tc) => (
                   <Typography variant="subtitle2">

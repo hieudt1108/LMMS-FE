@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import {useCallback, useState} from 'react';
 import { sentenceCase } from 'change-case';
 // @mui
 import {
@@ -27,7 +27,7 @@ import MenuPopover from '../../../../components/menu-popover';
 import { TableHeadCustom } from '../../../../components/table';
 import {dispatch} from "../../../../redux/store";
 import {getOneDocumentRedux, startDownloadFileRedux} from "../../../../redux/slices/document";
-import {FileShareDialog} from "../../file";
+import {FileDetailsDrawer, FileShareDialog} from "../../file";
 import {URL_GLOBAL} from "../../../../config";
 import {useSnackbar} from "../../../../components/snackbar";
 import ConfirmDialog from "../../../../components/confirm-dialog";
@@ -94,6 +94,7 @@ function AppNewInvoiceRow({ row,setReports }) {
   const [openPopover, setOpenPopover] = useState(null);
   const [openShare, setOpenShare] = useState(false);
   const [openConfirmDeleteFile, setOpenConfirmDeleteFile] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
   };
@@ -101,6 +102,26 @@ function AppNewInvoiceRow({ row,setReports }) {
   const handleClosePopover = () => {
     setOpenPopover(null);
   };
+
+
+  const handleOpenDetails = async () => {
+    try{
+      const message = await dispatch(getOneDocumentRedux(row.document.id));
+      if (message && message.variant) {
+        enqueueSnackbar(message.title, { variant: message.variant });
+      } else {
+        setOpenDetails(true);
+      }
+    } catch (e) {
+      enqueueSnackbar('Không thực hiện được thao tác này', { variant: 'error' });
+    }
+  };
+
+
+  const handleCloseDetails = () => {
+    setOpenDetails(false);
+  };
+
 
   const handleDownload = async () => {
     handleClosePopover();
@@ -110,6 +131,10 @@ function AppNewInvoiceRow({ row,setReports }) {
       enqueueSnackbar(message.title, { variant: message.variant });
     }
   };
+
+  const handlePreviewFile = useCallback(() => {
+    window.open(`${URL_GLOBAL.VIEW_FILE}${row.document.urlDocument}`, '_blank', 'noopener,noreferrer');
+  }, []);
 
 
   const handleOpenShare = async () => {
@@ -163,6 +188,25 @@ function AppNewInvoiceRow({ row,setReports }) {
       </TableRow>
 
       <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
+        <MenuItem
+            onClick={() => {
+              handleClosePopover();
+              handleOpenDetails();
+            }}
+        >
+          <Iconify icon="eva:eye-fill" />
+          Chi tiết
+        </MenuItem>
+        {(row.document.typeFile == 'audio/mpeg' ||
+                row.document.typeFile == 'video/mp4' ||
+                row.document.typeFile == 'image/jpeg' ||
+                row.document.typeFile == 'image/png' ||
+                row.document.typeFile == 'application/pdf')  && (
+                <MenuItem onClick={handlePreviewFile}>
+                  <Iconify icon="eva:link-2-fill" />
+                  Xem trước
+                </MenuItem>
+            )}
         <MenuItem onClick={handleDownload}>
           <Iconify icon="eva:download-fill" />
           Tải xuống
@@ -185,6 +229,12 @@ function AppNewInvoiceRow({ row,setReports }) {
           Xóa
         </MenuItem>
       </MenuPopover>
+      {openDetails && (
+          <FileDetailsDrawer
+              open={openDetails}
+              onClose={handleCloseDetails}
+          />
+      )}
       {openShare && (
           <FileShareDialog
               file={row.document}

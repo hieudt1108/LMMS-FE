@@ -38,7 +38,6 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
 
   const [openPopover, setOpenPopover] = useState(null);
 
-  const [favorite, setFavorite] = useState(file.isFavorite);
 
   const [openShare, setOpenShare] = useState(false);
 
@@ -47,9 +46,6 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
   const [openConfirmAddDocument, setOpenConfirmAddDocument] = useState(false);
   const [openConfirmDeleteFile, setOpenConfirmDeleteFile] = useState(false);
 
-  const handleFavorite = () => {
-    setFavorite(!favorite);
-  };
 
   const handleOpenShare = async () => {
     handleClosePopover();
@@ -183,7 +179,9 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
             sx={{ typography: 'caption', color: 'text.disabled', mt: 0.5 }}
           >
             {file.programName ? (
-              <Box> {`${file.programName}-${file.subjectName}-${file.typeDocumentName}`} </Box>
+              <Box>
+                  {`${file.code} / ${file.programName} / ${file.subjectName} / ${file.typeDocumentName}`}
+              </Box>
             ) : (
               <Box> {`Loại file: ${file.typeFile}`} </Box>
             )}
@@ -286,8 +284,6 @@ const FileGeneralRecentCard = ({ data, file, onDelete, handleOpenPopupSaveInMyFo
 
       {openDetails && (
         <FileDetailsDrawer
-          favorite={false}
-          onFavorite={handleFavorite}
           open={openDetails}
           onClose={handleCloseDetails}
         />

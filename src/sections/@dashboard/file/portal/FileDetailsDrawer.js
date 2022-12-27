@@ -73,14 +73,6 @@ export default function FileDetailsDrawer({
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ p: 2.5 }}>
               <Typography variant="h6"> Thông tin chi tiết </Typography>
 
-              <Checkbox
-                color="warning"
-                icon={<Iconify icon="eva:star-outline" />}
-                checkedIcon={<Iconify icon="eva:star-fill" />}
-                checked={favorite}
-                onChange={onFavorite}
-                sx={{ p: 0.75 }}
-              />
             </Stack>
 
             <Stack spacing={2.5} justifyContent="center" sx={{ p: 2.5, bgcolor: 'background.neutral' }}>

@@ -32,6 +32,7 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { useSnackbar } from '../../../../components/snackbar';
 import { removeMemberInClass } from '../../../../dataProvider/agent';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import {ROLES_CODE} from "../../../../config";
 
 // ----------------------------------------------------------------------
 
@@ -83,7 +84,9 @@ export default function ClassTeacher({
   };
 
   const dataFiltered = applyFilter({
-    inputData: myClass?.members,
+    inputData: myClass?.members?.filter((object) =>
+        object?.roleInClasses?.find((roleInClass) => roleInClass.role === 'GVCHUNHIEM' || roleInClass.role === 'GIAOVIEN')
+    ),
     comparator: getComparator(order, orderBy),
   });
 

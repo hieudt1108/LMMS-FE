@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import {
@@ -32,6 +32,7 @@ import {useAuthContext} from "../../../../auth/useAuthContext";
 import CustomBreadcrumbs from "../../../../components/custom-breadcrumbs";
 import {PATH_DASHBOARD} from "../../../../routes/paths";
 import EmptyContent from "../../../../components/empty-content";
+import {getClassById} from "../../../../dataProvider/agent";
 
 export default function SysllabusSubject({
                                              data,
@@ -61,6 +62,7 @@ export default function SysllabusSubject({
     const handleClosePreview = () => {
         setOpenPreview(false);
     };
+
 
     return (
         <>

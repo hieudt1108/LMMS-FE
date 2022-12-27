@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useCallback, useRef, useState } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Box, Stack, Paper, MenuItem, Typography, CardHeader, Grid, Button } from '@mui/material';
+import {Box, Stack, Paper, MenuItem, Typography, CardHeader, Grid, Button, Checkbox} from '@mui/material';
 // utils
 import { fDateTime } from '../../../../utils/formatTime';
 // components
@@ -29,8 +29,6 @@ ClassNewestBooking.propTypes = {
 
 export default function ClassNewestBooking({ fetchMyClass, classID, myClass, title, user, subheader, sx, ...other }) {
   const theme = useTheme();
-
-  console.log('myClass.Subject: ', myClass?.subjects);
 
   return (
     <Box sx={{ py: 2, ...sx }} {...other}>
@@ -146,13 +144,24 @@ function BookingItem({ fetchMyClass, item, user, classID }) {
             </Stack>
           </Box>
         </Stack>
-        {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
-          <Button onClick={handleOpenConfirm}>
-            <Iconify icon="eva:trash-2-outline" width={28} />
-          </Button>
-        ) : (
-          ''
-        )}
+          <Stack sx={{mr:2}} direction = 'row' alignItems = 'center' spacing = {3}>
+              {item?.teacher &&
+                  item?.teacher.map((tc) => (
+                      user?.subjects.find((su) => su.name === name && (user?.id === tc.id)) ? (
+                      <Iconify sx={{ color: 'orange' }} icon="eva:star-fill" />
+                      ) : (
+                          ''
+                      )
+                  ))}
+              {user?.roles.find((role) => role.name === 'ADMIN' || role.name === 'GVCHUNHIEM') ? (
+                  <Button onClick={handleOpenConfirm}>
+                      <Iconify icon="eva:trash-2-outline" width={28} />
+                  </Button>
+              ) : (
+                  ''
+              )}
+          </Stack>
+
       </Paper>
       <ConfirmDialog
         open={openConfirm}

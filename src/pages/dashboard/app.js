@@ -130,6 +130,7 @@ export default function GeneralAppPage() {
       setPaging(JSON.parse(res.headers['x-pagination']));
 
       setReportDocs(res.data.data);
+      console.log('res: ', res);
     } else if (res.response) {
       console.log(`${res.response.status} !`);
     }

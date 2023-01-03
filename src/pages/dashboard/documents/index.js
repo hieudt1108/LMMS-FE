@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 // next
 import { useRouter } from 'next/router';
+import { PATH_DASHBOARD } from 'src/routes/paths';
 // routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
 

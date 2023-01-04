@@ -474,9 +474,7 @@ export default function UserNewForm({isEdit = false, currentUser}) {
                                                         value={value}
                                                         disabled={
                                                             userRole.find((item) => item.id === getValues(`items[${index}].id`))?.name !==
-                                                            'GIAOVIEN' &&
-                                                            userRole.find((item) => item.id === getValues(`items[${index}].id`))?.name !==
-                                                            'TRUONGBOMON'
+                                                            'GIAOVIEN'
                                                         }
                                                         disableCloseOnSelect
                                                         multiple

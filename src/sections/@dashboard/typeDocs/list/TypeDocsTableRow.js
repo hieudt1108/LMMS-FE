@@ -27,6 +27,7 @@ TypeDocsTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   typeId: PropTypes.string,
+  optionsSubject: PropTypes.object,
   onEditRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onAddTypeToSubject: PropTypes.func,
@@ -35,7 +36,7 @@ TypeDocsTableRow.propTypes = {
   moreAction: PropTypes.bool,
 };
 
-export default function TypeDocsTableRow({ row, selected,typeId, onEditRow, onSelectRow,onAddTypeToSubject, onRemoveTypeFromSubject, onDeleteRow, moreAction }) {
+export default function TypeDocsTableRow({ row, selected,typeId,optionsSubject, onEditRow, onSelectRow,onAddTypeToSubject, onRemoveTypeFromSubject, onDeleteRow, moreAction }) {
   const { id, name, createDate } = row;
 
 
@@ -144,7 +145,7 @@ export default function TypeDocsTableRow({ row, selected,typeId, onEditRow, onSe
         </MenuItem>
         )}
       </MenuPopover>
-      <SubjectAddTypeDocsDialog typeDocsId={typeId} open={openAddOrRemoveTypeDocs} onClose={handleCloseAddTypeDocs} />
+      <SubjectAddTypeDocsDialog typeDocsId={typeId} subject={optionsSubject} open={openAddOrRemoveTypeDocs} onClose={handleCloseAddTypeDocs} />
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}

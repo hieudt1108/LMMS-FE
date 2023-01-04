@@ -111,7 +111,7 @@ export default function TypeDocsListPage() {
   const [listTypeDocuments, setListTypeDocuments] = useState([]);
 
   const [userSubject, setUserSubject] = useState([]);
-
+  const [listSubject, setListSubject] = useState([]);
   const [subject, setSelectedSubject] = useState('all');
 
   const [moreAction, setMoreAction] = useState(true);
@@ -218,7 +218,7 @@ export default function TypeDocsListPage() {
           id: tag.id,
         };
       });
-
+      setListSubject(res.data.data)
       setUserSubject(transformData);
     } else {
       return error;
@@ -330,6 +330,7 @@ export default function TypeDocsListPage() {
                       key={types.id}
                       row={types}
                       typeId={types.id}
+                      optionsSubject={listSubject}
                       selected={selected.includes(types.id)}
                       onSelectRow={() => onSelectRow(types.id)}
                       onDeleteRow={() => handleDeleteRow(types.id)}

@@ -28,9 +28,10 @@ import {useAuthContext} from "../../../../auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
-export default function SubjectAddTypeDocsDialog({ typeDocsId, open, onClose }) {
+export default function SubjectAddTypeDocsDialog({ typeDocsId,subject, open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
   const { headOfSubject } = useAuthContext();
+  console.log('SubjectAddTypeDocsDialog',subject)
 
   const renderMenuItem = useCallback((item) => {
     if (item && item.length) {
@@ -125,7 +126,7 @@ export default function SubjectAddTypeDocsDialog({ typeDocsId, open, onClose }) 
                         setValue('subjectId', newValue);
                       }}
                   >
-                    {renderMenuItem(headOfSubject)}
+                    {renderMenuItem(subject)}
                   </Select>
                 </FormControl>
               </Box>
